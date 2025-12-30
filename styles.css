@@ -1,0 +1,294 @@
+:root {
+    --primary-color: #4285f4;
+    --text-color: #333;
+    --text-secondary: #5f6368;
+    --bg-overlay: rgba(255, 255, 255, 0.65);
+    /* More transparent for glass effect */
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-hover: rgba(255, 255, 255, 0.95);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+}
+
+#background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    transition: all 0.5s ease;
+}
+
+/* Main Container - Dashboard Style */
+.container {
+    width: 90%;
+    height: 90vh;
+    /* Fixed height for dashboard feel */
+    margin: 5vh auto;
+    border-radius: 20px;
+    /* Glassmorphism wrapper */
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    box-sizing: border-box;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search Bar */
+#search-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+#search-input {
+    width: 60%;
+    max-width: 600px;
+    padding: 15px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#search-input:focus {
+    width: 65%;
+    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.2);
+    transform: scale(1.02);
+}
+
+/* Bookmarks Area */
+#bookmarks-tree {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    /* Space for scrollbar */
+}
+
+/* Scrollbar styling */
+#bookmarks-tree::-webkit-scrollbar {
+    width: 8px;
+}
+
+#bookmarks-tree::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+#bookmarks-tree::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+#bookmarks-tree::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Horizontal Top-Level Items (Cards) */
+.top-level-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    /* Center cards */
+    align-items: flex-start;
+    padding-bottom: 40px;
+}
+
+.bookmark-card {
+    background: var(--card-bg);
+    width: 280px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: grab;
+    /* For dragging */
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    /* Limit height of cards */
+}
+
+.bookmark-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    background: var(--card-hover);
+}
+
+.bookmark-card:active {
+    cursor: grabbing;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+    /* Make header part of drag handle logic essentially */
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--primary-color);
+    margin-left: 10px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* List Items inside Card */
+.card-content {
+    overflow-y: auto;
+    flex: 1;
+    /* Custom scrollbar for inside card */
+    scrollbar-width: thin;
+}
+
+.card-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.card-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.leaf-node {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.leaf-node:hover {
+    background: rgba(66, 133, 244, 0.1);
+}
+
+.bookmark-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.bookmark-label {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Sub-folders in list */
+.sub-folder {
+    margin-left: 10px;
+    border-left: 2px solid rgba(0, 0, 0, 0.05);
+    padding-left: 10px;
+}
+
+.sub-folder-header {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 0;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.sub-folder-header:hover {
+    color: var(--primary-color);
+}
+
+.sub-folder-content.hidden {
+    display: none;
+}
+
+/* Drag & Drop Visuals */
+.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+.drag-over {
+    border: 2px dashed var(--primary-color);
+}
+
+/* Settings Button */
+#settings-btn {
+    /* same as before but maybe cooler */
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#settings-btn:hover {
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Helper classes */
+.hidden {
+    display: none !important;
+}
+
+/* Settings Modal - cleanup */
+.modal-content {
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
