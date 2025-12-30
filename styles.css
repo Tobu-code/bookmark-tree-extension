@@ -207,7 +207,7 @@ html {
     align-items: center;
     padding: 8px 10px;
     margin-bottom: 4px;
-    border-radius: 8px;
+    border-radius: 16px;
     text-decoration: none;
     color: var(--text-color);
     transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s;
@@ -220,20 +220,20 @@ html {
 /* Hover Effect - Dock Style */
 .leaf-node:hover {
     background: rgba(66, 133, 244, 0.15);
-    transform: scale(1.15) translateX(10px);
+    transform: scale(1.02);
     z-index: 10;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Previous Sibling */
 .leaf-node:has(+ .leaf-node:hover) {
-    transform: scale(1.05) translateX(5px);
+    transform: scale(1.01);
     z-index: 5;
 }
 
 /* Next Sibling */
 .leaf-node:hover+.leaf-node {
-    transform: scale(1.05) translateX(5px);
+    transform: scale(1.01);
     z-index: 5;
 }
 
