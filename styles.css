@@ -70,23 +70,52 @@ html {
 }
 
 #search-input {
+    flex: 1;
+    padding: 16px 12px;
+    font-size: 18px;
+    border: none;
+    background: transparent;
+    outline: none;
+    min-width: 0;
+}
+
+/* Wrapper looks like the old input */
+.search-wrapper {
+    display: flex;
+    align-items: center;
     width: 50%;
     max-width: 600px;
-    padding: 16px 28px;
-    font-size: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 40px;
     background: rgba(255, 255, 255, 0.8);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
-    outline: none;
+    padding-left: 20px;
+    /* Space for select */
 }
 
-#search-input:focus {
+.search-wrapper:focus-within {
     width: 55%;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
     transform: scale(1.02);
+}
+
+#search-engine-select {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    outline: none;
+    padding-right: 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    margin-right: 5px;
+}
+
+#search-engine-select:hover {
+    color: var(--primary-color);
 }
 
 /* Bookmarks Area */

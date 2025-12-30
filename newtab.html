@@ -11,7 +11,13 @@
     
     <div class="container">
         <div id="search-container">
-            <input type="text" id="search-input" placeholder="Search bookmarks...">
+            <div class="search-wrapper">
+                <select id="search-engine-select">
+                    <option value="google">Google</option>
+                    <option value="bing">Bing</option>
+                </select>
+                <input type="text" id="search-input" placeholder="Search bookmarks...">
+            </div>
         </div>
         <div id="bookmarks-tree" class="tree-view"></div>
     </div>

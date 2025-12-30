@@ -227,12 +227,33 @@ function handleDragEnd(e) {
 
 function initSearch() {
     const input = document.getElementById('search-input');
+    const select = document.getElementById('search-engine-select');
+    const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
+
+    // Load saved engine
+    chrome.storage.local.get([STORAGE_KEY_ENGINE], (result) => {
+        if (result[STORAGE_KEY_ENGINE]) {
+            select.value = result[STORAGE_KEY_ENGINE];
+        }
+    });
+
+    // Save engine on change
+    select.addEventListener('change', () => {
+        chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: select.value });
+    });
 
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const query = input.value.trim();
             if (query) {
-                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                const engine = select.value;
+                let searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+
+                if (engine === 'bing') {
+                    searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+                }
+
+                window.location.href = searchUrl;
             }
         }
     });
