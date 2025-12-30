@@ -201,6 +201,7 @@ html {
     border-radius: 4px;
 }
 
+
 .leaf-node {
     display: flex;
     align-items: center;
@@ -209,12 +210,30 @@ html {
     border-radius: 8px;
     text-decoration: none;
     color: var(--text-color);
-    transition: background 0.2s;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s;
     cursor: pointer;
+    transform-origin: left center;
+    position: relative; /* Needed for z-index */
 }
 
+/* Hover Effect - Dock Style */
 .leaf-node:hover {
-    background: rgba(66, 133, 244, 0.1);
+    background: rgba(66, 133, 244, 0.15);
+    transform: scale(1.15) translateX(10px);
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Previous Sibling */
+.leaf-node:has(+ .leaf-node:hover) {
+    transform: scale(1.05) translateX(5px);
+    z-index: 5;
+}
+
+/* Next Sibling */
+.leaf-node:hover + .leaf-node {
+    transform: scale(1.05) translateX(5px);
+    z-index: 5;
 }
 
 .bookmark-icon {
