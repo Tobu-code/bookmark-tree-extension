@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2025-12-31
+
+### Features
+- **Settings Panel**: New options for "Open in New Tab" and "Appearance".
+- **Theme**: Support for Light, Dark, and System modes.
+- **Link Behavior**: Configurable link opening (New Tab vs Current Tab).
+
 ## [0.2.0] - 2025-12-31
 
 ### Features

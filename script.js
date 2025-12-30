@@ -14,6 +14,9 @@ function initBookmarks() {
         const container = document.getElementById('bookmarks-tree');
         container.innerHTML = ''; // Clear previous
 
+        // Apply Open in New Tab setting to container class for easier delegation or just use global
+        // We will use the global OPEN_IN_NEW_TAB variable when creating links
+
         // Create a wrapper for top-level columns
         const topLevelContainer = document.createElement('div');
         topLevelContainer.className = 'top-level-container';
@@ -109,6 +112,9 @@ function createSimpleTile(node) {
     const leaf = document.createElement('a');
     leaf.className = 'leaf-node';
     leaf.href = node.url;
+    if (OPEN_IN_NEW_TAB) {
+        leaf.target = '_blank';
+    }
     leaf.style.padding = '0';
 
     const emoji = getRandomEmoji();
@@ -125,6 +131,9 @@ function renderTreeItem(node) {
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
+        if (OPEN_IN_NEW_TAB) {
+            a.target = '_blank';
+        }
 
         const emoji = getRandomEmoji();
         a.innerHTML = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${emoji}</span> <span class="bookmark-label">${node.title}</span>`;
@@ -277,6 +286,10 @@ function initSearch() {
 // --- Settings Logic (Preserved) ---
 const STORAGE_KEY_BG = 'bookmark_tree_bg';
 const STORAGE_KEY_OPACITY = 'bookmark_tree_opacity';
+const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
+const STORAGE_KEY_THEME = 'settings_theme';
+
+let OPEN_IN_NEW_TAB = false;
 
 function initSettings() {
     const modal = document.getElementById('settings-modal');
@@ -284,12 +297,16 @@ function initSettings() {
     const close = document.getElementById('close-modal');
     const saveBtn = document.getElementById('save-settings');
     const clearBtn = document.getElementById('clear-bg');
+
+    // Inputs
     const bgUrlInput = document.getElementById('bg-url');
     const bgUpload = document.getElementById('bg-upload');
     const opacityInput = document.getElementById('bg-opacity');
+    const newTabInput = document.getElementById('open-new-tab');
+    const themeInputs = document.getElementsByName('theme');
 
     // Load saved settings
-    chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY], (result) => {
+    chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME], (result) => {
         if (result[STORAGE_KEY_BG]) {
             applyBackground(result[STORAGE_KEY_BG]);
             bgUrlInput.value = result[STORAGE_KEY_BG].startsWith('data:') ? '' : result[STORAGE_KEY_BG];
@@ -298,6 +315,33 @@ function initSettings() {
             opacityInput.value = result[STORAGE_KEY_OPACITY];
             updateOpacity(result[STORAGE_KEY_OPACITY]);
         }
+
+        // Open in New Tab
+        if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
+            OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];
+            newTabInput.checked = OPEN_IN_NEW_TAB;
+            // Re-render bookmarks if needed, but this is init, so initBookmarks() runs after?
+            // Actually initBookmarks calls concurrently. We might need to re-run it or ensure variable is set before.
+            // Since callbacks are async, we might want to call initBookmarks inside here or rely on the variable being updated eventually.
+            // But for initial load, initBookmarks might run before this helper returns. 
+            // Ideally we should chain them, but let's just re-run initBookmarks if it already ran? 
+            // Or simpler: reload logic.
+            // For now, let's assume initBookmarks reads the global variable. 
+            // We can check if we need to re-render.
+            const links = document.querySelectorAll('a.leaf-node');
+            if (links.length > 0) {
+                // Update existing links dynamically without full re-render
+                links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
+            }
+        }
+
+        // Theme
+        const savedTheme = result[STORAGE_KEY_THEME] || 'system';
+        applyTheme(savedTheme);
+        // Set radio button
+        themeInputs.forEach(radio => {
+            if (radio.value === savedTheme) radio.checked = true;
+        });
     });
 
     btn.onclick = () => modal.classList.remove('hidden');
@@ -312,9 +356,24 @@ function initSettings() {
         const url = bgUrlInput.value.trim();
         const file = bgUpload.files[0];
         const opacity = opacityInput.value;
+        const newTab = newTabInput.checked;
+        const selectedTheme = Array.from(themeInputs).find(r => r.checked)?.value || 'system';
 
-        chrome.storage.local.set({ [STORAGE_KEY_OPACITY]: opacity });
+        // Save Settings
+        chrome.storage.local.set({
+            [STORAGE_KEY_OPACITY]: opacity,
+            [STORAGE_KEY_NEW_TAB]: newTab,
+            [STORAGE_KEY_THEME]: selectedTheme
+        });
+
         updateOpacity(opacity);
+
+        // Update Globals and UI immediately
+        OPEN_IN_NEW_TAB = newTab;
+        const links = document.querySelectorAll('a.leaf-node');
+        links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
+
+        applyTheme(selectedTheme);
 
         if (file) {
             const reader = new FileReader();
@@ -335,6 +394,8 @@ function initSettings() {
                 applyBackground(url);
                 modal.classList.add('hidden');
             });
+        } else {
+            modal.classList.add('hidden');
         }
     };
 
@@ -343,8 +404,20 @@ function initSettings() {
             document.getElementById('background-layer').style.backgroundImage = 'none';
             bgUrlInput.value = '';
             bgUpload.value = '';
-            modal.classList.add('hidden');
+            // Don't close modal to allow other settings
         });
+    }
+}
+
+function applyTheme(theme) {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+    } else if (theme === 'light') {
+        root.setAttribute('data-theme', 'light');
+    } else {
+        // System
+        root.removeAttribute('data-theme');
     }
 }
 

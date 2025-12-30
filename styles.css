@@ -1,4 +1,5 @@
 :root {
+    /* Default (Light) - will be overridden by data-theme="dark" or media query */
     --primary-color: #4285f4;
     --text-color: #333;
     --text-secondary: #5f6368;
@@ -7,7 +8,38 @@
     --card-hover: rgba(255, 255, 255, 0.95);
     --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.12);
-    /* Stronger shadow */
+    --modal-bg: rgba(255, 255, 255, 0.9);
+    --modal-text: #333;
+}
+
+/* Dark Theme overrides via data-attribute */
+:root[data-theme="dark"] {
+    --primary-color: #8ab4f8;
+    --text-color: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --bg-overlay: rgba(32, 33, 36, 0.60);
+    --card-bg: rgba(40, 44, 52, 0.75);
+    --card-hover: rgba(50, 54, 62, 0.95);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.5);
+    --modal-bg: rgba(40, 44, 52, 0.95);
+    --modal-text: #e8eaed;
+}
+
+/* System Dark Theme (only if no data-theme is set) */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary-color: #8ab4f8;
+        --text-color: #e8eaed;
+        --text-secondary: #9aa0a6;
+        --bg-overlay: rgba(32, 33, 36, 0.60);
+        --card-bg: rgba(40, 44, 52, 0.75);
+        --card-hover: rgba(50, 54, 62, 0.95);
+        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.5);
+        --modal-bg: rgba(40, 44, 52, 0.95);
+        --modal-text: #e8eaed;
+    }
 }
 
 body,
@@ -352,5 +384,125 @@ html {
 .modal-content {
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--modal-bg);
+    color: var(--modal-text);
+    padding: 30px;
+    width: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--primary-color);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+}
+
+/* Radio Group for Theme */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-option input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+/* Setting Items spacing */
+.setting-item {
+    margin-bottom: 25px;
+}
+
+.setting-item label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.setting-item button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+.setting-item button:hover {
+    opacity: 0.9;
+}
+
+#clear-bg {
+    background: transparent;
+    border: 1px solid var(--text-secondary);
+    color: var(--text-secondary);
+    margin-left: 10px;
+}
+
+#save-settings {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 10px;
 }

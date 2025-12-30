@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Tab</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div id="background-layer"></div>
-    
+
     <div class="container">
         <div id="search-container">
             <div class="search-wrapper">
@@ -40,6 +42,29 @@
                 <label for="bg-opacity">Overlay Opacity:</label>
                 <input type="range" id="bg-opacity" min="0" max="1" step="0.1" value="0.3">
             </div>
+            <div class="setting-item">
+                <label>Open in new tab</label>
+                <label class="switch">
+                    <input type="checkbox" id="open-new-tab">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <label>Appearance</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="light"> Light
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="dark"> Dark
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="system"> System
+                    </label>
+                </div>
+            </div>
+
             <button id="save-settings">Save</button>
             <button id="clear-bg">Reset Background</button>
         </div>
@@ -47,4 +72,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
