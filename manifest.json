@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "小飞猪的书签",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "description": "A beautiful tree view of your bookmarks on the new tab page.",
   "permissions": [
     "bookmarks",
