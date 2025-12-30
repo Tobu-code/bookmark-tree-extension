@@ -85,6 +85,12 @@ function createBookmarkCard(folderNode) {
     return card;
 }
 
+// --- Helpers ---
+function getRandomEmoji() {
+    const emojis = ['🌍', '📚', '🔗', '📌', '💻', '🎨', '🎵', '🎬', '🎮', '📱', '📡', '💡', '📅', '📝', '📁', '📂'];
+    return emojis[Math.floor(Math.random() * emojis.length)];
+}
+
 function createSimpleTile(node) {
     // For single bookmarks at the top level, we make a mini card
     const card = document.createElement('div');
@@ -105,8 +111,8 @@ function createSimpleTile(node) {
     leaf.href = node.url;
     leaf.style.padding = '0';
 
-    const iconUrl = `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}&sz=32`;
-    leaf.innerHTML = `<img src="${iconUrl}" class="bookmark-icon" style="width:24px;height:24px;"> <span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
+    const emoji = getRandomEmoji();
+    leaf.innerHTML = `<span class="bookmark-icon" style="font-size:20px;margin-right:8px;">${emoji}</span> <span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
 
     card.appendChild(leaf);
     return card;
@@ -120,8 +126,8 @@ function renderTreeItem(node) {
         a.className = 'leaf-node';
         a.href = node.url;
 
-        const iconUrl = `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}`;
-        a.innerHTML = `<img src="${iconUrl}" class="bookmark-icon"> <span class="bookmark-label">${node.title}</span>`;
+        const emoji = getRandomEmoji();
+        a.innerHTML = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${emoji}</span> <span class="bookmark-label">${node.title}</span>`;
         return a;
     } else {
         // Sub-folder
