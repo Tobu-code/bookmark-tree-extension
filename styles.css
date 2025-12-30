@@ -350,6 +350,40 @@ html {
     background: rgba(66, 133, 244, 0.05);
 }
 
+/* Close Button - Mac Style */
+.close {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 14px;
+    height: 14px;
+    background-color: #FF5F56;
+    /* Red circle */
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+    font-size: 10px;
+    color: transparent;
+    /* Text hidden by default */
+}
+
+/* Show 'x' on hover */
+.close:hover {
+    color: rgba(0, 0, 0, 0.5);
+    /* Dark X */
+}
+
+.close:hover::before {
+    content: '×';
+    /* Times symbol */
+    font-weight: bold;
+    line-height: 1;
+}
+
+
 /* Settings Button */
 #settings-btn {
     position: fixed;
@@ -497,12 +531,33 @@ input:checked+.slider:before {
     background: transparent;
     border: 1px solid var(--text-secondary);
     color: var(--text-secondary);
-    margin-left: 10px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#clear-bg:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--text-color);
+    color: var(--text-color);
 }
 
 #save-settings {
-    width: 100%;
-    padding: 12px;
+    width: 50%;
+    /* Centered with auto margins */
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 24px;
     font-size: 16px;
-    margin-top: 10px;
+    border-radius: 25px;
+    /* Pill shape */
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#save-settings:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(66, 133, 244, 0.4);
 }

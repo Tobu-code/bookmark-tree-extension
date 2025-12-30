@@ -24,26 +24,29 @@
         <div id="bookmarks-tree" class="tree-view"></div>
     </div>
 
-    <button id="settings-btn" title="Settings">⚙️</button>
+    <button id="settings-btn" title="设置">⚙️</button>
 
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
-            <h2>Settings</h2>
+            <span id="close-modal" class="close"></span>
+            <h2>设置</h2>
             <div class="setting-item">
-                <label for="bg-url">Background Image URL:</label>
+                <label for="bg-url">背景图片链接:</label>
                 <input type="text" id="bg-url" placeholder="https://example.com/image.jpg">
             </div>
             <div class="setting-item">
-                <label for="bg-upload">Or Upload Image:</label>
-                <input type="file" id="bg-upload" accept="image/*">
+                <label for="bg-upload">或上传图片:</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="file" id="bg-upload" accept="image/*">
+                    <button id="clear-bg">重置</button>
+                </div>
             </div>
             <div class="setting-item">
-                <label for="bg-opacity">Overlay Opacity:</label>
+                <label for="bg-opacity">遮罩透明度:</label>
                 <input type="range" id="bg-opacity" min="0" max="1" step="0.1" value="0.3">
             </div>
             <div class="setting-item">
-                <label>Open in new tab</label>
+                <label>新标签页打开书签</label>
                 <label class="switch">
                     <input type="checkbox" id="open-new-tab">
                     <span class="slider"></span>
@@ -51,22 +54,21 @@
             </div>
 
             <div class="setting-item">
-                <label>Appearance</label>
+                <label>外观</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="light"> Light
+                        <input type="radio" name="theme" value="light"> 浅色
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="dark"> Dark
+                        <input type="radio" name="theme" value="dark"> 深色
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="system"> System
+                        <input type="radio" name="theme" value="system"> 跟随系统
                     </label>
                 </div>
             </div>
 
-            <button id="save-settings">Save</button>
-            <button id="clear-bg">Reset Background</button>
+            <button id="save-settings">保存</button>
         </div>
     </div>
 
