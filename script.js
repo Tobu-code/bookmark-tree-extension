@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
 });
 
+
 // --- State and Constants ---
 let dragSrcEl = null;
 
@@ -51,6 +52,8 @@ function initBookmarks() {
                 }
             });
         }
+
+
     });
 }
 
@@ -84,6 +87,17 @@ function createBookmarkCard(folderNode) {
     }
 
     card.appendChild(content);
+
+    // Auto-collapse all sub-folders when mouse leaves the entire card
+    card.addEventListener('mouseleave', () => {
+        const subFolders = content.querySelectorAll('.sub-folder');
+        subFolders.forEach(folder => {
+            if (folder.collapseIfUnlocked) {
+                folder.collapseIfUnlocked();
+            }
+        });
+    });
+
     return card;
 }
 
@@ -209,29 +223,19 @@ function renderTreeItem(node) {
             }
         });
 
-        // Collapse timeout reference
-        let collapseTimeout = null;
-
         // Auto-expand on hover (Fast)
         wrapper.addEventListener('mouseenter', () => {
-            // Clear any pending collapse
-            if (collapseTimeout) {
-                clearTimeout(collapseTimeout);
-                collapseTimeout = null;
-            }
             childrenContainer.classList.remove('hidden');
             header.querySelector('span').style.transform = 'rotate(90deg)';
         });
 
-        // Auto-collapse on leave (with delay, unless locked)
-        wrapper.addEventListener('mouseleave', () => {
+        // Store reference to collapse function for card-level collapse
+        wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
-                collapseTimeout = setTimeout(() => {
-                    childrenContainer.classList.add('hidden');
-                    header.querySelector('span').style.transform = 'rotate(0deg)';
-                }, 300); // 300ms delay
+                childrenContainer.classList.add('hidden');
+                header.querySelector('span').style.transform = 'rotate(0deg)';
             }
-        });
+        };
 
         wrapper.appendChild(header);
         wrapper.appendChild(childrenContainer);
