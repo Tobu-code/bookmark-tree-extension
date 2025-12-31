@@ -159,26 +159,43 @@ function renderTreeItem(node) {
             });
         }
 
+        // Interactions
+        // State: 'isLocked' (persistent open) stored on wrapper or header dataset
+
         header.addEventListener('click', (e) => {
             e.stopPropagation();
-            const isHidden = childrenContainer.classList.toggle('hidden');
-            header.querySelector('span').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(90deg)';
-        });
+            const isHidden = childrenContainer.classList.contains('hidden');
 
-        // Auto-expand on hover
-        let hoverTimeout;
-        header.addEventListener('mouseenter', () => {
-            if (childrenContainer.classList.contains('hidden')) {
-                hoverTimeout = setTimeout(() => {
-                    childrenContainer.classList.remove('hidden');
-                    header.querySelector('span').style.transform = 'rotate(90deg)';
-                }, 300); // 300ms delay
+            if (isHidden) {
+                // Open and Lock
+                childrenContainer.classList.remove('hidden');
+                header.querySelector('span').style.transform = 'rotate(90deg)';
+                header.dataset.isLocked = 'true';
+            } else {
+                if (header.dataset.isLocked === 'true') {
+                    // Locked -> Unlock and Close
+                    childrenContainer.classList.add('hidden');
+                    header.querySelector('span').style.transform = 'rotate(0deg)';
+                    header.dataset.isLocked = 'false';
+                } else {
+                    // Hover-Open (Not Locked) -> Lock it
+                    header.dataset.isLocked = 'true';
+                    // Optional: Visual cue that it's locked?
+                }
             }
         });
 
+        // Auto-expand on hover (Fast)
+        header.addEventListener('mouseenter', () => {
+            childrenContainer.classList.remove('hidden');
+            header.querySelector('span').style.transform = 'rotate(90deg)';
+        });
+
+        // Auto-collapse on leave (unless locked)
         header.addEventListener('mouseleave', () => {
-            if (hoverTimeout) {
-                clearTimeout(hoverTimeout);
+            if (header.dataset.isLocked !== 'true') {
+                childrenContainer.classList.add('hidden');
+                header.querySelector('span').style.transform = 'rotate(0deg)';
             }
         });
 
