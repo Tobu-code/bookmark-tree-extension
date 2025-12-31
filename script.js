@@ -195,13 +195,13 @@ function renderTreeItem(node) {
         });
 
         // Auto-expand on hover (Fast)
-        header.addEventListener('mouseenter', () => {
+        wrapper.addEventListener('mouseenter', () => {
             childrenContainer.classList.remove('hidden');
             header.querySelector('span').style.transform = 'rotate(90deg)';
         });
 
         // Auto-collapse on leave (unless locked)
-        header.addEventListener('mouseleave', () => {
+        wrapper.addEventListener('mouseleave', () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
                 header.querySelector('span').style.transform = 'rotate(0deg)';
