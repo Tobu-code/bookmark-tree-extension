@@ -297,24 +297,25 @@ html {
 /* Hover Effect - Dock Style Enhanced */
 /* Trigger on Wrapper Hover, Affect Node */
 .leaf-wrapper:hover .leaf-node {
-    justify-content: center;
-    /* Center on hover */
+    justify-content: flex-start;
+    padding-left: 20px;
+    /* Center-ish Left on hover */
     background: rgba(66, 133, 244, 0.15);
     /* Restore blue tint */
-    transform: scale(1.15);
+    transform: scale(1.05);
     z-index: 20;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Previous Sibling */
 .leaf-wrapper:has(+ .leaf-wrapper:hover) .leaf-node {
-    transform: scale(1.05);
+    transform: scale(1.02);
     z-index: 10;
 }
 
 /* Next Sibling */
 .leaf-wrapper:hover+.leaf-wrapper .leaf-node {
-    transform: scale(1.05);
+    transform: scale(1.02);
     z-index: 10;
 }
 
