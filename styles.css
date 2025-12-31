@@ -243,6 +243,8 @@ html {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Stronger shadow for depth */
 }
 
 /* List Items inside Card */
@@ -345,6 +347,8 @@ html {
     cursor: pointer;
     display: flex;
     align-items: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    /* Shadow for directory/folder titles */
 }
 
 .sub-folder-header:hover {
