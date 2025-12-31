@@ -90,7 +90,7 @@ function createBookmarkCard(folderNode) {
 
 // --- Helpers ---
 function getRandomEmoji() {
-    const emojis = ['🌍', '📚', '🔗', '📌', '💻', '🎨', '🎵', '🎬', '🎮', '📱', '📡', '💡', '📅', '📝', '📁', '📂'];
+    const emojis = ['🌍', '📚', '🔗', '📌', '💻', '🎨', '🎵', '🎬', '🎮', '📱', '📡', '💡', '📅', '📝'];
     return emojis[Math.floor(Math.random() * emojis.length)];
 }
 
