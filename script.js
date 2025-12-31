@@ -74,6 +74,17 @@ function createBookmarkCard(folderNode) {
     const header = document.createElement('div');
     header.className = 'card-header';
     header.innerHTML = `<span style="font-size:20px;">📁</span> <span class="card-title">${folderNode.title}</span>`;
+
+    // Mac-style Expand Button
+    const expandBtn = document.createElement('button');
+    expandBtn.className = 'expand-btn';
+    expandBtn.title = '放大查看';
+    expandBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showFolderModal(folderNode);
+    });
+    header.appendChild(expandBtn);
+
     card.appendChild(header);
 
     // Content List
@@ -305,6 +316,138 @@ function handleDragEnd(e) {
     this.style.opacity = '1';
     const items = document.querySelectorAll('.bookmark-card');
     items.forEach(item => item.classList.remove('drag-over'));
+}
+
+// --- Folder Modal Logic ---
+
+function showFolderModal(folderNode) {
+    const modal = document.getElementById('folder-modal');
+    const title = modal.querySelector('.folder-modal-title');
+    const body = modal.querySelector('.folder-modal-body');
+    const closeBtn = document.getElementById('close-folder-modal');
+
+    // Set title
+    title.textContent = folderNode.title;
+
+    // Clear and render content
+    body.innerHTML = '';
+    if (folderNode.children) {
+        folderNode.children.forEach(child => {
+            body.appendChild(renderTreeItemForModal(child));
+        });
+    }
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Close handlers
+    const closeModal = () => {
+        modal.classList.add('hidden');
+        body.innerHTML = '';
+    };
+
+    closeBtn.onclick = closeModal;
+
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    };
+
+    // ESC key to close
+    const escHandler = (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+}
+
+// Render tree item for modal (same logic but with auto-collapse on modal leave)
+function renderTreeItemForModal(node) {
+    if (node.url) {
+        // Leaf
+        const wrapper = document.createElement('div');
+        wrapper.className = 'leaf-wrapper';
+
+        const a = document.createElement('a');
+        a.className = 'leaf-node';
+        a.href = node.url;
+        if (OPEN_IN_NEW_TAB) {
+            a.target = '_blank';
+        }
+
+        // Icon handling
+        const iconData = getIconForBookmark(node.url);
+        let iconHtml;
+        if (iconData.type === 'img') {
+            iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:16px;\\'>🔖</span>'" style="width:16px;height:16px;margin-right:8px;">`;
+        } else {
+            iconHtml = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${iconData.value}</span>`;
+        }
+
+        a.innerHTML = `${iconHtml}<span class="bookmark-label">${node.title}</span>`;
+
+        wrapper.appendChild(a);
+        return wrapper;
+    } else {
+        // Sub-folder
+        const wrapper = document.createElement('div');
+        wrapper.className = 'sub-folder';
+
+        const header = document.createElement('div');
+        header.className = 'sub-folder-header';
+        header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg);">▶</span> ${node.title}`;
+        header.dataset.isLocked = 'true'; // Default open
+
+        const childrenContainer = document.createElement('div');
+        childrenContainer.className = 'sub-folder-content'; // Default expanded (removed hidden)
+
+        if (node.children) {
+            node.children.forEach(child => {
+                childrenContainer.appendChild(renderTreeItemForModal(child));
+            });
+        }
+
+        // Click to toggle and lock
+        header.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = childrenContainer.classList.contains('hidden');
+
+            if (isHidden) {
+                childrenContainer.classList.remove('hidden');
+                header.querySelector('span').style.transform = 'rotate(90deg)';
+                header.dataset.isLocked = 'true';
+            } else {
+                if (header.dataset.isLocked === 'true') {
+                    childrenContainer.classList.add('hidden');
+                    header.querySelector('span').style.transform = 'rotate(0deg)';
+                    header.dataset.isLocked = 'false';
+                } else {
+                    header.dataset.isLocked = 'true';
+                }
+            }
+        });
+
+        // Auto-expand on hover
+        wrapper.addEventListener('mouseenter', () => {
+            childrenContainer.classList.remove('hidden');
+            header.querySelector('span').style.transform = 'rotate(90deg)';
+        });
+
+        // Collapse function for parent to call
+        wrapper.collapseIfUnlocked = () => {
+            if (header.dataset.isLocked !== 'true') {
+                childrenContainer.classList.add('hidden');
+                header.querySelector('span').style.transform = 'rotate(0deg)';
+            }
+        };
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(childrenContainer);
+        return wrapper;
+    }
 }
 
 // --- Search Logic ---
