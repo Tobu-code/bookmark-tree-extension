@@ -517,6 +517,10 @@ select {
     color: var(--text-color);
     outline: none;
     transition: all 0.2s;
+    line-height: 1.5;
+    /* Improve text centering */
+    min-height: 46px;
+    /* Ensure consistent height */
 }
 
 input[type="text"]:focus,
@@ -587,14 +591,22 @@ label.switch input:checked+.slider-track::after {
     background: rgba(0, 0, 0, 0.04);
     padding: 4px;
     border-radius: 12px;
+    min-height: 48px;
+    /* Match input height */
+    box-sizing: border-box;
+    /* Ensure padding includes total height */
+    align-items: stretch;
+    /* Stretch items to fill height */
 }
 
 .radio-option {
     position: relative;
     display: flex;
+    /* Flex to center content */
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    padding: 0 10px;
+    /* Remove vertical padding, let flex center */
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.2s;
@@ -602,13 +614,27 @@ label.switch input:checked+.slider-track::after {
     font-weight: 500;
     color: var(--text-secondary);
     text-align: center;
+    margin: 0;
+    /* No margin */
+    height: 100%;
+    /* Fill grid cell */
+    min-height: 38px;
+    /* Inner height */
+    line-height: normal;
+    /* Allow natural text centering */
 }
 
 .radio-option input {
+    /* Robust screen-reader only hide */
     position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .radio-option:has(input:checked) {
@@ -627,11 +653,19 @@ label.switch input:checked+.slider-track::after {
     display: flex;
     gap: 8px;
     align-items: center;
+    /* Vertically center items */
+    justify-content: space-between;
+    /* Better distribution */
     flex-wrap: wrap;
+    /* wrap if needed but try to stay on line */
     background: rgba(0, 0, 0, 0.03);
-    padding: 8px;
+    padding: 4px 8px;
+    /* Reduce vertical padding as container has min-height */
     border-radius: 12px;
     border: 1px dashed rgba(0, 0, 0, 0.1);
+    min-height: 48px;
+    /* Match text inputs */
+    box-sizing: border-box;
 }
 
 input[type="file"] {
@@ -642,22 +676,38 @@ input[type="file"] {
     background: transparent;
     border: none;
     padding: 0;
+    margin: 0;
+    /* Remove default margin */
+    align-self: center;
+    /* Center explicit */
+    /* Removed height: 100% and flex/align-items as strict height can cause offset text in default file inputs */
 }
 
 /* Buttons */
 .secondary-btn,
-#clear-bg {
+#clear-bg,
+#about-btn {
+    display: inline-flex;
+    /* Use flex for centering text */
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
+    /* Precise centering */
     background: var(--card-bg);
     /* Use theme variable */
     border: 1px solid rgba(0, 0, 0, 0.1);
     color: var(--text-color);
-    padding: 8px 16px;
+    padding: 0 16px;
+    height: 36px;
+    /* Fixed height match min-height */
     border-radius: 8px;
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    min-height: 36px;
+    /* Consistent button height */
 }
 
 .secondary-btn:hover,
@@ -670,12 +720,12 @@ input[type="file"] {
 
 #about-btn {
     width: 100%;
-    justify-content: center;
-    padding: 12px;
     background: var(--primary-color);
     color: white;
     border: none;
     font-weight: 600;
+    padding: 12px;
+    min-height: 44px;
 }
 
 #about-btn:hover {
