@@ -162,6 +162,23 @@ function renderTreeItem(node) {
             header.querySelector('span').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(90deg)';
         });
 
+        // Auto-expand on hover
+        let hoverTimeout;
+        header.addEventListener('mouseenter', () => {
+            if (childrenContainer.classList.contains('hidden')) {
+                hoverTimeout = setTimeout(() => {
+                    childrenContainer.classList.remove('hidden');
+                    header.querySelector('span').style.transform = 'rotate(90deg)';
+                }, 300); // 300ms delay
+            }
+        });
+
+        header.addEventListener('mouseleave', () => {
+            if (hoverTimeout) {
+                clearTimeout(hoverTimeout);
+            }
+        });
+
         wrapper.appendChild(header);
         wrapper.appendChild(childrenContainer);
         return wrapper;
