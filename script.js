@@ -112,6 +112,9 @@ function createSimpleTile(node) {
     card.addEventListener('drop', handleDrop);
     card.addEventListener('dragend', handleDragEnd);
 
+    const wrapper = document.createElement('div');
+    wrapper.className = 'leaf-wrapper';
+
     const leaf = document.createElement('a');
     leaf.className = 'leaf-node';
     leaf.href = node.url;
@@ -123,7 +126,8 @@ function createSimpleTile(node) {
     const emoji = getRandomEmoji();
     leaf.innerHTML = `<span class="bookmark-icon" style="font-size:20px;margin-right:8px;">${emoji}</span> <span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
 
-    card.appendChild(leaf);
+    wrapper.appendChild(leaf);
+    card.appendChild(wrapper);
     return card;
 }
 
@@ -131,6 +135,9 @@ function createSimpleTile(node) {
 function renderTreeItem(node) {
     if (node.url) {
         // Leaf
+        const wrapper = document.createElement('div');
+        wrapper.className = 'leaf-wrapper';
+
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
@@ -140,7 +147,9 @@ function renderTreeItem(node) {
 
         const emoji = getRandomEmoji();
         a.innerHTML = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${emoji}</span> <span class="bookmark-label">${node.title}</span>`;
-        return a;
+
+        wrapper.appendChild(a);
+        return wrapper;
     } else {
         // Sub-folder
         const wrapper = document.createElement('div');
