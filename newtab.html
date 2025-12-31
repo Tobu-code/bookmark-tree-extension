@@ -14,10 +14,17 @@
     <div class="container">
         <div id="search-container">
             <div class="search-wrapper">
-                <select id="search-engine-select">
-                    <option value="google">Google</option>
-                    <option value="bing">Bing</option>
-                </select>
+                <div id="engine-picker-container">
+                    <span id="search-engine-label">Google</span>
+                    <div id="engine-picker-overlay" class="hidden"></div>
+                    <div id="engine-wheel" class="hidden">
+                        <div class="wheel-option" data-engine="google" data-url="https://www.google.com/search?q=">
+                            Google</div>
+                        <div class="wheel-option" data-engine="bing" data-url="https://www.bing.com/search?q=">Bing
+                        </div>
+                        <div class="wheel-option" data-engine="baidu" data-url="https://www.baidu.com/s?wd=">Baidu</div>
+                    </div>
+                </div>
                 <input type="text" id="search-input" placeholder="Search bookmarks...">
             </div>
         </div>
@@ -78,7 +85,10 @@
                 <label>图标风格</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="icon-style" value="animals" checked><span>动物</span>
+                        <input type="radio" name="icon-style" value="native" checked><span>原生</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="icon-style" value="animals"><span>动物</span>
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="icon-style" value="work"><span>办公</span>

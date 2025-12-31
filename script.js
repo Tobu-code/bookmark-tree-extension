@@ -122,8 +122,16 @@ function createSimpleTile(node) {
     }
     leaf.style.padding = '0';
 
-    const emoji = getRandomEmoji();
-    leaf.innerHTML = `<span class="bookmark-icon" style="font-size:20px;margin-right:8px;">${emoji}</span> <span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
+    // Icon handling
+    const iconData = getIconForBookmark(node.url);
+    let iconHtml;
+    if (iconData.type === 'img') {
+        iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:20px;\\'>🔖</span>'" style="width:20px;height:20px;margin-right:8px;">`;
+    } else {
+        iconHtml = `<span class="bookmark-icon" style="font-size:20px;margin-right:8px;">${iconData.value}</span>`;
+    }
+
+    leaf.innerHTML = `${iconHtml}<span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
 
     wrapper.appendChild(leaf);
     card.appendChild(wrapper);
@@ -144,8 +152,16 @@ function renderTreeItem(node) {
             a.target = '_blank';
         }
 
-        const emoji = getRandomEmoji();
-        a.innerHTML = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${emoji}</span> <span class="bookmark-label">${node.title}</span>`;
+        // Icon handling
+        const iconData = getIconForBookmark(node.url);
+        let iconHtml;
+        if (iconData.type === 'img') {
+            iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:16px;\\'>🔖</span>'" style="width:16px;height:16px;margin-right:8px;">`;
+        } else {
+            iconHtml = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${iconData.value}</span>`;
+        }
+
+        a.innerHTML = `${iconHtml}<span class="bookmark-label">${node.title}</span>`;
 
         wrapper.appendChild(a);
         return wrapper;
@@ -193,17 +209,27 @@ function renderTreeItem(node) {
             }
         });
 
+        // Collapse timeout reference
+        let collapseTimeout = null;
+
         // Auto-expand on hover (Fast)
         wrapper.addEventListener('mouseenter', () => {
+            // Clear any pending collapse
+            if (collapseTimeout) {
+                clearTimeout(collapseTimeout);
+                collapseTimeout = null;
+            }
             childrenContainer.classList.remove('hidden');
             header.querySelector('span').style.transform = 'rotate(90deg)';
         });
 
-        // Auto-collapse on leave (unless locked)
+        // Auto-collapse on leave (with delay, unless locked)
         wrapper.addEventListener('mouseleave', () => {
             if (header.dataset.isLocked !== 'true') {
-                childrenContainer.classList.add('hidden');
-                header.querySelector('span').style.transform = 'rotate(0deg)';
+                collapseTimeout = setTimeout(() => {
+                    childrenContainer.classList.add('hidden');
+                    header.querySelector('span').style.transform = 'rotate(0deg)';
+                }, 300); // 300ms delay
             }
         });
 
@@ -281,32 +307,79 @@ function handleDragEnd(e) {
 
 function initSearch() {
     const input = document.getElementById('search-input');
-    const select = document.getElementById('search-engine-select');
+    const label = document.getElementById('search-engine-label');
+    const wheel = document.getElementById('engine-wheel');
+    const overlay = document.getElementById('engine-picker-overlay');
+    const options = document.querySelectorAll('.wheel-option');
     const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
+
+    let currentEngine = 'google';
+    let currentUrl = 'https://www.google.com/search?q=';
+
+    // Show/hide picker with overlay
+    function showPicker() {
+        wheel.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+        updateActiveOption();
+    }
+
+    function hidePicker() {
+        wheel.classList.add('hidden');
+        overlay.classList.add('hidden');
+    }
+
+    // Update active state
+    function updateActiveOption() {
+        options.forEach(opt => {
+            opt.classList.toggle('active', opt.dataset.engine === currentEngine);
+        });
+    }
 
     // Load saved engine
     chrome.storage.local.get([STORAGE_KEY_ENGINE], (result) => {
         if (result[STORAGE_KEY_ENGINE]) {
-            select.value = result[STORAGE_KEY_ENGINE];
+            const opt = document.querySelector(`.wheel-option[data-engine="${result[STORAGE_KEY_ENGINE]}"]`);
+            if (opt) {
+                currentEngine = opt.dataset.engine;
+                currentUrl = opt.dataset.url;
+                label.textContent = opt.textContent.trim();
+                updateActiveOption();
+            }
         }
     });
 
-    // Save engine on change
-    select.addEventListener('change', () => {
-        chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: select.value });
+    // Click label to toggle popup
+    label.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (wheel.classList.contains('hidden')) {
+            showPicker();
+        } else {
+            hidePicker();
+        }
+    });
+
+    // Click option to select
+    options.forEach(opt => {
+        opt.addEventListener('click', () => {
+            currentEngine = opt.dataset.engine;
+            currentUrl = opt.dataset.url;
+            label.textContent = opt.textContent.trim();
+            updateActiveOption();
+            chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
+            hidePicker();
+        });
+    });
+
+    // Click overlay to close
+    overlay.addEventListener('click', () => {
+        hidePicker();
     });
 
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const query = input.value.trim();
             if (query) {
-                const engine = select.value;
-                let searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-
-                if (engine === 'bing') {
-                    searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
-                }
-
+                const searchUrl = currentUrl + encodeURIComponent(query);
                 window.location.href = searchUrl;
             }
         }
@@ -336,7 +409,7 @@ const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 
 let OPEN_IN_NEW_TAB = false;
-let CURRENT_ICON_STYLE = 'animals'; // 'animals' or 'work'
+let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
 
 const ANIMAL_EMOJIS = [
     '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
@@ -348,9 +421,20 @@ const WORK_EMOJIS = [
     '💻', '🖥️', '⌨️', '🖱️', '📱', '🖨️', '🔍', '💡', '🧠', '⚙️'
 ];
 
-function getRandomEmoji() {
-    const emojis = CURRENT_ICON_STYLE === 'work' ? WORK_EMOJIS : ANIMAL_EMOJIS;
-    return emojis[Math.floor(Math.random() * emojis.length)];
+// Returns emoji or null for native favicon mode
+function getIconForBookmark(url) {
+    if (CURRENT_ICON_STYLE === 'native') {
+        // Return favicon URL
+        try {
+            const domain = new URL(url).origin;
+            return { type: 'img', src: `${domain}/favicon.ico` };
+        } catch {
+            return { type: 'emoji', value: '🔖' }; // fallback
+        }
+    } else {
+        const emojis = CURRENT_ICON_STYLE === 'work' ? WORK_EMOJIS : ANIMAL_EMOJIS;
+        return { type: 'emoji', value: emojis[Math.floor(Math.random() * emojis.length)] };
+    }
 }
 
 function initSettings() {
