@@ -250,6 +250,7 @@ html {
 /* List Items inside Card */
 .card-content {
     overflow-y: auto;
+    overflow-x: hidden;
     flex: 1;
     scrollbar-width: thin;
     padding: 0 15px;
@@ -318,11 +319,15 @@ html {
 }
 
 .bookmark-icon {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-right: 12px;
     flex-shrink: 0;
-    border-radius: 2px;
+    border-radius: 4px;
+    line-height: 1;
 }
 
 .bookmark-label {
