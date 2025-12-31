@@ -441,165 +441,231 @@ html {
     display: none !important;
 }
 
-/* Settings Modal */
+/* --- Unified Settings UI --- */
+
+/* Modal Layout */
 .modal-content {
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     background: var(--modal-bg);
     color: var(--modal-text);
-    padding: 30px;
-    width: fit-content;
-    min-width: 300px;
+    padding: 32px;
+    width: 420px;
+    /* Fixed width for consistency */
     max-width: 90vw;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     z-index: 1000;
 }
 
-/* Toggle Switch */
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+/* Setting Items */
+.setting-item {
+    margin-bottom: 24px;
+}
+
+.setting-item label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Unified Input Styles */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    color: var(--text-color);
+    outline: none;
+    transition: all 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    background: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+}
+
+/* Range Slider */
+input[type=range] {
+    width: 100%;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+/* Toggle Switch (Checkbox) */
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 26px;
-    margin-left: 10px;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+    margin: 0;
 }
 
 .switch input {
+    display: none;
+}
+
+.slider-track {
+    width: 44px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 20px;
+    position: relative;
+    transition: .3s;
+}
+
+.slider-track::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: .3s cubic-bezier(0.3, 1.5, 0.7, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+label.switch input:checked+.slider-track {
+    background-color: #34C759 !important;
+    /* Green for better contrast */
+}
+
+label.switch input:checked+.slider-track::after {
+    left: 22px;
+}
+
+/* Radio Cards (Segmented Control) */
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.radio-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.radio-option input {
+    position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
+.radio-option:has(input:checked) {
+    background: #fff;
+    color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+.radio-option:hover:not(:has(input:checked)) {
+    background: rgba(255, 255, 255, 0.5);
 }
 
-input:checked+.slider {
-    background-color: var(--primary-color);
-}
-
-input:focus+.slider {
-    box-shadow: 0 0 1px var(--primary-color);
-}
-
-input:checked+.slider:before {
-    transform: translateX(24px);
-}
-
-/* Radio Group for Theme */
-.radio-group {
+/* File Upload Area */
+.file-upload-container {
     display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.radio-option {
-    display: flex;
+    gap: 8px;
     align-items: center;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+input[type="file"] {
+    font-size: 12px;
+    color: var(--text-secondary);
+    width: auto;
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* Buttons */
+.secondary-btn,
+#clear-bg {
+    background: var(--card-bg);
+    /* Use theme variable */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
-}
-
-.radio-option input {
-    margin-right: 8px;
-    cursor: pointer;
-}
-
-/* Setting Items spacing */
-.setting-item {
-    margin-bottom: 25px;
-}
-
-.setting-item label {
+    font-size: 13px;
     font-weight: 500;
-    display: block;
-    margin-bottom: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
-.setting-item button {
+.secondary-btn:hover,
+#clear-bg:hover {
+    background: var(--bg-overlay);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+#about-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
     background: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: opacity 0.2s;
+    font-weight: 600;
 }
 
-.setting-item button:hover {
+#about-btn:hover {
+    background: var(--primary-color);
     opacity: 0.9;
+    color: white;
 }
 
-#clear-bg {
-    background: transparent;
-    border: 1px solid var(--text-secondary);
-    color: var(--text-secondary);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
 
-#clear-bg:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: var(--text-color);
-    color: var(--text-color);
-}
-
-#save-settings {
-    width: 50%;
-    /* Centered with auto margins */
-    display: block;
-    margin: 30px auto 0;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 25px;
-    /* Pill shape */
-    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-#save-settings:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(66, 133, 244, 0.4);
-}
-
-/* About Section Styles */
-.about-section {
-    margin-top: 15px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
 
 .about-header {
     margin-bottom: 20px;
@@ -674,22 +740,4 @@ input:checked+.slider:before {
     max-width: 300px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.secondary-btn {
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: var(--text-color);
-    padding: 10px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.secondary-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
 }
