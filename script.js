@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    initBookmarks();
-    initSettings();
+    initSettings(); // initBookmarks will be called inside initSettings after loading
     initSearch();
 });
 
@@ -334,14 +333,31 @@ const STORAGE_KEY_BG = 'bookmark_tree_bg';
 const STORAGE_KEY_OPACITY = 'bookmark_tree_opacity';
 const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
 const STORAGE_KEY_THEME = 'settings_theme';
+const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 
 let OPEN_IN_NEW_TAB = false;
+let CURRENT_ICON_STYLE = 'animals'; // 'animals' or 'work'
+
+const ANIMAL_EMOJIS = [
+    '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
+    '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅'
+];
+
+const WORK_EMOJIS = [
+    '💼', '📊', '📈', '📉', '📧', '📇', '📅', '📝', '📌', '📎',
+    '💻', '🖥️', '⌨️', '🖱️', '📱', '🖨️', '🔍', '💡', '🧠', '⚙️'
+];
+
+function getRandomEmoji() {
+    const emojis = CURRENT_ICON_STYLE === 'work' ? WORK_EMOJIS : ANIMAL_EMOJIS;
+    return emojis[Math.floor(Math.random() * emojis.length)];
+}
 
 function initSettings() {
     const modal = document.getElementById('settings-modal');
     const btn = document.getElementById('settings-btn');
     const close = document.getElementById('close-modal');
-    const saveBtn = document.getElementById('save-settings');
+    const saveBtn = document.getElementById('save-settings'); // Element removed, but var might be null
     const clearBtn = document.getElementById('clear-bg');
 
     // Inputs
@@ -350,28 +366,122 @@ function initSettings() {
     const opacityInput = document.getElementById('bg-opacity');
     const newTabInput = document.getElementById('open-new-tab');
     const themeInputs = document.getElementsByName('theme');
+    const iconStyleInputs = document.getElementsByName('icon-style');
 
-    // About Section
+    // About Section Logic
     const aboutBtn = document.getElementById('about-btn');
-    const aboutContent = document.getElementById('about-content');
+    const aboutModal = document.getElementById('about-modal');
+    const closeAbout = document.getElementById('close-about');
     const appVersion = document.getElementById('app-version');
+    const appDesc = document.getElementById('app-desc');
 
-    if (aboutBtn && aboutContent) {
+    if (aboutBtn && aboutModal) {
         aboutBtn.onclick = () => {
-            const isHidden = aboutContent.classList.toggle('hidden');
-            // Optional: scroll to bottom if opening
-            if (!isHidden) {
-                setTimeout(() => modal.querySelector('.modal-content').scrollTo({ top: 1000, behavior: 'smooth' }), 100);
-            }
+            modal.classList.add('hidden'); // Close settings
+            aboutModal.classList.remove('hidden'); // Open about
         };
+
+        // Return to settings logic
+        const returnToSettings = () => {
+            aboutModal.classList.add('hidden');
+            modal.classList.remove('hidden');
+        };
+
+        closeAbout.onclick = returnToSettings;
+
+        // Close about modal on outside click - return to settings? 
+        // User asked "exit ... back to settings".
+        aboutModal.addEventListener('click', (e) => {
+            if (e.target === aboutModal) {
+                returnToSettings();
+            }
+        });
     }
 
-    if (appVersion && chrome.runtime && chrome.runtime.getManifest) {
-        appVersion.textContent = chrome.runtime.getManifest().version;
+    if (chrome.runtime && chrome.runtime.getManifest) {
+        const manifest = chrome.runtime.getManifest();
+        if (appVersion) appVersion.textContent = manifest.version;
+        if (appDesc) appDesc.textContent = manifest.description;
     }
+
+    // Helper to save settings
+    const saveSetting = (key, value, callback) => {
+        chrome.storage.local.set({ [key]: value }, callback);
+    };
+
+    // Real-time Listeners
+
+    // 1. Background URL (Blur/Change)
+    bgUrlInput.addEventListener('change', () => {
+        const url = bgUrlInput.value.trim();
+        if (url) {
+            saveSetting(STORAGE_KEY_BG, url, () => applyBackground(url));
+            // Clear file input value if any
+            bgUpload.value = '';
+        }
+    });
+
+    // 2. Background File
+    bgUpload.addEventListener('change', () => {
+        const file = bgUpload.files[0];
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64data = reader.result;
+                try {
+                    saveSetting(STORAGE_KEY_BG, base64data, () => applyBackground(base64data));
+                    bgUrlInput.value = ''; // Clear URL input
+                    if (fileNameDisplay) fileNameDisplay.textContent = `已选择: ${file.name}`;
+                } catch (e) {
+                    alert('Image too large to save!');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 3. Opacity (Input - Realtime)
+    opacityInput.addEventListener('input', () => {
+        const opacity = opacityInput.value;
+        updateOpacity(opacity); // Visual update
+        saveSetting(STORAGE_KEY_OPACITY, opacity); // Storage update
+    });
+
+    // 4. Open New Tab
+    newTabInput.addEventListener('change', () => {
+        OPEN_IN_NEW_TAB = newTabInput.checked;
+        saveSetting(STORAGE_KEY_NEW_TAB, OPEN_IN_NEW_TAB);
+
+        const links = document.querySelectorAll('a.leaf-node');
+        links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
+    });
+
+    // 5. Theme
+    themeInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                const theme = radio.value;
+                applyTheme(theme);
+                saveSetting(STORAGE_KEY_THEME, theme);
+            }
+        });
+    });
+
+    // 6. Icon Style
+    iconStyleInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                CURRENT_ICON_STYLE = radio.value;
+                saveSetting(STORAGE_KEY_ICON_STYLE, CURRENT_ICON_STYLE);
+                initBookmarks(); // Re-render
+            }
+        });
+    });
 
     // Load saved settings
-    chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME], (result) => {
+    chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
         if (result[STORAGE_KEY_BG]) {
             applyBackground(result[STORAGE_KEY_BG]);
             bgUrlInput.value = result[STORAGE_KEY_BG].startsWith('data:') ? '' : result[STORAGE_KEY_BG];
@@ -385,17 +495,8 @@ function initSettings() {
         if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
             OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];
             newTabInput.checked = OPEN_IN_NEW_TAB;
-            // Re-render bookmarks if needed, but this is init, so initBookmarks() runs after?
-            // Actually initBookmarks calls concurrently. We might need to re-run it or ensure variable is set before.
-            // Since callbacks are async, we might want to call initBookmarks inside here or rely on the variable being updated eventually.
-            // But for initial load, initBookmarks might run before this helper returns. 
-            // Ideally we should chain them, but let's just re-run initBookmarks if it already ran? 
-            // Or simpler: reload logic.
-            // For now, let's assume initBookmarks reads the global variable. 
-            // We can check if we need to re-render.
             const links = document.querySelectorAll('a.leaf-node');
             if (links.length > 0) {
-                // Update existing links dynamically without full re-render
                 links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
             }
         }
@@ -403,10 +504,20 @@ function initSettings() {
         // Theme
         const savedTheme = result[STORAGE_KEY_THEME] || 'system';
         applyTheme(savedTheme);
-        // Set radio button
         themeInputs.forEach(radio => {
             if (radio.value === savedTheme) radio.checked = true;
         });
+
+        // Icon Style
+        if (result[STORAGE_KEY_ICON_STYLE]) {
+            CURRENT_ICON_STYLE = result[STORAGE_KEY_ICON_STYLE];
+            iconStyleInputs.forEach(radio => {
+                if (radio.value === CURRENT_ICON_STYLE) radio.checked = true;
+            });
+        }
+
+        // Initial Bookmark Render after settings are loaded
+        initBookmarks();
     });
 
     btn.onclick = () => modal.classList.remove('hidden');
@@ -417,59 +528,13 @@ function initSettings() {
         }
     };
 
-    saveBtn.onclick = () => {
-        const url = bgUrlInput.value.trim();
-        const file = bgUpload.files[0];
-        const opacity = opacityInput.value;
-        const newTab = newTabInput.checked;
-        const selectedTheme = Array.from(themeInputs).find(r => r.checked)?.value || 'system';
-
-        // Save Settings
-        chrome.storage.local.set({
-            [STORAGE_KEY_OPACITY]: opacity,
-            [STORAGE_KEY_NEW_TAB]: newTab,
-            [STORAGE_KEY_THEME]: selectedTheme
-        });
-
-        updateOpacity(opacity);
-
-        // Update Globals and UI immediately
-        OPEN_IN_NEW_TAB = newTab;
-        const links = document.querySelectorAll('a.leaf-node');
-        links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
-
-        applyTheme(selectedTheme);
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64data = reader.result;
-                try {
-                    chrome.storage.local.set({ [STORAGE_KEY_BG]: base64data }, () => {
-                        applyBackground(base64data);
-                        modal.classList.add('hidden');
-                    });
-                } catch (e) {
-                    alert('Image too large to save!');
-                }
-            };
-            reader.readAsDataURL(file);
-        } else if (url) {
-            chrome.storage.local.set({ [STORAGE_KEY_BG]: url }, () => {
-                applyBackground(url);
-                modal.classList.add('hidden');
-            });
-        } else {
-            modal.classList.add('hidden');
-        }
-    };
-
     clearBtn.onclick = () => {
         chrome.storage.local.remove([STORAGE_KEY_BG], () => {
             document.getElementById('background-layer').style.backgroundImage = 'none';
             bgUrlInput.value = '';
             bgUpload.value = '';
-            // Don't close modal to allow other settings
+            const fileNameDisplay = document.getElementById('file-name-display');
+            if (fileNameDisplay) fileNameDisplay.textContent = '';
         });
     }
 }

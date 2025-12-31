@@ -36,9 +36,10 @@
             </div>
             <div class="setting-item">
                 <label for="bg-upload">或上传图片:</label>
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <input type="file" id="bg-upload" accept="image/*">
                     <button id="clear-bg">重置</button>
+                    <span id="file-name-display" style="font-size: 12px; color: #888; margin-left: 5px;"></span>
                 </div>
             </div>
             <div class="setting-item">
@@ -68,27 +69,40 @@
                 </div>
             </div>
 
+            <div class="setting-item">
+                <label>图标风格</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="icon-style" value="animals" checked> 动物
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="icon-style" value="work"> 办公
+                    </label>
+                </div>
+            </div>
+
             <div class="setting-item"
                 style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px; padding-top: 20px;">
-                <button id="about-btn" class="secondary-btn" style="width: 100%;">关于小飞猪书签 🐷</button>
+                <button id="about-btn" class="secondary-btn" style="width: 100%;">关于</button>
             </div>
+        </div>
+    </div>
 
-            <div id="about-content" class="about-section hidden">
-                <div class="about-header">
-                    <img src="icon.png" alt="Logo" class="about-logo">
-                    <h3>小飞猪的书签</h3>
-                    <p class="version">Version <span id="app-version">0.3.0</span></p>
-                </div>
-                <ul class="feature-list">
-                    <li>📂 精美树形目录 (Tree View)</li>
-                    <li>🖱️ 极速悬浮交互 (Fast Hover)</li>
-                    <li>🌗 深色模式支持 (Dark Mode)</li>
-                    <li>🎨 自定义背景图 (Custom BG)</li>
-                    <li>🔒 点击锁定目录 (Click Lock)</li>
-                </ul>
+    <!-- About Modal -->
+    <div id="about-modal" class="modal hidden">
+        <div class="modal-content" style="text-align: center;">
+            <span id="close-about" class="close"></span>
+            <div class="about-header">
+                <h3>小飞猪的书签</h3>
+                <p id="app-desc" class="description">A beautiful tree view of your bookmarks.</p>
+                <p class="version">Version <span id="app-version">0.3.1</span></p>
             </div>
-
-            <button id="save-settings">保存</button>
+            <ul class="feature-list">
+                <li><b>悬停交互：</b>灵动的悬停放大效果，文本左对齐更舒适。</li>
+                <li><b>图标风格：</b>新增“办公”风格 Emoji，可在设置中自由切换。</li>
+                <li><b>智能目录：</b>优化目录折叠逻辑，防止误触，浏览更顺畅。</li>
+                <li><b>背景设置：</b>支持上传图片或链接，打造专属标签页。</li>
+            </ul>
         </div>
     </div>
 
