@@ -582,3 +582,72 @@ input:checked+.slider:before {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(66, 133, 244, 0.4);
 }
+
+/* About Section Styles */
+.about-section {
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-header {
+    margin-bottom: 20px;
+}
+
+.about-logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 15px;
+}
+
+.about-header h3 {
+    margin: 5px 0;
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.version {
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.feature-list li {
+    margin-bottom: 8px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    padding: 10px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.secondary-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}

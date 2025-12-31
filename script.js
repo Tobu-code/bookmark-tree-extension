@@ -351,6 +351,25 @@ function initSettings() {
     const newTabInput = document.getElementById('open-new-tab');
     const themeInputs = document.getElementsByName('theme');
 
+    // About Section
+    const aboutBtn = document.getElementById('about-btn');
+    const aboutContent = document.getElementById('about-content');
+    const appVersion = document.getElementById('app-version');
+
+    if (aboutBtn && aboutContent) {
+        aboutBtn.onclick = () => {
+            const isHidden = aboutContent.classList.toggle('hidden');
+            // Optional: scroll to bottom if opening
+            if (!isHidden) {
+                setTimeout(() => modal.querySelector('.modal-content').scrollTo({ top: 1000, behavior: 'smooth' }), 100);
+            }
+        };
+    }
+
+    if (appVersion && chrome.runtime && chrome.runtime.getManifest) {
+        appVersion.textContent = chrome.runtime.getManifest().version;
+    }
+
     // Load saved settings
     chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME], (result) => {
         if (result[STORAGE_KEY_BG]) {
