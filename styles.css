@@ -250,7 +250,8 @@ html {
     overflow-y: auto;
     flex: 1;
     scrollbar-width: thin;
-    padding-right: 5px;
+    padding: 0 15px;
+    /* Add horizontal padding to prevent scaled items from clipping */
 }
 
 .card-content::-webkit-scrollbar {
@@ -265,37 +266,41 @@ html {
 
 .leaf-node {
     display: flex;
+    /* justify-content: flex-start; Default is left */
     align-items: center;
     padding: 8px 10px;
     margin-bottom: 4px;
     border-radius: 16px;
     text-decoration: none;
     color: var(--text-color);
-    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
-    transform-origin: left center;
+    transform-origin: center center;
     position: relative;
     /* Needed for z-index */
 }
 
-/* Hover Effect - Dock Style */
+/* Hover Effect - Dock Style Enhanced */
 .leaf-node:hover {
+    justify-content: center;
+    /* Center on hover */
     background: rgba(66, 133, 244, 0.15);
-    transform: scale(1.02);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Restore blue tint */
+    transform: scale(1.15);
+    z-index: 20;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Previous Sibling */
 .leaf-node:has(+ .leaf-node:hover) {
-    transform: scale(1.01);
-    z-index: 5;
+    transform: scale(1.05);
+    z-index: 10;
 }
 
 /* Next Sibling */
 .leaf-node:hover+.leaf-node {
-    transform: scale(1.01);
-    z-index: 5;
+    transform: scale(1.05);
+    z-index: 10;
 }
 
 .bookmark-icon {
