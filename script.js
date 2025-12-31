@@ -364,7 +364,7 @@ function initSettings() {
     const bgUrlInput = document.getElementById('bg-url');
     const bgUpload = document.getElementById('bg-upload');
     const opacityInput = document.getElementById('bg-opacity');
-    const newTabInput = document.getElementById('open-new-tab');
+    const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
 
@@ -449,13 +449,17 @@ function initSettings() {
         saveSetting(STORAGE_KEY_OPACITY, opacity); // Storage update
     });
 
-    // 4. Open New Tab
-    newTabInput.addEventListener('change', () => {
-        OPEN_IN_NEW_TAB = newTabInput.checked;
-        saveSetting(STORAGE_KEY_NEW_TAB, OPEN_IN_NEW_TAB);
+    // 4. Link Target (Radio)
+    linkTargetInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                OPEN_IN_NEW_TAB = radio.value === 'blank';
+                saveSetting(STORAGE_KEY_NEW_TAB, OPEN_IN_NEW_TAB);
 
-        const links = document.querySelectorAll('a.leaf-node');
-        links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
+                const links = document.querySelectorAll('a.leaf-node');
+                links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
+            }
+        });
     });
 
     // 5. Theme
@@ -492,13 +496,22 @@ function initSettings() {
         }
 
         // Open in New Tab
+        // Link Target (Radio)
         if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
             OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];
-            newTabInput.checked = OPEN_IN_NEW_TAB;
+            linkTargetInputs.forEach(radio => {
+                radio.checked = (radio.value === 'blank') === OPEN_IN_NEW_TAB;
+            });
             const links = document.querySelectorAll('a.leaf-node');
             if (links.length > 0) {
                 links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
             }
+        } else {
+            // Default to new tab
+            OPEN_IN_NEW_TAB = true;
+            linkTargetInputs.forEach(radio => {
+                radio.checked = radio.value === 'blank';
+            });
         }
 
         // Theme

@@ -48,24 +48,28 @@
                 <input type="range" id="bg-opacity" min="0" max="1" step="0.1" value="0.3">
             </div>
             <div class="setting-item">
-                <label class="switch">
-                    <span>新标签页打开书签</span>
-                    <input type="checkbox" id="open-new-tab">
-                    <span class="slider-track"></span>
-                </label>
+                <label>链接打开方式</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="self"><span>当前页</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="blank" checked><span>新标签页</span>
+                    </label>
+                </div>
             </div>
 
             <div class="setting-item">
                 <label>外观</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="light"> 浅色
+                        <input type="radio" name="theme" value="light"><span>浅色</span>
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="dark"> 深色
+                        <input type="radio" name="theme" value="dark"><span>深色</span>
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="theme" value="system"> 跟随系统
+                        <input type="radio" name="theme" value="system"><span>跟随系统</span>
                     </label>
                 </div>
             </div>
@@ -74,10 +78,10 @@
                 <label>图标风格</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="icon-style" value="animals" checked> 动物
+                        <input type="radio" name="icon-style" value="animals" checked><span>动物</span>
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="icon-style" value="work"> 办公
+                        <input type="radio" name="icon-style" value="work"><span>办公</span>
                     </label>
                 </div>
             </div>

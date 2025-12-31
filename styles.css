@@ -549,7 +549,12 @@ input[type=range] {
 }
 
 .switch input {
-    display: none;
+    /* Screen-reader friendly hide - preserves sibling selectors */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 .slider-track {
@@ -558,7 +563,8 @@ input[type=range] {
     background-color: #ccc;
     border-radius: 20px;
     position: relative;
-    transition: .3s;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
 }
 
 .slider-track::after {
@@ -570,16 +576,25 @@ input[type=range] {
     border-radius: 50%;
     top: 2px;
     left: 2px;
-    transition: .3s cubic-bezier(0.3, 1.5, 0.7, 1);
+    transition: left 0.3s cubic-bezier(0.3, 1.5, 0.7, 1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-label.switch input:checked+.slider-track {
+/* Using :has() for modern browsers - more reliable */
+.switch:has(input:checked) .slider-track {
     background-color: #34C759 !important;
-    /* Green for better contrast */
 }
 
-label.switch input:checked+.slider-track::after {
+.switch:has(input:checked) .slider-track::after {
+    left: 22px;
+}
+
+/* Fallback with adjacent sibling for older browsers */
+.switch input:checked+.slider-track {
+    background-color: #34C759 !important;
+}
+
+.switch input:checked+.slider-track::after {
     left: 22px;
 }
 
@@ -602,11 +617,9 @@ label.switch input:checked+.slider-track::after {
 .radio-option {
     position: relative;
     display: flex;
-    /* Flex to center content */
     align-items: center;
     justify-content: center;
     padding: 0 10px;
-    /* Remove vertical padding, let flex center */
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.2s;
@@ -615,13 +628,16 @@ label.switch input:checked+.slider-track::after {
     color: var(--text-secondary);
     text-align: center;
     margin: 0;
-    /* No margin */
     height: 100%;
-    /* Fill grid cell */
-    min-height: 38px;
-    /* Inner height */
-    line-height: normal;
-    /* Allow natural text centering */
+    min-height: 40px;
+    line-height: 1;
+}
+
+.radio-option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .radio-option input {
