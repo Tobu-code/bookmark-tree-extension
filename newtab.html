@@ -13,6 +13,7 @@
 
     <div class="container">
         <div id="search-container">
+            <div id="search-overlay" class="hidden"></div>
             <div class="search-wrapper">
                 <div id="engine-picker-container">
                     <span id="search-engine-label">Google</span>
@@ -25,7 +26,8 @@
                         <div class="wheel-option" data-engine="baidu" data-url="https://www.baidu.com/s?wd=">Baidu</div>
                     </div>
                 </div>
-                <input type="text" id="search-input" placeholder="Search bookmarks...">
+                <input type="text" id="search-input" placeholder="Search bookmarks..." autocomplete="off">
+                <div id="search-suggestions" class="hidden"></div>
             </div>
         </div>
         <div id="bookmarks-tree" class="tree-view"></div>

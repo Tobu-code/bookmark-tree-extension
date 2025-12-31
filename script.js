@@ -314,11 +314,40 @@ function initSearch() {
     const label = document.getElementById('search-engine-label');
     const wheel = document.getElementById('engine-wheel');
     const overlay = document.getElementById('engine-picker-overlay');
+    const searchOverlay = document.getElementById('search-overlay');
+    const suggestions = document.getElementById('search-suggestions');
     const options = document.querySelectorAll('.wheel-option');
     const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
 
     let currentEngine = 'google';
     let currentUrl = 'https://www.google.com/search?q=';
+    let selectedIndex = -1;
+    let allBookmarks = [];
+
+    // Collect all bookmarks for suggestions
+    function collectAllBookmarks() {
+        allBookmarks = [];
+        chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+            function traverse(nodes, path = '') {
+                nodes.forEach(node => {
+                    if (node.url) {
+                        allBookmarks.push({
+                            title: node.title,
+                            url: node.url,
+                            path: path
+                        });
+                    }
+                    if (node.children) {
+                        traverse(node.children, path ? `${path} > ${node.title}` : node.title);
+                    }
+                });
+            }
+            traverse(bookmarkTreeNodes);
+        });
+    }
+
+    // Collect bookmarks on init
+    collectAllBookmarks();
 
     // Show/hide picker with overlay
     function showPicker() {
@@ -337,6 +366,108 @@ function initSearch() {
         options.forEach(opt => {
             opt.classList.toggle('active', opt.dataset.engine === currentEngine);
         });
+    }
+
+    // Search mode - blur background
+    function enterSearchMode() {
+        document.body.classList.add('search-active');
+        searchOverlay.classList.remove('hidden');
+        searchOverlay.classList.add('active');
+    }
+
+    function exitSearchMode() {
+        document.body.classList.remove('search-active');
+        searchOverlay.classList.add('hidden');
+        searchOverlay.classList.remove('active');
+        hideSuggestions();
+    }
+
+    function showSuggestions() {
+        suggestions.classList.remove('hidden');
+    }
+
+    function hideSuggestions() {
+        suggestions.classList.add('hidden');
+        selectedIndex = -1;
+    }
+
+    // Render suggestions
+    function renderSuggestions(query) {
+        if (!query.trim()) {
+            hideSuggestions();
+            return;
+        }
+
+        const queryLower = query.toLowerCase();
+        const matches = allBookmarks.filter(b =>
+            b.title.toLowerCase().includes(queryLower) ||
+            b.url.toLowerCase().includes(queryLower)
+        ).slice(0, 10); // Limit to 10 results
+
+        if (matches.length === 0) {
+            suggestions.innerHTML = '<div class="no-results">没有找到匹配的书签</div>';
+            showSuggestions();
+            return;
+        }
+
+        suggestions.innerHTML = matches.map((bookmark, index) => {
+            let iconHtml;
+            try {
+                const domain = new URL(bookmark.url).origin;
+                iconHtml = `<img src="${domain}/favicon.ico" onerror="this.outerHTML='🔖'">`;
+            } catch {
+                iconHtml = '🔖';
+            }
+
+            // Get short folder path (last folder only)
+            const pathParts = bookmark.path.split(' > ');
+            const shortPath = pathParts.length > 1 ? pathParts[pathParts.length - 1] : '';
+
+            return `
+                <div class="suggestion-item" data-index="${index}" data-url="${bookmark.url}">
+                    <div class="suggestion-icon">${iconHtml}</div>
+                    <div class="suggestion-content">
+                        <div class="suggestion-title">${escapeHtml(bookmark.title)}</div>
+                        <div class="suggestion-url">${escapeHtml(bookmark.url)}</div>
+                    </div>
+                    ${shortPath ? `<span class="suggestion-folder">${escapeHtml(shortPath)}</span>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        // Add click handlers
+        suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const url = item.dataset.url;
+                if (OPEN_IN_NEW_TAB) {
+                    window.open(url, '_blank');
+                } else {
+                    window.location.href = url;
+                }
+                exitSearchMode();
+                input.value = '';
+            });
+        });
+
+        showSuggestions();
+        selectedIndex = -1;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function updateSelection() {
+        const items = suggestions.querySelectorAll('.suggestion-item');
+        items.forEach((item, index) => {
+            item.classList.toggle('selected', index === selectedIndex);
+        });
+        // Scroll selected into view
+        if (selectedIndex >= 0 && items[selectedIndex]) {
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
     }
 
     // Load saved engine
@@ -379,29 +510,64 @@ function initSearch() {
         hidePicker();
     });
 
+    // Search overlay click to exit search mode
+    searchOverlay.addEventListener('click', () => {
+        exitSearchMode();
+        input.blur();
+    });
+
+    // Focus/blur events for search mode
+    input.addEventListener('focus', () => {
+        enterSearchMode();
+        if (input.value.trim()) {
+            renderSuggestions(input.value);
+        }
+    });
+
     input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const query = input.value.trim();
-            if (query) {
-                const searchUrl = currentUrl + encodeURIComponent(query);
-                window.location.href = searchUrl;
+        const items = suggestions.querySelectorAll('.suggestion-item');
+        const hasItems = items.length > 0 && !suggestions.classList.contains('hidden');
+
+        if (e.key === 'ArrowDown' && hasItems) {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection();
+        } else if (e.key === 'ArrowUp' && hasItems) {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, 0);
+            updateSelection();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (selectedIndex >= 0 && items[selectedIndex]) {
+                // Open selected suggestion
+                const url = items[selectedIndex].dataset.url;
+                if (OPEN_IN_NEW_TAB) {
+                    window.open(url, '_blank');
+                } else {
+                    window.location.href = url;
+                }
+                exitSearchMode();
+                input.value = '';
+            } else {
+                // Web search
+                const query = input.value.trim();
+                if (query) {
+                    const searchUrl = currentUrl + encodeURIComponent(query);
+                    if (OPEN_IN_NEW_TAB) {
+                        window.open(searchUrl, '_blank');
+                    } else {
+                        window.location.href = searchUrl;
+                    }
+                }
             }
+        } else if (e.key === 'Escape') {
+            exitSearchMode();
+            input.blur();
         }
     });
 
     input.addEventListener('input', (e) => {
-        const query = input.value.toLowerCase();
-        // Simple filter: Toggle visibility of list items?
-        // It's tricky with nested structure. 
-        // Let's implement filtering only leaf nodes.
-        const allNodes = document.querySelectorAll('.leaf-node');
-        allNodes.forEach(node => {
-            const text = node.textContent.toLowerCase();
-            const visible = text.includes(query);
-            // We'll hide the node itself
-            node.style.display = visible ? 'flex' : 'none';
-            // We should ideally also hide empty folders, but that's V2 optimization.
-        });
+        renderSuggestions(input.value);
     });
 }
 
