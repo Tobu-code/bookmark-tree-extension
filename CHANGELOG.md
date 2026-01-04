@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2026-01-04
+
+### Official Release
+- **Brand Identity**: Launched new "Bookmark Tree" minimalist icon with fresh green branding.
+- **Visuals**: Introduced modern gradient background presets (Fresh, Deep Blue, Midnight).
+- **Themes**: Full support for Light, Dark, System, and custom Deep/Midnight themes.
+
+### Features
+- **Tree View**: Hierarchical bookmark navigation with Mac-style hover expansion.
+- **Search**: Integrated search engine picker (Drum style) and quick bookmark search.
+- **Customization**: 
+    - 5+ Background presets + Custom Image support.
+    - Adjustable blur and opacity.
+    - Multiple icon styles (Native Favicon, Animal Emojis, Work Emojis).
+- **UX**: Smooth drag-and-drop sorting and responsive grid layout.
+
 ## [0.3.0] - 2025-12-31
 
 ### Features

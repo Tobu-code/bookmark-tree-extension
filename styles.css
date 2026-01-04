@@ -897,7 +897,8 @@ body.search-active #search-container {
 
 /* Modal Content (Card) */
 .modal-content {
-    border-radius: 24px;
+    border-radius: 32px;
+    /* Increased rounded corners */
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: var(--modal-bg);
@@ -906,12 +907,18 @@ body.search-active #search-container {
     width: 420px;
     max-width: 90vw;
     max-height: 90vh;
-    /* Prevent overflow */
     overflow-y: auto;
-    /* Scroll if too tall */
     position: relative;
-    /* Changed from fixed */
-    /* top/left/transform removed as parent is flex center */
+}
+
+/* About Modal Adaptive Width */
+#about-modal .modal-content {
+    width: auto;
+    min-width: 420px;
+    max-width: 800px;
+    /* Reasonable cap */
+    display: inline-block;
+    /* Helps with fit-content behavior in flex container */
 }
 
 .modal-content h2 {
