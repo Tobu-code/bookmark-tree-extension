@@ -20,7 +20,17 @@ async function build() {
     const version = manifest.version;
     // Sanitize name for filename (allow unicode, replace only path separators and problematic chars)
     const safeName = manifest.name.replace(/[\/\\:*?"<>|]/g, '_');
-    const zipFileName = `${safeName}_v${version}.zip`;
+
+    // Generate timestamp
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const timestamp = `${year}${month}${day}_${hour}${minute}`;
+
+    const zipFileName = `${safeName}_v${version}_${timestamp}.zip`;
 
     // 2. Clear and create dist directory
     await fs.emptyDir(distDir);
@@ -99,15 +109,25 @@ async function build() {
         console.log('Minified newtab.html');
     }
 
-    // 6. Create Zip
-    const outputZipPath = path.join(rootDir, zipFileName);
+    // 6. Create Zip in release directory
+    const releaseDir = path.join(rootDir, 'release');
+    await fs.ensureDir(releaseDir);
+    const outputZipPath = path.join(releaseDir, zipFileName);
     const output = fs.createWriteStream(outputZipPath);
     const archive = archiver('zip', {
         zlib: { level: 9 } // Sets the compression level.
     });
 
-    output.on('close', function () {
-        console.log(`${zipFileName} created successfully! Total bytes: ${archive.pointer()}`);
+    output.on('close', async function () {
+        console.log(`${zipFileName} created successfully in release/! Total bytes: ${archive.pointer()}`);
+
+        // 7. Cleanup dist directory
+        try {
+            await fs.remove(distDir);
+            console.log('Cleaned up dist directory.');
+        } catch (err) {
+            console.error('Error removing dist directory:', err);
+        }
     });
 
     archive.on('warning', function (err) {
