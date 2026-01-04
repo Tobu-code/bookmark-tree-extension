@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="background-layer"></div>
+    <div id="background-layer" class="bg-gradient-1"></div>
 
     <div class="container">
         <div id="search-container">
@@ -40,11 +40,25 @@
             <span id="close-modal" class="close"></span>
             <h2>设置</h2>
             <div class="setting-item">
-                <label for="bg-url">背景图片链接:</label>
+                <label>背景预设</label>
+                <div class="bg-presets">
+                    <div class="bg-preset-option bg-gradient-1" data-bg="bg-gradient-1" title="Gradient 1"></div>
+                    <div class="bg-preset-option bg-gradient-2" data-bg="bg-gradient-2" title="Gradient 2"></div>
+                    <div class="bg-preset-option bg-gradient-3" data-bg="bg-gradient-3" title="Gradient 3"></div>
+                    <div class="bg-preset-option bg-gradient-4" data-bg="bg-gradient-4" title="Gradient 4"></div>
+                    <div class="bg-preset-option bg-gradient-dark-1" data-bg="bg-gradient-dark-1"
+                        title="Dark Gradient 1"></div>
+                    <div class="bg-preset-option bg-gradient-dark-2" data-bg="bg-gradient-dark-2"
+                        title="Dark Gradient 2"></div>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label for="bg-url">自定义图片链接:</label>
                 <input type="text" id="bg-url" placeholder="https://example.com/image.jpg">
             </div>
             <div class="setting-item">
                 <label for="bg-upload">上传图片:</label>
+
                 <div class="file-upload-container">
                     <input type="file" id="bg-upload" accept="image/*">
                     <button id="clear-bg">重置</button>
@@ -79,6 +93,12 @@
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="theme" value="system"><span>跟随系统</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="deep-blue"><span>深邃蓝</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="midnight-purple"><span>午夜紫</span>
                     </label>
                 </div>
             </div>

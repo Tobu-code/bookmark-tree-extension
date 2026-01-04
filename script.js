@@ -818,6 +818,7 @@ function initSettings() {
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
+    const bgPresets = document.querySelectorAll('.bg-preset-option');
 
     // About Section Logic
     const aboutBtn = document.getElementById('about-btn');
@@ -862,6 +863,29 @@ function initSettings() {
 
     // Real-time Listeners
 
+    // Helper to clear presets selection visual
+    const clearPresetSelection = () => {
+        bgPresets.forEach(p => p.classList.remove('selected'));
+    };
+
+    // 0. Background Presets
+    bgPresets.forEach(preset => {
+        preset.addEventListener('click', () => {
+            const bgClass = preset.dataset.bg;
+            saveSetting(STORAGE_KEY_BG, bgClass, () => applyBackground(bgClass));
+
+            // Visual feedback
+            clearPresetSelection();
+            preset.classList.add('selected');
+
+            // Clear other inputs
+            bgUrlInput.value = '';
+            bgUpload.value = '';
+            const fileNameDisplay = document.getElementById('file-name-display');
+            if (fileNameDisplay) fileNameDisplay.textContent = '';
+        });
+    });
+
     // 1. Background URL (Blur/Change)
     bgUrlInput.addEventListener('change', () => {
         const url = bgUrlInput.value.trim();
@@ -869,6 +893,7 @@ function initSettings() {
             saveSetting(STORAGE_KEY_BG, url, () => applyBackground(url));
             // Clear file input value if any
             bgUpload.value = '';
+            clearPresetSelection();
         }
     });
 
@@ -885,6 +910,7 @@ function initSettings() {
                     saveSetting(STORAGE_KEY_BG, base64data, () => applyBackground(base64data));
                     bgUrlInput.value = ''; // Clear URL input
                     if (fileNameDisplay) fileNameDisplay.textContent = `已选择: ${file.name}`;
+                    clearPresetSelection();
                 } catch (e) {
                     alert('Image too large to save!');
                 }
@@ -892,6 +918,8 @@ function initSettings() {
             reader.readAsDataURL(file);
         }
     });
+
+
 
     // 3. Opacity (Input - Realtime)
     opacityInput.addEventListener('input', () => {
@@ -938,8 +966,24 @@ function initSettings() {
     // Load saved settings
     chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
         if (result[STORAGE_KEY_BG]) {
-            applyBackground(result[STORAGE_KEY_BG]);
-            bgUrlInput.value = result[STORAGE_KEY_BG].startsWith('data:') ? '' : result[STORAGE_KEY_BG];
+            const bg = result[STORAGE_KEY_BG];
+            applyBackground(bg);
+
+            // Restore UI state
+            if (bg.startsWith('bg-gradient-')) {
+                const preset = document.querySelector(`.bg-preset-option[data-bg="${bg}"]`);
+                if (preset) preset.classList.add('selected');
+            } else {
+                bgUrlInput.value = bg.startsWith('data:') ? '' : bg;
+            }
+        } else {
+            // Default background
+            const defaultBg = 'bg-gradient-1';
+            applyBackground(defaultBg);
+            // Don't save it yet, just show it. Or should we? 
+            // Better to show it visually.
+            const preset = document.querySelector(`.bg-preset-option[data-bg="${defaultBg}"]`);
+            if (preset) preset.classList.add('selected');
         }
         if (result[STORAGE_KEY_OPACITY]) {
             opacityInput.value = result[STORAGE_KEY_OPACITY];
@@ -1005,22 +1049,26 @@ function initSettings() {
 
 function applyTheme(theme) {
     const root = document.documentElement;
-    if (theme === 'dark') {
-        root.setAttribute('data-theme', 'dark');
-    } else if (theme === 'light') {
-        root.setAttribute('data-theme', 'light');
-    } else {
-        // System
+    if (theme === 'system') {
         root.removeAttribute('data-theme');
+    } else {
+        root.setAttribute('data-theme', theme);
     }
 }
 
 function applyBackground(data) {
     const layer = document.getElementById('background-layer');
-    if (data) {
-        layer.style.backgroundImage = `url('${data}')`;
+
+    // Reset
+    layer.style.backgroundImage = '';
+    layer.className = ''; // Reset classes (be careful if other classes exist, but here it's dedicated)
+
+    if (!data) return;
+
+    if (data.startsWith('bg-gradient-')) {
+        layer.classList.add(data);
     } else {
-        layer.style.backgroundImage = '';
+        layer.style.backgroundImage = `url('${data}')`;
     }
 }
 

@@ -26,6 +26,34 @@
     --modal-text: #e8eaed;
 }
 
+/* Deep Blue Theme */
+:root[data-theme="deep-blue"] {
+    --primary-color: #a6c8ff;
+    --text-color: #e1e9f5;
+    --text-secondary: #9aa8bc;
+    --bg-overlay: rgba(10, 25, 41, 0.75);
+    --card-bg: rgba(23, 42, 69, 0.8);
+    --card-hover: rgba(30, 58, 95, 0.95);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
+    --modal-bg: rgba(23, 42, 69, 0.95);
+    --modal-text: #e1e9f5;
+}
+
+/* Midnight Purple Theme */
+:root[data-theme="midnight-purple"] {
+    --primary-color: #d7b7fd;
+    --text-color: #f3e5f5;
+    --text-secondary: #b39ddb;
+    --bg-overlay: rgba(30, 20, 50, 0.75);
+    --card-bg: rgba(50, 30, 80, 0.8);
+    --card-hover: rgba(70, 45, 110, 0.95);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
+    --modal-bg: rgba(50, 30, 80, 0.95);
+    --modal-text: #f3e5f5;
+}
+
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -58,12 +86,42 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('default_background.png');
+    /* background-image removed to allow gradient classes to work */
     background-size: cover;
     background-position: center;
     z-index: -1;
     transition: all 0.5s ease;
 }
+
+/* Modern Gradient Presets via classes */
+.bg-gradient-1 {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.bg-gradient-2 {
+    background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.bg-gradient-3 {
+    background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.bg-gradient-4 {
+    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+}
+
+.bg-gradient-dark-1 {
+    background: linear-gradient(to top, #09203f 0%, #537895 100%);
+}
+
+.bg-gradient-dark-2 {
+    background: linear-gradient(60deg, #29323c 0%, #485563 100%);
+}
+
+/* Dark mode specific adjustments for gradients if needed 
+   For now, we let these lively gradients stand as they are modern 
+   and glassmorphism sits on top. */
+
 
 /* Main Container - Dashboard Style */
 .container {
@@ -585,6 +643,34 @@ body.search-active #search-container {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     /* Stronger shadow for depth */
 }
+
+/* Background Preset Selectors */
+.bg-presets {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.bg-preset-option {
+    width: 60px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bg-preset-option:hover {
+    transform: scale(1.05);
+}
+
+.bg-preset-option.selected {
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 
 /* List Items inside Card */
 .card-content {
