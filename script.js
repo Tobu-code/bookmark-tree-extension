@@ -170,6 +170,19 @@ function renderTreeItem(node) {
         const wrapper = document.createElement('div');
         wrapper.className = 'leaf-wrapper';
 
+        // Draggable props
+        wrapper.setAttribute('draggable', 'true');
+        wrapper.dataset.id = node.id;
+        wrapper.dataset.parentId = node.parentId; // Important for moving
+        wrapper.dataset.type = 'bookmark';
+
+        // Drag Events
+        wrapper.addEventListener('dragstart', handleItemDragStart);
+        wrapper.addEventListener('dragover', handleItemDragOver);
+        wrapper.addEventListener('dragleave', handleItemDragLeave);
+        wrapper.addEventListener('drop', handleItemDrop);
+        wrapper.addEventListener('dragend', handleItemDragEnd);
+
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
@@ -195,12 +208,26 @@ function renderTreeItem(node) {
         const wrapper = document.createElement('div');
         wrapper.className = 'sub-folder';
 
+        // Draggable props
+        wrapper.setAttribute('draggable', 'true');
+        wrapper.dataset.id = node.id;
+        wrapper.dataset.parentId = node.parentId;
+        wrapper.dataset.type = 'folder';
+
+        // Drag Events
+        wrapper.addEventListener('dragstart', handleItemDragStart);
+        wrapper.addEventListener('dragover', handleItemDragOver);
+        wrapper.addEventListener('dragleave', handleItemDragLeave);
+        wrapper.addEventListener('drop', handleItemDrop);
+        wrapper.addEventListener('dragend', handleItemDragEnd);
+
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
         header.innerHTML = `<span style="margin-right:5px;">▶</span> ${node.title}`;
 
         const childrenContainer = document.createElement('div');
         childrenContainer.className = 'sub-folder-content hidden';
+        childrenContainer.dataset.parentId = node.id; // Mark container with parent ID for dropping into empty folders (future)
 
         if (node.children) {
             node.children.forEach(child => {
@@ -980,3 +1007,95 @@ function updateOpacity(val) {
     // Let's assume 1.0 = fully opaque white, 0.0 = fully transparent
     c.style.setProperty('--bg-overlay', `rgba(255, 255, 255, ${val})`);
 }
+
+// --- Bookmark Item Drag Handlers ---
+
+function handleItemDragStart(e) {
+    if (this.getAttribute('draggable') !== 'true') return;
+    e.stopPropagation(); // Prevent card drag start
+    this.style.opacity = '0.4';
+    dragSrcEl = this; // Reuse global
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', this.dataset.id); // Transfer ID
+    e.dataTransfer.setData('type', 'bookmark-item');
+}
+
+function handleItemDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+    e.stopPropagation(); // Prevent card drag over
+    e.dataTransfer.dropEffect = 'move';
+    this.classList.add('drag-over-item');
+    return false;
+}
+
+function handleItemDragLeave(e) {
+    e.stopPropagation();
+    this.classList.remove('drag-over-item');
+}
+
+function handleItemDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+    this.classList.remove('drag-over-item');
+
+    // Check if we are dropping an item
+    const type = e.dataTransfer.getData('type');
+    if (type !== 'bookmark-item') return false;
+
+    if (dragSrcEl !== this) {
+        // Visual Move
+        const parent = this.parentNode;
+        const allChildren = Array.from(parent.children);
+        const srcIndex = allChildren.indexOf(dragSrcEl);
+        const targetIndex = allChildren.indexOf(this);
+
+        let newIndex = targetIndex;
+
+        if (dragSrcEl.parentNode === parent && srcIndex < targetIndex) {
+            parent.insertBefore(dragSrcEl, this.nextSibling);
+            newIndex = targetIndex + 1;
+        } else {
+            parent.insertBefore(dragSrcEl, this);
+        }
+
+        // API Update
+        const srcId = dragSrcEl.dataset.id;
+
+        // Determine Destination Parent ID
+        let destParentId = parent.dataset.parentId;
+        if (!destParentId) {
+            const card = parent.closest('.bookmark-card');
+            if (card) destParentId = card.dataset.id;
+        }
+
+        const destination = { index: newIndex };
+        if (destParentId) {
+            destination.parentId = destParentId;
+        }
+
+        chrome.bookmarks.move(srcId, destination, (res) => {
+            if (chrome.runtime.lastError) {
+                console.error('Move failed:', chrome.runtime.lastError.message);
+            } else {
+                console.log('Moved bookmark item:', res);
+                dragSrcEl.dataset.parentId = destParentId;
+            }
+        });
+
+        dragSrcEl.style.opacity = '1';
+    }
+    return false;
+}
+
+function handleItemDragEnd(e) {
+    if (e.stopPropagation) e.stopPropagation();
+    this.style.opacity = '1';
+    // Clean all item drag-overs
+    document.querySelectorAll('.drag-over-item').forEach(el => el.classList.remove('drag-over-item'));
+    dragSrcEl = null;
+}
+
