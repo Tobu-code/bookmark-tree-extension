@@ -398,6 +398,19 @@ function renderTreeItemForModal(node) {
         const wrapper = document.createElement('div');
         wrapper.className = 'leaf-wrapper';
 
+        // Draggable props
+        wrapper.setAttribute('draggable', 'true');
+        wrapper.dataset.id = node.id;
+        wrapper.dataset.parentId = node.parentId;
+        wrapper.dataset.type = 'bookmark';
+
+        // Drag Events
+        wrapper.addEventListener('dragstart', handleItemDragStart);
+        wrapper.addEventListener('dragover', handleItemDragOver);
+        wrapper.addEventListener('dragleave', handleItemDragLeave);
+        wrapper.addEventListener('drop', handleItemDrop);
+        wrapper.addEventListener('dragend', handleItemDragEnd);
+
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
@@ -423,6 +436,19 @@ function renderTreeItemForModal(node) {
         const wrapper = document.createElement('div');
         wrapper.className = 'sub-folder';
 
+        // Draggable props
+        wrapper.setAttribute('draggable', 'true');
+        wrapper.dataset.id = node.id;
+        wrapper.dataset.parentId = node.parentId;
+        wrapper.dataset.type = 'folder';
+
+        // Drag Events
+        wrapper.addEventListener('dragstart', handleItemDragStart);
+        wrapper.addEventListener('dragover', handleItemDragOver);
+        wrapper.addEventListener('dragleave', handleItemDragLeave);
+        wrapper.addEventListener('drop', handleItemDrop);
+        wrapper.addEventListener('dragend', handleItemDragEnd);
+
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
         header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg);">▶</span> ${node.title}`;
@@ -430,6 +456,7 @@ function renderTreeItemForModal(node) {
 
         const childrenContainer = document.createElement('div');
         childrenContainer.className = 'sub-folder-content'; // Default expanded (removed hidden)
+        childrenContainer.dataset.parentId = node.id;
 
         if (node.children) {
             node.children.forEach(child => {
