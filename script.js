@@ -994,7 +994,7 @@ function initSettings() {
 
     clearBtn.onclick = () => {
         chrome.storage.local.remove([STORAGE_KEY_BG], () => {
-            document.getElementById('background-layer').style.backgroundImage = 'none';
+            document.getElementById('background-layer').style.backgroundImage = '';
             bgUrlInput.value = '';
             bgUpload.value = '';
             const fileNameDisplay = document.getElementById('file-name-display');
@@ -1020,7 +1020,7 @@ function applyBackground(data) {
     if (data) {
         layer.style.backgroundImage = `url('${data}')`;
     } else {
-        layer.style.backgroundImage = 'none';
+        layer.style.backgroundImage = '';
     }
 }
 
