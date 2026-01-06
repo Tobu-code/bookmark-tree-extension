@@ -113,6 +113,31 @@ function createBookmarkCard(folderNode) {
 }
 
 // --- Helpers ---
+
+// Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
+function createBookmarkIcon(iconData, size = 16) {
+    if (iconData.type === 'img') {
+        const img = document.createElement('img');
+        img.className = 'bookmark-icon';
+        img.src = iconData.src;
+        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
+        img.addEventListener('error', function () {
+            const span = document.createElement('span');
+            span.className = 'bookmark-icon';
+            span.style.cssText = `font-size:${size}px;margin-right:8px;`;
+            span.textContent = '🔖';
+            this.replaceWith(span);
+        });
+        return img;
+    } else {
+        const span = document.createElement('span');
+        span.className = 'bookmark-icon';
+        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
+        span.textContent = iconData.value;
+        return span;
+    }
+}
+
 function getRandomEmoji() {
     const emojis = [
         '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
@@ -147,16 +172,16 @@ function createSimpleTile(node) {
     }
     leaf.style.padding = '0';
 
-    // Icon handling
+    // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
-    let iconHtml;
-    if (iconData.type === 'img') {
-        iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:20px;\\'>🔖</span>'" style="width:20px;height:20px;margin-right:8px;">`;
-    } else {
-        iconHtml = `<span class="bookmark-icon" style="font-size:20px;margin-right:8px;">${iconData.value}</span>`;
-    }
+    const iconElement = createBookmarkIcon(iconData, 20);
+    leaf.appendChild(iconElement);
 
-    leaf.innerHTML = `${iconHtml}<span class="bookmark-label" style="font-weight:bold;">${node.title}</span>`;
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'bookmark-label';
+    labelSpan.style.fontWeight = 'bold';
+    labelSpan.textContent = node.title;
+    leaf.appendChild(labelSpan);
 
     wrapper.appendChild(leaf);
     card.appendChild(wrapper);
@@ -190,16 +215,15 @@ function renderTreeItem(node) {
             a.target = '_blank';
         }
 
-        // Icon handling
+        // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        let iconHtml;
-        if (iconData.type === 'img') {
-            iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:16px;\\'>🔖</span>'" style="width:16px;height:16px;margin-right:8px;">`;
-        } else {
-            iconHtml = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${iconData.value}</span>`;
-        }
+        const iconElement = createBookmarkIcon(iconData, 16);
+        a.appendChild(iconElement);
 
-        a.innerHTML = `${iconHtml}<span class="bookmark-label">${node.title}</span>`;
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'bookmark-label';
+        labelSpan.textContent = node.title;
+        a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
         return wrapper;
@@ -418,16 +442,15 @@ function renderTreeItemForModal(node) {
             a.target = '_blank';
         }
 
-        // Icon handling
+        // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        let iconHtml;
-        if (iconData.type === 'img') {
-            iconHtml = `<img class="bookmark-icon" src="${iconData.src}" onerror="this.outerHTML='<span class=\\'bookmark-icon\\' style=\\'font-size:16px;\\'>🔖</span>'" style="width:16px;height:16px;margin-right:8px;">`;
-        } else {
-            iconHtml = `<span class="bookmark-icon" style="font-size:16px;margin-right:8px;">${iconData.value}</span>`;
-        }
+        const iconElement = createBookmarkIcon(iconData, 16);
+        a.appendChild(iconElement);
 
-        a.innerHTML = `${iconHtml}<span class="bookmark-label">${node.title}</span>`;
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'bookmark-label';
+        labelSpan.textContent = node.title;
+        a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
         return wrapper;
@@ -607,30 +630,59 @@ function initSearch() {
             return;
         }
 
-        suggestions.innerHTML = matches.map((bookmark, index) => {
-            let iconHtml;
-            try {
-                const domain = new URL(bookmark.url).origin;
-                iconHtml = `<img src="${domain}/favicon.ico" onerror="this.outerHTML='🔖'">`;
-            } catch {
-                iconHtml = '🔖';
-            }
-
+        suggestions.innerHTML = '';
+        matches.forEach((bookmark, index) => {
             // Get short folder path (last folder only)
             const pathParts = bookmark.path.split(' > ');
             const shortPath = pathParts.length > 1 ? pathParts[pathParts.length - 1] : '';
 
-            return `
-                <div class="suggestion-item" data-index="${index}" data-url="${bookmark.url}">
-                    <div class="suggestion-icon">${iconHtml}</div>
-                    <div class="suggestion-content">
-                        <div class="suggestion-title">${escapeHtml(bookmark.title)}</div>
-                        <div class="suggestion-url">${escapeHtml(bookmark.url)}</div>
-                    </div>
-                    ${shortPath ? `<span class="suggestion-folder">${escapeHtml(shortPath)}</span>` : ''}
-                </div>
-            `;
-        }).join('');
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            item.dataset.index = index;
+            item.dataset.url = bookmark.url;
+
+            // Icon (CSP-compliant)
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'suggestion-icon';
+            try {
+                const domain = new URL(bookmark.url).origin;
+                const img = document.createElement('img');
+                img.src = `${domain}/favicon.ico`;
+                img.addEventListener('error', function () {
+                    this.replaceWith(document.createTextNode('🔖'));
+                });
+                iconDiv.appendChild(img);
+            } catch {
+                iconDiv.textContent = '🔖';
+            }
+            item.appendChild(iconDiv);
+
+            // Content
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'suggestion-content';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'suggestion-title';
+            titleDiv.textContent = bookmark.title;
+            contentDiv.appendChild(titleDiv);
+
+            const urlDiv = document.createElement('div');
+            urlDiv.className = 'suggestion-url';
+            urlDiv.textContent = bookmark.url;
+            contentDiv.appendChild(urlDiv);
+
+            item.appendChild(contentDiv);
+
+            // Folder path
+            if (shortPath) {
+                const folderSpan = document.createElement('span');
+                folderSpan.className = 'suggestion-folder';
+                folderSpan.textContent = shortPath;
+                item.appendChild(folderSpan);
+            }
+
+            suggestions.appendChild(item);
+        });
 
         // Add click handlers
         suggestions.querySelectorAll('.suggestion-item').forEach(item => {
