@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let dragSrcEl = null;
 
 const FOLDER_ICON_SVG = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+const BOOKMARK_ICON_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); vertical-align: middle; flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
 
 // --- Bookmarks Logic ---
 
@@ -132,6 +133,12 @@ function createBookmarkIcon(iconData, size = 16) {
             this.replaceWith(span);
         });
         return img;
+    } else if (iconData.type === 'svg') {
+        const span = document.createElement('span');
+        span.className = 'bookmark-icon';
+        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.innerHTML = iconData.value;
+        return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
@@ -250,7 +257,13 @@ function renderTreeItem(node) {
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
-        header.innerHTML = `<span style="margin-right:5px;">▶</span> ${node.title}`;
+        
+        // Add folder icon if in theme mode, or just always add it for consistency?
+        // User asked to "replace all bookmark icons... directory and bookmarks"
+        // Let's use FOLDER_ICON_SVG
+        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        
+        header.innerHTML = `<span style="margin-right:5px; transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
 
         const childrenContainer = document.createElement('div');
         childrenContainer.className = 'sub-folder-content hidden';
@@ -272,13 +285,13 @@ function renderTreeItem(node) {
             if (isHidden) {
                 // Open and Lock
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('span').style.transform = 'rotate(90deg)';
+                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
                 header.dataset.isLocked = 'true';
             } else {
                 if (header.dataset.isLocked === 'true') {
                     // Locked -> Unlock and Close
                     childrenContainer.classList.add('hidden');
-                    header.querySelector('span').style.transform = 'rotate(0deg)';
+                    header.querySelector('.arrow').style.transform = 'rotate(0deg)';
                     header.dataset.isLocked = 'false';
                 } else {
                     // Hover-Open (Not Locked) -> Lock it
@@ -291,14 +304,14 @@ function renderTreeItem(node) {
         // Auto-expand on hover (Fast)
         wrapper.addEventListener('mouseenter', () => {
             childrenContainer.classList.remove('hidden');
-            header.querySelector('span').style.transform = 'rotate(90deg)';
+            header.querySelector('.arrow').style.transform = 'rotate(90deg)';
         });
 
         // Store reference to collapse function for card-level collapse
         wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
-                header.querySelector('span').style.transform = 'rotate(0deg)';
+                header.querySelector('.arrow').style.transform = 'rotate(0deg)';
             }
         };
 
@@ -479,7 +492,10 @@ function renderTreeItemForModal(node) {
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
-        header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg);">▶</span> ${node.title}`;
+        
+        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        
+        header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg); transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
         header.dataset.isLocked = 'true'; // Default open
 
         const childrenContainer = document.createElement('div');
@@ -499,12 +515,12 @@ function renderTreeItemForModal(node) {
 
             if (isHidden) {
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('span').style.transform = 'rotate(90deg)';
+                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
                 header.dataset.isLocked = 'true';
             } else {
                 if (header.dataset.isLocked === 'true') {
                     childrenContainer.classList.add('hidden');
-                    header.querySelector('span').style.transform = 'rotate(0deg)';
+                    header.querySelector('.arrow').style.transform = 'rotate(0deg)';
                     header.dataset.isLocked = 'false';
                 } else {
                     header.dataset.isLocked = 'true';
@@ -515,14 +531,14 @@ function renderTreeItemForModal(node) {
         // Auto-expand on hover
         wrapper.addEventListener('mouseenter', () => {
             childrenContainer.classList.remove('hidden');
-            header.querySelector('span').style.transform = 'rotate(90deg)';
+            header.querySelector('.arrow').style.transform = 'rotate(90deg)';
         });
 
         // Collapse function for parent to call
         wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
-                header.querySelector('span').style.transform = 'rotate(0deg)';
+                header.querySelector('.arrow').style.transform = 'rotate(0deg)';
             }
         };
 
@@ -833,60 +849,18 @@ const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 let OPEN_IN_NEW_TAB = false;
 let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
 
-const ANIMAL_EMOJIS = [
-    '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
-    '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅',
-    '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌',
-    '🐞', '🐜', '🦟', '🦗', '🕷️', '🕸️', '🐢', '🐍', '🦎', '🦖',
-    '🦕', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬',
-    '🐳', '🐋', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍', '🦧', '🦣',
-    '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🐃', '🐂', '🐄',
-    '🐎', '🐖', '🐏', '🐑', '🐐', '🦌', '🐕', '🐩', '🦮', '🐈',
-    '🐓', '🦃', '🦚', '🦜', '🦢', '🦩', '🕊️', '🐇', '🦝', '🦨'
-];
-
-const WORK_EMOJIS = [
-    '💼', '📊', '📈', '📉', '📧', '📇', '📅', '📝', '📌', '📎',
-    '💻', '🖥️', '⌨️', '🖱️', '📱', '🖨️', '🔍', '💡', '🧠', '⚙️',
-    '📁', '📂', '🗂️', '🗃️', '🗄️', '🗑️', '🔒', '🔓', '🔏', '🔐',
-    '🔑', '🗝️', '🔨', '🪓', '⛏️', '⚒️', '🛠️', '🗡️', '⚔️', '🔫',
-    '🛡️', '🔧', '🔩', '⚖️', '🔗', '⛓️', '🧰', '🧲', '⚗️', '🧪',
-    '🧫', '🧬', '🔬', '🔭', '📡', '💉', '🩸', '💊', '🩹', '🩺',
-    '🚪', '🛗', '🪞', '🪟', '🛏️', '🛋️', '🪑', '🚽', '🪠', '🚿',
-    '🛁', '🧼', '🪒', '🧴', '🧹', '🧺', '🧻', '🧊', '🥤', '🥢',
-    '🍽️', '🍴', '🥄', '🔪', '🏺', '🌍', '🌎', '🌏', '🌐', '🗺️',
-    '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️',
-    '🏟️', '🏛️', '🏗️', '🧱', '🏘️', '🏚️', '🏠', '🏡', '🏢', '🏣',
-    '🏤', '🏥', '🏦', '🏨', '🏩', '🏪', '🏫', '🏬', '🏭', '🏯'
-];
-
-// Hash function for consistent emoji selection
-function getHashForString(str) {
-    let hash = 0;
-    if (!str || str.length === 0) return hash;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return Math.abs(hash);
-}
-
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
-    if (CURRENT_ICON_STYLE === 'native') {
-        // Return favicon URL
+    if (CURRENT_ICON_STYLE === 'theme') {
+        return { type: 'svg', value: BOOKMARK_ICON_SVG };
+    } else {
+        // Native (Default)
         try {
             const domain = new URL(url).origin;
             return { type: 'img', src: `${domain}/favicon.ico` };
         } catch {
             return { type: 'emoji', value: '🔖' }; // fallback
         }
-    } else {
-        const emojis = CURRENT_ICON_STYLE === 'work' ? WORK_EMOJIS : ANIMAL_EMOJIS;
-        // Use hash of URL to pick emoji deterministically and evenly
-        const hash = getHashForString(url);
-        return { type: 'emoji', value: emojis[hash % emojis.length] };
     }
 }
 
