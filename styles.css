@@ -138,12 +138,13 @@ h1, h2, h3, .card-title, .folder-modal-title {
 
 #search-input {
     flex: 1;
-    padding: 24px 16px; /* Increased vertical and horizontal padding */
-    font-size: 22px; /* Larger text for better focus */
+    padding: 18px 12px; /* Reduced vertical padding */
+    font-size: 18px; /* Slightly smaller text */
     border: none;
     background: transparent;
     outline: none;
     min-width: 0;
+    color: var(--text-color);
 }
 
 #search-input::placeholder {
@@ -157,20 +158,21 @@ h1, h2, h3, .card-title, .folder-modal-title {
     align-items: center;
     width: 65%; /* Wider search bar */
     max-width: 800px;
-    border-radius: 50px; /* Increased radius for the taller bar */
+    border-radius: 24px; /* More rectangular/pill shape */
     background: var(--card-bg);
-    box-shadow: var(--shadow-md); /* Apply specific Claude shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Softer shadow */
     border: 1px solid var(--border-color);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    padding-left: 28px;
+    transition: all 0.2s ease;
+    padding-left: 20px;
     /* Space for select */
 }
 
 .search-wrapper:focus-within {
-    width: 70%;
+    width: 65%; /* Keep width stable */
     background: var(--card-bg);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
-    transform: scale(1.02);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
 }
 
 /* Engine Picker Container */
@@ -181,8 +183,8 @@ h1, h2, h3, .card-title, .folder-modal-title {
 }
 
 #search-engine-label {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px; /* Slightly smaller */
+    font-weight: 500;
     color: var(--text-secondary);
     cursor: pointer;
     padding-right: 12px;
@@ -1292,23 +1294,25 @@ input[type="file"] {
     height: 36px;
     min-width: 36px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 60%), linear-gradient(135deg, #4285f4 0%, #8e44ef 50%, #ea4335 100%);
+    background: transparent;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4), inset 0 1px 1px rgba(255,255,255,0.4);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: none;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-secondary);
     margin-left: 8px;
     margin-right: 12px;
     flex-shrink: 0;
 }
 
 #ai-sidebar-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--primary-color);
     transform: scale(1.1);
-    box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
+    box-shadow: none;
 }
 
 #ai-sidebar-btn:active {
@@ -1316,7 +1320,7 @@ input[type="file"] {
 }
 
 #ai-sidebar-btn svg {
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    filter: none;
 }
 
 /* AI Sidebar Panel */
