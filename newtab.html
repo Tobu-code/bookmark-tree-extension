@@ -85,10 +85,16 @@
             </div>
         </div>
         <div class="ai-sidebar-content">
-            <iframe id="ai-iframe" frameborder="0"></iframe>
+            <!-- Multiple iframes for state preservation -->
+            <iframe id="ai-iframe-google" class="ai-iframe active" data-ai="google" frameborder="0"></iframe>
+            <iframe id="ai-iframe-gemini" class="ai-iframe" data-ai="gemini" frameborder="0"></iframe>
+            <iframe id="ai-iframe-chatgpt" class="ai-iframe" data-ai="chatgpt" frameborder="0"></iframe>
+            <iframe id="ai-iframe-grok" class="ai-iframe" data-ai="grok" frameborder="0"></iframe>
+            <iframe id="ai-iframe-qwen" class="ai-iframe" data-ai="qwen" frameborder="0"></iframe>
+
             <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
                 <div class="ai-placeholder-icon">🔍</div>
-                <p>无法直接嵌入 Google AI 搜索</p>
+                <p>无法直接嵌入 AI 搜索</p>
                 <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
                 <button id="ai-open-gemini" class="ai-open-btn">在弹窗中打开</button>
             </div>

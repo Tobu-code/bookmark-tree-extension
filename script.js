@@ -1236,20 +1236,40 @@ function initAiSidebar() {
     const closeBtn = document.getElementById('ai-sidebar-close');
     const openNewWindowBtn = document.getElementById('ai-open-new-window');
     const openFallbackBtn = document.getElementById('ai-open-gemini');
-    const iframe = document.getElementById('ai-iframe');
     const fallback = document.getElementById('ai-iframe-fallback');
     const aiTabs = document.querySelectorAll('.ai-tab');
+
+    // Get all iframes
+    const iframes = {
+        google: document.getElementById('ai-iframe-google'),
+        gemini: document.getElementById('ai-iframe-gemini'),
+        chatgpt: document.getElementById('ai-iframe-chatgpt'),
+        grok: document.getElementById('ai-iframe-grok'),
+        qwen: document.getElementById('ai-iframe-qwen')
+    };
+
+    // AI URLs mapping
+    const aiUrls = {
+        google: 'https://www.google.com/search?udm=50&aep=11',
+        gemini: 'https://gemini.google.com',
+        chatgpt: 'https://chatgpt.com/',
+        grok: 'https://grok.com/',
+        qwen: 'https://chat.qwen.ai/'
+    };
 
     const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
 
     // Current AI state
     let currentAi = {
         id: 'google',
-        url: 'https://www.google.com/search?udm=50&aep=11',
+        url: aiUrls.google,
         icon: '🔍',
         name: 'Google AI'
     };
-    let currentLoadedUrl = '';
+
+    // Track which iframes have been loaded
+    const loadedIframes = new Set();
+
 
     // Load saved AI preference
     chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
@@ -1259,6 +1279,9 @@ function initAiSidebar() {
             updateCurrentAiDisplay();
         }
         updateActiveTab();
+
+        // Preload default AI iframe
+        preloadIframe(currentAi.id);
     });
 
     function updateCurrentAiDisplay() {
@@ -1271,48 +1294,61 @@ function initAiSidebar() {
         });
     }
 
+    // Preload iframe for specific AI
+    function preloadIframe(aiId) {
+        const iframe = iframes[aiId];
+        if (iframe && !loadedIframes.has(aiId)) {
+            iframe.src = aiUrls[aiId];
+            loadedIframes.add(aiId);
+
+            iframe.addEventListener('load', () => {
+                iframe.classList.add('loaded');
+            });
+        }
+    }
+
+    // Switch between AI iframes
+    function switchToAi(aiId) {
+        Object.values(iframes).forEach(iframe => {
+            if (iframe) iframe.classList.remove('active');
+        });
+
+        const targetIframe = iframes[aiId];
+        if (targetIframe) {
+            targetIframe.classList.add('active');
+            if (!loadedIframes.has(aiId)) {
+                preloadIframe(aiId);
+            }
+        }
+    }
+
     function selectAi(tab) {
+        const newId = tab.dataset.ai;
+        if (newId === currentAi.id) return;
+
         currentAi = {
-            id: tab.dataset.ai,
+            id: newId,
             url: tab.dataset.url,
             icon: tab.dataset.icon,
             name: tab.dataset.name
         };
 
-        // Save preference
         chrome.storage.local.set({ [STORAGE_KEY_AI]: currentAi });
-
         updateCurrentAiDisplay();
         updateActiveTab();
-
-        // Force reload iframe
-        currentLoadedUrl = '';
-        loadIframe();
-    }
-
-    function loadIframe() {
-        if (iframe && currentAi.url !== currentLoadedUrl) {
-            iframe.src = currentAi.url;
-            currentLoadedUrl = currentAi.url;
-
-            // Reset fallback state
-            iframe.style.display = '';
-            if (fallback) fallback.classList.add('hidden');
-        }
+        switchToAi(newId);
     }
 
     function openSidebar() {
         sidebar.classList.remove('hidden');
-        sidebar.classList.add('active');
-        sidebarOverlay.classList.remove('hidden');
-        sidebarOverlay.classList.add('active');
+        requestAnimationFrame(() => {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.remove('hidden');
+            sidebarOverlay.classList.add('active');
+        });
 
         updateCurrentAiDisplay();
-
-        // Load iframe
-        if (iframe) {
-            loadIframe();
-        }
+        switchToAi(currentAi.id);
     }
 
     function closeSidebar() {
@@ -1365,10 +1401,14 @@ function initAiSidebar() {
     if (openNewWindowBtn) openNewWindowBtn.addEventListener('click', openPopup);
     if (openFallbackBtn) openFallbackBtn.addEventListener('click', openPopup);
 
-    // Iframe error handling
-    if (iframe) {
-        iframe.addEventListener('error', showFallback);
-    }
+    // Iframe error events for all iframes
+    Object.values(iframes).forEach(iframe => {
+        if (iframe) {
+            iframe.addEventListener('error', () => {
+                showFallback();
+            });
+        }
+    });
 
     // ESC key to close
     document.addEventListener('keydown', (e) => {

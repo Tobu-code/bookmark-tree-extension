@@ -1434,12 +1434,23 @@ input[type="file"] {
     overflow: hidden;
 }
 
-/* AI Iframe */
-#ai-iframe {
+/* AI Iframes - Multiple for state preservation */
+.ai-iframe {
     width: 100%;
     height: 100%;
     border: none;
     background: white;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ai-iframe.active {
+    display: block;
+}
+
+.ai-iframe.loaded {
+    opacity: 1;
 }
 
 /* Placeholder when iframe can't be used */
