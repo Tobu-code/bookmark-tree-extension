@@ -1,3 +1,27 @@
+@font-face {
+    font-family: 'Söhne';
+    src: url('fonts/Sohne-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tiêmpos Headline'; /* Mapping Diatype to this stack for now, or just use Diatype if preferred */
+    src: url('fonts/Diatype-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tiêmpos Headline';
+    src: url('fonts/Diatype-Medium.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     /* Claude Light Mode - Refined */
     --primary-color: #ae5630; /* Terracotta Orange */
