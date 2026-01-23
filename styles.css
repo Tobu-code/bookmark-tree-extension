@@ -26,34 +26,6 @@
     --modal-text: #e8eaed;
 }
 
-/* Deep Blue Theme */
-:root[data-theme="deep-blue"] {
-    --primary-color: #a6c8ff;
-    --text-color: #e1e9f5;
-    --text-secondary: #9aa8bc;
-    --bg-overlay: rgba(10, 25, 41, 0.75);
-    --card-bg: rgba(23, 42, 69, 0.8);
-    --card-hover: rgba(30, 58, 95, 0.95);
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
-    --modal-bg: rgba(23, 42, 69, 0.95);
-    --modal-text: #e1e9f5;
-}
-
-/* Midnight Purple Theme */
-:root[data-theme="midnight-purple"] {
-    --primary-color: #d7b7fd;
-    --text-color: #f3e5f5;
-    --text-secondary: #b39ddb;
-    --bg-overlay: rgba(30, 20, 50, 0.75);
-    --card-bg: rgba(50, 30, 80, 0.8);
-    --card-hover: rgba(70, 45, 110, 0.95);
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
-    --modal-bg: rgba(50, 30, 80, 0.95);
-    --modal-text: #f3e5f5;
-}
-
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -98,8 +70,9 @@ html {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-.bg-gradient-2 {
-    background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+.bg-claude {
+    background: linear-gradient(135deg, #F5F2EB 0%, #E8E2D6 100%);
+    /* Optional subtle graininess could be added with an overlay image if desired, but gradient is cleaner */
 }
 
 .bg-gradient-3 {
