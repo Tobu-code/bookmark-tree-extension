@@ -1,15 +1,15 @@
 :root {
-    /* Default (Light) - will be overridden by data-theme="dark" or media query */
-    --primary-color: #4285f4;
-    --text-color: #333;
-    --text-secondary: #5f6368;
-    --bg-overlay: rgba(255, 255, 255, 0.60);
-    --card-bg: rgba(255, 255, 255, 0.75);
-    --card-hover: rgba(255, 255, 255, 0.95);
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.12);
-    --modal-bg: rgba(255, 255, 255, 0.9);
-    --modal-text: #333;
+    /* Claude Light Mode - Refined */
+    --primary-color: #ae5630; /* Terracotta Orange */
+    --text-color: #1a1a18; /* Deep Charcoal Black */
+    --text-secondary: #6b6a68; /* Medium Grey */
+    --bg-overlay: rgba(245, 245, 240, 0.95); /* Creamy/Beige Tint */
+    --card-bg: #FFFFFF; /* Pure White Cards */
+    --card-hover: #F5F5F0; /* Subtle Beige Hover */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.035); /* Specific Claude shadow */
+    --modal-bg: #FFFFFF;
+    --modal-text: #1a1a18;
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode */
@@ -68,8 +68,8 @@ h1, h2, h3, .card-title, .folder-modal-title {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Default to Claude Beige Gradient */
-    background: linear-gradient(135deg, #F5F2EB 0%, #E8E2D6 100%);
+    /* Default to Claude Beige */
+    background: #F5F5F0;
     background-size: cover;
     background-position: center;
     z-index: -1;
@@ -90,8 +90,8 @@ h1, h2, h3, .card-title, .folder-modal-title {
     background: var(--bg-overlay);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     padding: 40px;
@@ -144,9 +144,9 @@ h1, h2, h3, .card-title, .folder-modal-title {
     width: 65%; /* Wider search bar */
     max-width: 800px;
     border-radius: 50px; /* Increased radius for the taller bar */
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Stronger shadow for "pop" effect */
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-md); /* Apply specific Claude shadow */
+    border: 1px solid rgba(0, 0, 0, 0.06);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     padding-left: 28px;
     /* Space for select */
@@ -155,7 +155,7 @@ h1, h2, h3, .card-title, .folder-modal-title {
 .search-wrapper:focus-within {
     width: 70%;
     background: #fff;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
     transform: scale(1.02);
 }
 
@@ -454,9 +454,9 @@ body.search-active #search-container {
     border-radius: 18px;
     padding: 24px;
     box-sizing: border-box; /* Fix: Include padding in width calculation */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
     /* Initial shadow */
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     /* Distinct border */
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: grab;
