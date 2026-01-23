@@ -52,6 +52,12 @@
     :root:not([data-theme="light"]) #background-layer {
         background: #0E0E0E;
     }
+
+    /* Fix: Ensure folder modal is dark in system dark mode */
+    :root:not([data-theme="light"]) .folder-modal-content {
+        background: rgba(26, 26, 25, 0.9);
+        border-color: var(--border-color);
+    }
 }
 
 body,
@@ -523,7 +529,7 @@ body.search-active #search-container {
 .folder-modal-content {
     border-radius: 24px;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--border-color);
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
@@ -541,7 +547,8 @@ body.search-active #search-container {
 
 /* Dark theme support for modal blur */
 :root[data-theme="dark"] .folder-modal-content {
-    background: rgba(40, 44, 52, 0.85);
+    background: rgba(26, 26, 25, 0.9);
+    border-color: var(--border-color);
 }
 
 @keyframes modalSlideIn {
