@@ -96,6 +96,18 @@ body[data-bg-preset="bg-claude"] .folder-modal-title {
     font-weight: 600;
 }
 
+/* Gradient 3 (Green/Mint) Style Linkage */
+body[data-bg-preset="bg-gradient-3"] {
+    --primary-color: #2E7D32; /* Forest Green */
+    --text-color: #1B2E1C; 
+}
+
+/* Gradient 4 (Blue/Cyan) Style Linkage */
+body[data-bg-preset="bg-gradient-4"] {
+    --primary-color: #1565C0; /* Stronger Blue */
+    --text-color: #0D1E33;
+}
+
 .bg-gradient-3 {
     background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
 }
@@ -164,7 +176,8 @@ body[data-bg-preset="bg-gradient-dark-2"] {
 
 /* Search Bar */
 #search-container {
-    margin-bottom: 40px;
+    margin-top: 40px; /* Push search down from top */
+    margin-bottom: 80px; /* Large gap before bookmarks tree */
     display: flex;
     justify-content: center;
     position: relative;
@@ -173,33 +186,38 @@ body[data-bg-preset="bg-gradient-dark-2"] {
 
 #search-input {
     flex: 1;
-    padding: 16px 12px;
-    font-size: 18px;
+    padding: 24px 16px; /* Increased vertical and horizontal padding */
+    font-size: 22px; /* Larger text for better focus */
     border: none;
     background: transparent;
     outline: none;
     min-width: 0;
 }
 
+#search-input::placeholder {
+    font-style: italic;
+    opacity: 0.5;
+}
+
 /* Wrapper looks like the old input */
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: 50%;
-    max-width: 600px;
-    border-radius: 40px;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
-    padding-left: 20px;
+    width: 65%; /* Wider search bar */
+    max-width: 800px;
+    border-radius: 50px; /* Increased radius for the taller bar */
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Stronger shadow for "pop" effect */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding-left: 28px;
     /* Space for select */
 }
 
 .search-wrapper:focus-within {
-    width: 55%;
+    width: 70%;
     background: #fff;
-    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
     transform: scale(1.02);
 }
 
@@ -479,15 +497,14 @@ body.search-active #search-container {
 
 /* Horizontal Top-Level Items (Cards) */
 .top-level-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 60px;
-    /* Increased gap */
-    justify-content: center;
-    align-items: flex-start;
-    padding-bottom: 40px;
-    padding-left: 0;
-    /* Align slightly better */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px); /* Columns match card width */
+    grid-gap: 60px 50px; /* Legacy support just in case, vertical 60, horizontal 50 */
+    gap: 60px 50px;
+    justify-content: center; /* Centers the whole grid in the container */
+    padding: 20px 0 80px 0;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding doesn't break layout */
 }
 
 .bookmark-card {
@@ -498,6 +515,7 @@ body.search-active #search-container {
     /* Fixed Height */
     border-radius: 18px;
     padding: 24px;
+    box-sizing: border-box; /* Fix: Include padding in width calculation */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     /* Initial shadow */
     border: 1px solid rgba(255, 255, 255, 0.6);
