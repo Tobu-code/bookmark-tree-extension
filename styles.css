@@ -41,10 +41,16 @@
         --bg-overlay: #0E0E0E;
         --card-bg: #1A1A19;
         --card-hover: #252524;
+        --border-color: rgba(255, 255, 255, 0.1);
         --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
         --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
         --modal-bg: #1A1A19;
         --modal-text: #F2F0E9;
+    }
+
+    /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
+    :root:not([data-theme="light"]) #background-layer {
+        background: #0E0E0E;
     }
 }
 
