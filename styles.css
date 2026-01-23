@@ -478,7 +478,7 @@ body.search-active #search-container {
 /* Horizontal Top-Level Items (Cards) */
 .top-level-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 300px); /* Columns match card width */
+    grid-template-columns: repeat(auto-fill, 360px); /* Columns match card width */
     grid-gap: 60px 80px; /* Legacy support just in case, vertical 60, horizontal 80 */
     gap: 60px 80px;
     justify-content: center; /* Centers the whole grid in the container */
@@ -489,7 +489,7 @@ body.search-active #search-container {
 
 .bookmark-card {
     background: var(--card-bg);
-    width: 300px;
+    width: 360px;
     /* Slightly wider */
     height: 380px;
     /* Fixed Height */
@@ -1318,7 +1318,7 @@ input[type="file"] {
     color: var(--text-color);
     margin: 5px 0 10px;
     line-height: 1.5;
-    max-width: 300px;
+    max-width: 360px;
     margin-left: auto;
     margin-right: auto;
 }
