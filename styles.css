@@ -72,7 +72,28 @@ html {
 
 .bg-claude {
     background: linear-gradient(135deg, #F5F2EB 0%, #E8E2D6 100%);
-    /* Optional subtle graininess could be added with an overlay image if desired, but gradient is cleaner */
+}
+
+/* Claude Style Linkage */
+body[data-bg-preset="bg-claude"] {
+    --primary-color: #D97757; /* Terracotta */
+    --text-color: #2D2926; /* Charcoal */
+    --text-secondary: #746C65; /* Warm Grey */
+    --bg-overlay: rgba(240, 238, 230, 0.6); /* Warm beige tint */
+    --card-bg: rgba(255, 255, 255, 0.85); /* Whiter cards */
+    --card-hover: #FFFFFF;
+    --shadow-sm: 0 4px 6px rgba(60, 50, 40, 0.05); /* Warm shadows */
+    --shadow-md: 0 12px 24px rgba(60, 50, 40, 0.08);
+}
+
+/* Serif headings for Claude style */
+body[data-bg-preset="bg-claude"] h1,
+body[data-bg-preset="bg-claude"] h2,
+body[data-bg-preset="bg-claude"] h3,
+body[data-bg-preset="bg-claude"] .card-title,
+body[data-bg-preset="bg-claude"] .folder-modal-title {
+    font-family: 'Tiêmpos Headline', 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+    font-weight: 600;
 }
 
 .bg-gradient-3 {
@@ -89,6 +110,20 @@ html {
 
 .bg-gradient-dark-2 {
     background: linear-gradient(60deg, #29323c 0%, #485563 100%);
+}
+
+/* Dark Background Presets Linkage - Auto-adapt text color even in light mode */
+body[data-bg-preset="bg-gradient-dark-1"],
+body[data-bg-preset="bg-gradient-dark-2"] {
+    --primary-color: #8ab4f8;
+    --text-color: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --bg-overlay: rgba(32, 33, 36, 0.4);
+    --card-bg: rgba(40, 44, 52, 0.6);
+    --card-hover: rgba(50, 54, 62, 0.9);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --modal-bg: rgba(40, 44, 52, 0.95);
+    --modal-text: #e8eaed;
 }
 
 /* Dark mode specific adjustments for gradients if needed 

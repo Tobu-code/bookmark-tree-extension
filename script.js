@@ -1147,12 +1147,18 @@ function applyBackground(data) {
     layer.style.backgroundImage = '';
     layer.className = ''; // Reset classes (be careful if other classes exist, but here it's dedicated)
 
-    if (!data) return;
+    if (!data) {
+        document.body.removeAttribute('data-bg-preset');
+        return;
+    }
 
-    if (data.startsWith('bg-gradient-')) {
+    if (data.startsWith('bg-gradient-') || data.startsWith('bg-claude')) {
         layer.classList.add(data);
+        // Link background preset to body for CSS variable overrides
+        document.body.dataset.bgPreset = data;
     } else {
         layer.style.backgroundImage = `url('${data}')`;
+        document.body.removeAttribute('data-bg-preset');
     }
 }
 
