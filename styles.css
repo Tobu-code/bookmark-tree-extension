@@ -776,7 +776,7 @@ body.search-active #search-container {
 }
 
 .sub-folder-header {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     padding: 6px 0;
     color: var(--text-secondary);
