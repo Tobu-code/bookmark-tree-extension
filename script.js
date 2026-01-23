@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- State and Constants ---
 let dragSrcEl = null;
 
+const FOLDER_ICON_SVG = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+
 // --- Bookmarks Logic ---
 
 function initBookmarks() {
@@ -74,7 +76,7 @@ function createBookmarkCard(folderNode) {
     // Header
     const header = document.createElement('div');
     header.className = 'card-header';
-    header.innerHTML = `<span style="font-size:20px;">📁</span> <span class="card-title">${folderNode.title}</span>`;
+    header.innerHTML = `${FOLDER_ICON_SVG} <span class="card-title">${folderNode.title}</span>`;
 
     // Mac-style Expand Button
     const expandBtn = document.createElement('button');
@@ -375,10 +377,12 @@ function handleDragEnd(e) {
 function showFolderModal(folderNode) {
     const modal = document.getElementById('folder-modal');
     const title = modal.querySelector('.folder-modal-title');
+    const iconContainer = modal.querySelector('.folder-modal-icon');
     const body = modal.querySelector('.folder-modal-body');
     const closeBtn = document.getElementById('close-folder-modal');
 
-    // Set title
+    // Set icon and title
+    if (iconContainer) iconContainer.innerHTML = FOLDER_ICON_SVG;
     title.textContent = folderNode.title;
 
     // Clear and render content

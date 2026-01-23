@@ -577,8 +577,15 @@ body.search-active #search-container {
 }
 
 .folder-modal-icon {
-    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-right: 12px;
+}
+
+.folder-modal-icon svg {
+    width: 32px;
+    height: 32px;
 }
 
 .folder-modal-title {
