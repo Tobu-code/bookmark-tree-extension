@@ -32,6 +32,15 @@
     --modal-text: #F2F0E9;
 }
 
+:root[data-theme="dark"] #settings-btn {
+    background: rgba(26, 26, 25, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme="dark"] #settings-btn:hover {
+    background: rgba(26, 26, 25, 0.9);
+}
+
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -57,6 +66,12 @@
     :root:not([data-theme="light"]) .folder-modal-content {
         background: rgba(26, 26, 25, 0.9);
         border-color: var(--border-color);
+    }
+
+    /* Fix: Ensure settings button is visible in system dark mode */
+    :root:not([data-theme="light"]) #settings-btn {
+        background: rgba(26, 26, 25, 0.6);
+        border-color: rgba(255, 255, 255, 0.1);
     }
 }
 
