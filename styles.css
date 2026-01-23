@@ -91,7 +91,7 @@ h1, h2, h3, .card-title, .folder-modal-title {
 
 /* Main Container - Dashboard Style */
 .container {
-    width: 92%;
+    width: 96%;
     height: 92vh;
     margin: 4vh auto;
     border-radius: 24px;
@@ -102,7 +102,7 @@ h1, h2, h3, .card-title, .folder-modal-title {
     border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    padding: 40px;
+    padding: 40px 20px;
     box-sizing: border-box;
     animation: fadeIn 0.8s ease-out;
     position: relative;
@@ -432,8 +432,8 @@ body.search-active #search-container {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 300px); /* Columns match card width */
-    grid-gap: 60px 50px; /* Legacy support just in case, vertical 60, horizontal 50 */
-    gap: 60px 50px;
+    grid-gap: 60px 80px; /* Legacy support just in case, vertical 60, horizontal 80 */
+    gap: 60px 80px;
     justify-content: center; /* Centers the whole grid in the container */
     padding: 20px 0 80px 0;
     width: 100%;
@@ -742,8 +742,8 @@ body.search-active #search-container {
 }
 
 .bookmark-icon {
-    width: 30px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -751,7 +751,7 @@ body.search-active #search-container {
     flex-shrink: 0;
     border-radius: 6px;
     line-height: 1;
-    font-size: 22px; /* Increased font size for emoji icons */
+    font-size: 20px; /* Increased font size for emoji icons */
 }
 
 .bookmark-label {
