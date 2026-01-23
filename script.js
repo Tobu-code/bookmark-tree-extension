@@ -175,7 +175,7 @@ function createSimpleTile(node) {
 
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 20);
+    const iconElement = createBookmarkIcon(iconData, 28);
     leaf.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -218,7 +218,7 @@ function renderTreeItem(node) {
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 16);
+        const iconElement = createBookmarkIcon(iconData, 24);
         a.appendChild(iconElement);
 
         const labelSpan = document.createElement('span');
@@ -445,7 +445,7 @@ function renderTreeItemForModal(node) {
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 16);
+        const iconElement = createBookmarkIcon(iconData, 24);
         a.appendChild(iconElement);
 
         const labelSpan = document.createElement('span');
@@ -833,13 +833,42 @@ let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
 
 const ANIMAL_EMOJIS = [
     '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
-    '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅'
+    '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅',
+    '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌',
+    '🐞', '🐜', '🦟', '🦗', '🕷️', '🕸️', '🐢', '🐍', '🦎', '🦖',
+    '🦕', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬',
+    '🐳', '🐋', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍', '🦧', '🦣',
+    '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🐃', '🐂', '🐄',
+    '🐎', '🐖', '🐏', '🐑', '🐐', '🦌', '🐕', '🐩', '🦮', '🐈',
+    '🐓', '🦃', '🦚', '🦜', '🦢', '🦩', '🕊️', '🐇', '🦝', '🦨'
 ];
 
 const WORK_EMOJIS = [
     '💼', '📊', '📈', '📉', '📧', '📇', '📅', '📝', '📌', '📎',
-    '💻', '🖥️', '⌨️', '🖱️', '📱', '🖨️', '🔍', '💡', '🧠', '⚙️'
+    '💻', '🖥️', '⌨️', '🖱️', '📱', '🖨️', '🔍', '💡', '🧠', '⚙️',
+    '📁', '📂', '🗂️', '🗃️', '🗄️', '🗑️', '🔒', '🔓', '🔏', '🔐',
+    '🔑', '🗝️', '🔨', '🪓', '⛏️', '⚒️', '🛠️', '🗡️', '⚔️', '🔫',
+    '🛡️', '🔧', '🔩', '⚖️', '🔗', '⛓️', '🧰', '🧲', '⚗️', '🧪',
+    '🧫', '🧬', '🔬', '🔭', '📡', '💉', '🩸', '💊', '🩹', '🩺',
+    '🚪', '🛗', '🪞', '🪟', '🛏️', '🛋️', '🪑', '🚽', '🪠', '🚿',
+    '🛁', '🧼', '🪒', '🧴', '🧹', '🧺', '🧻', '🧊', '🥤', '🥢',
+    '🍽️', '🍴', '🥄', '🔪', '🏺', '🌍', '🌎', '🌏', '🌐', '🗺️',
+    '🧭', '🏔️', '⛰️', '🌋', '🗻', '🏕️', '🏖️', '🏜️', '🏝️', '🏞️',
+    '🏟️', '🏛️', '🏗️', '🧱', '🏘️', '🏚️', '🏠', '🏡', '🏢', '🏣',
+    '🏤', '🏥', '🏦', '🏨', '🏩', '🏪', '🏫', '🏬', '🏭', '🏯'
 ];
+
+// Hash function for consistent emoji selection
+function getHashForString(str) {
+    let hash = 0;
+    if (!str || str.length === 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+}
 
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
@@ -853,7 +882,9 @@ function getIconForBookmark(url) {
         }
     } else {
         const emojis = CURRENT_ICON_STYLE === 'work' ? WORK_EMOJIS : ANIMAL_EMOJIS;
-        return { type: 'emoji', value: emojis[Math.floor(Math.random() * emojis.length)] };
+        // Use hash of URL to pick emoji deterministically and evenly
+        const hash = getHashForString(url);
+        return { type: 'emoji', value: emojis[hash % emojis.length] };
     }
 }
 
