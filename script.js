@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initSettings(); // initBookmarks will be called inside initSettings after loading
     initSearch();
+    initAiSidebar();
 });
 
 
@@ -1226,3 +1227,97 @@ function handleItemDragEnd(e) {
     dragSrcEl = null;
 }
 
+// --- Google AI Sidebar Logic ---
+
+function initAiSidebar() {
+    const toggleBtn = document.getElementById('ai-sidebar-btn');
+    const sidebar = document.getElementById('ai-sidebar');
+    const overlay = document.getElementById('ai-sidebar-overlay');
+    const closeBtn = document.getElementById('ai-sidebar-close');
+    const openNewWindowBtn = document.getElementById('ai-open-new-window');
+    const openGeminiBtn = document.getElementById('ai-open-gemini');
+    const iframe = document.getElementById('ai-iframe');
+    const fallback = document.getElementById('ai-iframe-fallback');
+
+    const GOOGLE_AI_URL = 'https://www.google.com/search?udm=50&aep=11';
+    let iframeLoaded = false;
+
+    function openSidebar() {
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('active');
+        overlay.classList.remove('hidden');
+        overlay.classList.add('active');
+
+        // Lazy load iframe on first open
+        if (!iframeLoaded && iframe) {
+            iframe.src = GOOGLE_AI_URL;
+            iframeLoaded = true;
+        }
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        // Wait for animation to complete before hiding
+        setTimeout(() => {
+            if (!sidebar.classList.contains('active')) {
+                sidebar.classList.add('hidden');
+                overlay.classList.add('hidden');
+            }
+        }, 400);
+    }
+
+    function openPopup() {
+        window.open(GOOGLE_AI_URL, 'GoogleAI', 'width=500,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
+    }
+
+    // Check if iframe is blocked (will show fallback)
+    if (iframe) {
+        iframe.addEventListener('load', () => {
+            // Try to access iframe content - if blocked by CSP, this will fail
+            try {
+                // Just check if it loaded something
+                if (iframe.contentWindow.location.href === 'about:blank') {
+                    showFallback();
+                }
+            } catch (e) {
+                // Cross-origin access is expected, iframe loaded successfully
+            }
+        });
+
+        iframe.addEventListener('error', () => {
+            showFallback();
+        });
+    }
+
+    function showFallback() {
+        if (iframe) iframe.style.display = 'none';
+        if (fallback) fallback.classList.remove('hidden');
+    }
+
+    // Toggle button click
+    toggleBtn.addEventListener('click', () => {
+        if (sidebar.classList.contains('active')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+
+    // Close button
+    closeBtn.addEventListener('click', closeSidebar);
+
+    // Overlay click to close
+    overlay.addEventListener('click', closeSidebar);
+
+    // Open in popup buttons
+    if (openNewWindowBtn) openNewWindowBtn.addEventListener('click', openPopup);
+    if (openGeminiBtn) openGeminiBtn.addEventListener('click', openPopup);
+
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+            closeSidebar();
+        }
+    });
+}

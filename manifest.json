@@ -1,12 +1,25 @@
 {
   "manifest_version": 3,
   "name": "小飞猪的书签",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful tree view of your bookmarks on the new tab page.",
   "permissions": [
     "bookmarks",
-    "storage"
+    "storage",
+    "declarativeNetRequest"
   ],
+  "host_permissions": [
+    "*://*.google.com/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "remove_xframe",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
