@@ -139,6 +139,7 @@ html {
     padding: 40px;
     box-sizing: border-box;
     animation: fadeIn 0.8s ease-out;
+    position: relative;
 }
 
 @keyframes fadeIn {
@@ -176,8 +177,8 @@ html {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: 40%;
-    max-width: 500px;
+    width: 50%;
+    max-width: 600px;
     border-radius: 40px;
     background: rgba(255, 255, 255, 0.8);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -188,7 +189,7 @@ html {
 }
 
 .search-wrapper:focus-within {
-    width: 45%;
+    width: 55%;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
     transform: scale(1.02);
@@ -848,27 +849,32 @@ body.search-active #search-container {
 
 /* Settings Button */
 #settings-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 56px;
-    height: 56px;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: white;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    font-size: 24px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 20px;
     cursor: pointer;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background 0.3s;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-secondary);
 }
 
 #settings-btn:hover {
     transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
 }
 
 /* Helper classes */
@@ -1277,10 +1283,10 @@ input[type="file"] {
     height: 36px;
     min-width: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4285f4 0%, #8e44ef 50%, #ea4335 100%);
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 60%), linear-gradient(135deg, #4285f4 0%, #8e44ef 50%, #ea4335 100%);
     border: none;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4), inset 0 1px 1px rgba(255,255,255,0.4);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     align-items: center;
