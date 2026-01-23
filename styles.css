@@ -171,7 +171,7 @@ h1, h2, h3, .card-title, .folder-modal-title {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: 65%; /* Wider search bar */
+    width: 58.5%; /* Reduced from 65% */
     max-width: 800px;
     border-radius: 24px; /* More rectangular/pill shape */
     background: var(--card-bg);
@@ -183,7 +183,7 @@ h1, h2, h3, .card-title, .folder-modal-title {
 }
 
 .search-wrapper:focus-within {
-    width: 65%; /* Keep width stable */
+    width: 58.5%; /* Keep width stable */
     background: var(--card-bg);
     border-color: var(--primary-color);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -1354,7 +1354,7 @@ input[type="file"] {
     flex-direction: column;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid var(--border-color);
 }
 
 .ai-sidebar.active {
@@ -1366,15 +1366,15 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(135deg, rgba(66, 133, 244, 0.05) 0%, rgba(142, 68, 239, 0.05) 100%);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--card-bg); /* Clean background */
 }
 
 /* AI Tabs Container */
 .ai-tabs {
     display: flex;
-    gap: 4px;
+    gap: 8px;
     flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
@@ -1388,42 +1388,45 @@ input[type="file"] {
 .ai-tab {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
+    gap: 8px;
+    padding: 8px 16px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     border: 1px solid transparent;
     white-space: nowrap;
     user-select: none;
+    color: var(--text-secondary);
 }
 
 .ai-tab:hover {
-    background: rgba(66, 133, 244, 0.15);
-    border-color: rgba(66, 133, 244, 0.3);
-}
-
-.ai-tab.active {
-    background: linear-gradient(135deg, #4285f4 0%, #8e44ef 100%);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
-}
-
-.ai-tab-icon {
-    font-size: 18px;
-    line-height: 1;
-}
-
-.ai-tab-name {
-    font-size: 13px;
-    font-weight: 500;
+    background: var(--card-hover);
     color: var(--text-color);
 }
 
-.ai-tab.active .ai-tab-name {
-    color: white;
+.ai-tab.active {
+    background: var(--bg-overlay);
+    border-color: var(--border-color);
+    color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
     font-weight: 600;
+}
+
+.ai-tab-icon {
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.ai-tab-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ai-tab.active .ai-tab-name {
+    color: var(--primary-color);
 }
 
 .ai-sidebar-title {
@@ -1444,8 +1447,8 @@ input[type="file"] {
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid transparent;
+    background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1455,9 +1458,9 @@ input[type="file"] {
 }
 
 .ai-action-btn:hover {
-    background: rgba(66, 133, 244, 0.2);
+    background: var(--card-hover);
     color: var(--primary-color);
-    transform: scale(1.05);
+    border-color: var(--border-color);
 }
 
 /* Sidebar Content */
