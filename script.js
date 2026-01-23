@@ -821,9 +821,7 @@ function initSearch() {
     });
 }
 
-// --- Settings Logic (Preserved) ---
-const STORAGE_KEY_BG = 'bookmark_tree_bg';
-const STORAGE_KEY_OPACITY = 'bookmark_tree_opacity';
+// --- Settings Logic (Cleaned) ---
 const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
 const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
@@ -892,17 +890,11 @@ function initSettings() {
     const modal = document.getElementById('settings-modal');
     const btn = document.getElementById('settings-btn');
     const close = document.getElementById('close-modal');
-    const saveBtn = document.getElementById('save-settings'); // Element removed, but var might be null
-    const clearBtn = document.getElementById('clear-bg');
 
     // Inputs
-    const bgUrlInput = document.getElementById('bg-url');
-    const bgUpload = document.getElementById('bg-upload');
-    const opacityInput = document.getElementById('bg-opacity');
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
-    const bgPresets = document.querySelectorAll('.bg-preset-option');
 
     // About Section Logic
     const aboutBtn = document.getElementById('about-btn');
@@ -917,16 +909,12 @@ function initSettings() {
             aboutModal.classList.remove('hidden'); // Open about
         };
 
-        // Return to settings logic
         const returnToSettings = () => {
             aboutModal.classList.add('hidden');
             modal.classList.remove('hidden');
         };
 
         closeAbout.onclick = returnToSettings;
-
-        // Close about modal on outside click - return to settings? 
-        // User asked "exit ... back to settings".
         aboutModal.addEventListener('click', (e) => {
             if (e.target === aboutModal) {
                 returnToSettings();
@@ -945,74 +933,7 @@ function initSettings() {
         chrome.storage.local.set({ [key]: value }, callback);
     };
 
-    // Real-time Listeners
-
-    // Helper to clear presets selection visual
-    const clearPresetSelection = () => {
-        bgPresets.forEach(p => p.classList.remove('selected'));
-    };
-
-    // 0. Background Presets
-    bgPresets.forEach(preset => {
-        preset.addEventListener('click', () => {
-            const bgClass = preset.dataset.bg;
-            saveSetting(STORAGE_KEY_BG, bgClass, () => applyBackground(bgClass));
-
-            // Visual feedback
-            clearPresetSelection();
-            preset.classList.add('selected');
-
-            // Clear other inputs
-            bgUrlInput.value = '';
-            bgUpload.value = '';
-            const fileNameDisplay = document.getElementById('file-name-display');
-            if (fileNameDisplay) fileNameDisplay.textContent = '';
-        });
-    });
-
-    // 1. Background URL (Blur/Change)
-    bgUrlInput.addEventListener('change', () => {
-        const url = bgUrlInput.value.trim();
-        if (url) {
-            saveSetting(STORAGE_KEY_BG, url, () => applyBackground(url));
-            // Clear file input value if any
-            bgUpload.value = '';
-            clearPresetSelection();
-        }
-    });
-
-    // 2. Background File
-    bgUpload.addEventListener('change', () => {
-        const file = bgUpload.files[0];
-        const fileNameDisplay = document.getElementById('file-name-display');
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64data = reader.result;
-                try {
-                    saveSetting(STORAGE_KEY_BG, base64data, () => applyBackground(base64data));
-                    bgUrlInput.value = ''; // Clear URL input
-                    if (fileNameDisplay) fileNameDisplay.textContent = `已选择: ${file.name}`;
-                    clearPresetSelection();
-                } catch (e) {
-                    alert('Image too large to save!');
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-
-
-    // 3. Opacity (Input - Realtime)
-    opacityInput.addEventListener('input', () => {
-        const opacity = opacityInput.value;
-        updateOpacity(opacity); // Visual update
-        saveSetting(STORAGE_KEY_OPACITY, opacity); // Storage update
-    });
-
-    // 4. Link Target (Radio)
+    // 1. Link Target (Radio)
     linkTargetInputs.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.checked) {
@@ -1025,7 +946,7 @@ function initSettings() {
         });
     });
 
-    // 5. Theme
+    // 2. Theme
     themeInputs.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.checked) {
@@ -1036,7 +957,7 @@ function initSettings() {
         });
     });
 
-    // 6. Icon Style
+    // 3. Icon Style
     iconStyleInputs.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.checked) {
@@ -1048,34 +969,9 @@ function initSettings() {
     });
 
     // Load saved settings
-    chrome.storage.local.get([STORAGE_KEY_BG, STORAGE_KEY_OPACITY, STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
-        if (result[STORAGE_KEY_BG]) {
-            const bg = result[STORAGE_KEY_BG];
-            applyBackground(bg);
-
-            // Restore UI state
-            if (bg.startsWith('bg-gradient-')) {
-                const preset = document.querySelector(`.bg-preset-option[data-bg="${bg}"]`);
-                if (preset) preset.classList.add('selected');
-            } else {
-                bgUrlInput.value = bg.startsWith('data:') ? '' : bg;
-            }
-        } else {
-            // Default background
-            const defaultBg = 'bg-gradient-1';
-            applyBackground(defaultBg);
-            // Don't save it yet, just show it. Or should we? 
-            // Better to show it visually.
-            const preset = document.querySelector(`.bg-preset-option[data-bg="${defaultBg}"]`);
-            if (preset) preset.classList.add('selected');
-        }
-        if (result[STORAGE_KEY_OPACITY]) {
-            opacityInput.value = result[STORAGE_KEY_OPACITY];
-            updateOpacity(result[STORAGE_KEY_OPACITY]);
-        }
-
+    chrome.storage.local.get([STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
+        
         // Open in New Tab
-        // Link Target (Radio)
         if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
             OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];
             linkTargetInputs.forEach(radio => {
@@ -1119,16 +1015,6 @@ function initSettings() {
             modal.classList.add('hidden');
         }
     };
-
-    clearBtn.onclick = () => {
-        chrome.storage.local.remove([STORAGE_KEY_BG], () => {
-            document.getElementById('background-layer').style.backgroundImage = '';
-            bgUrlInput.value = '';
-            bgUpload.value = '';
-            const fileNameDisplay = document.getElementById('file-name-display');
-            if (fileNameDisplay) fileNameDisplay.textContent = '';
-        });
-    }
 }
 
 function applyTheme(theme) {
@@ -1138,39 +1024,6 @@ function applyTheme(theme) {
     } else {
         root.setAttribute('data-theme', theme);
     }
-}
-
-function applyBackground(data) {
-    const layer = document.getElementById('background-layer');
-
-    // Reset
-    layer.style.backgroundImage = '';
-    layer.className = ''; // Reset classes (be careful if other classes exist, but here it's dedicated)
-
-    if (!data) {
-        document.body.removeAttribute('data-bg-preset');
-        return;
-    }
-
-    if (data.startsWith('bg-gradient-') || data.startsWith('bg-claude')) {
-        layer.classList.add(data);
-        // Link background preset to body for CSS variable overrides
-        document.body.dataset.bgPreset = data;
-    } else {
-        layer.style.backgroundImage = `url('${data}')`;
-        document.body.removeAttribute('data-bg-preset');
-    }
-}
-
-function updateOpacity(val) {
-    // val is 0 to 1
-    // Container uses var(--bg-overlay)
-    // We update the css var on the container
-    const c = document.querySelector('.container');
-    // Inverse logic: Higher opacity slider = More solid background (less transparent)
-    // Slider value name is "Overlay Opacity"
-    // Let's assume 1.0 = fully opaque white, 0.0 = fully transparent
-    c.style.setProperty('--bg-overlay', `rgba(255, 255, 255, ${val})`);
 }
 
 // --- Bookmark Item Drag Handlers ---

@@ -107,48 +107,6 @@
         <div class="modal-content">
             <span id="close-modal" class="close"></span>
             <h2>设置</h2>
-            <div class="setting-item">
-                <label>背景预设</label>
-                <div class="bg-presets">
-                    <div class="bg-preset-option bg-gradient-1" data-bg="bg-gradient-1" title="Gradient 1"></div>
-                    <div class="bg-preset-option bg-claude" data-bg="bg-claude" title="Claude Style"></div>
-                    <div class="bg-preset-option bg-gradient-3" data-bg="bg-gradient-3" title="Gradient 3"></div>
-                    <div class="bg-preset-option bg-gradient-4" data-bg="bg-gradient-4" title="Gradient 4"></div>
-                    <div class="bg-preset-option bg-gradient-dark-1" data-bg="bg-gradient-dark-1"
-                        title="Dark Gradient 1"></div>
-                    <div class="bg-preset-option bg-gradient-dark-2" data-bg="bg-gradient-dark-2"
-                        title="Dark Gradient 2"></div>
-                </div>
-            </div>
-            <div class="setting-item">
-                <label for="bg-url">自定义图片链接:</label>
-                <input type="text" id="bg-url" placeholder="https://example.com/image.jpg">
-            </div>
-            <div class="setting-item">
-                <label for="bg-upload">上传图片:</label>
-
-                <div class="file-upload-container">
-                    <input type="file" id="bg-upload" accept="image/*">
-                    <button id="clear-bg">重置</button>
-                    <span id="file-name-display"
-                        style="font-size: 12px; color: var(--text-secondary); width: 100%;"></span>
-                </div>
-            </div>
-            <div class="setting-item">
-                <label for="bg-opacity">遮罩透明度:</label>
-                <input type="range" id="bg-opacity" min="0" max="1" step="0.1" value="0.3">
-            </div>
-            <div class="setting-item">
-                <label>链接打开方式</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="link-target" value="self"><span>当前页</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="link-target" value="blank" checked><span>新标签页</span>
-                    </label>
-                </div>
-            </div>
 
             <div class="setting-item">
                 <label>外观主题</label>
@@ -161,6 +119,18 @@
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="theme" value="system"><span>自动</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>链接打开方式</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="self"><span>当前页</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="blank" checked><span>新标签页</span>
                     </label>
                 </div>
             </div>

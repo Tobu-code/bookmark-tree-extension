@@ -12,33 +12,37 @@
     --modal-text: #333;
 }
 
-/* Dark Theme overrides via data-attribute */
+/* Dark Theme overrides via data-attribute - Claude Dark Mode */
 :root[data-theme="dark"] {
-    --primary-color: #8ab4f8;
-    --text-color: #e8eaed;
-    --text-secondary: #9aa0a6;
-    --bg-overlay: rgba(32, 33, 36, 0.60);
-    --card-bg: rgba(40, 44, 52, 0.75);
-    --card-hover: rgba(50, 54, 62, 0.95);
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.5);
-    --modal-bg: rgba(40, 44, 52, 0.95);
-    --modal-text: #e8eaed;
+    --primary-color: #D97757; /* Terracotta/Clay - Core Brand Accent */
+    --text-color: #F2F0E9; /* Off-white for primary text */
+    --text-secondary: #9E9E9C; /* Medium Grey for secondary text */
+    
+    /* Backgrounds */
+    --bg-overlay: #0E0E0E; /* Deep Charcoal Main Background */
+    --card-bg: #1A1A19; /* Slightly lighter deep grey for cards */
+    --card-hover: #252524; /* Hover state */
+    
+    /* Shadows & Borders */
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
+    --modal-bg: #1A1A19;
+    --modal-text: #F2F0E9;
 }
 
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #8ab4f8;
-        --text-color: #e8eaed;
-        --text-secondary: #9aa0a6;
-        --bg-overlay: rgba(32, 33, 36, 0.60);
-        --card-bg: rgba(40, 44, 52, 0.75);
-        --card-hover: rgba(50, 54, 62, 0.95);
-        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.5);
-        --modal-bg: rgba(40, 44, 52, 0.95);
-        --modal-text: #e8eaed;
+        --primary-color: #D97757;
+        --text-color: #F2F0E9;
+        --text-secondary: #9E9E9C;
+        --bg-overlay: #0E0E0E;
+        --card-bg: #1A1A19;
+        --card-hover: #252524;
+        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
+        --modal-bg: #1A1A19;
+        --modal-text: #F2F0E9;
     }
 }
 
@@ -48,8 +52,14 @@ html {
     padding: 0;
     width: 100%;
     height: 100%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Söhne', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Claude UI Font */
     overflow: hidden;
+}
+
+/* Default Serif Headings (Claude Style) */
+h1, h2, h3, .card-title, .folder-modal-title {
+    font-family: 'Tiêmpos Headline', 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+    font-weight: 600;
 }
 
 #background-layer {
@@ -58,90 +68,18 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    /* background-image removed to allow gradient classes to work */
+    /* Default to Claude Beige Gradient */
+    background: linear-gradient(135deg, #F5F2EB 0%, #E8E2D6 100%);
     background-size: cover;
     background-position: center;
     z-index: -1;
     transition: all 0.5s ease;
 }
 
-/* Modern Gradient Presets via classes */
-.bg-gradient-1 {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+/* Dark Theme overrides for background */
+:root[data-theme="dark"] #background-layer {
+    background: #0E0E0E; /* Deep Charcoal Solid for Claude Dark */
 }
-
-.bg-claude {
-    background: linear-gradient(135deg, #F5F2EB 0%, #E8E2D6 100%);
-}
-
-/* Claude Style Linkage */
-body[data-bg-preset="bg-claude"] {
-    --primary-color: #D97757; /* Terracotta */
-    --text-color: #2D2926; /* Charcoal */
-    --text-secondary: #746C65; /* Warm Grey */
-    --bg-overlay: rgba(240, 238, 230, 0.6); /* Warm beige tint */
-    --card-bg: rgba(255, 255, 255, 0.85); /* Whiter cards */
-    --card-hover: #FFFFFF;
-    --shadow-sm: 0 4px 6px rgba(60, 50, 40, 0.05); /* Warm shadows */
-    --shadow-md: 0 12px 24px rgba(60, 50, 40, 0.08);
-}
-
-/* Serif headings for Claude style */
-body[data-bg-preset="bg-claude"] h1,
-body[data-bg-preset="bg-claude"] h2,
-body[data-bg-preset="bg-claude"] h3,
-body[data-bg-preset="bg-claude"] .card-title,
-body[data-bg-preset="bg-claude"] .folder-modal-title {
-    font-family: 'Tiêmpos Headline', 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif;
-    font-weight: 600;
-}
-
-/* Gradient 3 (Green/Mint) Style Linkage */
-body[data-bg-preset="bg-gradient-3"] {
-    --primary-color: #2E7D32; /* Forest Green */
-    --text-color: #1B2E1C; 
-}
-
-/* Gradient 4 (Blue/Cyan) Style Linkage */
-body[data-bg-preset="bg-gradient-4"] {
-    --primary-color: #1565C0; /* Stronger Blue */
-    --text-color: #0D1E33;
-}
-
-.bg-gradient-3 {
-    background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-}
-
-.bg-gradient-4 {
-    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
-}
-
-.bg-gradient-dark-1 {
-    background: linear-gradient(to top, #09203f 0%, #537895 100%);
-}
-
-.bg-gradient-dark-2 {
-    background: linear-gradient(60deg, #29323c 0%, #485563 100%);
-}
-
-/* Dark Background Presets Linkage - Auto-adapt text color even in light mode */
-body[data-bg-preset="bg-gradient-dark-1"],
-body[data-bg-preset="bg-gradient-dark-2"] {
-    --primary-color: #8ab4f8;
-    --text-color: #e8eaed;
-    --text-secondary: #9aa0a6;
-    --bg-overlay: rgba(32, 33, 36, 0.4);
-    --card-bg: rgba(40, 44, 52, 0.6);
-    --card-hover: rgba(50, 54, 62, 0.9);
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --modal-bg: rgba(40, 44, 52, 0.95);
-    --modal-text: #e8eaed;
-}
-
-/* Dark mode specific adjustments for gradients if needed 
-   For now, we let these lively gradients stand as they are modern 
-   and glassmorphism sits on top. */
-
 
 /* Main Container - Dashboard Style */
 .container {
