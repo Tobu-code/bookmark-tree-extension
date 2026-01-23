@@ -1227,67 +1227,107 @@ function handleItemDragEnd(e) {
     dragSrcEl = null;
 }
 
-// --- Google AI Sidebar Logic ---
+// --- AI Sidebar Logic ---
 
 function initAiSidebar() {
     const toggleBtn = document.getElementById('ai-sidebar-btn');
     const sidebar = document.getElementById('ai-sidebar');
-    const overlay = document.getElementById('ai-sidebar-overlay');
+    const sidebarOverlay = document.getElementById('ai-sidebar-overlay');
     const closeBtn = document.getElementById('ai-sidebar-close');
     const openNewWindowBtn = document.getElementById('ai-open-new-window');
-    const openGeminiBtn = document.getElementById('ai-open-gemini');
+    const openFallbackBtn = document.getElementById('ai-open-gemini');
     const iframe = document.getElementById('ai-iframe');
     const fallback = document.getElementById('ai-iframe-fallback');
+    const aiTabs = document.querySelectorAll('.ai-tab');
 
-    const GOOGLE_AI_URL = 'https://www.google.com/search?udm=50&aep=11';
-    let iframeLoaded = false;
+    const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
+
+    // Current AI state
+    let currentAi = {
+        id: 'google',
+        url: 'https://www.google.com/search?udm=50&aep=11',
+        icon: '🔍',
+        name: 'Google AI'
+    };
+    let currentLoadedUrl = '';
+
+    // Load saved AI preference
+    chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
+        if (result[STORAGE_KEY_AI]) {
+            const saved = result[STORAGE_KEY_AI];
+            currentAi = saved;
+            updateCurrentAiDisplay();
+        }
+        updateActiveTab();
+    });
+
+    function updateCurrentAiDisplay() {
+        // Icon is now static in HTML, no need to update
+    }
+
+    function updateActiveTab() {
+        aiTabs.forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.ai === currentAi.id);
+        });
+    }
+
+    function selectAi(tab) {
+        currentAi = {
+            id: tab.dataset.ai,
+            url: tab.dataset.url,
+            icon: tab.dataset.icon,
+            name: tab.dataset.name
+        };
+
+        // Save preference
+        chrome.storage.local.set({ [STORAGE_KEY_AI]: currentAi });
+
+        updateCurrentAiDisplay();
+        updateActiveTab();
+
+        // Force reload iframe
+        currentLoadedUrl = '';
+        loadIframe();
+    }
+
+    function loadIframe() {
+        if (iframe && currentAi.url !== currentLoadedUrl) {
+            iframe.src = currentAi.url;
+            currentLoadedUrl = currentAi.url;
+
+            // Reset fallback state
+            iframe.style.display = '';
+            if (fallback) fallback.classList.add('hidden');
+        }
+    }
 
     function openSidebar() {
         sidebar.classList.remove('hidden');
         sidebar.classList.add('active');
-        overlay.classList.remove('hidden');
-        overlay.classList.add('active');
+        sidebarOverlay.classList.remove('hidden');
+        sidebarOverlay.classList.add('active');
 
-        // Lazy load iframe on first open
-        if (!iframeLoaded && iframe) {
-            iframe.src = GOOGLE_AI_URL;
-            iframeLoaded = true;
+        updateCurrentAiDisplay();
+
+        // Load iframe
+        if (iframe) {
+            loadIframe();
         }
     }
 
     function closeSidebar() {
         sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        // Wait for animation to complete before hiding
+        sidebarOverlay.classList.remove('active');
         setTimeout(() => {
             if (!sidebar.classList.contains('active')) {
                 sidebar.classList.add('hidden');
-                overlay.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
             }
         }, 400);
     }
 
     function openPopup() {
-        window.open(GOOGLE_AI_URL, 'GoogleAI', 'width=500,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
-    }
-
-    // Check if iframe is blocked (will show fallback)
-    if (iframe) {
-        iframe.addEventListener('load', () => {
-            // Try to access iframe content - if blocked by CSP, this will fail
-            try {
-                // Just check if it loaded something
-                if (iframe.contentWindow.location.href === 'about:blank') {
-                    showFallback();
-                }
-            } catch (e) {
-                // Cross-origin access is expected, iframe loaded successfully
-            }
-        });
-
-        iframe.addEventListener('error', () => {
-            showFallback();
-        });
+        window.open(currentAi.url, 'AI_Window', 'width=800,height=900,left=100,top=100,resizable=yes,scrollbars=yes');
     }
 
     function showFallback() {
@@ -1295,24 +1335,40 @@ function initAiSidebar() {
         if (fallback) fallback.classList.remove('hidden');
     }
 
-    // Toggle button click
-    toggleBtn.addEventListener('click', () => {
-        if (sidebar.classList.contains('active')) {
-            closeSidebar();
-        } else {
-            openSidebar();
-        }
+    // AI tabs click
+    aiTabs.forEach(tab => {
+        tab.addEventListener('click', () => selectAi(tab));
     });
 
-    // Close button
-    closeBtn.addEventListener('click', closeSidebar);
+    // Main button click - open sidebar
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            if (sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
 
-    // Overlay click to close
-    overlay.addEventListener('click', closeSidebar);
+    // Close button
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeSidebar);
+    }
+
+    // Sidebar overlay click
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
 
     // Open in popup buttons
     if (openNewWindowBtn) openNewWindowBtn.addEventListener('click', openPopup);
-    if (openGeminiBtn) openGeminiBtn.addEventListener('click', openPopup);
+    if (openFallbackBtn) openFallbackBtn.addEventListener('click', openPopup);
+
+    // Iframe error handling
+    if (iframe) {
+        iframe.addEventListener('error', showFallback);
+    }
 
     // ESC key to close
     document.addEventListener('keydown', (e) => {

@@ -21,5 +21,120 @@
                 "sub_frame"
             ]
         }
+    },
+    {
+        "id": 2,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://gemini.google.com/*",
+            "resourceTypes": [
+                "sub_frame"
+            ]
+        }
+    },
+    {
+        "id": 3,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://chatgpt.com/*",
+            "resourceTypes": [
+                "sub_frame"
+            ]
+        }
+    },
+    {
+        "id": 4,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://grok.com/*",
+            "resourceTypes": [
+                "sub_frame"
+            ]
+        }
+    },
+    {
+        "id": 5,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://chat.qwen.ai/*",
+            "resourceTypes": [
+                "sub_frame"
+            ]
+        }
+    },
+    {
+        "id": 6,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://qwen.ai/*",
+            "resourceTypes": [
+                "sub_frame"
+            ]
+        }
     }
 ]

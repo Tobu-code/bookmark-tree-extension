@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "小飞猪的书签",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "A beautiful tree view of your bookmarks on the new tab page.",
   "permissions": [
     "bookmarks",
@@ -9,7 +9,13 @@
     "declarativeNetRequest"
   ],
   "host_permissions": [
-    "*://*.google.com/*"
+    "*://*.google.com/*",
+    "*://*.chatgpt.com/*",
+    "*://chatgpt.com/*",
+    "*://*.grok.com/*",
+    "*://grok.com/*",
+    "*://*.qwen.ai/*",
+    "*://qwen.ai/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

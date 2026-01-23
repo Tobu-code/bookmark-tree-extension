@@ -158,6 +158,8 @@ html {
     margin-bottom: 40px;
     display: flex;
     justify-content: center;
+    position: relative;
+    z-index: 100;
 }
 
 #search-input {
@@ -1266,10 +1268,10 @@ input[type="file"] {
 }
 
 /* ========================================
-   Google AI Sidebar Styles
+   AI Picker & Sidebar Styles
    ======================================== */
 
-/* AI Sidebar Toggle Button (inline with search) */
+/* AI Sidebar Toggle Button */
 #ai-sidebar-btn {
     width: 36px;
     height: 36px;
@@ -1307,7 +1309,7 @@ input[type="file"] {
     position: fixed;
     top: 0;
     right: 0;
-    width: 50vw;
+    width: 66.67vw;
     height: 100vh;
     background: var(--modal-bg);
     backdrop-filter: blur(30px);
@@ -1330,9 +1332,64 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
+    padding: 12px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(135deg, rgba(66, 133, 244, 0.1) 0%, rgba(142, 68, 239, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(66, 133, 244, 0.05) 0%, rgba(142, 68, 239, 0.05) 100%);
+}
+
+/* AI Tabs Container */
+.ai-tabs {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.ai-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* AI Tab */
+.ai-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.ai-tab:hover {
+    background: rgba(66, 133, 244, 0.15);
+    border-color: rgba(66, 133, 244, 0.3);
+}
+
+.ai-tab.active {
+    background: linear-gradient(135deg, #4285f4 0%, #8e44ef 100%);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.ai-tab-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.ai-tab-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.ai-tab.active .ai-tab-name {
+    color: white;
+    font-weight: 600;
 }
 
 .ai-sidebar-title {

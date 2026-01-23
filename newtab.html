@@ -39,10 +39,36 @@
         <div id="bookmarks-tree" class="tree-view"></div>
     </div>
 
-    <!-- Google AI Sidebar -->
+    <!-- AI Sidebar -->
     <div id="ai-sidebar" class="ai-sidebar hidden">
         <div class="ai-sidebar-header">
-            <span class="ai-sidebar-title">✨ Google AI</span>
+            <div class="ai-tabs">
+                <div class="ai-tab active" data-ai="google" data-url="https://www.google.com/search?udm=50&aep=11"
+                    data-icon="🔍" data-name="Google AI" title="Google AI">
+                    <span class="ai-tab-icon">🔍</span>
+                    <span class="ai-tab-name">Google AI</span>
+                </div>
+                <div class="ai-tab" data-ai="gemini" data-url="https://gemini.google.com" data-icon="✨"
+                    data-name="Gemini" title="Gemini">
+                    <span class="ai-tab-icon">✨</span>
+                    <span class="ai-tab-name">Gemini</span>
+                </div>
+                <div class="ai-tab" data-ai="chatgpt" data-url="https://chatgpt.com/" data-icon="🤖" data-name="ChatGPT"
+                    title="ChatGPT">
+                    <span class="ai-tab-icon">🤖</span>
+                    <span class="ai-tab-name">ChatGPT</span>
+                </div>
+                <div class="ai-tab" data-ai="grok" data-url="https://grok.com/" data-icon="🚀" data-name="Grok"
+                    title="Grok">
+                    <span class="ai-tab-icon">🚀</span>
+                    <span class="ai-tab-name">Grok</span>
+                </div>
+                <div class="ai-tab" data-ai="qwen" data-url="https://chat.qwen.ai/" data-icon="🧠" data-name="通义千问"
+                    title="通义千问">
+                    <span class="ai-tab-icon">🧠</span>
+                    <span class="ai-tab-name">千问</span>
+                </div>
+            </div>
             <div class="ai-sidebar-actions">
                 <button id="ai-open-new-window" class="ai-action-btn" title="在新窗口打开">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
