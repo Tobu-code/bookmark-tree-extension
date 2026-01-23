@@ -433,25 +433,40 @@ body.search-active #search-container {
     padding: 10px;
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling - Mac/iOS Native Feel */
 #bookmarks-tree::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 #bookmarks-tree::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 5px;
+    background: transparent;
 }
 
 #bookmarks-tree::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     border: 2px solid transparent;
     background-clip: content-box;
 }
 
 #bookmarks-tree::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+/* Dark theme adaptation for scrollbar */
+:root[data-theme="dark"] #bookmarks-tree::-webkit-scrollbar-thumb,
+:root[data-theme="deep-blue"] #bookmarks-tree::-webkit-scrollbar-thumb,
+:root[data-theme="midnight-purple"] #bookmarks-tree::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="dark"] .folder-modal-body::-webkit-scrollbar-thumb,
+:root[data-theme="deep-blue"] .folder-modal-body::-webkit-scrollbar-thumb,
+:root[data-theme="midnight-purple"] .folder-modal-body::-webkit-scrollbar-thumb,
+:root[data-theme="dark"] .card-content::-webkit-scrollbar-thumb,
+:root[data-theme="deep-blue"] .card-content::-webkit-scrollbar-thumb,
+:root[data-theme="midnight-purple"] .card-content::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Horizontal Top-Level Items (Cards) */
@@ -626,12 +641,22 @@ body.search-active #search-container {
 }
 
 .folder-modal-body::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
+}
+
+.folder-modal-body::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .folder-modal-body::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.folder-modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.35);
 }
 
 .card-title {
@@ -686,12 +711,22 @@ body.search-active #search-container {
 }
 
 .card-content::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
+}
+
+.card-content::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .card-content::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.card-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.35);
 }
 
 
