@@ -1377,147 +1377,171 @@ input[type="file"] {
     filter: none;
 }
 
-/* AI Sidebar Panel */
+/* AI Sidebar Panel - Visual Enhancement (Claude-style Dark) */
 .ai-sidebar {
     position: fixed;
     top: 0;
     right: 0;
     width: 66.67vw;
     height: 100vh;
-    background: var(--modal-bg);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+    /* Deep, rich dark background with slight transparency - "Dark Glass" */
+    background: rgba(16, 16, 18, 0.96);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    /* Soft, deep shadow to lift it */
+    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
     z-index: 1001;
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border-left: 1px solid var(--border-color);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.4, 1);
+    /* Very subtle border */
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .ai-sidebar.active {
     transform: translateX(0);
 }
 
-/* Sidebar Header */
+/* Sidebar Header - Low Profile */
 .ai-sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
-    /* Reduced from 16px 20px */
-    border-bottom: 1px solid var(--border-color);
-    background: var(--card-bg);
-    /* Clean background */
+    padding: 16px 24px;
+    height: 50px;
+    /* Enforce restrained height */
+    box-sizing: border-box;
+    /* Removed solid background, let glass shine through */
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    /* Barely visible separator */
 }
 
-/* AI Tabs Container */
+/* AI Tabs Container - Breathing Room */
 .ai-tabs {
     display: flex;
-    gap: 8px;
+    gap: 12px;
+    /* Increased gap */
     flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
+    align-items: center;
 }
 
 .ai-tabs::-webkit-scrollbar {
     display: none;
 }
 
-/* AI Tab */
+/* AI Tab (Conversation Item) - Minimalist & Light-based */
 .ai-tab {
     display: flex;
     align-items: center;
-    gap: 6px;
-    /* Reduced gap */
-    padding: 6px 12px;
-    /* Smoother, more compact padding */
-    border-radius: 8px;
-    /* Slightly tighter corners */
+    gap: 10px;
+    padding: 8px 14px;
+    /* More breathing room */
+    border-radius: 10px;
+    /* Soft radii */
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease-out;
     background: transparent;
+    /* Default transparent */
     border: 1px solid transparent;
-    white-space: nowrap;
     user-select: none;
-    color: var(--text-secondary);
+    /* Default muted state */
+    color: rgba(255, 255, 255, 0.5);
 }
 
+/* Hover: Lifted by air */
 .ai-tab:hover {
-    background: var(--card-hover);
-    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.85);
 }
 
+/* Active: Soft Glow */
 .ai-tab.active {
-    background: var(--bg-overlay);
-    border-color: var(--border-color);
-    color: var(--primary-color);
-    box-shadow: var(--shadow-sm);
-    font-weight: 600;
-}
-
-.ai-tab-icon {
-    font-size: 14px;
-    /* Reduced icon size */
-    line-height: 1;
-    display: flex;
-    align-items: center;
-}
-
-.ai-tab-icon svg {
-    width: 14px;
-    height: 14px;
-}
-
-.ai-tab-name {
-    font-size: 13px;
-    /* Slightly smaller text */
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Subtle inset highlight */
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    /* Deep soft shadow */
     font-weight: 500;
 }
 
+/* De-emphasized Icons */
+.ai-tab-icon {
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    /* Dimmed by default */
+    transition: opacity 0.2s;
+}
+
+.ai-tab:hover .ai-tab-icon,
+.ai-tab.active .ai-tab-icon {
+    opacity: 1;
+    /* Brighten on interaction */
+}
+
+.ai-tab-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.ai-tab-name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    /* Slight track */
+}
+
 .ai-tab.active .ai-tab-name {
-    color: var(--primary-color);
+    color: #fff;
 }
 
 .ai-sidebar-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    /* Hidden or subdued if present */
+    display: none;
 }
 
+/* Actions - Secondary */
 .ai-sidebar-actions {
     display: flex;
     gap: 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.ai-sidebar-actions:hover {
+    opacity: 1;
+    /* Focus when mouse is near */
 }
 
 .ai-action-btn {
-    width: 28px;
-    /* Reduced from 32px */
-    height: 28px;
-    border-radius: 6px;
-    border: 1px solid transparent;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
     background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.6);
     transition: all 0.2s;
 }
 
 .ai-action-btn svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
 }
 
 .ai-action-btn:hover {
-    background: var(--card-hover);
-    color: var(--primary-color);
-    border-color: var(--border-color);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 /* Sidebar Content */
