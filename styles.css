@@ -23,38 +23,53 @@
     --modal-text: #1a1a18;
 }
 
-/* Dark Theme overrides via data-attribute - Claude Dark Mode */
+/* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
 :root[data-theme="dark"] {
+    /* Core Brand */
     --primary-color: #D97757;
     /* Terracotta/Clay - Core Brand Accent */
     --text-color: #F2F0E9;
     /* Off-white for primary text */
-    --text-secondary: #9E9E9C;
-    /* Medium Grey for secondary text */
+    --text-secondary: #A8A6A3;
+    /* Slightly warmer grey for secondary text */
 
-    /* Backgrounds */
-    --bg-overlay: #0E0E0E;
-    /* Deep Charcoal Main Background */
-    --card-bg: #1A1A19;
-    /* Slightly lighter deep grey for cards */
-    --card-hover: #252524;
-    /* Hover state */
-    --border-color: rgba(255, 255, 255, 0.1);
+    /* Backgrounds - Deep Purple-Grey Palette */
+    --bg-overlay: #1A1523;
+    /* Deep purple-grey main background */
+    --card-bg: #221D2A;
+    /* Purple-tinted card background */
+    --card-hover: #2D2638;
+    /* Warmer purple hover state */
+    --border-color: rgba(217, 119, 87, 0.12);
+    /* Warm-tinted borders */
 
-    /* Shadows & Borders */
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
-    --modal-bg: #1A1A19;
+    /* Enhanced Shadows & Effects */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 40px rgba(217, 119, 87, 0.15);
+    /* New: Glow effect */
+    --modal-bg: #221D2A;
     --modal-text: #F2F0E9;
+
+    /* New: Glass & Glow Variables */
+    --glow-color: rgba(217, 119, 87, 0.25);
+    --glow-soft: rgba(217, 119, 87, 0.1);
+    --glass-bg: rgba(34, 29, 42, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --highlight-top: rgba(255, 255, 255, 0.04);
 }
 
 :root[data-theme="dark"] #settings-btn {
-    background: rgba(26, 26, 25, 0.6);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
+    border-color: rgba(217, 119, 87, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 :root[data-theme="dark"] #settings-btn:hover {
-    background: rgba(26, 26, 25, 0.9);
+    background: linear-gradient(135deg, #3A3245 0%, #2D2638 100%);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 20px var(--glow-soft, rgba(217, 119, 87, 0.15));
 }
 
 /* System Dark Theme (only if no data-theme is set) */
@@ -62,32 +77,38 @@
     :root:not([data-theme="light"]) {
         --primary-color: #D97757;
         --text-color: #F2F0E9;
-        --text-secondary: #9E9E9C;
-        --bg-overlay: #0E0E0E;
-        --card-bg: #1A1A19;
-        --card-hover: #252524;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.4);
-        --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
-        --modal-bg: #1A1A19;
+        --text-secondary: #A8A6A3;
+        --bg-overlay: #1A1523;
+        --card-bg: #221D2A;
+        --card-hover: #2D2638;
+        --border-color: rgba(217, 119, 87, 0.12);
+        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.4);
+        --shadow-glow: 0 0 40px rgba(217, 119, 87, 0.15);
+        --modal-bg: #221D2A;
         --modal-text: #F2F0E9;
+        --glow-color: rgba(217, 119, 87, 0.25);
+        --glow-soft: rgba(217, 119, 87, 0.1);
+        --glass-bg: rgba(34, 29, 42, 0.85);
+        --glass-border: rgba(255, 255, 255, 0.06);
+        --highlight-top: rgba(255, 255, 255, 0.04);
     }
 
     /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
     :root:not([data-theme="light"]) #background-layer {
-        background: #0E0E0E;
+        background: #1A1523;
     }
 
     /* Fix: Ensure folder modal is dark in system dark mode */
     :root:not([data-theme="light"]) .folder-modal-content {
-        background: rgba(26, 26, 25, 0.9);
-        border-color: var(--border-color);
+        background: var(--glass-bg);
+        border-color: var(--glass-border);
     }
 
     /* Fix: Ensure settings button is visible in system dark mode */
     :root:not([data-theme="light"]) #settings-btn {
-        background: rgba(26, 26, 25, 0.6);
-        border-color: rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
+        border-color: rgba(217, 119, 87, 0.15);
     }
 }
 
@@ -126,10 +147,9 @@ h3,
     transition: all 0.5s ease;
 }
 
-/* Dark Theme overrides for background */
+/* Dark Theme overrides for background - Deep Purple-Grey */
 :root[data-theme="dark"] #background-layer {
-    background: #0E0E0E;
-    /* Deep Charcoal Solid for Claude Dark */
+    background: #1A1523;
 }
 
 /* Main Container - Dashboard Style */
@@ -193,31 +213,47 @@ h3,
     opacity: 0.5;
 }
 
-/* Wrapper looks like the old input */
+/* Wrapper looks like the old input - Claude Style Enhanced */
 .search-wrapper {
     display: flex;
     align-items: center;
     width: 58.5%;
-    /* Reduced from 65% */
     max-width: 800px;
-    border-radius: 24px;
-    /* More rectangular/pill shape */
+    border-radius: 20px;
+    /* More rounded, Claude-style */
     background: var(--card-bg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    /* Softer shadow */
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding-left: 20px;
-    /* Space for select */
+    position: relative;
+}
+
+/* Subtle ambient glow behind search (dark mode only) */
+:root[data-theme="dark"] .search-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    background: transparent;
+    z-index: -1;
+    transition: all 0.3s ease;
 }
 
 .search-wrapper:focus-within {
     width: 58.5%;
-    /* Keep width stable */
     background: var(--card-bg);
     border-color: var(--primary-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-1px);
+    box-shadow:
+        0 0 0 3px var(--glow-color, rgba(217, 119, 87, 0.2)),
+        0 8px 32px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+:root[data-theme="dark"] .search-wrapper:focus-within::before {
+    background: radial-gradient(ellipse at center, var(--glow-soft, rgba(217, 119, 87, 0.08)) 0%, transparent 70%);
 }
 
 /* Engine Picker Container */
@@ -483,51 +519,52 @@ body.search-active #search-container {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Horizontal Top-Level Items (Cards) */
+/* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
-    /* Columns match card width */
-    grid-gap: 60px 80px;
-    /* Legacy support just in case, vertical 60, horizontal 80 */
-    gap: 60px 80px;
+    grid-gap: 80px 100px;
+    /* Increased breathing room */
+    gap: 80px 100px;
     justify-content: center;
-    /* Centers the whole grid in the container */
-    padding: 20px 0 80px 0;
+    padding: 24px 0 100px 0;
     width: 100%;
     box-sizing: border-box;
-    /* Ensure padding doesn't break layout */
 }
 
 .bookmark-card {
     background: var(--card-bg);
     width: 360px;
-    /* Slightly wider */
     height: 380px;
-    /* Fixed Height */
-    border-radius: 18px;
+    border-radius: 24px;
+    /* More rounded, Claude-style */
     padding: 24px;
     box-sizing: border-box;
-    /* Fix: Include padding in width calculation */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
-    /* Initial shadow */
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    /* Distinct border */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-color);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: grab;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    /* Ensure rounded corners clip content */
+}
+
+/* Dark mode: subtle warm border tint */
+:root[data-theme="dark"] .bookmark-card {
+    border-color: rgba(217, 119, 87, 0.08);
 }
 
 .bookmark-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-12px);
     background: var(--card-hover);
-    border-color: #fff;
+    border-color: rgba(217, 119, 87, 0.15);
     z-index: 10;
+    box-shadow:
+        0 20px 48px rgba(0, 0, 0, 0.25),
+        0 0 60px var(--glow-soft, rgba(217, 119, 87, 0.08));
 }
 
 .bookmark-card:active {
@@ -539,7 +576,7 @@ body.search-active #search-container {
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 12px;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid var(--border-color);
     position: relative;
 }
 
@@ -759,53 +796,50 @@ body.search-active #search-container {
 
 .leaf-wrapper {
     display: block;
-    margin-bottom: 4px;
-    /* Move margin here for stable layout */
+    margin-bottom: 6px;
+    /* Slightly more breathing room */
     transform-style: preserve-3d;
-    /* Optional goodness */
 }
 
 .leaf-node {
     display: flex;
-    /* justify-content: flex-start; Default is left */
     align-items: center;
-    padding: 8px 10px;
-    /* margin-bottom: 4px; Removed from here */
-    border-radius: 16px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    /* Slightly smaller radius for list items */
     text-decoration: none;
     color: var(--text-color);
-    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
     transform-origin: center center;
     position: relative;
-    /* Needed for z-index */
     width: 100%;
-    /* Fill wrapper */
     box-sizing: border-box;
+    border-left: 2px solid transparent;
+    /* Prepare for hover accent */
 }
 
-/* Hover Effect - Dock Style Enhanced */
-/* Trigger on Wrapper Hover, Affect Node */
+/* Hover Effect - Claude Style Gradient */
 .leaf-wrapper:hover .leaf-node {
-    justify-content: flex-start;
-    padding-left: 20px;
-    /* Center-ish Left on hover */
-    background: rgba(66, 133, 244, 0.15);
-    /* Restore blue tint */
-    transform: scale(1.05);
+    padding-left: 16px;
+    background: linear-gradient(135deg,
+            rgba(217, 119, 87, 0.12) 0%,
+            rgba(217, 119, 87, 0.04) 100%);
+    border-left-color: var(--primary-color);
+    transform: scale(1.02) translateX(4px);
     z-index: 20;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Previous Sibling */
+/* Previous Sibling - subtle lift */
 .leaf-wrapper:has(+ .leaf-wrapper:hover) .leaf-node {
-    transform: scale(1.02);
+    transform: scale(1.01);
     z-index: 10;
 }
 
-/* Next Sibling */
+/* Next Sibling - subtle lift */
 .leaf-wrapper:hover+.leaf-wrapper .leaf-node {
-    transform: scale(1.02);
+    transform: scale(1.01);
     z-index: 10;
 }
 
@@ -912,22 +946,22 @@ body.search-active #search-container {
 }
 
 
-/* Settings Button */
+/* Settings Button - Bottom Right Corner */
 #settings-btn {
-    position: absolute;
+    position: fixed;
     bottom: 24px;
     right: 24px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
     cursor: pointer;
-    transition: transform 0.3s, background 0.3s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -935,12 +969,22 @@ body.search-active #search-container {
     color: var(--text-secondary);
 }
 
-#settings-btn:hover {
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--primary-color);
+#settings-btn svg {
+    width: 18px;
+    height: 18px;
 }
+
+#settings-btn:hover {
+    transform: rotate(45deg);
+    background: var(--card-hover, rgba(255, 255, 255, 0.15));
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.15),
+        0 0 12px var(--glow-soft, rgba(217, 119, 87, 0.1));
+}
+
+/* Remove tooltip - cleaner look */
 
 /* Helper classes */
 .hidden {
@@ -956,25 +1000,26 @@ body.search-active #search-container {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    /* Darkens background */
-    backdrop-filter: blur(8px);
-    /* Blurs background elements */
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fadeIn 0.2s ease-out;
+    animation: fadeIn 0.25s ease-out;
 }
 
-/* Modal Content (Card) */
+/* Modal Content (Card) - Claude Glass Style */
 .modal-content {
-    border-radius: 32px;
-    /* Increased rounded corners */
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: var(--modal-bg);
+    border-radius: 28px;
+    box-shadow:
+        0 32px 64px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+    background: var(--glass-bg, var(--modal-bg));
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     color: var(--modal-text);
     padding: 32px;
     width: 420px;
@@ -1377,52 +1422,47 @@ input[type="file"] {
     filter: none;
 }
 
-/* AI Sidebar Panel - Visual Enhancement (Claude-style Dark) */
+/* AI Sidebar Panel - Matching Theme Colors */
 .ai-sidebar {
     position: fixed;
     top: 0;
     right: 0;
     width: 66.67vw;
     height: 100vh;
-    /* Deep, rich dark background with slight transparency - "Dark Glass" */
-    background: rgba(16, 16, 18, 0.96);
+    /* Match theme: Deep purple-grey background */
+    background: var(--bg-overlay, #1A1523);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    /* Soft, deep shadow to lift it */
     box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
     z-index: 1001;
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.2, 1, 0.4, 1);
-    /* Very subtle border */
-    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    /* Warm-tinted border */
+    border-left: 1px solid var(--border-color, rgba(217, 119, 87, 0.12));
 }
 
 .ai-sidebar.active {
     transform: translateX(0);
 }
 
-/* Sidebar Header - Low Profile */
+/* Sidebar Header - Theme Matched */
 .ai-sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
     height: 50px;
-    /* Enforce restrained height */
     box-sizing: border-box;
-    /* Removed solid background, let glass shine through */
-    background: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    /* Barely visible separator */
+    background: var(--card-bg, #221D2A);
+    border-bottom: 1px solid var(--border-color, rgba(217, 119, 87, 0.1));
 }
 
-/* AI Tabs Container - Breathing Room */
+/* AI Tabs Container */
 .ai-tabs {
     display: flex;
     gap: 12px;
-    /* Increased gap */
     flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
@@ -1433,39 +1473,33 @@ input[type="file"] {
     display: none;
 }
 
-/* AI Tab (Conversation Item) - Minimalist & Light-based */
+/* AI Tab - Theme Matched */
 .ai-tab {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 8px 14px;
-    /* More breathing room */
     border-radius: 10px;
-    /* Soft radii */
     cursor: pointer;
     transition: all 0.25s ease-out;
     background: transparent;
-    /* Default transparent */
     border: 1px solid transparent;
     user-select: none;
-    /* Default muted state */
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary, #A8A6A3);
 }
 
-/* Hover: Lifted by air */
+/* Hover: Warm highlight */
 .ai-tab:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.85);
+    background: var(--card-hover, #2D2638);
+    color: var(--text-color, #F2F0E9);
 }
 
-/* Active: Soft Glow */
+/* Active: Primary color accent */
 .ai-tab.active {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    /* Subtle inset highlight */
-    color: #fff;
+    background: rgba(217, 119, 87, 0.15);
+    border: 1px solid rgba(217, 119, 87, 0.2);
+    color: var(--primary-color, #D97757);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    /* Deep soft shadow */
     font-weight: 500;
 }
 
@@ -1476,14 +1510,12 @@ input[type="file"] {
     display: flex;
     align-items: center;
     opacity: 0.6;
-    /* Dimmed by default */
     transition: opacity 0.2s;
 }
 
 .ai-tab:hover .ai-tab-icon,
 .ai-tab.active .ai-tab-icon {
     opacity: 1;
-    /* Brighten on interaction */
 }
 
 .ai-tab-icon svg {
@@ -1495,11 +1527,10 @@ input[type="file"] {
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.02em;
-    /* Slight track */
 }
 
 .ai-tab.active .ai-tab-name {
-    color: #fff;
+    color: var(--primary-color, #D97757);
 }
 
 .ai-sidebar-title {
@@ -1507,17 +1538,16 @@ input[type="file"] {
     display: none;
 }
 
-/* Actions - Secondary */
+/* Actions - Theme Matched */
 .ai-sidebar-actions {
     display: flex;
     gap: 8px;
-    opacity: 0.6;
+    opacity: 0.7;
     transition: opacity 0.2s;
 }
 
 .ai-sidebar-actions:hover {
     opacity: 1;
-    /* Focus when mouse is near */
 }
 
 .ai-action-btn {
@@ -1530,7 +1560,7 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary, #A8A6A3);
     transition: all 0.2s;
 }
 
@@ -1540,8 +1570,8 @@ input[type="file"] {
 }
 
 .ai-action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--card-hover, #2D2638);
+    color: var(--primary-color, #D97757);
 }
 
 /* Sidebar Content */
