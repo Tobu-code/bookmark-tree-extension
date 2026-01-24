@@ -1405,7 +1405,8 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
+    padding: 10px 16px;
+    /* Reduced from 16px 20px */
     border-bottom: 1px solid var(--border-color);
     background: var(--card-bg);
     /* Clean background */
@@ -1428,9 +1429,12 @@ input[type="file"] {
 .ai-tab {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 10px;
+    gap: 6px;
+    /* Reduced gap */
+    padding: 6px 12px;
+    /* Smoother, more compact padding */
+    border-radius: 8px;
+    /* Slightly tighter corners */
     cursor: pointer;
     transition: all 0.2s ease;
     background: transparent;
@@ -1454,14 +1458,21 @@ input[type="file"] {
 }
 
 .ai-tab-icon {
-    font-size: 16px;
+    font-size: 14px;
+    /* Reduced icon size */
     line-height: 1;
     display: flex;
     align-items: center;
 }
 
+.ai-tab-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
 .ai-tab-name {
-    font-size: 14px;
+    font-size: 13px;
+    /* Slightly smaller text */
     font-weight: 500;
 }
 
@@ -1484,9 +1495,10 @@ input[type="file"] {
 }
 
 .ai-action-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 28px;
+    /* Reduced from 32px */
+    height: 28px;
+    border-radius: 6px;
     border: 1px solid transparent;
     background: transparent;
     cursor: pointer;
@@ -1495,6 +1507,11 @@ input[type="file"] {
     justify-content: center;
     color: var(--text-secondary);
     transition: all 0.2s;
+}
+
+.ai-action-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .ai-action-btn:hover {
