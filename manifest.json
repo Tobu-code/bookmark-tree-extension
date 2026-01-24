@@ -6,7 +6,8 @@
   "permissions": [
     "bookmarks",
     "storage",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "favicon"
   ],
   "host_permissions": [
     "*://*.google.com/*",
@@ -15,7 +16,14 @@
     "*://*.grok.com/*",
     "*://grok.com/*",
     "*://*.qwen.ai/*",
-    "*://qwen.ai/*"
+    "*://qwen.ai/*",
+    "*://*.openalternative.co/*",
+    "*://*.x.ai/*",
+    "*://x.ai/*",
+    "*://*.x.com/*",
+    "*://x.com/*",
+    "*://*.twitter.com/*",
+    "*://twitter.com/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

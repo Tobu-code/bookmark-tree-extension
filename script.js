@@ -257,12 +257,12 @@ function renderTreeItem(node) {
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
-        
+
         // Add folder icon if in theme mode, or just always add it for consistency?
         // User asked to "replace all bookmark icons... directory and bookmarks"
         // Let's use FOLDER_ICON_SVG
         const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
-        
+
         header.innerHTML = `<span style="margin-right:5px; transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
 
         const childrenContainer = document.createElement('div');
@@ -492,9 +492,9 @@ function renderTreeItemForModal(node) {
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
-        
+
         const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
-        
+
         header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg); transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
         header.dataset.isLocked = 'true'; // Default open
 
@@ -666,9 +666,10 @@ function initSearch() {
             const iconDiv = document.createElement('div');
             iconDiv.className = 'suggestion-icon';
             try {
-                const domain = new URL(bookmark.url).origin;
+                const url = new URL(bookmark.url);
                 const img = document.createElement('img');
-                img.src = `${domain}/favicon.ico`;
+                // Use extension's favicon service
+                img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
                 img.addEventListener('error', function () {
                     this.replaceWith(document.createTextNode('🔖'));
                 });
@@ -856,8 +857,10 @@ function getIconForBookmark(url) {
     } else {
         // Native (Default)
         try {
-            const domain = new URL(url).origin;
-            return { type: 'img', src: `${domain}/favicon.ico` };
+            return {
+                type: 'img',
+                src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
+            };
         } catch {
             return { type: 'emoji', value: '🔖' }; // fallback
         }
@@ -948,7 +951,7 @@ function initSettings() {
 
     // Load saved settings
     chrome.storage.local.get([STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
-        
+
         // Open in New Tab
         if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
             OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];

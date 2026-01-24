@@ -12,13 +12,32 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://www.google.com/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
             ]
         }
     },
@@ -35,13 +54,32 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://gemini.google.com/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
             ]
         }
     },
@@ -58,13 +96,32 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://chatgpt.com/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
             ]
         }
     },
@@ -81,13 +138,32 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://grok.com/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
             ]
         }
     },
@@ -104,13 +180,32 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://chat.qwen.ai/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
             ]
         }
     },
@@ -127,13 +222,228 @@
                 {
                     "header": "Content-Security-Policy",
                     "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
                 }
             ]
         },
         "condition": {
             "urlFilter": "*://qwen.ai/*",
             "resourceTypes": [
-                "sub_frame"
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image"
+            ]
+        }
+    },
+    {
+        "id": 7,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Access-Control-Allow-Origin",
+                    "operation": "set",
+                    "value": "*"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://*.openalternative.co/*",
+            "resourceTypes": [
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image",
+                "font",
+                "stylesheet"
+            ]
+        }
+    },
+    {
+        "id": 8,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Access-Control-Allow-Origin",
+                    "operation": "set",
+                    "value": "*"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://*.x.ai/*",
+            "resourceTypes": [
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image",
+                "font",
+                "stylesheet"
+            ]
+        }
+    },
+    {
+        "id": 9,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Access-Control-Allow-Origin",
+                    "operation": "set",
+                    "value": "*"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://*.x.com/*",
+            "resourceTypes": [
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image",
+                "font",
+                "stylesheet"
+            ]
+        }
+    },
+    {
+        "id": 10,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                {
+                    "header": "X-Frame-Options",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Content-Security-Policy-Report-Only",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Opener-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Embedder-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Cross-Origin-Resource-Policy",
+                    "operation": "remove"
+                },
+                {
+                    "header": "Access-Control-Allow-Origin",
+                    "operation": "set",
+                    "value": "*"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "*://*.twitter.com/*",
+            "resourceTypes": [
+                "sub_frame",
+                "xmlhttprequest",
+                "script",
+                "image",
+                "font",
+                "stylesheet"
             ]
         }
     }
