@@ -1075,6 +1075,7 @@ function applyTheme(theme) {
 
 function applyBackground() {
     const bgLayer = document.getElementById('background-layer');
+    const aiSidebar = document.getElementById('ai-sidebar');
     if (!bgLayer) return;
 
     if (CURRENT_BG_IMAGE) {
@@ -1084,6 +1085,13 @@ function applyBackground() {
     }
 
     bgLayer.style.filter = `blur(${CURRENT_BG_BLUR}px)`;
+    if (aiSidebar) {
+        // Base blur of 40px plus user's background blur
+        const totalBlur = 40 + parseInt(CURRENT_BG_BLUR);
+        aiSidebar.style.backdropFilter = `blur(${totalBlur}px)`;
+        aiSidebar.style.webkitBackdropFilter = `blur(${totalBlur}px)`;
+    }
+
     // Scale up slightly to avoid blurred edges if blurring
     if (CURRENT_BG_BLUR > 0) {
         bgLayer.style.transform = 'scale(1.05)';
