@@ -42,7 +42,8 @@ async function build() {
         'styles.css',
         'icons', // directory
         'LICENSE',
-        'README.md'
+        'README.md',
+        'rules.json'
     ];
 
     for (const file of filesToCopy) {
