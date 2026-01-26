@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2026-01-26
+
+### Major Update
+- **Performance**: Significant performance improvements for large bookmark collections.
+- **UI/UX**: Refined user interface with smoother animations and improved responsiveness.
+- **New Features**: Enhanced search capabilities and additional customization options.
+
 ## [1.0.0] - 2026-01-04
 
 ### Official Release

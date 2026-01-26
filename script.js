@@ -877,38 +877,6 @@ function initSettings() {
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
 
-    // About Section Logic
-    const aboutBtn = document.getElementById('about-btn');
-    const aboutModal = document.getElementById('about-modal');
-    const closeAbout = document.getElementById('close-about');
-    const appVersion = document.getElementById('app-version');
-    const appDesc = document.getElementById('app-desc');
-
-    if (aboutBtn && aboutModal) {
-        aboutBtn.onclick = () => {
-            modal.classList.add('hidden'); // Close settings
-            aboutModal.classList.remove('hidden'); // Open about
-        };
-
-        const returnToSettings = () => {
-            aboutModal.classList.add('hidden');
-            modal.classList.remove('hidden');
-        };
-
-        closeAbout.onclick = returnToSettings;
-        aboutModal.addEventListener('click', (e) => {
-            if (e.target === aboutModal) {
-                returnToSettings();
-            }
-        });
-    }
-
-    if (chrome.runtime && chrome.runtime.getManifest) {
-        const manifest = chrome.runtime.getManifest();
-        if (appVersion) appVersion.textContent = manifest.version;
-        if (appDesc) appDesc.textContent = manifest.description;
-    }
-
     // Helper to save settings
     const saveSetting = (key, value, callback) => {
         chrome.storage.local.set({ [key]: value }, callback);

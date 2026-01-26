@@ -35,7 +35,7 @@
 
 ## 📄 版权与许可
 
-Copyright © 2025 [小飞猪的希冀](mailto:zanehao_work@outlook.com).
+Copyright © 2026 [小飞猪的希冀](mailto:zanehao_work@outlook.com).
 
 本项目采用 [MIT License](LICENSE) 开源协议。您可以自由地使用、修改和分发本项目，但需保留原作者版权声明。
 
