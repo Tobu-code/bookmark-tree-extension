@@ -4,6 +4,10 @@ const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
 const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
+const STORAGE_KEY_FREQUENT_DATA = 'frequent_bookmarks_data';
+const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
+const FREQUENT_BOOKMARK_COUNT = 6;
+const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. UI Initialization (Sync)
@@ -15,7 +19,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const getBookmarks = () => new Promise(resolve => chrome.bookmarks.getTree(resolve));
 
     const [settings, bookmarkTree] = await Promise.all([
-        getStorage([STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE, STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR]),
+        getStorage([
+            STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
+            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR,
+            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED
+        ]),
         getBookmarks()
     ]);
 
@@ -24,9 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     else OPEN_IN_NEW_TAB = true; // Default
 
     if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
-    
+
     if (settings[STORAGE_KEY_BG_IMAGE]) CURRENT_BG_IMAGE = settings[STORAGE_KEY_BG_IMAGE];
-    
+
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) CURRENT_BG_BLUR = settings[STORAGE_KEY_BG_BLUR];
 
     // 4. Init Settings UI (Bindings)
@@ -37,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 5. Apply Visuals
     const theme = settings[STORAGE_KEY_THEME] || 'system';
     applyTheme(theme);
-    
+
     // 6. Background Preload
     if (CURRENT_BG_IMAGE) {
         await preloadImage(CURRENT_BG_IMAGE);
@@ -47,7 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 7. Render Bookmarks
     renderBookmarks(bookmarkTree);
 
-    // 8. Reveal Page
+    // 8. Render Frequent Bookmarks (if enabled)
+    const frequentEnabled = settings[STORAGE_KEY_FREQUENT_ENABLED] !== false; // Default true
+    if (frequentEnabled) {
+        const frequentData = settings[STORAGE_KEY_FREQUENT_DATA] || {};
+        renderFrequentBookmarks(frequentData);
+    }
+
+    // 9. Reveal Page
     // Use double requestAnimationFrame to ensure the browser has painted the background 
     // and layout is stable before triggering the opacity transition.
     requestAnimationFrame(() => {
@@ -61,7 +76,7 @@ function preloadImage(url) {
     return new Promise((resolve) => {
         const img = new Image();
         img.src = url;
-        
+
         // Use decode() if available to ensure image is ready for display
         if ('decode' in img) {
             img.decode()
@@ -244,6 +259,11 @@ function createSimpleTile(node) {
     }
     leaf.style.padding = '0';
 
+    // Track click for frequent bookmarks
+    leaf.addEventListener('click', () => {
+        trackBookmarkClick(node.url, node.title);
+    });
+
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
     const iconElement = createBookmarkIcon(iconData, 28);
@@ -286,6 +306,11 @@ function renderTreeItem(node) {
         if (OPEN_IN_NEW_TAB) {
             a.target = '_blank';
         }
+
+        // Track click for frequent bookmarks
+        a.addEventListener('click', () => {
+            trackBookmarkClick(node.url, node.title);
+        });
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
@@ -521,6 +546,11 @@ function renderTreeItemForModal(node) {
         if (OPEN_IN_NEW_TAB) {
             a.target = '_blank';
         }
+
+        // Track click for frequent bookmarks
+        a.addEventListener('click', () => {
+            trackBookmarkClick(node.url, node.title);
+        });
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
@@ -961,12 +991,12 @@ function initSettingsUI(settings) {
                 links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
             }
         });
-        
+
         // Initial state
         if (settings[STORAGE_KEY_NEW_TAB] !== undefined) {
-             if ((radio.value === 'blank') === settings[STORAGE_KEY_NEW_TAB]) radio.checked = true;
+            if ((radio.value === 'blank') === settings[STORAGE_KEY_NEW_TAB]) radio.checked = true;
         } else {
-             if (radio.value === 'blank') radio.checked = true; // Default
+            if (radio.value === 'blank') radio.checked = true; // Default
         }
     });
 
@@ -979,7 +1009,7 @@ function initSettingsUI(settings) {
                 saveSetting(STORAGE_KEY_THEME, theme);
             }
         });
-        
+
         // Initial state
         const savedTheme = settings[STORAGE_KEY_THEME] || 'system';
         if (radio.value === savedTheme) radio.checked = true;
@@ -995,7 +1025,7 @@ function initSettingsUI(settings) {
                 chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
             }
         });
-        
+
         // Initial state
         if (settings[STORAGE_KEY_ICON_STYLE] && radio.value === settings[STORAGE_KEY_ICON_STYLE]) {
             radio.checked = true;
@@ -1003,7 +1033,7 @@ function initSettingsUI(settings) {
     });
 
     // 4. Background Settings
-    
+
     // File Upload
     bgUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -1048,12 +1078,30 @@ function initSettingsUI(settings) {
     blurInput.addEventListener('change', () => {
         saveSetting(STORAGE_KEY_BG_BLUR, CURRENT_BG_BLUR);
     });
-    
+
     // Initial Blur State
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
         blurInput.value = settings[STORAGE_KEY_BG_BLUR];
         blurValueDisplay.textContent = `${settings[STORAGE_KEY_BG_BLUR]}px`;
     }
+
+    // 5. Frequent Bookmarks Toggle
+    const frequentInputs = document.getElementsByName('frequent-enabled');
+    frequentInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                const enabled = radio.value === 'on';
+                saveSetting(STORAGE_KEY_FREQUENT_ENABLED, enabled);
+                toggleFrequentBookmarks(enabled);
+            }
+        });
+
+        // Initial state
+        const savedEnabled = settings[STORAGE_KEY_FREQUENT_ENABLED] !== false; // Default true
+        if ((radio.value === 'on') === savedEnabled) {
+            radio.checked = true;
+        }
+    });
 
     btn.onclick = () => modal.classList.remove('hidden');
     close.onclick = () => modal.classList.add('hidden');
@@ -1380,4 +1428,145 @@ function initAiSidebar() {
             closeSidebar();
         }
     });
+}
+
+// ========================================
+// Frequent Bookmarks - Frecency Algorithm
+// ========================================
+
+/**
+ * Calculate Frecency score for a bookmark
+ * Score = clickCount * decayFactor(lastClickTime)
+ * decayFactor = exp(-λ * hoursSinceClick / 24)
+ */
+function calculateFrecency(data) {
+    const now = Date.now();
+    const hoursSinceClick = (now - data.lastClickTime) / (1000 * 60 * 60);
+    const decayFactor = Math.exp(-FRECENCY_DECAY_LAMBDA * hoursSinceClick / 24);
+    return data.clickCount * decayFactor;
+}
+
+/**
+ * Track bookmark click and update frequency data
+ */
+function trackBookmarkClick(url, title) {
+    chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
+        const frequentData = result[STORAGE_KEY_FREQUENT_DATA] || {};
+        const key = url; // Use URL as unique key
+
+        if (frequentData[key]) {
+            frequentData[key].clickCount += 1;
+            frequentData[key].lastClickTime = Date.now();
+            frequentData[key].title = title; // Update title in case it changed
+        } else {
+            frequentData[key] = {
+                url: url,
+                title: title,
+                clickCount: 1,
+                lastClickTime: Date.now()
+            };
+        }
+
+        // Clean up old entries (keep top 50 to prevent storage bloat)
+        const entries = Object.entries(frequentData);
+        if (entries.length > 50) {
+            const sorted = entries.sort((a, b) => calculateFrecency(b[1]) - calculateFrecency(a[1]));
+            const trimmed = sorted.slice(0, 50);
+            const newData = Object.fromEntries(trimmed);
+            chrome.storage.local.set({ [STORAGE_KEY_FREQUENT_DATA]: newData });
+        } else {
+            chrome.storage.local.set({ [STORAGE_KEY_FREQUENT_DATA]: frequentData });
+        }
+    });
+}
+
+/**
+ * Get top N frequent bookmarks sorted by Frecency score
+ */
+function getTopFrequentBookmarks(frequentData, count = FREQUENT_BOOKMARK_COUNT) {
+    const entries = Object.entries(frequentData);
+    if (entries.length === 0) return [];
+
+    const scored = entries.map(([key, data]) => ({
+        ...data,
+        score: calculateFrecency(data)
+    }));
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, count);
+}
+
+/**
+ * Render frequent bookmarks section
+ */
+function renderFrequentBookmarks(frequentData) {
+    const section = document.getElementById('frequent-bookmarks');
+    const container = section.querySelector('.suggested-items');
+
+    if (!section || !container) return;
+
+    const topBookmarks = getTopFrequentBookmarks(frequentData);
+
+    if (topBookmarks.length === 0) {
+        section.classList.add('hidden');
+        return;
+    }
+
+    container.innerHTML = '';
+
+    topBookmarks.forEach(bookmark => {
+        const item = document.createElement('a');
+        item.className = 'suggested-item';
+        item.href = bookmark.url;
+        if (OPEN_IN_NEW_TAB) {
+            item.target = '_blank';
+        }
+
+        // Track click when opened
+        item.addEventListener('click', () => {
+            trackBookmarkClick(bookmark.url, bookmark.title);
+        });
+
+        // Icon
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'suggested-item-icon';
+        try {
+            const img = document.createElement('img');
+            img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
+            img.addEventListener('error', function () {
+                this.replaceWith(document.createTextNode('·'));
+            });
+            iconDiv.appendChild(img);
+        } catch {
+            iconDiv.textContent = '·';
+        }
+        item.appendChild(iconDiv);
+
+        // Title
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'suggested-item-title';
+        titleSpan.textContent = bookmark.title || new URL(bookmark.url).hostname;
+        item.appendChild(titleSpan);
+
+        container.appendChild(item);
+    });
+
+    section.classList.remove('hidden');
+}
+
+/**
+ * Toggle frequent bookmarks section visibility
+ */
+function toggleFrequentBookmarks(enabled) {
+    const section = document.getElementById('frequent-bookmarks');
+    if (!section) return;
+
+    if (enabled) {
+        chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
+            const frequentData = result[STORAGE_KEY_FREQUENT_DATA] || {};
+            renderFrequentBookmarks(frequentData);
+        });
+    } else {
+        section.classList.add('hidden');
+    }
 }

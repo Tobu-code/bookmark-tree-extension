@@ -21,7 +21,7 @@
     /* Specific Claude shadow */
     --modal-bg: #FFFFFF;
     --modal-text: #1a1a18;
-    
+
     /* Added for Modal Readability */
     --glass-bg: rgba(255, 255, 255, 0.9);
     --glass-border: rgba(0, 0, 0, 0.08);
@@ -149,8 +149,9 @@ h3,
     background-repeat: no-repeat;
     z-index: -1;
     transition: all 0.5s ease;
-    image-rendering: -webkit-optimize-contrast; /* Improve sharpness */
-    
+    image-rendering: -webkit-optimize-contrast;
+    /* Improve sharpness */
+
     /* Pre-load state */
     opacity: 0;
 }
@@ -176,7 +177,7 @@ h3,
     padding: 40px 20px;
     box-sizing: border-box;
     position: relative;
-    
+
     /* Pre-load state */
     opacity: 0;
     transform: translateY(20px);
@@ -200,7 +201,7 @@ body.loaded .container {
     background-position: center;
     z-index: -1;
     transition: all 0.5s ease;
-    
+
     /* Pre-load state */
     opacity: 0;
 }
@@ -1121,7 +1122,8 @@ body.search-active #search-container {
 
 /* Range Slider - Enhanced for better usability */
 input[type=range] {
-    -webkit-appearance: none; /* Remove default styling */
+    -webkit-appearance: none;
+    /* Remove default styling */
     width: 100%;
     margin: 10px 0;
     cursor: pointer;
@@ -1155,7 +1157,8 @@ input[type=range]::-webkit-slider-thumb {
     border-radius: 50%;
     background: var(--primary-color);
     cursor: pointer;
-    margin-top: -6px; /* Offset to center on track */
+    margin-top: -6px;
+    /* Offset to center on track */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     border: 2px solid var(--card-bg);
     transition: transform 0.1s;
@@ -1813,5 +1816,108 @@ input[type="file"] {
         right: 16px;
         width: 48px;
         height: 48px;
+    }
+}
+
+/* ========================================
+   Suggested Destinations - Minimalist Style
+   ======================================== */
+
+.suggested-section {
+    margin: -60px auto 40px auto;
+    padding: 0;
+    width: 58.5%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.suggested-items {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.suggested-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    opacity: 0.55;
+}
+
+.suggested-item:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .suggested-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .suggested-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+}
+
+.suggested-item-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    opacity: 0.6;
+    filter: grayscale(40%);
+    transition: all 0.2s ease;
+}
+
+.suggested-item:hover .suggested-item-icon {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.suggested-item-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+}
+
+.suggested-item-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    transition: color 0.2s ease;
+}
+
+.suggested-item:hover .suggested-item-title {
+    color: var(--text-color);
+}
+
+/* Responsive - Suggested Section */
+@media (max-width: 768px) {
+    .suggested-section {
+        width: 90%;
+        margin: -40px auto 30px auto;
+    }
+
+    .suggested-item-title {
+        max-width: 60px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 500px) {
+    .suggested-section {
+        display: none;
     }
 }
