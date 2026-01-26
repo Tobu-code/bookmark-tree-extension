@@ -804,7 +804,7 @@ body.search-active #search-container {
 .leaf-node {
     display: flex;
     align-items: center;
-    padding: 10px 12px;
+    padding: 6px 10px;
     border-radius: 12px;
     /* Slightly smaller radius for list items */
     text-decoration: none;
@@ -858,7 +858,7 @@ body.search-active #search-container {
 }
 
 .bookmark-label {
-    font-size: 15px;
+    font-size: 13px;
     /* Slightly larger text to match larger icon */
     white-space: nowrap;
     overflow: hidden;
@@ -873,9 +873,9 @@ body.search-active #search-container {
 }
 
 .sub-folder-header {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 6px 0;
+    padding: 4px 0;
     color: var(--text-secondary);
     cursor: pointer;
     display: flex;
