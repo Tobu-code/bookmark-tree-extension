@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. UI Initialization (Sync)
     initSearch();
     initAiSidebar();
+    initAmbientTime();
 
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
@@ -1569,4 +1570,63 @@ function toggleFrequentBookmarks(enabled) {
     } else {
         section.classList.add('hidden');
     }
+}
+
+// ========================================
+// Ambient Time Display - Claude Style
+// ========================================
+
+/**
+ * Initialize ambient time display and idle detection
+ */
+function initAmbientTime() {
+    const timeContainer = document.getElementById('ambient-time-container');
+    if (!timeContainer) return;
+
+    let idleTimer;
+    const idleDelay = 3000; // 3 seconds
+
+    function resetIdleTimer() {
+        // When active, reduce presence
+        timeContainer.classList.remove('visible');
+        timeContainer.classList.add('dimmed');
+
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            // When idle, show clearly (as restrained background hint)
+            timeContainer.classList.remove('dimmed');
+            timeContainer.classList.add('visible');
+        }, idleDelay);
+    }
+
+    // Update time every minute
+    function updateAmbientTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        // Format: 2026 · 01 · 26 14:37
+        timeContainer.textContent = `${year} · ${month} · ${day}   ${hours}:${minutes}`;
+
+        // Schedule next update at the start of the next minute
+        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+        setTimeout(updateAmbientTime, msUntilNextMinute);
+    }
+
+    // Listen for interactions to handle visibility
+    window.addEventListener('mousemove', resetIdleTimer);
+    window.addEventListener('keydown', resetIdleTimer);
+    window.addEventListener('click', resetIdleTimer);
+    window.addEventListener('scroll', resetIdleTimer);
+
+    // Initial update
+    updateAmbientTime();
+
+    // Initial state setup after delay
+    idleTimer = setTimeout(() => {
+        timeContainer.classList.add('visible');
+    }, idleDelay);
 }

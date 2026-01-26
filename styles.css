@@ -213,13 +213,39 @@ body.loaded #background-layer {
 /* Search Bar */
 #search-container {
     margin-top: 40px;
-    /* Push search down from top */
     margin-bottom: 80px;
-    /* Large gap before bookmarks tree */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     z-index: 100;
+}
+
+.ambient-time {
+    width: 58.5%;
+    max-width: 800px;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    opacity: 0;
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-start;
+    letter-spacing: 0.5px;
+    white-space: pre-wrap;
+}
+
+.ambient-time.visible {
+    opacity: 0.45;
+    /* 只有在闲置时才显示为极浅灰色 */
+}
+
+.ambient-time.dimmed {
+    opacity: 0.15;
+    /* 输入或交互时进一步降级存在感 */
 }
 
 #search-input {
