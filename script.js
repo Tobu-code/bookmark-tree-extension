@@ -1311,7 +1311,18 @@ function initAiSidebar() {
     function preloadIframe(aiId) {
         const iframe = iframes[aiId];
         if (iframe && !loadedIframes.has(aiId)) {
-            iframe.src = aiUrls[aiId];
+            let url = aiUrls[aiId];
+
+            // Inject theme parameter for Google Search
+            if (aiId === 'google') {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+                    (document.documentElement.getAttribute('data-theme') === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                if (isDark) {
+                    url += '&theme=1'; // Basic dark theme hint for Google
+                }
+            }
+
+            iframe.src = url;
             loadedIframes.add(aiId);
 
             iframe.addEventListener('load', () => {
