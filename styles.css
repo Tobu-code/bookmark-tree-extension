@@ -9,7 +9,7 @@
     /* Deep Charcoal Black */
     --text-secondary: #6b6a68;
     /* Medium Grey */
-    --bg-overlay: rgba(245, 245, 240, 0.95);
+    --bg-overlay: rgba(245, 245, 240, 0.75);
     /* Creamy/Beige Tint */
     --card-bg: #FFFFFF;
     /* Pure White Cards */
@@ -34,7 +34,7 @@
     /* Slightly warmer grey for secondary text */
 
     /* Backgrounds - Deep Purple-Grey Palette */
-    --bg-overlay: #1A1523;
+    --bg-overlay: rgba(26, 21, 35, 0.75);
     /* Deep purple-grey main background */
     --card-bg: #221D2A;
     /* Purple-tinted card background */
@@ -78,7 +78,7 @@
         --primary-color: #D97757;
         --text-color: #F2F0E9;
         --text-secondary: #A8A6A3;
-        --bg-overlay: #1A1523;
+        --bg-overlay: rgba(26, 21, 35, 0.75);
         --card-bg: #221D2A;
         --card-hover: #2D2638;
         --border-color: rgba(217, 119, 87, 0.12);
