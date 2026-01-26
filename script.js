@@ -846,9 +846,13 @@ function initSearch() {
 const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
 const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
+const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
+const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
 
 let OPEN_IN_NEW_TAB = false;
 let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
+let CURRENT_BG_IMAGE = null;
+let CURRENT_BG_BLUR = 0;
 
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
@@ -876,6 +880,12 @@ function initSettings() {
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
+
+    // Background Inputs
+    const bgUpload = document.getElementById('bg-image-upload');
+    const clearBgBtn = document.getElementById('clear-bg');
+    const blurInput = document.getElementById('bg-blur');
+    const blurValueDisplay = document.getElementById('blur-value');
 
     // Helper to save settings
     const saveSetting = (key, value, callback) => {
@@ -917,8 +927,61 @@ function initSettings() {
         });
     });
 
+    // 4. Background Settings
+    
+    // File Upload
+    bgUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Limit size (e.g., 4MB to be safe for local storage)
+        if (file.size > 4 * 1024 * 1024) {
+            alert('图片过大，请选择小于 4MB 的图片');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            CURRENT_BG_IMAGE = dataUrl;
+            applyBackground();
+            saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
+                if (chrome.runtime.lastError) {
+                    console.error('Failed to save image:', chrome.runtime.lastError);
+                    alert('图片保存失败 (可能超出存储限制)');
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Clear Background
+    clearBgBtn.addEventListener('click', () => {
+        CURRENT_BG_IMAGE = null;
+        bgUpload.value = ''; // Reset input
+        applyBackground();
+        chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
+    });
+
+    // Blur Slider
+    blurInput.addEventListener('input', (e) => {
+        CURRENT_BG_BLUR = e.target.value;
+        blurValueDisplay.textContent = `${CURRENT_BG_BLUR}px`;
+        applyBackground();
+    });
+
+    blurInput.addEventListener('change', () => {
+        saveSetting(STORAGE_KEY_BG_BLUR, CURRENT_BG_BLUR);
+    });
+
     // Load saved settings
-    chrome.storage.local.get([STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE], (result) => {
+    chrome.storage.local.get([
+        STORAGE_KEY_NEW_TAB, 
+        STORAGE_KEY_THEME, 
+        STORAGE_KEY_ICON_STYLE,
+        STORAGE_KEY_BG_IMAGE,
+        STORAGE_KEY_BG_BLUR
+    ], (result) => {
 
         // Open in New Tab
         if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
@@ -953,6 +1016,20 @@ function initSettings() {
             });
         }
 
+        // Background Image
+        if (result[STORAGE_KEY_BG_IMAGE]) {
+            CURRENT_BG_IMAGE = result[STORAGE_KEY_BG_IMAGE];
+        }
+
+        // Background Blur
+        if (result[STORAGE_KEY_BG_BLUR] !== undefined) {
+            CURRENT_BG_BLUR = result[STORAGE_KEY_BG_BLUR];
+            blurInput.value = CURRENT_BG_BLUR;
+            blurValueDisplay.textContent = `${CURRENT_BG_BLUR}px`;
+        }
+
+        applyBackground();
+
         // Initial Bookmark Render after settings are loaded
         initBookmarks();
     });
@@ -972,6 +1049,25 @@ function applyTheme(theme) {
         root.removeAttribute('data-theme');
     } else {
         root.setAttribute('data-theme', theme);
+    }
+}
+
+function applyBackground() {
+    const bgLayer = document.getElementById('background-layer');
+    if (!bgLayer) return;
+
+    if (CURRENT_BG_IMAGE) {
+        bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
+    } else {
+        bgLayer.style.backgroundImage = ''; // Fallback to CSS default
+    }
+
+    bgLayer.style.filter = `blur(${CURRENT_BG_BLUR}px)`;
+    // Scale up slightly to avoid blurred edges if blurring
+    if (CURRENT_BG_BLUR > 0) {
+        bgLayer.style.transform = 'scale(1.05)';
+    } else {
+        bgLayer.style.transform = 'scale(1)';
     }
 }
 
