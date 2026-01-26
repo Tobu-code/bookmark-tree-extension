@@ -99,7 +99,7 @@
 
     /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
     :root:not([data-theme="light"]) #background-layer {
-        background: #1A1523;
+        background-color: #1A1523;
     }
 
     /* Fix: Ensure folder modal is dark in system dark mode */
@@ -143,16 +143,21 @@ h3,
     width: 100%;
     height: 100%;
     /* Default to Claude Beige */
-    background: #F5F5F0;
+    background-color: #F5F5F0;
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     z-index: -1;
     transition: all 0.5s ease;
+    image-rendering: -webkit-optimize-contrast; /* Improve sharpness */
+    
+    /* Pre-load state */
+    opacity: 0;
 }
 
 /* Dark Theme overrides for background - Deep Purple-Grey */
 :root[data-theme="dark"] #background-layer {
-    background: #1A1523;
+    background-color: #1A1523;
 }
 
 /* Main Container - Dashboard Style */
@@ -1114,11 +1119,71 @@ body.search-active #search-container {
     box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
 }
 
-/* Range Slider */
+/* Range Slider - Enhanced for better usability */
 input[type=range] {
+    -webkit-appearance: none; /* Remove default styling */
     width: 100%;
-    margin: 8px 0;
+    margin: 10px 0;
     cursor: pointer;
+    background: transparent;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+/* Webkit (Chrome/Safari) Slider Track */
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: none;
+}
+
+/* Dark mode track */
+:root[data-theme="dark"] input[type=range]::-webkit-slider-runnable-track {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Webkit (Chrome/Safari) Slider Thumb */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    margin-top: -6px; /* Offset to center on track */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--card-bg);
+    transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Firefox Slider Track */
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: none;
+}
+
+/* Firefox Slider Thumb */
+input[type=range]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border: 2px solid var(--card-bg);
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Toggle Switch (Checkbox) */
