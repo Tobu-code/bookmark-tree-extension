@@ -2,14 +2,23 @@
 
 
 :root {
-    /* Claude Light Mode - Refined */
-    --primary-color: #ae5630;
-    /* Terracotta Orange */
-    --text-color: #1a1a18;
-    /* Deep Charcoal Black */
-    --text-secondary: #6b6a68;
-    /* Medium Grey */
-    --bg-overlay: rgba(245, 245, 240, 0.4);
+    /* Claude Color Hierarchy - Restrained & Readable */
+    --text-primary: #1F2937;
+    /* Level 1: Page Titles */
+    --text-section: #3F3F46;
+    /* Level 2: Section Titles */
+    --text-body: #52525B;
+    /* Level 3: Functional Labels & Body */
+    --text-muted: #A3A3A3;
+    /* Level 4: Secondary / Inactive */
+    --text-disabled: #CBD5E1;
+    /* Disabled States */
+    --primary-color: #A16207;
+    /* Emphasis: Warm Brown Orange */
+
+    --text-color: var(--text-body);
+    --text-secondary: var(--text-muted);
+    --bg-overlay: rgba(245, 245, 240, 0.15);
     /* Creamy/Beige Tint */
     --card-bg: #FFFFFF;
     /* Pure White Cards */
@@ -20,7 +29,7 @@
     --shadow-md: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.035);
     /* Specific Claude shadow */
     --modal-bg: #FFFFFF;
-    --modal-text: #1a1a18;
+    --modal-text: var(--text-primary);
 
     /* Added for Modal Readability */
     --glass-bg: rgba(255, 255, 255, 0.9);
@@ -37,7 +46,7 @@
     --text-secondary: #A8A6A3;
     /* Slightly warmer grey for secondary text */
 
-    --bg-overlay: rgba(26, 21, 35, 0.4);
+    --bg-overlay: rgba(26, 21, 35, 0.15);
     /* Deep purple-grey main background */
     --card-bg: #221D2A;
     /* Purple-tinted card background */
@@ -81,7 +90,7 @@
         --primary-color: #D97757;
         --text-color: #F2F0E9;
         --text-secondary: #A8A6A3;
-        --bg-overlay: rgba(26, 21, 35, 0.4);
+        --bg-overlay: rgba(26, 21, 35, 0.15);
         --card-bg: #221D2A;
         --card-hover: #2D2638;
         --border-color: rgba(217, 119, 87, 0.12);
@@ -134,6 +143,7 @@ h3,
 .folder-modal-title {
     font-family: "Charter", "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 #background-layer {
@@ -163,13 +173,13 @@ h3,
 
 /* Main Container - Dashboard Style */
 .container {
-    width: 96%;
+    width: 85%;
     height: 92vh;
     margin: 4vh auto;
     border-radius: 24px;
     background: var(--bg-overlay);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
@@ -239,8 +249,8 @@ body.loaded #background-layer {
 }
 
 .ambient-time.visible {
-    opacity: 0.45;
-    /* 只有在闲置时才显示为极浅灰色 */
+    opacity: 0.65;
+    /* 稍微加深，提高可读性 */
 }
 
 .ambient-time.dimmed {
@@ -576,9 +586,9 @@ body.search-active #search-container {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
-    grid-gap: 40px 60px;
-    /* Increased breathing room */
-    gap: 40px 60px;
+    grid-gap: 60px 60px;
+    /* Increased breathing room - vertical gap increased from 40px to 60px */
+    gap: 60px 60px;
     justify-content: center;
     padding: 24px 0 100px 0;
     width: 100%;
@@ -1103,7 +1113,7 @@ body.search-active #search-container {
     font-size: 22px;
     font-weight: 700;
     text-align: center;
-    color: var(--primary-color);
+    color: var(--text-primary);
 }
 
 /* Setting Items */
@@ -1116,7 +1126,7 @@ body.search-active #search-container {
     display: block;
     margin-bottom: 10px;
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--text-section);
 }
 
 /* Unified Input Styles (Modal Only) */
@@ -1279,7 +1289,7 @@ input[type=range]::-moz-range-thumb {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 8px;
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(0, 0, 0, 0.06);
     padding: 4px;
     border-radius: 12px;
     min-height: 48px;
@@ -1301,7 +1311,7 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.2s;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-body);
     text-align: center;
     margin: 0;
     height: 100%;
@@ -1330,9 +1340,9 @@ input[type=range]::-moz-range-thumb {
 }
 
 .radio-option:has(input:checked) {
-    background: #fff;
+    background: #f8f8f8;
     color: var(--primary-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     font-weight: 600;
 }
 
