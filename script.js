@@ -934,9 +934,9 @@ function initSettings() {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Limit size (e.g., 4MB to be safe for local storage)
-        if (file.size > 4 * 1024 * 1024) {
-            alert('图片过大，请选择小于 4MB 的图片');
+        // Limit size (e.g., 10MB to be safe for local storage)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('图片过大，请选择小于 10MB 的图片');
             return;
         }
 

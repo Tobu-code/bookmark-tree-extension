@@ -533,7 +533,9 @@ body.search-active #search-container {
 }
 
 .bookmark-card {
-    background: var(--card-bg);
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     width: 360px;
     height: 380px;
     border-radius: 24px;
@@ -621,7 +623,7 @@ body.search-active #search-container {
     border-radius: 24px;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
     border: 1px solid var(--border-color);
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--bg-overlay);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     color: var(--modal-text);
@@ -636,9 +638,8 @@ body.search-active #search-container {
     animation: modalSlideIn 0.3s ease-out;
 }
 
-/* Dark theme support for modal blur */
+/* Dark theme support for modal blur - Removed redundant background */
 :root[data-theme="dark"] .folder-modal-content {
-    background: rgba(26, 26, 25, 0.9);
     border-color: var(--border-color);
 }
 
@@ -1017,7 +1018,7 @@ body.search-active #search-container {
         0 32px 64px rgba(0, 0, 0, 0.35),
         inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.08));
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    background: var(--glass-bg, var(--modal-bg));
+    background: var(--bg-overlay);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     color: var(--modal-text);
