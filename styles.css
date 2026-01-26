@@ -1891,6 +1891,7 @@ input[type="file"] {
 .suggested-item-title {
     font-size: 13px;
     font-weight: 400;
+    font-style: italic;
     color: var(--text-secondary);
     white-space: nowrap;
     overflow: hidden;
@@ -1902,6 +1903,7 @@ input[type="file"] {
 .suggested-item:hover .suggested-item-title {
     color: var(--text-color);
 }
+
 
 /* Responsive - Suggested Section */
 @media (max-width: 768px) {
