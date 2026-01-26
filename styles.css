@@ -898,22 +898,21 @@ body.search-active #search-container {
 }
 
 .bookmark-icon {
-    width: 27px;
-    height: 27px;
+    width: 18px;
+    height: 18px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
+    margin-right: 10px;
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: 4px;
     line-height: 1;
-    font-size: 20px;
-    /* Increased font size for emoji icons */
+    font-size: 14px;
+    /* Adjusted font size for emoji icons to match smaller icon */
 }
 
 .bookmark-label {
     font-size: 13px;
-    /* Slightly larger text to match larger icon */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
