@@ -522,9 +522,9 @@ body.search-active #search-container {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
-    grid-gap: 80px 100px;
+    grid-gap: 40px 60px;
     /* Increased breathing room */
-    gap: 80px 100px;
+    gap: 40px 60px;
     justify-content: center;
     padding: 24px 0 100px 0;
     width: 100%;
