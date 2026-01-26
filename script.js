@@ -1,9 +1,86 @@
-document.addEventListener('DOMContentLoaded', () => {
-    initSettings(); // initBookmarks will be called inside initSettings after loading
+// --- Constants ---
+const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
+const STORAGE_KEY_THEME = 'settings_theme';
+const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
+const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
+const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. UI Initialization (Sync)
     initSearch();
     initAiSidebar();
+
+    // 2. Data Loading (Async)
+    const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
+    const getBookmarks = () => new Promise(resolve => chrome.bookmarks.getTree(resolve));
+
+    const [settings, bookmarkTree] = await Promise.all([
+        getStorage([STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE, STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR]),
+        getBookmarks()
+    ]);
+
+    // 3. Apply Settings Global State
+    if (settings[STORAGE_KEY_NEW_TAB] !== undefined) OPEN_IN_NEW_TAB = settings[STORAGE_KEY_NEW_TAB];
+    else OPEN_IN_NEW_TAB = true; // Default
+
+    if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
+    
+    if (settings[STORAGE_KEY_BG_IMAGE]) CURRENT_BG_IMAGE = settings[STORAGE_KEY_BG_IMAGE];
+    
+    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) CURRENT_BG_BLUR = settings[STORAGE_KEY_BG_BLUR];
+
+    // 4. Init Settings UI (Bindings)
+    // We defer this call until we have the function definition, or we can hoist the logic.
+    // For now, we assume initSettingsUI will be defined later or we call the modified initSettings.
+    initSettingsUI(settings);
+
+    // 5. Apply Visuals
+    const theme = settings[STORAGE_KEY_THEME] || 'system';
+    applyTheme(theme);
+    
+    // 6. Background Preload
+    if (CURRENT_BG_IMAGE) {
+        await preloadImage(CURRENT_BG_IMAGE);
+    }
+    applyBackground();
+
+    // 7. Render Bookmarks
+    renderBookmarks(bookmarkTree);
+
+    // 8. Reveal Page
+    // Use double requestAnimationFrame to ensure the browser has painted the background 
+    // and layout is stable before triggering the opacity transition.
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            document.body.classList.add('loaded');
+        });
+    });
 });
 
+function preloadImage(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = url;
+        
+        // Use decode() if available to ensure image is ready for display
+        if ('decode' in img) {
+            img.decode()
+                .then(resolve)
+                .catch(() => {
+                    // Fallback if decode fails (e.g. invalid image data)
+                    resolve();
+                });
+        } else {
+            // Fallback for older browsers
+            if (img.complete) {
+                resolve();
+            } else {
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+            }
+        }
+    });
+}
 
 // --- State and Constants ---
 let dragSrcEl = null;
@@ -13,52 +90,37 @@ const BOOKMARK_ICON_SVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill=
 
 // --- Bookmarks Logic ---
 
-function initBookmarks() {
-    chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-        const container = document.getElementById('bookmarks-tree');
-        container.innerHTML = ''; // Clear previous
+function renderBookmarks(bookmarkTreeNodes) {
+    const container = document.getElementById('bookmarks-tree');
+    container.innerHTML = ''; // Clear previous
 
-        // Apply Open in New Tab setting to container class for easier delegation or just use global
-        // We will use the global OPEN_IN_NEW_TAB variable when creating links
+    // Create a wrapper for top-level columns
+    const topLevelContainer = document.createElement('div');
+    topLevelContainer.className = 'top-level-container';
+    container.appendChild(topLevelContainer);
 
-        // Create a wrapper for top-level columns
-        const topLevelContainer = document.createElement('div');
-        topLevelContainer.className = 'top-level-container';
-        container.appendChild(topLevelContainer);
+    // We want to primarily show "Bookmarks Bar" content
+    // Root -> [0] is usually the root node
+    const rootNode = bookmarkTreeNodes[0];
 
-        // We want to primarily show "Bookmarks Bar" content
-        // Root -> [0] is usually the root node
-        const rootNode = bookmarkTreeNodes[0];
+    // Find Bookmarks Bar (usually id '1' or title 'Bookmarks Bar')
+    let bookmarksBar = rootNode.children.find(node => node.id === '1');
+    if (!bookmarksBar && rootNode.children.length > 0) {
+        // Fallback: Use the first child if id '1' not found
+        bookmarksBar = rootNode.children[0];
+    }
 
-        // Find Bookmarks Bar (usually id '1' or title 'Bookmarks Bar')
-        let bookmarksBar = rootNode.children.find(node => node.id === '1');
-        if (!bookmarksBar && rootNode.children.length > 0) {
-            // Fallback: Use the first child if id '1' not found
-            bookmarksBar = rootNode.children[0];
-        }
-
-        if (bookmarksBar && bookmarksBar.children) {
-            bookmarksBar.children.forEach(child => {
-                // We treat immediate children of Bookmarks Bar as "Cards"
-                // If it's a folder, it gets a card.
-                // If it's a file, maybe group them in a "Misc" card or just a mini card.
-                // For better aesthetics, let's make everything a card/item.
-                if (child.children) { // Is Folder
-                    const card = createBookmarkCard(child);
-                    topLevelContainer.appendChild(card);
-                } else {
-                    // Single bookmark at top level
-                    // Only render if we want mixed content. 
-                    // Let's create a special "Quick Links" card for loose items if we find them?
-                    // For now, let's just make it a simple tile.
-                    const card = createSimpleTile(child);
-                    topLevelContainer.appendChild(card);
-                }
-            });
-        }
-
-
-    });
+    if (bookmarksBar && bookmarksBar.children) {
+        bookmarksBar.children.forEach(child => {
+            if (child.children) { // Is Folder
+                const card = createBookmarkCard(child);
+                topLevelContainer.appendChild(card);
+            } else {
+                const card = createSimpleTile(child);
+                topLevelContainer.appendChild(card);
+            }
+        });
+    }
 }
 
 function createBookmarkCard(folderNode) {
@@ -843,11 +905,7 @@ function initSearch() {
 }
 
 // --- Settings Logic (Cleaned) ---
-const STORAGE_KEY_NEW_TAB = 'settings_open_new_tab';
-const STORAGE_KEY_THEME = 'settings_theme';
-const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
-const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
-const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
+// Constants are defined at the top of the file
 
 let OPEN_IN_NEW_TAB = false;
 let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
@@ -871,7 +929,7 @@ function getIconForBookmark(url) {
     }
 }
 
-function initSettings() {
+function initSettingsUI(settings) {
     const modal = document.getElementById('settings-modal');
     const btn = document.getElementById('settings-btn');
     const close = document.getElementById('close-modal');
@@ -903,6 +961,13 @@ function initSettings() {
                 links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
             }
         });
+        
+        // Initial state
+        if (settings[STORAGE_KEY_NEW_TAB] !== undefined) {
+             if ((radio.value === 'blank') === settings[STORAGE_KEY_NEW_TAB]) radio.checked = true;
+        } else {
+             if (radio.value === 'blank') radio.checked = true; // Default
+        }
     });
 
     // 2. Theme
@@ -914,6 +979,10 @@ function initSettings() {
                 saveSetting(STORAGE_KEY_THEME, theme);
             }
         });
+        
+        // Initial state
+        const savedTheme = settings[STORAGE_KEY_THEME] || 'system';
+        if (radio.value === savedTheme) radio.checked = true;
     });
 
     // 3. Icon Style
@@ -922,9 +991,15 @@ function initSettings() {
             if (radio.checked) {
                 CURRENT_ICON_STYLE = radio.value;
                 saveSetting(STORAGE_KEY_ICON_STYLE, CURRENT_ICON_STYLE);
-                initBookmarks(); // Re-render
+                // Re-render bookmarks
+                chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
             }
         });
+        
+        // Initial state
+        if (settings[STORAGE_KEY_ICON_STYLE] && radio.value === settings[STORAGE_KEY_ICON_STYLE]) {
+            radio.checked = true;
+        }
     });
 
     // 4. Background Settings
@@ -973,66 +1048,12 @@ function initSettings() {
     blurInput.addEventListener('change', () => {
         saveSetting(STORAGE_KEY_BG_BLUR, CURRENT_BG_BLUR);
     });
-
-    // Load saved settings
-    chrome.storage.local.get([
-        STORAGE_KEY_NEW_TAB, 
-        STORAGE_KEY_THEME, 
-        STORAGE_KEY_ICON_STYLE,
-        STORAGE_KEY_BG_IMAGE,
-        STORAGE_KEY_BG_BLUR
-    ], (result) => {
-
-        // Open in New Tab
-        if (result[STORAGE_KEY_NEW_TAB] !== undefined) {
-            OPEN_IN_NEW_TAB = result[STORAGE_KEY_NEW_TAB];
-            linkTargetInputs.forEach(radio => {
-                radio.checked = (radio.value === 'blank') === OPEN_IN_NEW_TAB;
-            });
-            const links = document.querySelectorAll('a.leaf-node');
-            if (links.length > 0) {
-                links.forEach(a => a.target = OPEN_IN_NEW_TAB ? '_blank' : '_self');
-            }
-        } else {
-            // Default to new tab
-            OPEN_IN_NEW_TAB = true;
-            linkTargetInputs.forEach(radio => {
-                radio.checked = radio.value === 'blank';
-            });
-        }
-
-        // Theme
-        const savedTheme = result[STORAGE_KEY_THEME] || 'system';
-        applyTheme(savedTheme);
-        themeInputs.forEach(radio => {
-            if (radio.value === savedTheme) radio.checked = true;
-        });
-
-        // Icon Style
-        if (result[STORAGE_KEY_ICON_STYLE]) {
-            CURRENT_ICON_STYLE = result[STORAGE_KEY_ICON_STYLE];
-            iconStyleInputs.forEach(radio => {
-                if (radio.value === CURRENT_ICON_STYLE) radio.checked = true;
-            });
-        }
-
-        // Background Image
-        if (result[STORAGE_KEY_BG_IMAGE]) {
-            CURRENT_BG_IMAGE = result[STORAGE_KEY_BG_IMAGE];
-        }
-
-        // Background Blur
-        if (result[STORAGE_KEY_BG_BLUR] !== undefined) {
-            CURRENT_BG_BLUR = result[STORAGE_KEY_BG_BLUR];
-            blurInput.value = CURRENT_BG_BLUR;
-            blurValueDisplay.textContent = `${CURRENT_BG_BLUR}px`;
-        }
-
-        applyBackground();
-
-        // Initial Bookmark Render after settings are loaded
-        initBookmarks();
-    });
+    
+    // Initial Blur State
+    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
+        blurInput.value = settings[STORAGE_KEY_BG_BLUR];
+        blurValueDisplay.textContent = `${settings[STORAGE_KEY_BG_BLUR]}px`;
+    }
 
     btn.onclick = () => modal.classList.remove('hidden');
     close.onclick = () => modal.classList.add('hidden');
