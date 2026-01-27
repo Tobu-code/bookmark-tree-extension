@@ -1097,6 +1097,49 @@ body.search-active #search-container {
     /* Helps with fit-content behavior in flex container */
 }
 
+/* Light Theme Modal - Enhanced Readability */
+:root:not([data-theme="dark"]) .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1a1a18;
+}
+
+:root:not([data-theme="dark"]) .modal-content h2 {
+    color: #ae5630;
+}
+
+:root:not([data-theme="dark"]) .setting-item label {
+    color: #1a1a18;
+}
+
+:root:not([data-theme="dark"]) .radio-group {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+:root:not([data-theme="dark"]) .radio-option {
+    color: #4a4a48;
+}
+
+:root:not([data-theme="dark"]) .radio-option:has(input:checked) {
+    background: #fff;
+    color: #ae5630;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+:root:not([data-theme="dark"]) .radio-option:hover:not(:has(input:checked)) {
+    background: rgba(255, 255, 255, 0.7);
+    color: #2a2a28;
+}
+
+:root:not([data-theme="dark"]) .file-upload-container {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+:root:not([data-theme="dark"]) #blur-value {
+    color: #6b6a68;
+}
+
 .modal-content h2 {
     margin-top: 0;
     margin-bottom: 24px;
