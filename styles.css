@@ -1908,10 +1908,12 @@ input[type="file"] {
    ======================================== */
 
 .suggested-section {
-    margin: 10px auto 40px auto;
+    margin: -20px auto 40px auto;
     padding: 0;
-    width: 58.5%;
-    max-width: 800px;
+    width: 65%;
+    /* 略微增加宽度比例 */
+    max-width: 900px;
+    /* 增加最大宽度以容纳偏移后的所有项 */
     box-sizing: border-box;
 }
 
@@ -1919,8 +1921,10 @@ input[type="file"] {
     display: flex;
     gap: 6px;
     flex-wrap: nowrap;
-    justify-content: center;
-    overflow: hidden;
+    justify-content: flex-start;
+    padding-left: 101px;
+    overflow: visible;
+    /* 允许超出边界以防截断 */
 }
 
 .suggested-item {
@@ -1928,6 +1932,8 @@ input[type="file"] {
     align-items: center;
     gap: 6px;
     padding: 6px 10px;
+    width: 120px;
+    flex-shrink: 0;
     background: transparent;
     border: none;
     border-radius: 8px;
@@ -1935,6 +1941,7 @@ input[type="file"] {
     transition: all 0.2s ease;
     text-decoration: none;
     opacity: 0.55;
+    box-sizing: border-box;
 }
 
 .suggested-item:hover {
@@ -1980,7 +1987,7 @@ input[type="file"] {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100px;
+    flex: 1;
     transition: color 0.2s ease;
 }
 
