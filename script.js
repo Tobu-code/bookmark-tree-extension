@@ -835,9 +835,12 @@ function initSearch() {
         });
 
         // Add click handlers
-        suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+        suggestions.querySelectorAll('.suggestion-item').forEach((item, index) => {
             item.addEventListener('click', () => {
                 const url = item.dataset.url;
+                const bookmark = matches[index];
+                // Track click for frequent bookmarks
+                trackBookmarkClick(bookmark.url, bookmark.title);
                 if (OPEN_IN_NEW_TAB) {
                     window.open(url, '_blank');
                 } else {
@@ -940,6 +943,11 @@ function initSearch() {
             if (selectedIndex >= 0 && items[selectedIndex]) {
                 // Open selected suggestion
                 const url = items[selectedIndex].dataset.url;
+                // Get bookmark info from allBookmarks based on URL
+                const bookmark = allBookmarks.find(b => b.url === url);
+                if (bookmark) {
+                    trackBookmarkClick(bookmark.url, bookmark.title);
+                }
                 if (OPEN_IN_NEW_TAB) {
                     window.open(url, '_blank');
                 } else {
