@@ -148,9 +148,16 @@ h3,
     background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
-    transition: all 0.5s ease;
+    transition: background-color 0.5s ease, opacity 0.5s ease;
+
+    /* High-quality image rendering */
     image-rendering: -webkit-optimize-contrast;
-    /* Improve sharpness */
+    image-rendering: crisp-edges;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: background-image;
 
     /* Pre-load state */
     opacity: 0;
@@ -163,9 +170,9 @@ h3,
 
 /* Main Container - Dashboard Style */
 .container {
-    width: 96%;
-    height: 92vh;
-    margin: 4vh auto;
+    width: 88%;
+    height: 85vh;
+    margin: 7.5vh auto;
     border-radius: 24px;
     background: var(--bg-overlay);
     backdrop-filter: blur(25px);
@@ -189,26 +196,10 @@ body.loaded .container {
     transform: translateY(0);
 }
 
-#background-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Default to Claude Beige */
-    background: #F5F5F0;
-    background-size: cover;
-    background-position: center;
-    z-index: -1;
-    transition: all 0.5s ease;
-
-    /* Pre-load state */
-    opacity: 0;
-}
-
 body.loaded #background-layer {
     opacity: 1;
 }
+
 
 /* Search Bar */
 #search-container {
@@ -224,9 +215,9 @@ body.loaded #background-layer {
 .ambient-time {
     width: 58.5%;
     max-width: 800px;
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-color);
     margin-bottom: 12px;
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -236,16 +227,17 @@ body.loaded #background-layer {
     justify-content: flex-start;
     letter-spacing: 0.5px;
     white-space: pre-wrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ambient-time.visible {
-    opacity: 0.45;
-    /* 只有在闲置时才显示为极浅灰色 */
+    opacity: 0.75;
+    /* 闲置时清晰显示 */
 }
 
 .ambient-time.dimmed {
-    opacity: 0.15;
-    /* 输入或交互时进一步降级存在感 */
+    opacity: 0.4;
+    /* 输入或交互时适当降低存在感 */
 }
 
 #search-input {
@@ -576,9 +568,9 @@ body.search-active #search-container {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
-    grid-gap: 40px 60px;
-    /* Increased breathing room */
-    gap: 40px 60px;
+    grid-gap: 40px 100px;
+    /* Increased horizontal breathing room */
+    gap: 40px 100px;
     justify-content: center;
     padding: 24px 0 100px 0;
     width: 100%;

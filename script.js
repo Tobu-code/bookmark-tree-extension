@@ -1069,21 +1069,30 @@ function initSettingsUI(settings) {
         chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
     });
 
-    // Blur Slider
+    // Blur Slider - 档位制 (0-10档，每档5px)
+    function getBlurLabel(level) {
+        if (level === 0) return '关闭';
+        return `第${level}档`;
+    }
+
     blurInput.addEventListener('input', (e) => {
-        CURRENT_BG_BLUR = e.target.value;
-        blurValueDisplay.textContent = `${CURRENT_BG_BLUR}px`;
+        const level = parseInt(e.target.value);
+        CURRENT_BG_BLUR = level * 5; // 每档5px
+        blurValueDisplay.textContent = getBlurLabel(level);
         applyBackground();
     });
 
-    blurInput.addEventListener('change', () => {
-        saveSetting(STORAGE_KEY_BG_BLUR, CURRENT_BG_BLUR);
+    blurInput.addEventListener('change', (e) => {
+        const level = parseInt(e.target.value);
+        saveSetting(STORAGE_KEY_BG_BLUR, level); // 存储档位值
     });
 
     // Initial Blur State
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
-        blurInput.value = settings[STORAGE_KEY_BG_BLUR];
-        blurValueDisplay.textContent = `${settings[STORAGE_KEY_BG_BLUR]}px`;
+        const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
+        blurInput.value = level;
+        CURRENT_BG_BLUR = level * 5;
+        blurValueDisplay.textContent = getBlurLabel(level);
     }
 
     // 5. Frequent Bookmarks Toggle
