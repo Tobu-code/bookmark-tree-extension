@@ -407,6 +407,7 @@ function renderTreeItem(node) {
         // Auto-expand on hover with delay
         let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
+            if (HOVER_DELAY === 1100) return; // "Closed" setting
             hoverTimer = setTimeout(() => {
                 childrenContainer.classList.remove('hidden');
                 header.querySelector('.arrow').style.transform = 'rotate(90deg)';
@@ -649,6 +650,7 @@ function renderTreeItemForModal(node) {
         // Auto-expand on hover with delay
         let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
+            if (HOVER_DELAY === 1100) return; // "Closed" setting
             hoverTimer = setTimeout(() => {
                 childrenContainer.classList.remove('hidden');
                 header.querySelector('.arrow').style.transform = 'rotate(90deg)';
@@ -1188,7 +1190,11 @@ function initSettingsUI(settings) {
 
     hoverDelayInput.addEventListener('input', (e) => {
         HOVER_DELAY = parseInt(e.target.value);
-        hoverDelayValueDisplay.textContent = `${HOVER_DELAY}ms`;
+        if (HOVER_DELAY === 1100) {
+            hoverDelayValueDisplay.textContent = '已关闭';
+        } else {
+            hoverDelayValueDisplay.textContent = `${HOVER_DELAY}ms`;
+        }
     });
 
     hoverDelayInput.addEventListener('change', () => {
@@ -1198,7 +1204,11 @@ function initSettingsUI(settings) {
     // Initial Hover Delay State
     if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
         hoverDelayInput.value = settings[STORAGE_KEY_HOVER_DELAY];
-        hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
+        if (parseInt(settings[STORAGE_KEY_HOVER_DELAY]) === 1100) {
+            hoverDelayValueDisplay.textContent = '已关闭';
+        } else {
+            hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
+        }
     }
 
     // 6. Frequent Bookmarks Toggle

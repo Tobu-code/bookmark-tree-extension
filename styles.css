@@ -204,7 +204,7 @@ body.loaded #background-layer {
 /* Search Bar */
 #search-container {
     margin-top: 40px;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -215,8 +215,9 @@ body.loaded #background-layer {
 .ambient-time {
     width: 58.5%;
     max-width: 800px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 400;
+    font-variant-numeric: tabular-nums;
     color: var(--text-color);
     margin-bottom: 12px;
     opacity: 0;
@@ -568,9 +569,9 @@ body.search-active #search-container {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, 360px);
-    grid-gap: 40px 100px;
+    grid-gap: 40px 60px;
     /* Increased horizontal breathing room */
-    gap: 40px 100px;
+    gap: 40px 60px;
     justify-content: center;
     padding: 24px 0 100px 0;
     width: 100%;
@@ -778,8 +779,7 @@ body.search-active #search-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    /* Stronger shadow for depth */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Background Preset Selectors */
@@ -842,7 +842,7 @@ body.search-active #search-container {
 
 .leaf-wrapper {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     /* Slightly more breathing room */
     transform-style: preserve-3d;
 }
@@ -904,7 +904,7 @@ body.search-active #search-container {
 }
 
 .bookmark-label {
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -918,10 +918,11 @@ body.search-active #search-container {
 }
 
 .sub-folder-header {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     padding: 4px 0;
-    color: var(--text-secondary);
+    color: var(--text-color);
+    opacity: 0.85;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1905,7 +1906,7 @@ input[type="file"] {
    ======================================== */
 
 .suggested-section {
-    margin: -60px auto 40px auto;
+    margin: 10px auto 40px auto;
     padding: 0;
     width: 58.5%;
     max-width: 800px;
