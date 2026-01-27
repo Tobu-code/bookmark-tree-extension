@@ -4,8 +4,10 @@ const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
 const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
+const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
 const STORAGE_KEY_FREQUENT_DATA = 'frequent_bookmarks_data';
 const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
+const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const FREQUENT_BOOKMARK_COUNT = 6;
 const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
@@ -22,8 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const [settings, bookmarkTree] = await Promise.all([
         getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
-            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR,
-            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED
+            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
+            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY
         ]),
         getBookmarks()
     ]);
@@ -36,7 +38,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_BG_IMAGE]) CURRENT_BG_IMAGE = settings[STORAGE_KEY_BG_IMAGE];
 
-    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) CURRENT_BG_BLUR = settings[STORAGE_KEY_BG_BLUR];
+    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
+        const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
+        CURRENT_BG_BLUR = level * 5;
+    }
+
+    if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
+        const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
+        CURRENT_CONTAINER_BLUR = level * 5;
+    }
+
+    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
+        HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
+    }
 
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
@@ -52,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await preloadImage(CURRENT_BG_IMAGE);
     }
     applyBackground();
+    applyContainerBlur();
 
     // 7. Render Bookmarks
     renderBookmarks(bookmarkTree);
@@ -389,10 +404,20 @@ function renderTreeItem(node) {
             }
         });
 
-        // Auto-expand on hover (Fast)
+        // Auto-expand on hover with delay
+        let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
-            childrenContainer.classList.remove('hidden');
-            header.querySelector('.arrow').style.transform = 'rotate(90deg)';
+            hoverTimer = setTimeout(() => {
+                childrenContainer.classList.remove('hidden');
+                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
+            }, HOVER_DELAY);
+        });
+
+        wrapper.addEventListener('mouseleave', () => {
+            if (hoverTimer) {
+                clearTimeout(hoverTimer);
+                hoverTimer = null;
+            }
         });
 
         // Store reference to collapse function for card-level collapse
@@ -621,10 +646,20 @@ function renderTreeItemForModal(node) {
             }
         });
 
-        // Auto-expand on hover
+        // Auto-expand on hover with delay
+        let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
-            childrenContainer.classList.remove('hidden');
-            header.querySelector('.arrow').style.transform = 'rotate(90deg)';
+            hoverTimer = setTimeout(() => {
+                childrenContainer.classList.remove('hidden');
+                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
+            }, HOVER_DELAY);
+        });
+
+        wrapper.addEventListener('mouseleave', () => {
+            if (hoverTimer) {
+                clearTimeout(hoverTimer);
+                hoverTimer = null;
+            }
         });
 
         // Collapse function for parent to call
@@ -942,6 +977,8 @@ let OPEN_IN_NEW_TAB = false;
 let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
+let CURRENT_CONTAINER_BLUR = 15; // 默认15px (档位3)
+let HOVER_DELAY = 300; // 默认300ms
 
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
@@ -974,7 +1011,10 @@ function initSettingsUI(settings) {
     const bgUpload = document.getElementById('bg-image-upload');
     const clearBgBtn = document.getElementById('clear-bg');
     const blurInput = document.getElementById('bg-blur');
-    const blurValueDisplay = document.getElementById('blur-value');
+    const blurValueDisplay = document.getElementById('bg-blur-value');
+    const containerBlurInput = document.getElementById('container-blur');
+    const containerBlurValueDisplay = document.getElementById('container-blur-value');
+    const blurControls = document.getElementById('blur-controls');
 
     // Helper to save settings
     const saveSetting = (key, value, callback) => {
@@ -1035,6 +1075,14 @@ function initSettingsUI(settings) {
 
     // 4. Background Settings
 
+    // 更新模糊控制的启用/禁用状态
+    function updateBlurControlsState() {
+        const hasImage = CURRENT_BG_IMAGE !== null;
+        blurInput.disabled = !hasImage;
+        containerBlurInput.disabled = !hasImage;
+        blurControls.style.opacity = hasImage ? '1' : '0.5';
+    }
+
     // File Upload
     bgUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -1050,6 +1098,7 @@ function initSettingsUI(settings) {
         reader.onload = (event) => {
             const dataUrl = event.target.result;
             CURRENT_BG_IMAGE = dataUrl;
+            updateBlurControlsState();
             applyBackground();
             saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
                 if (chrome.runtime.lastError) {
@@ -1065,6 +1114,7 @@ function initSettingsUI(settings) {
     clearBgBtn.addEventListener('click', () => {
         CURRENT_BG_IMAGE = null;
         bgUpload.value = ''; // Reset input
+        updateBlurControlsState();
         applyBackground();
         chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
     });
@@ -1072,9 +1122,10 @@ function initSettingsUI(settings) {
     // Blur Slider - 档位制 (0-10档，每档5px)
     function getBlurLabel(level) {
         if (level === 0) return '关闭';
-        return `第${level}档`;
+        return `${level * 10}%`;
     }
 
+    // 背景模糊滑块
     blurInput.addEventListener('input', (e) => {
         const level = parseInt(e.target.value);
         CURRENT_BG_BLUR = level * 5; // 每档5px
@@ -1087,6 +1138,19 @@ function initSettingsUI(settings) {
         saveSetting(STORAGE_KEY_BG_BLUR, level); // 存储档位值
     });
 
+    // 主容器模糊滑块
+    containerBlurInput.addEventListener('input', (e) => {
+        const level = parseInt(e.target.value);
+        CURRENT_CONTAINER_BLUR = level * 5; // 每档5px
+        containerBlurValueDisplay.textContent = getBlurLabel(level);
+        applyContainerBlur();
+    });
+
+    containerBlurInput.addEventListener('change', (e) => {
+        const level = parseInt(e.target.value);
+        saveSetting(STORAGE_KEY_CONTAINER_BLUR, level);
+    });
+
     // Initial Blur State
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
@@ -1095,7 +1159,41 @@ function initSettingsUI(settings) {
         blurValueDisplay.textContent = getBlurLabel(level);
     }
 
-    // 5. Frequent Bookmarks Toggle
+    if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
+        const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
+        containerBlurInput.value = level;
+        CURRENT_CONTAINER_BLUR = level * 5;
+        containerBlurValueDisplay.textContent = getBlurLabel(level);
+    } else {
+        // 默认档位3 (15px)
+        containerBlurInput.value = 3;
+        CURRENT_CONTAINER_BLUR = 15;
+        containerBlurValueDisplay.textContent = getBlurLabel(3);
+    }
+
+    // 初始化模糊控制状态
+    updateBlurControlsState();
+
+    // 5. Hover Delay Setting
+    const hoverDelayInput = document.getElementById('hover-delay');
+    const hoverDelayValueDisplay = document.getElementById('hover-delay-value');
+
+    hoverDelayInput.addEventListener('input', (e) => {
+        HOVER_DELAY = parseInt(e.target.value);
+        hoverDelayValueDisplay.textContent = `${HOVER_DELAY}ms`;
+    });
+
+    hoverDelayInput.addEventListener('change', () => {
+        saveSetting(STORAGE_KEY_HOVER_DELAY, HOVER_DELAY);
+    });
+
+    // Initial Hover Delay State
+    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
+        hoverDelayInput.value = settings[STORAGE_KEY_HOVER_DELAY];
+        hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
+    }
+
+    // 6. Frequent Bookmarks Toggle
     const frequentInputs = document.getElementsByName('frequent-enabled');
     frequentInputs.forEach(radio => {
         radio.addEventListener('change', () => {
@@ -1156,6 +1254,14 @@ function applyBackground() {
     } else {
         bgLayer.style.transform = 'scale(1)';
     }
+}
+
+function applyContainerBlur() {
+    const container = document.querySelector('.container');
+    if (!container) return;
+
+    container.style.backdropFilter = `blur(${CURRENT_CONTAINER_BLUR}px)`;
+    container.style.webkitBackdropFilter = `blur(${CURRENT_CONTAINER_BLUR}px)`;
 }
 
 // --- Bookmark Item Drag Handlers ---
