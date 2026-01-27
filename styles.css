@@ -1617,13 +1617,54 @@ input[type="file"] {
     margin-left: 8px;
     margin-right: 12px;
     flex-shrink: 0;
+    position: relative;
+}
+
+/* Flowing border for AI button */
+#ai-sidebar-btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: conic-gradient(from var(--border-angle, 0deg),
+            transparent 0%,
+            rgba(147, 112, 219, 0.4) 10%,
+            #9370DB 20%,
+            rgba(100, 200, 255, 0.8) 30%,
+            #64C8FF 40%,
+            rgba(147, 112, 219, 0.4) 50%,
+            transparent 60%,
+            transparent 100%);
+    z-index: -1;
+    animation: flowingBorder 3s linear infinite;
+}
+
+#ai-sidebar-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--card-bg);
+    z-index: -1;
 }
 
 #ai-sidebar-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: transparent;
     color: var(--primary-color);
     transform: scale(1.1);
     box-shadow: none;
+}
+
+#ai-sidebar-btn:hover::before {
+    background: conic-gradient(from var(--border-angle, 0deg),
+            transparent 0%,
+            rgba(217, 119, 87, 0.5) 10%,
+            #D97757 20%,
+            rgba(255, 180, 120, 0.9) 30%,
+            #D97757 40%,
+            rgba(217, 119, 87, 0.5) 50%,
+            transparent 60%,
+            transparent 100%);
 }
 
 #ai-sidebar-btn:active {
@@ -1632,6 +1673,8 @@ input[type="file"] {
 
 #ai-sidebar-btn svg {
     filter: none;
+    position: relative;
+    z-index: 1;
 }
 
 /* AI Sidebar Panel - Matching Theme Colors */
