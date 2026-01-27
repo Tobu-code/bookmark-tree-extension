@@ -326,7 +326,7 @@ body.loaded #background-layer {
     background: var(--card-bg);
     border-color: transparent;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
 }
 
 .search-wrapper:focus-within::before {
