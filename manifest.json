@@ -26,7 +26,8 @@
     "*://*.kimi.moonshot.cn/*",
     "*://*.longcat.chat/*",
     "*://*.perplexity.ai/*",
-    "*://*.z.ai/*"
+    "*://*.z.ai/*",
+    "*://*.doubao.com/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

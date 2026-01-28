@@ -1817,6 +1817,12 @@ input[type="file"] {
     color: #ff4f00;
 }
 
+.ai-tab[data-ai="doubao"].active {
+    background: rgba(61, 126, 255, 0.12);
+    border-color: rgba(61, 126, 255, 0.2);
+    color: #3D7EFF;
+}
+
 .ai-tab[data-ai="bailing"].active {
     background: rgba(22, 119, 255, 0.12);
     border-color: rgba(22, 119, 255, 0.2);

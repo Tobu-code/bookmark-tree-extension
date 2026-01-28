@@ -1394,6 +1394,7 @@ function initAiSidebar() {
         longcat: document.getElementById('ai-iframe-longcat'),
         perplexity: document.getElementById('ai-iframe-perplexity'),
         zai: document.getElementById('ai-iframe-zai'),
+        doubao: document.getElementById('ai-iframe-doubao'),
         grok: document.getElementById('ai-iframe-grok'),
         qwen: document.getElementById('ai-iframe-qwen')
     };
@@ -1407,6 +1408,7 @@ function initAiSidebar() {
         longcat: 'https://longcat.chat/',
         perplexity: 'https://www.perplexity.ai/',
         zai: 'https://chat.z.ai/',
+        doubao: 'https://www.doubao.com/chat/',
         grok: 'https://grok.com/',
         qwen: 'https://chat.qwen.ai/'
     };
@@ -1478,23 +1480,27 @@ function initAiSidebar() {
 
         function loadAiOrder() {
             chrome.storage.local.get([STORAGE_KEY_AI_ORDER], (result) => {
-                if (result[STORAGE_KEY_AI_ORDER]) {
-                    const order = result[STORAGE_KEY_AI_ORDER];
-                    const existingTabs = new Map();
-                    tabsContainer.querySelectorAll('.ai-tab').forEach(tab => {
-                        existingTabs.set(tab.dataset.ai, tab);
-                    });
+                const order = result[STORAGE_KEY_AI_ORDER];
+                const existingTabs = new Map();
+                tabsContainer.querySelectorAll('.ai-tab').forEach(tab => {
+                    existingTabs.set(tab.dataset.ai, tab);
+                });
 
+                if (order) {
                     // Re-append in order
                     order.forEach(aiId => {
                         if (existingTabs.has(aiId)) {
                             tabsContainer.appendChild(existingTabs.get(aiId));
+                            existingTabs.delete(aiId); // Mark as handled
                         }
                     });
-
-                    // Re-query aiTabs reference as it might have changed in DOM
-                    // or just use delegating context. For now, most logic uses delegated events.
                 }
+
+                // Any remaining tabs (e.g., newly added after order was saved)
+                // should also be appended to the end
+                existingTabs.forEach(tab => {
+                    tabsContainer.appendChild(tab);
+                });
             });
         }
 
