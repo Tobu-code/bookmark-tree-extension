@@ -1523,6 +1523,10 @@ function initAiSidebar() {
         preloadIframe(currentAi.id);
     });
 
+    function updateCurrentAiDisplay() {
+        // No-op: Functionality removed as icon is static, but kept to prevent ReferenceErrors from legacy calls
+    }
+
     function updateActiveTab() {
         // Re-query tabs as they might have been reordered in DOM
         document.querySelectorAll('.ai-tab').forEach(tab => {
