@@ -1763,8 +1763,82 @@ input[type="file"] {
     background: rgba(217, 119, 87, 0.15);
     border: 1px solid rgba(217, 119, 87, 0.2);
     color: var(--primary-color, #D97757);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    font-weight: 500;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+/* Dragging state */
+.ai-tab.dragging {
+    opacity: 0.5;
+    background: var(--card-hover, #2D2638);
+    cursor: grabbing;
+}
+
+/* Brand-specific active colors */
+.ai-tab[data-ai="google"].active {
+    background: rgba(66, 133, 244, 0.12);
+    border-color: rgba(66, 133, 244, 0.2);
+    color: #4285F4;
+}
+
+.ai-tab[data-ai="gemini"].active {
+    background: rgba(78, 130, 238, 0.12);
+    border-color: rgba(78, 130, 238, 0.2);
+    color: #4e82ee;
+}
+
+.ai-tab[data-ai="chatgpt"].active {
+    background: rgba(16, 163, 127, 0.12);
+    border-color: rgba(16, 163, 127, 0.2);
+    color: #10a37f;
+}
+
+.ai-tab[data-ai="kimi"].active {
+    background: rgba(141, 61, 255, 0.12);
+    border-color: rgba(141, 61, 255, 0.2);
+    color: #8d3dff;
+}
+
+.ai-tab[data-ai="longcat"].active {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+.ai-tab[data-ai="perplexity"].active {
+    background: rgba(31, 184, 205, 0.12);
+    border-color: rgba(31, 184, 205, 0.2);
+    color: #1fb8cd;
+}
+
+.ai-tab[data-ai="zai"].active {
+    background: rgba(255, 79, 0, 0.12);
+    border-color: rgba(255, 79, 0, 0.2);
+    color: #ff4f00;
+}
+
+.ai-tab[data-ai="bailing"].active {
+    background: rgba(22, 119, 255, 0.12);
+    border-color: rgba(22, 119, 255, 0.2);
+    color: #1677ff;
+}
+
+.ai-tab[data-ai="grok"].active {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+.ai-tab[data-ai="qwen"].active {
+    background: rgba(96, 51, 255, 0.12);
+    border-color: rgba(96, 51, 255, 0.2);
+    color: #6033ff;
+}
+
+:root[data-theme="dark"] .ai-tab[data-ai="longcat"].active,
+:root[data-theme="dark"] .ai-tab[data-ai="grok"].active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 /* De-emphasized Icons */

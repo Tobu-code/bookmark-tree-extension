@@ -10,20 +10,23 @@
     "favicon"
   ],
   "host_permissions": [
+    "https://www.google.com/",
     "*://*.google.com/*",
+    "*://*.google.com.hk/*",
+    "*://*.google.co.jp/*",
+    "https://*.gstatic.com/*",
+    "https://*.googleusercontent.com/*",
+    "https://*.googleapis.com/*",
     "*://*.chatgpt.com/*",
-    "*://chatgpt.com/*",
+    "*://*.openai.com/*",
     "*://*.grok.com/*",
-    "*://grok.com/*",
-    "*://*.qwen.ai/*",
-    "*://qwen.ai/*",
-    "*://*.openalternative.co/*",
-    "*://*.x.ai/*",
-    "*://x.ai/*",
     "*://*.x.com/*",
-    "*://x.com/*",
-    "*://*.twitter.com/*",
-    "*://twitter.com/*"
+    "*://*.chat.qwen.ai/*",
+    "*://*.kimi.com/*",
+    "*://*.kimi.moonshot.cn/*",
+    "*://*.longcat.chat/*",
+    "*://*.perplexity.ai/*",
+    "*://*.z.ai/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

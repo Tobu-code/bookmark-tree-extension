@@ -1390,6 +1390,10 @@ function initAiSidebar() {
         google: document.getElementById('ai-iframe-google'),
         gemini: document.getElementById('ai-iframe-gemini'),
         chatgpt: document.getElementById('ai-iframe-chatgpt'),
+        kimi: document.getElementById('ai-iframe-kimi'),
+        longcat: document.getElementById('ai-iframe-longcat'),
+        perplexity: document.getElementById('ai-iframe-perplexity'),
+        zai: document.getElementById('ai-iframe-zai'),
         grok: document.getElementById('ai-iframe-grok'),
         qwen: document.getElementById('ai-iframe-qwen')
     };
@@ -1399,11 +1403,16 @@ function initAiSidebar() {
         google: 'https://www.google.com/search?udm=50&aep=11',
         gemini: 'https://gemini.google.com',
         chatgpt: 'https://chatgpt.com/',
+        kimi: 'https://kimi.moonshot.cn/',
+        longcat: 'https://longcat.chat/',
+        perplexity: 'https://www.perplexity.ai/',
+        zai: 'https://chat.z.ai/',
         grok: 'https://grok.com/',
         qwen: 'https://chat.qwen.ai/'
     };
 
     const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
+    const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
 
     // Current AI state
     let currentAi = {
@@ -1416,13 +1425,91 @@ function initAiSidebar() {
     // Track which iframes have been loaded
     const loadedIframes = new Set();
 
+    // --- Drag and Drop Sorting for AI Tabs ---
+    const tabsContainer = document.querySelector('.ai-tabs');
+    let draggedTab = null;
+
+    function initAiTabSort() {
+        tabsContainer.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('ai-tab')) {
+                draggedTab = e.target;
+                e.target.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            }
+        });
+
+        tabsContainer.addEventListener('dragend', (e) => {
+            if (e.target.classList.contains('ai-tab')) {
+                e.target.classList.remove('dragging');
+                draggedTab = null;
+                saveAiOrder();
+            }
+        });
+
+        tabsContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const afterElement = getDragAfterElement(tabsContainer, e.clientX);
+            if (afterElement == null) {
+                tabsContainer.appendChild(draggedTab);
+            } else {
+                tabsContainer.insertBefore(draggedTab, afterElement);
+            }
+        });
+
+        // Helper to find the element we are dragging over
+        function getDragAfterElement(container, x) {
+            const draggableElements = [...container.querySelectorAll('.ai-tab:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function saveAiOrder() {
+            const currentOrder = [...tabsContainer.querySelectorAll('.ai-tab')].map(tab => tab.dataset.ai);
+            chrome.storage.local.set({ [STORAGE_KEY_AI_ORDER]: currentOrder });
+        }
+
+        function loadAiOrder() {
+            chrome.storage.local.get([STORAGE_KEY_AI_ORDER], (result) => {
+                if (result[STORAGE_KEY_AI_ORDER]) {
+                    const order = result[STORAGE_KEY_AI_ORDER];
+                    const existingTabs = new Map();
+                    tabsContainer.querySelectorAll('.ai-tab').forEach(tab => {
+                        existingTabs.set(tab.dataset.ai, tab);
+                    });
+
+                    // Re-append in order
+                    order.forEach(aiId => {
+                        if (existingTabs.has(aiId)) {
+                            tabsContainer.appendChild(existingTabs.get(aiId));
+                        }
+                    });
+
+                    // Re-query aiTabs reference as it might have changed in DOM
+                    // or just use delegating context. For now, most logic uses delegated events.
+                }
+            });
+        }
+
+        loadAiOrder();
+    }
+
+    initAiTabSort();
+
 
     // Load saved AI preference
     chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
         if (result[STORAGE_KEY_AI]) {
             const saved = result[STORAGE_KEY_AI];
             currentAi = saved;
-            updateCurrentAiDisplay();
+            // updateCurrentAiDisplay(); // No longer needed as icon is static
         }
         updateActiveTab();
 
@@ -1430,12 +1517,9 @@ function initAiSidebar() {
         preloadIframe(currentAi.id);
     });
 
-    function updateCurrentAiDisplay() {
-        // Icon is now static in HTML, no need to update
-    }
-
     function updateActiveTab() {
-        aiTabs.forEach(tab => {
+        // Re-query tabs as they might have been reordered in DOM
+        document.querySelectorAll('.ai-tab').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.ai === currentAi.id);
         });
     }
@@ -1491,7 +1575,6 @@ function initAiSidebar() {
         };
 
         chrome.storage.local.set({ [STORAGE_KEY_AI]: currentAi });
-        updateCurrentAiDisplay();
         updateActiveTab();
         switchToAi(newId);
     }
@@ -1504,7 +1587,6 @@ function initAiSidebar() {
             sidebarOverlay.classList.add('active');
         });
 
-        updateCurrentAiDisplay();
         switchToAi(currentAi.id);
     }
 
