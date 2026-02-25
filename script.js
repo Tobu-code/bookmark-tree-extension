@@ -339,6 +339,11 @@ function renderTreeItem(node) {
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
+
+        // Action buttons (move & delete)
+        const actions = createBookmarkActions(node, wrapper);
+        wrapper.appendChild(actions);
+
         return wrapper;
     } else {
         // Sub-folder
@@ -435,6 +440,85 @@ function renderTreeItem(node) {
     }
 }
 
+// --- Bookmark Actions (Move & Delete) ---
+
+function createBookmarkActions(node, wrapperEl) {
+    const actions = document.createElement('div');
+    actions.className = 'bookmark-actions';
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'bookmark-action-btn delete-btn';
+    deleteBtn.title = '删除书签';
+    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    deleteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteBookmark(node, wrapperEl);
+    });
+    actions.appendChild(deleteBtn);
+
+    return actions;
+}
+
+function showConfirmDialog(message, onConfirm) {
+    const dialog = document.getElementById('confirm-dialog');
+    const msgEl = document.getElementById('confirm-dialog-message');
+    const cancelBtn = document.getElementById('confirm-dialog-cancel');
+    const okBtn = document.getElementById('confirm-dialog-ok');
+
+    msgEl.textContent = message;
+    dialog.classList.remove('hidden');
+
+    // Clean up old listeners by replacing buttons
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    const newOkBtn = okBtn.cloneNode(true);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+
+    const closeDialog = () => {
+        dialog.classList.add('hidden');
+    };
+
+    newCancelBtn.addEventListener('click', closeDialog);
+    newOkBtn.addEventListener('click', () => {
+        closeDialog();
+        onConfirm();
+    });
+
+    // Click overlay to cancel
+    dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) closeDialog();
+    }, { once: true });
+
+    // ESC to cancel
+    const escHandler = (e) => {
+        if (e.key === 'Escape' && !dialog.classList.contains('hidden')) {
+            closeDialog();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+}
+
+function deleteBookmark(node, wrapperEl) {
+    const title = node.title || node.url || '此书签';
+    showConfirmDialog(`确定要删除「${title}」吗？\n此操作无法撤销。`, () => {
+        chrome.bookmarks.remove(node.id, () => {
+            if (chrome.runtime.lastError) {
+                console.error('Delete failed:', chrome.runtime.lastError.message);
+                return;
+            }
+            console.log('Deleted bookmark:', node.id);
+            // Animate out
+            wrapperEl.classList.add('bookmark-fade-out');
+            wrapperEl.addEventListener('animationend', () => {
+                wrapperEl.remove();
+            });
+        });
+    });
+}
+
 // --- Drag & Drop Logic ---
 
 function handleDragStart(e) {
@@ -511,6 +595,10 @@ function showFolderModal(folderNode) {
     // Set icon and title
     if (iconContainer) iconContainer.innerHTML = FOLDER_ICON_SVG;
     title.textContent = folderNode.title;
+
+    // Store folder ID on the modal content for move dialog
+    const modalContent = modal.querySelector('.folder-modal-content');
+    if (modalContent) modalContent.dataset.folderId = folderNode.id;
 
     // Clear and render content
     body.innerHTML = '';
@@ -590,6 +678,11 @@ function renderTreeItemForModal(node) {
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
+
+        // Action buttons (move & delete)
+        const actions = createBookmarkActions(node, wrapper);
+        wrapper.appendChild(actions);
+
         return wrapper;
     } else {
         // Sub-folder
@@ -1301,13 +1394,22 @@ function handleItemDragOver(e) {
     }
     e.stopPropagation(); // Prevent card drag over
     e.dataTransfer.dropEffect = 'move';
-    this.classList.add('drag-over-item');
+
+    // If dragging over a folder, show "drop into" visual
+    if (this.dataset.type === 'folder' && dragSrcEl && dragSrcEl.dataset.type === 'bookmark') {
+        this.classList.add('drag-into-folder');
+        this.classList.remove('drag-over-item');
+    } else {
+        this.classList.add('drag-over-item');
+        this.classList.remove('drag-into-folder');
+    }
     return false;
 }
 
 function handleItemDragLeave(e) {
     e.stopPropagation();
     this.classList.remove('drag-over-item');
+    this.classList.remove('drag-into-folder');
 }
 
 function handleItemDrop(e) {
@@ -1315,13 +1417,36 @@ function handleItemDrop(e) {
         e.stopPropagation();
     }
     this.classList.remove('drag-over-item');
+    this.classList.remove('drag-into-folder');
 
     // Check if we are dropping an item
     const type = e.dataTransfer.getData('type');
     if (type !== 'bookmark-item') return false;
 
     if (dragSrcEl !== this) {
-        // Visual Move
+        const srcId = dragSrcEl.dataset.id;
+
+        // Case 1: Dropping a bookmark onto a folder → move INTO the folder
+        if (this.dataset.type === 'folder' && dragSrcEl.dataset.type === 'bookmark') {
+            const destFolderId = this.dataset.id;
+
+            chrome.bookmarks.move(srcId, { parentId: destFolderId }, (res) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Move into folder failed:', chrome.runtime.lastError.message);
+                } else {
+                    console.log('Moved bookmark into folder:', res);
+                    // Refresh entire bookmark tree to reflect the change
+                    chrome.bookmarks.getTree((bookmarkTree) => {
+                        renderBookmarks(bookmarkTree);
+                    });
+                }
+            });
+
+            dragSrcEl.style.opacity = '1';
+            return false;
+        }
+
+        // Case 2: Reordering within the same parent (original logic)
         const parent = this.parentNode;
         const allChildren = Array.from(parent.children);
         const srcIndex = allChildren.indexOf(dragSrcEl);
@@ -1337,8 +1462,6 @@ function handleItemDrop(e) {
         }
 
         // API Update
-        const srcId = dragSrcEl.dataset.id;
-
         // Determine Destination Parent ID
         let destParentId = parent.dataset.parentId;
         if (!destParentId) {
@@ -1368,8 +1491,9 @@ function handleItemDrop(e) {
 function handleItemDragEnd(e) {
     if (e.stopPropagation) e.stopPropagation();
     this.style.opacity = '1';
-    // Clean all item drag-overs
+    // Clean all drag visual states
     document.querySelectorAll('.drag-over-item').forEach(el => el.classList.remove('drag-over-item'));
+    document.querySelectorAll('.drag-into-folder').forEach(el => el.classList.remove('drag-into-folder'));
     dragSrcEl = null;
 }
 

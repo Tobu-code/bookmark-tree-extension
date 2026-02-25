@@ -327,6 +327,26 @@
         </div>
     </div>
 
+    <!-- Confirm Dialog (Delete) -->
+    <div id="confirm-dialog" class="modal hidden">
+        <div class="confirm-dialog-content">
+            <div class="confirm-dialog-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF5F56" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </div>
+            <div class="confirm-dialog-title">确认删除</div>
+            <div class="confirm-dialog-message" id="confirm-dialog-message">确定要删除这个书签吗？</div>
+            <div class="confirm-dialog-actions">
+                <button id="confirm-dialog-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
+                <button id="confirm-dialog-ok" class="confirm-btn confirm-btn-danger">删除</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 
