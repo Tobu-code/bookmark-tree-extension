@@ -919,11 +919,15 @@ body.search-active #search-container {
     box-sizing: border-box;
     border-left: 2px solid transparent;
     /* Prepare for hover accent */
+    overflow: hidden;
+    min-width: 0;
 }
 
 /* Hover Effect - Claude Style Gradient */
 .leaf-wrapper:hover .leaf-node {
     padding-left: 16px;
+    padding-right: 68px;
+    /* Reserve space for action buttons */
     background: linear-gradient(135deg,
             rgba(217, 119, 87, 0.12) 0%,
             rgba(217, 119, 87, 0.04) 100%);
@@ -2378,4 +2382,112 @@ input[type="file"] {
     background: #ff3b30;
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(255, 95, 86, 0.4);
+}
+
+/* ============================================
+   Edit Button & Dialog
+   ============================================ */
+
+.bookmark-action-btn.edit-btn:hover {
+    background: rgba(66, 133, 244, 0.15);
+    color: #4285F4;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+}
+
+.confirm-btn-primary {
+    background: var(--primary-color, #ae5630);
+    color: white;
+    box-shadow: 0 2px 8px rgba(174, 86, 48, 0.3);
+}
+
+.confirm-btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(174, 86, 48, 0.4);
+}
+
+.edit-dialog-content {
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg, rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    color: var(--modal-text);
+    padding: 28px 32px;
+    width: 400px;
+    max-width: 90vw;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+:root:not([data-theme="dark"]) .edit-dialog-content {
+    background: rgba(255, 255, 255, 0.97);
+}
+
+.edit-dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.edit-dialog-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.edit-dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.edit-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.edit-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-overlay, rgba(0, 0, 0, 0.03));
+    font-size: 14px;
+    color: var(--text-color);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.edit-field input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(174, 86, 48, 0.12);
+    background: var(--card-bg, #fff);
+}
+
+:root[data-theme="dark"] .edit-field input,
+:root[data-theme="deep-blue"] .edit-field input,
+:root[data-theme="midnight-purple"] .edit-field input {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="dark"] .edit-field input:focus,
+:root[data-theme="deep-blue"] .edit-field input:focus,
+:root[data-theme="midnight-purple"] .edit-field input:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.edit-dialog-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
 }

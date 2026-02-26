@@ -347,6 +347,34 @@
         </div>
     </div>
 
+    <!-- Edit Bookmark Dialog -->
+    <div id="edit-bookmark-dialog" class="modal hidden">
+        <div class="edit-dialog-content">
+            <div class="edit-dialog-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span class="edit-dialog-title">编辑书签</span>
+            </div>
+            <div class="edit-dialog-body">
+                <div class="edit-field">
+                    <label for="edit-bookmark-title">名称</label>
+                    <input type="text" id="edit-bookmark-title" placeholder="书签名称" autocomplete="off">
+                </div>
+                <div class="edit-field">
+                    <label for="edit-bookmark-url">地址</label>
+                    <input type="text" id="edit-bookmark-url" placeholder="https://..." autocomplete="off">
+                </div>
+            </div>
+            <div class="edit-dialog-actions">
+                <button id="edit-bookmark-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
+                <button id="edit-bookmark-save" class="confirm-btn confirm-btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 

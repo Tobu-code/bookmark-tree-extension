@@ -446,6 +446,18 @@ function createBookmarkActions(node, wrapperEl) {
     const actions = document.createElement('div');
     actions.className = 'bookmark-actions';
 
+    // Edit button
+    const editBtn = document.createElement('button');
+    editBtn.className = 'bookmark-action-btn edit-btn';
+    editBtn.title = '编辑书签';
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    editBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        editBookmark(node, wrapperEl);
+    });
+    actions.appendChild(editBtn);
+
     // Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'bookmark-action-btn delete-btn';
@@ -517,6 +529,116 @@ function deleteBookmark(node, wrapperEl) {
             });
         });
     });
+}
+
+function editBookmark(node, wrapperEl) {
+    const dialog = document.getElementById('edit-bookmark-dialog');
+    const titleInput = document.getElementById('edit-bookmark-title');
+    const urlInput = document.getElementById('edit-bookmark-url');
+    const cancelBtn = document.getElementById('edit-bookmark-cancel');
+    const saveBtn = document.getElementById('edit-bookmark-save');
+
+    // Pre-fill with current values
+    titleInput.value = node.title || '';
+    urlInput.value = node.url || '';
+
+    dialog.classList.remove('hidden');
+
+    // Focus title input
+    setTimeout(() => titleInput.focus(), 100);
+
+    // Clean up old listeners by replacing buttons
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    const newSaveBtn = saveBtn.cloneNode(true);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+
+    const closeDialog = () => {
+        dialog.classList.add('hidden');
+    };
+
+    newCancelBtn.addEventListener('click', closeDialog);
+
+    newSaveBtn.addEventListener('click', () => {
+        const newTitle = titleInput.value.trim();
+        const newUrl = urlInput.value.trim();
+
+        if (!newTitle) {
+            titleInput.focus();
+            titleInput.style.borderColor = '#FF5F56';
+            setTimeout(() => titleInput.style.borderColor = '', 1500);
+            return;
+        }
+        if (!newUrl) {
+            urlInput.focus();
+            urlInput.style.borderColor = '#FF5F56';
+            setTimeout(() => urlInput.style.borderColor = '', 1500);
+            return;
+        }
+
+        const changes = {};
+        if (newTitle !== node.title) changes.title = newTitle;
+        if (newUrl !== node.url) changes.url = newUrl;
+
+        if (Object.keys(changes).length === 0) {
+            closeDialog();
+            return;
+        }
+
+        chrome.bookmarks.update(node.id, changes, (updated) => {
+            if (chrome.runtime.lastError) {
+                console.error('Edit failed:', chrome.runtime.lastError.message);
+                return;
+            }
+            console.log('Updated bookmark:', updated);
+
+            // Update node object
+            if (changes.title) node.title = changes.title;
+            if (changes.url) node.url = changes.url;
+
+            // Update DOM
+            const labelEl = wrapperEl.querySelector('.bookmark-label');
+            if (labelEl && changes.title) labelEl.textContent = changes.title;
+
+            const linkEl = wrapperEl.querySelector('.leaf-node');
+            if (linkEl && changes.url) {
+                linkEl.href = changes.url;
+                // Update favicon
+                const oldIcon = linkEl.querySelector('.bookmark-icon');
+                if (oldIcon) {
+                    const iconData = getIconForBookmark(changes.url);
+                    const newIcon = createBookmarkIcon(iconData, 18);
+                    oldIcon.replaceWith(newIcon);
+                }
+            }
+
+            closeDialog();
+        });
+    });
+
+    // Enter key to save
+    const enterHandler = (e) => {
+        if (e.key === 'Enter' && !dialog.classList.contains('hidden')) {
+            e.preventDefault();
+            newSaveBtn.click();
+        }
+    };
+    titleInput.addEventListener('keydown', enterHandler);
+    urlInput.addEventListener('keydown', enterHandler);
+
+    // Click overlay to cancel
+    dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) closeDialog();
+    }, { once: true });
+
+    // ESC to cancel
+    const escHandler = (e) => {
+        if (e.key === 'Escape' && !dialog.classList.contains('hidden')) {
+            closeDialog();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
 }
 
 // --- Drag & Drop Logic ---
