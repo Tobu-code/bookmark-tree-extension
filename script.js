@@ -1444,6 +1444,40 @@ function initSettingsUI(settings) {
         }
     });
 
+    const exportBtn = document.getElementById('export-bookmarks-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const originalText = exportBtn.textContent;
+            exportBtn.textContent = '导出中...';
+            exportBtn.disabled = true;
+
+            chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+                const htmlContent = generateBookmarksHTML(bookmarkTreeNodes);
+                const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // Generate a filename with current date
+                const dateStr = new Date().toISOString().split('T')[0];
+                a.download = `bookmarks_${dateStr}.html`;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    exportBtn.textContent = '导出成功!';
+                    setTimeout(() => {
+                        exportBtn.textContent = originalText;
+                        exportBtn.disabled = false;
+                    }, 2000);
+                }, 100);
+            });
+        });
+    }
+
     btn.onclick = () => modal.classList.remove('hidden');
     close.onclick = () => modal.classList.add('hidden');
     window.onclick = (event) => {
@@ -1460,6 +1494,64 @@ function applyTheme(theme) {
     } else {
         root.setAttribute('data-theme', theme);
     }
+}
+
+// Generate Netscape Bookmark Format HTML
+function generateBookmarksHTML(nodes) {
+    let html = '<!DOCTYPE NETSCAPE-Bookmark-file-1>\n';
+    html += '<!-- This is an automatically generated file.\n';
+    html += '     It will be read and overwritten.\n';
+    html += '     DO NOT EDIT! -->\n';
+    html += '<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n';
+    html += '<TITLE>Bookmarks</TITLE>\n';
+    html += '<H1>Bookmarks</H1>\n';
+    html += '<DL><p>\n';
+
+    function traverseNodes(nodeArray, indentStr = "    ") {
+        let result = "";
+        for (const node of nodeArray) {
+            // Skip root node if it doesn't have a title and it's the very top level
+            if (!node.title && node.id === '0') {
+                if (node.children) {
+                    result += traverseNodes(node.children, indentStr);
+                }
+                continue;
+            }
+
+            if (node.url) {
+                // It's a bookmark
+                const title = escapeHtmlForExport(node.title || node.url);
+                const url = escapeHtmlForExport(node.url);
+                const addDate = node.dateAdded ? Math.floor(node.dateAdded / 1000) : "";
+                result += `${indentStr}<DT><A HREF="${url}" ADD_DATE="${addDate}">${title}</A>\n`;
+            } else if (node.children) {
+                // It's a folder
+                const title = escapeHtmlForExport(node.title || "Folder");
+                const addDate = node.dateAdded ? Math.floor(node.dateAdded / 1000) : "";
+                // Top level bar folders might need special attributes like PERSONAL_TOOLBAR_FOLDER
+                const toolbarAttr = (node.id === '1') ? ' PERSONAL_TOOLBAR_FOLDER="true"' : '';
+                result += `${indentStr}<DT><H3 ADD_DATE="${addDate}"${toolbarAttr}>${title}</H3>\n`;
+                result += `${indentStr}<DL><p>\n`;
+                result += traverseNodes(node.children, indentStr + "    ");
+                result += `${indentStr}</DL><p>\n`;
+            }
+        }
+        return result;
+    }
+
+    html += traverseNodes(nodes);
+    html += '</DL><p>\n';
+    return html;
+}
+
+function escapeHtmlForExport(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
 function applyBackground() {
