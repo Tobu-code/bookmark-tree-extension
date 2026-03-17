@@ -369,6 +369,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         });
     };
 
+    // Shared debounce timer for hover-to-switch
+    let folderHoverTimer = null;
+    let currentActiveFolder = null;
+
     allFolders.forEach((folder) => {
         // Skip hidden folders unless SHOW_HIDDEN_FOLDERS is true
         const isHidden = HIDDEN_FOLDERS.includes(folder.id);
@@ -402,10 +406,40 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             });
         });
 
+        // Hover-to-switch: mouseenter with debounce for smooth experience
+        folderTile.addEventListener('mouseenter', () => {
+            if (currentActiveFolder === folder) return; // Already active
+            clearTimeout(folderHoverTimer);
+            folderHoverTimer = setTimeout(() => {
+                dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
+                folderTile.classList.add('active');
+                currentActiveFolder = folder;
+                trackFolderClick(folder.id, folder.title);
+                // Smooth transition: fade out then in
+                bmkPane.style.opacity = '0';
+                bmkPane.style.transform = 'translateY(6px)';
+                setTimeout(() => {
+                    renderBmkPane(folder);
+                    // Trigger reflow then fade in
+                    requestAnimationFrame(() => {
+                        bmkPane.style.opacity = '1';
+                        bmkPane.style.transform = 'translateY(0)';
+                    });
+                }, 120); // Brief fade-out duration
+            }, 80); // Debounce: 80ms feels responsive but prevents accidental triggers
+        });
+
+        folderTile.addEventListener('mouseleave', () => {
+            clearTimeout(folderHoverTimer);
+        });
+
+        // Keep click as fallback (touch devices, accessibility)
         folderTile.addEventListener('click', () => {
+            clearTimeout(folderHoverTimer);
+            if (currentActiveFolder === folder) return;
             dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
             folderTile.classList.add('active');
-            // Track folder click frequency
+            currentActiveFolder = folder;
             trackFolderClick(folder.id, folder.title);
             renderBmkPane(folder);
         });
