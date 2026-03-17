@@ -1054,7 +1054,7 @@ body.search-active #search-container {
 }
 
 .expand-btn:hover::before {
-    content: '⤢';
+    content: '\2922';
     font-weight: bold;
     line-height: 1;
 }
@@ -1384,7 +1384,7 @@ body.search-active #search-container {
 }
 
 .close:hover::before {
-    content: '×';
+    content: '\00d7';
     /* Times symbol */
     font-weight: bold;
     line-height: 1;
