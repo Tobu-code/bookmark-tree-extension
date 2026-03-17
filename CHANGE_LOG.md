@@ -9,3 +9,5 @@
 - **Content**: Fixed garbled characters (`â¤¢`) showing on the card expand button on hover by replacing the literal character `⤢` with its CSS unicode escape sequence `\2922`.
 - **Type**: BugFix (Flat Mode Layout)
 - **Content**: Increased horizontal gaps `gap: 16px 32px;` and right-padding in the flat-mode `.directory-pane` to create a safe corridor. This prevents the mouse from accidentally triggering a hover switch to the second-column folders when the user moves diagonally from the first column into the bookmarks list pane.
+- **Type**: Optimization (UI/UX)
+- **Content**: Unified the hover animation of the layout toggle button to match the settings button. Both now use `transform: rotate(45deg)` instead of mixing scaling and rotation.
