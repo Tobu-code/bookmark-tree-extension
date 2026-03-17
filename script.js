@@ -93,6 +93,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 7. Render Bookmarks
     renderBookmarks(bookmarkTree);
 
+    // 7.5 Layout Toggle Button (outside settings for quick access)
+    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
+    const layoutIconTree = document.getElementById('layout-icon-tree');
+    const layoutIconFlat = document.getElementById('layout-icon-flat');
+    
+    function updateLayoutToggleIcon() {
+        if (LAYOUT_MODE === 'flat') {
+            layoutIconTree.style.display = 'none';
+            layoutIconFlat.style.display = 'block';
+            layoutToggleBtn.title = '切换到树状模式';
+        } else {
+            layoutIconTree.style.display = 'block';
+            layoutIconFlat.style.display = 'none';
+            layoutToggleBtn.title = '切换到平铺模式';
+        }
+    }
+    updateLayoutToggleIcon(); // Set initial icon state
+    
+    layoutToggleBtn.addEventListener('click', () => {
+        LAYOUT_MODE = LAYOUT_MODE === 'tree' ? 'flat' : 'tree';
+        chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: LAYOUT_MODE });
+        updateLayoutToggleIcon();
+        // Also sync the radio buttons inside settings modal
+        const layoutRadios = document.getElementsByName('layout-mode');
+        layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
+        // Re-render
+        chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+    });
+
     // 8. Render Frequent Bookmarks (if enabled)
     const frequentEnabled = settings[STORAGE_KEY_FREQUENT_ENABLED] !== false; // Default true
     if (frequentEnabled) {
