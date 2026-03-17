@@ -1518,29 +1518,58 @@ function initSettingsUI(settings) {
         blurControls.style.opacity = hasImage ? '1' : '0.5';
     }
 
-    // File Upload
+    // File Upload (with auto-compression for large images)
     bgUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Limit size (e.g., 10MB to be safe for local storage)
-        if (file.size > 10 * 1024 * 1024) {
-            alert('图片过大，请选择小于 10MB 的图片');
-            return;
-        }
-
         const reader = new FileReader();
         reader.onload = (event) => {
             const dataUrl = event.target.result;
-            CURRENT_BG_IMAGE = dataUrl;
-            updateBlurControlsState();
-            applyBackground();
-            saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
-                if (chrome.runtime.lastError) {
-                    console.error('Failed to save image:', chrome.runtime.lastError);
-                    alert('图片保存失败 (可能超出存储限制)');
-                }
-            });
+            
+            // Helper to save and apply image
+            const processSave = (finalDataUrl) => {
+                CURRENT_BG_IMAGE = finalDataUrl;
+                updateBlurControlsState();
+                applyBackground();
+                saveSetting(STORAGE_KEY_BG_IMAGE, finalDataUrl, () => {
+                    if (chrome.runtime.lastError) {
+                        console.error('Failed to save image:', chrome.runtime.lastError);
+                        alert('图片保存失败 (可能超出存储限制，请尝试更小的图片)');
+                    }
+                });
+            };
+
+            // If file is > 1.5MB, auto compress it to webp
+            if (file.size > 1.5 * 1024 * 1024) {
+                const img = new Image();
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Cap dimensions to 2560px max to ensure safe memory/storage usage
+                    const MAX_DIM = 2560;
+                    if (width > MAX_DIM || height > MAX_DIM) {
+                        const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
+                        width = Math.round(width * ratio);
+                        height = Math.round(height * ratio);
+                    }
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Compress to 80% quality WebP
+                    const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
+                    processSave(compressedDataUrl);
+                };
+                img.src = dataUrl;
+            } else {
+                // Save original if it's small enough
+                processSave(dataUrl);
+            }
         };
         reader.readAsDataURL(file);
     });

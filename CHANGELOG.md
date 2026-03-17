@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - **Feature**: 自动隐藏没有书签内容的空文件夹，避免产生无效点击。
 - **Feature**: 新增低频书签目录的折叠/隐藏功能。鼠标悬停在左侧文件夹可点击“眼睛”图标隐藏，并在左侧底部统一管理已隐藏的目录。
 
+### Bug Fixes
+- **Performance**: 优化了自定义背景图片的上传逻辑。现在当上传超过 1.5MB 的高清大图时，插件会自动在本地利用 Canvas 将其压缩并缩小尺寸（上限 2560px），彻底解决了因为图片过大导致的“保存失败”报错，同时保证每次打开新标签页依然能秒开不卡顿。
+
 ## [2.1.0] - 2026-03-17
 
 ### Features
