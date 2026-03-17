@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2026-03-17
+
+### Enhancements
+- **Layout**: 平铺模式下左侧目录面板变更为双列网格布局，更有效地利用屏幕空间。
+- **Feature**: 支持在平铺模式下使用拖拽（Drag & Drop）自由排序左侧文件夹和右侧书签。
+- **Feature**: 自动隐藏没有书签内容的空文件夹，避免产生无效点击。
+- **Feature**: 新增低频书签目录的折叠/隐藏功能。鼠标悬停在左侧文件夹可点击“眼睛”图标隐藏，并在左侧底部统一管理已隐藏的目录。
+
 ## [2.1.0] - 2026-03-17
 
 ### Features

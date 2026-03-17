@@ -630,11 +630,12 @@ body.search-active #search-container {
 }
 
 .directory-pane {
-    width: 250px;
+    width: 320px;
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    gap: 8px;
     overflow-y: auto;
     padding-right: 10px;
 }
@@ -691,6 +692,50 @@ body.search-active #search-container {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 15px;
+    flex-grow: 1;
+}
+
+.hide-icon {
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+    color: var(--text-color);
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.folder-tile:hover .hide-icon {
+    opacity: 0.5;
+}
+
+.folder-tile .hide-icon:hover {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+.folder-tile.is-hidden-folder {
+    opacity: 0.4;
+    border: 1px dashed var(--border-color);
+}
+
+.toggle-hidden-btn {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 10px;
+    color: var(--text-secondary, #888);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.toggle-hidden-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+:root[data-theme="dark"] .toggle-hidden-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .bookmarks-pane-header {

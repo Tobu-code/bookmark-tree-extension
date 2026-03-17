@@ -9,6 +9,7 @@ const STORAGE_KEY_FREQUENT_DATA = 'frequent_bookmarks_data';
 const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
+const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const FREQUENT_BOOKMARK_COUNT = 6;
 const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY,
-            STORAGE_KEY_LAYOUT_MODE
+            STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS
         ]),
         getBookmarks()
     ]);
@@ -56,6 +57,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
     else LAYOUT_MODE = 'tree';
+
+    if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
+    else HIDDEN_FOLDERS = [];
 
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
@@ -133,7 +137,10 @@ function flattenFolders(node, folders = [], path = []) {
              currentPath.push(node.title);
         }
 
-        if (node.id && node.id !== '0' && node.id !== '1' && node.title) {
+        // Check if this folder has at least one direct leaf node (bookmark)
+        const hasBookmarks = node.children.some(child => !child.children);
+
+        if (node.id && node.id !== '0' && node.id !== '1' && node.title && hasBookmarks) {
             // Store the full path joined by separator for display
             node._fullPath = currentPath.join(' / ');
             folders.push(node);
@@ -224,11 +231,33 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const listContainer = document.createElement('div');
         listContainer.className = 'bookmarks-pane-grid';
 
+        // Make the grid container a drop target for reordering bookmarks inside this folder
+        listContainer.dataset.type = 'folder';
+        listContainer.dataset.id = folder.id;
+        listContainer.addEventListener('dragover', handleItemDragOver);
+        listContainer.addEventListener('dragleave', handleItemDragLeave);
+        listContainer.addEventListener('drop', handleItemDrop);
+
         folder.children.forEach(child => {
             // ONLY render leaf bookmark nodes in the right pane. Directories are already on the left.
             if (!child.children) {
                 // Render bookmark using standard item rendering which gives us `.leaf-wrapper`
                 const bmkItem = renderTreeItem(child);
+                
+                // bmkItem is a .leaf-wrapper, it already has drill-down drag events attached by renderTreeNode
+                // but let's ensure it has the correct visual style and drag attributes since it's flat mode.
+                bmkItem.setAttribute('draggable', 'true');
+                bmkItem.dataset.id = child.id;
+                bmkItem.dataset.parentId = child.parentId;
+                bmkItem.dataset.type = 'bookmark';
+                
+                // Add flat mode specific drop targets to leaf wrappers if needed
+                bmkItem.addEventListener('dragstart', handleItemDragStart);
+                bmkItem.addEventListener('dragover', handleItemDragOver);
+                bmkItem.addEventListener('dragleave', handleItemDragLeave);
+                bmkItem.addEventListener('drop', handleItemDrop);
+                bmkItem.addEventListener('dragend', handleItemDragEnd);
+
                 listContainer.appendChild(bmkItem);
             }
         });
@@ -236,21 +265,80 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         bmkPane.appendChild(listContainer);
     };
 
-    allFolders.forEach((folder, index) => {
+    allFolders.forEach((folder) => {
+        // Skip hidden folders unless SHOW_HIDDEN_FOLDERS is true
+        const isHidden = HIDDEN_FOLDERS.includes(folder.id);
+        if (isHidden && !SHOW_HIDDEN_FOLDERS) return;
+
         const folderTile = document.createElement('div');
-        folderTile.className = 'folder-tile' + (index === 0 ? ' active' : '');
-        folderTile.dataset.id = folder.id;
-        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span>`;
+        folderTile.className = 'folder-tile';
+        if (isHidden) folderTile.classList.add('is-hidden-folder');
         
+        folderTile.dataset.id = folder.id;
+        folderTile.dataset.parentId = folder.parentId;
+        folderTile.dataset.type = 'folder';
+        folderTile.setAttribute('draggable', 'true');
+        
+        const eyeSvg = isHidden 
+            ? `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
+            : `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+
+        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span> ${eyeSvg}`;
+        
+        const hideBtn = folderTile.querySelector('.hide-icon');
+        hideBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isHidden) {
+                HIDDEN_FOLDERS = HIDDEN_FOLDERS.filter(id => id !== folder.id);
+            } else {
+                HIDDEN_FOLDERS.push(folder.id);
+            }
+            chrome.storage.local.set({ [STORAGE_KEY_HIDDEN_FOLDERS]: HIDDEN_FOLDERS }, () => {
+                renderBookmarks(bookmarkTreeNodes);
+            });
+        });
+
         folderTile.addEventListener('click', () => {
             dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
             folderTile.classList.add('active');
             renderBmkPane(folder);
         });
+
+        // Folder tile drag events for sorting folders
+        folderTile.addEventListener('dragstart', handleItemDragStart);
+        folderTile.addEventListener('dragover', handleItemDragOver);
+        folderTile.addEventListener('dragleave', handleItemDragLeave);
+        folderTile.addEventListener('drop', handleItemDrop);
+        folderTile.addEventListener('dragend', handleItemDragEnd);
         
         dirPane.appendChild(folderTile);
     });
 
+    // Automatically select the first visible folder
+    const firstTile = dirPane.querySelector('.folder-tile');
+    if (firstTile) {
+        firstTile.classList.add('active');
+        const firstFolderId = firstTile.dataset.id;
+        const firstFolder = allFolders.find(f => f.id === firstFolderId);
+        if (firstFolder) renderBmkPane(firstFolder);
+    }
+
+    // Add "Manage Hidden Folders" toggle at the bottom of the left pane
+    if (HIDDEN_FOLDERS.length > 0) {
+        const toggleHiddenBtn = document.createElement('div');
+        toggleHiddenBtn.className = 'toggle-hidden-btn';
+        toggleHiddenBtn.innerHTML = SHOW_HIDDEN_FOLDERS ? '隐藏已折叠目录' : `显示已折叠目录 (${HIDDEN_FOLDERS.length})`;
+        
+        toggleHiddenBtn.addEventListener('click', () => {
+            SHOW_HIDDEN_FOLDERS = !SHOW_HIDDEN_FOLDERS;
+            renderBookmarks(bookmarkTreeNodes);
+        });
+        
+        // Wrap the original dirPane content in a scrollable div and put this button at the bottom fixed
+        // or just append it as the last item in the grid, spanning both columns.
+        toggleHiddenBtn.style.gridColumn = '1 / -1';
+        dirPane.appendChild(toggleHiddenBtn);
+    }
     if (allFolders.length > 0) {
         renderBmkPane(allFolders[0]);
     }
