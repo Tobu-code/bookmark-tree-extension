@@ -9,5 +9,8 @@
 - **Content**: Fixed garbled characters (`â¤¢`) showing on the card expand button on hover by replacing the literal character `⤢` with its CSS unicode escape sequence `\2922`.
 - **Type**: BugFix (Flat Mode Layout)
 - **Content**: Increased horizontal gaps `gap: 16px 32px;` and right-padding in the flat-mode `.directory-pane` to create a safe corridor. This prevents the mouse from accidentally triggering a hover switch to the second-column folders when the user moves diagonally from the first column into the bookmarks list pane.
-- **Type**: Optimization (UI/UX)
-- **Content**: Unified the hover animation of the layout toggle button to match the settings button. Both now use `transform: rotate(45deg)` instead of mixing scaling and rotation.
+- **Type**: Optimization (Visual quality)
+- **Content**: Implemented three advanced aesthetic refinements: 
+  - 1. Added a subtle top gradient to the main container to improve date and search bar readability on bright backgrounds.
+  - 2. Applied `drop-shadow` to bookmark icons to give them better depth and visual separation.
+  - 3. Added a "Hover Focus" effect that slightly dims un-hovered items in the directory and bookmark panes, enhancing focus on the current target.
