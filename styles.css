@@ -636,11 +636,11 @@ body.search-active #search-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content;
-    gap: 12px;
+    gap: 16px; /* Wider gaps between folder tiles */
     overflow-y: auto;
-    padding-right: 24px; /* More breathing room before separator */
-    border-right: 1px solid rgba(0, 0, 0, 0.06); /* Item 1: Subtle vertical separator */
-    /* Item 4: Bottom fade mask for scroll hint */
+    padding-right: 24px;
+    padding-top: 60px; /* Offset to align with bookmark cards (below the right-side header) */
+    border-right: 1px solid rgba(0, 0, 0, 0.06);
     -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }
