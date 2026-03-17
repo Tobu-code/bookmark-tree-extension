@@ -653,10 +653,13 @@ body.search-active #search-container {
     flex: 1;
     background: transparent;
     padding: 24px;
-    padding-top: 0; /* Item 11: Align top with left pane */
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    /* Fix Chrome backdrop-filter scroll compositing bug */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 
@@ -791,12 +794,15 @@ body.search-active #search-container {
     background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.25); /* Bright glass edge */
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 16px;
     padding: 12px;
     margin-bottom: 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* Fix Chrome scroll compositing bug with backdrop-filter */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
