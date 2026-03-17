@@ -639,7 +639,7 @@ body.search-active #search-container {
     gap: 16px; /* Wider gaps between folder tiles */
     overflow-y: auto;
     padding-right: 24px;
-    padding-top: 60px; /* Offset to align with bookmark cards (below the right-side header) */
+    padding-top: 0; /* Header provides the vertical offset now */
     border-right: 1px solid rgba(0, 0, 0, 0.06);
     -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
@@ -821,7 +821,41 @@ body.search-active #search-container {
 .bookmarks-pane-grid .leaf-node {
     padding: 4px;
     display: flex;
-    flex-direction: column; /* Stack icon row + URL preview vertically */
+    flex-direction: column;
+    /* Reset tree-mode hover effects that cause the double-border */
+    border-left: none !important;
+    transform: none !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    border-left: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Left pane title header */
+.directory-pane-header {
+    grid-column: 1 / -1; /* Span both columns */
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.directory-pane-header span {
+    margin-left: 10px;
 }
 
 /* Item 8: URL preview line below the bookmark title */

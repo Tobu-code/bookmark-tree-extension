@@ -238,6 +238,12 @@ function renderTreeBookmarks(bookmarkTreeNodes, container) {
 function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
+
+    // Add "书签目录" title header to the left pane
+    const dirHeader = document.createElement('div');
+    dirHeader.className = 'directory-pane-header';
+    dirHeader.innerHTML = `${FOLDER_ICON_SVG} <span>书签目录</span>`;
+    dirPane.appendChild(dirHeader);
     
     const bmkPane = document.createElement('div');
     bmkPane.className = 'bookmarks-pane';
