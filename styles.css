@@ -711,7 +711,7 @@ body.search-active #search-container {
     box-shadow: 0 2px 8px rgba(217, 119, 87, 0.1);
 }
 
-.folder-tile:active {
+.folder-tile:not(:has(.hide-icon:hover)):active {
     transform: scale(0.97);
     transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -842,7 +842,7 @@ body.search-active #search-container {
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
 }
 
-.bookmarks-pane-grid .leaf-wrapper:active {
+.bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
     transform: scale(0.97);
     transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -1007,6 +1007,9 @@ body.search-active #search-container {
 
 .bookmark-card:active {
     cursor: grabbing;
+}
+
+.bookmark-card:not(:has(.expand-btn:hover, .card-content:hover)):active {
     transform: scale(0.97);
     transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
