@@ -636,9 +636,9 @@ body.search-active #search-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content;
-    gap: 16px;
+    gap: 16px 32px; /* Increased horizontal gap for safe hover path */
     overflow-y: auto;
-    padding-right: 24px;
+    padding-right: 32px; /* Increased right padding to create a wider safe corridor */
     padding-top: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.06);
     -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
