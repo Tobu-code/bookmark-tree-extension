@@ -621,6 +621,114 @@ body.search-active #search-container {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+/* --- Flat Layout (Split Pane) --- */
+#bookmarks-tree.layout-flat {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 10px 20px;
+}
+
+.directory-pane {
+    width: 250px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.bookmarks-pane {
+    flex: 1;
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+:root[data-theme="dark"] .bookmarks-pane {
+    border-color: rgba(217, 119, 87, 0.08);
+}
+
+.folder-tile {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--text-color);
+}
+
+.folder-tile:hover {
+    background: rgba(174, 86, 48, 0.08); /* Theme primary faint */
+}
+
+.folder-tile.active {
+    background: rgba(174, 86, 48, 0.15);
+    font-weight: 600;
+}
+
+:root[data-theme="dark"] .folder-tile:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+
+:root[data-theme="dark"] .folder-tile.active {
+    background: rgba(217, 119, 87, 0.3);
+}
+
+.folder-tile-title {
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 15px;
+}
+
+.bookmarks-pane-header {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.bookmarks-pane-header span {
+    margin-left: 10px;
+}
+
+.bookmarks-pane-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Scrollbars for panes */
+.directory-pane::-webkit-scrollbar,
+.bookmarks-pane::-webkit-scrollbar {
+    width: 6px;
+}
+.directory-pane::-webkit-scrollbar-thumb,
+.bookmarks-pane::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+:root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb,
+:root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */
 .top-level-container {
     display: grid;

@@ -8,6 +8,7 @@ const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
 const STORAGE_KEY_FREQUENT_DATA = 'frequent_bookmarks_data';
 const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
+const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const FREQUENT_BOOKMARK_COUNT = 6;
 const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
@@ -25,7 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
-            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY
+            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY,
+            STORAGE_KEY_LAYOUT_MODE
         ]),
         getBookmarks()
     ]);
@@ -51,6 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
         HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
     }
+
+    if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
+    else LAYOUT_MODE = 'tree';
 
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
@@ -121,10 +126,31 @@ const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill=
 
 // --- Bookmarks Logic ---
 
+function flattenFolders(node, folders = []) {
+    if (node.children) {
+        if (node.id && node.id !== '0' && node.id !== '1' && node.title) {
+            folders.push(node);
+        }
+        node.children.forEach(child => flattenFolders(child, folders));
+    }
+    return folders;
+}
+
 function renderBookmarks(bookmarkTreeNodes) {
     const container = document.getElementById('bookmarks-tree');
     container.innerHTML = ''; // Clear previous
+    container.className = 'tree-view'; // reset
 
+    if (LAYOUT_MODE === 'flat') {
+        container.classList.add('layout-flat');
+        renderFlatBookmarks(bookmarkTreeNodes, container);
+    } else {
+        container.classList.add('layout-tree');
+        renderTreeBookmarks(bookmarkTreeNodes, container);
+    }
+}
+
+function renderTreeBookmarks(bookmarkTreeNodes, container) {
     // Create a wrapper for top-level columns
     const topLevelContainer = document.createElement('div');
     topLevelContainer.className = 'top-level-container';
@@ -151,6 +177,71 @@ function renderBookmarks(bookmarkTreeNodes) {
                 topLevelContainer.appendChild(card);
             }
         });
+    }
+}
+
+function renderFlatBookmarks(bookmarkTreeNodes, container) {
+    const dirPane = document.createElement('div');
+    dirPane.className = 'directory-pane';
+    
+    const bmkPane = document.createElement('div');
+    bmkPane.className = 'bookmarks-pane';
+    
+    container.appendChild(dirPane);
+    container.appendChild(bmkPane);
+
+    const rootNode = bookmarkTreeNodes[0];
+    let bookmarksBar = rootNode.children.find(node => node.id === '1') || rootNode.children[0];
+
+    const allFolders = [];
+    if (bookmarksBar) {
+        // Make the bookmarks bar the first selectable folder
+        const rootFolder = Object.assign({}, bookmarksBar);
+        rootFolder.title = "书签栏";
+        allFolders.push(rootFolder);
+        
+        // Recursively find all other folders
+        bookmarksBar.children.forEach(child => flattenFolders(child, allFolders));
+    }
+
+    const renderBmkPane = (folder) => {
+        bmkPane.innerHTML = '';
+        if (!folder || !folder.children) return;
+        
+        const header = document.createElement('div');
+        header.className = 'bookmarks-pane-header';
+        header.innerHTML = `${FOLDER_ICON_SVG} <span>${folder.title}</span>`;
+        bmkPane.appendChild(header);
+
+        const listContainer = document.createElement('div');
+        listContainer.className = 'bookmarks-pane-list';
+
+        folder.children.forEach(child => {
+            // Render bookmarks as modal-style list items to save space
+            // If it's a folder, it will still render its children recursively unless we stop it.
+            // renderTreeItemForModal handles folders by making them collapsible.
+            listContainer.appendChild(renderTreeItemForModal(child));
+        });
+        
+        bmkPane.appendChild(listContainer);
+    };
+
+    allFolders.forEach((folder, index) => {
+        const folderTile = document.createElement('div');
+        folderTile.className = 'folder-tile' + (index === 0 ? ' active' : '');
+        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span>`;
+        
+        folderTile.addEventListener('click', () => {
+            dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
+            folderTile.classList.add('active');
+            renderBmkPane(folder);
+        });
+        
+        dirPane.appendChild(folderTile);
+    });
+
+    if (allFolders.length > 0) {
+        renderBmkPane(allFolders[0]);
     }
 }
 
@@ -1204,6 +1295,7 @@ let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
 let CURRENT_CONTAINER_BLUR = 15; // 默认15px (档位3)
 let HOVER_DELAY = 300; // 默认300ms
+let LAYOUT_MODE = 'tree'; // 'tree' or 'flat'
 
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
@@ -1227,10 +1319,10 @@ function initSettingsUI(settings) {
     const btn = document.getElementById('settings-btn');
     const close = document.getElementById('close-modal');
 
-    // Inputs
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
+    const layoutModeInputs = document.getElementsByName('layout-mode');
 
     // Background Inputs
     const bgUpload = document.getElementById('bg-image-upload');
@@ -1295,6 +1387,25 @@ function initSettingsUI(settings) {
         // Initial state
         if (settings[STORAGE_KEY_ICON_STYLE] && radio.value === settings[STORAGE_KEY_ICON_STYLE]) {
             radio.checked = true;
+        }
+    });
+
+    // 4. Layout Mode
+    layoutModeInputs.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                LAYOUT_MODE = radio.value;
+                saveSetting(STORAGE_KEY_LAYOUT_MODE, LAYOUT_MODE);
+                // Re-render bookmarks
+                chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+            }
+        });
+
+        // Initial state
+        if (settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === settings[STORAGE_KEY_LAYOUT_MODE]) {
+            radio.checked = true;
+        } else if (!settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === 'tree') {
+            radio.checked = true; // Default
         }
     });
 

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-03-17
+
+### Features
+- **Layout**: 新增“平铺模式” (Tile Mode) 布局选项，采用左右分栏设计（左侧目录卡片，右侧直接展示书签），提高无缝浏览体验。
+
 ## [2.0.0] - 2026-01-26
 
 ### Major Update
