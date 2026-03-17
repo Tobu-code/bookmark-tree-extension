@@ -630,11 +630,12 @@ body.search-active #search-container {
 }
 
 .directory-pane {
-    width: 320px;
+    width: 480px; /* Significantly wider left pane */
     flex-shrink: 0;
-    display: flex; /* Revert to flex for a spacious single column */
-    flex-direction: column;
-    gap: 12px; /* Increased gap for breathing room */
+    display: grid; /* Revert to grid for double column */
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    gap: 12px; /* Keep the increased gap for breathing room */
     overflow-y: auto;
     padding-right: 12px;
 }
@@ -750,7 +751,7 @@ body.search-active #search-container {
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Slightly smaller min-width for grid */
     gap: 20px; /* Increased gap */
     align-content: start;
 }
