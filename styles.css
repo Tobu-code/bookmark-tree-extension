@@ -711,6 +711,11 @@ body.search-active #search-container {
     box-shadow: 0 2px 8px rgba(217, 119, 87, 0.1);
 }
 
+.folder-tile:active {
+    transform: scale(0.97);
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 :root[data-theme="dark"] .folder-tile.active {
     background: rgba(217, 119, 87, 0.12);
     color: var(--primary-color);
@@ -835,6 +840,11 @@ body.search-active #search-container {
     background: rgba(40, 35, 50, 0.55);
     border-color: rgba(217, 119, 87, 0.4);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
+}
+
+.bookmarks-pane-grid .leaf-wrapper:active {
+    transform: scale(0.97);
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .bookmarks-pane-grid .leaf-node {
@@ -997,6 +1007,8 @@ body.search-active #search-container {
 
 .bookmark-card:active {
     cursor: grabbing;
+    transform: scale(0.97);
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .card-header {
