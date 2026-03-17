@@ -214,13 +214,44 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         bmkPane.appendChild(header);
 
         const listContainer = document.createElement('div');
-        listContainer.className = 'bookmarks-pane-list';
+        listContainer.className = 'bookmarks-pane-grid';
 
         folder.children.forEach(child => {
-            // Render bookmarks as modal-style list items to save space
-            // If it's a folder, it will still render its children recursively unless we stop it.
-            // renderTreeItemForModal handles folders by making them collapsible.
-            listContainer.appendChild(renderTreeItemForModal(child));
+            if (child.children) {
+                // Render sub-folder as a large tile
+                const folderIcon = document.createElement('div');
+                folderIcon.className = 'flat-folder-item';
+                
+                // Draggable props
+                folderIcon.setAttribute('draggable', 'true');
+                folderIcon.dataset.id = child.id;
+                folderIcon.dataset.parentId = child.parentId;
+                folderIcon.dataset.type = 'folder';
+                
+                folderIcon.innerHTML = `${FOLDER_ICON_SVG} <span class="flat-item-title">${child.title}</span>`;
+                
+                folderIcon.addEventListener('click', () => {
+                    // Click on folder tile inside the right pane selects it on the left pane
+                    const tile = dirPane.querySelector(`.folder-tile[data-id="${child.id}"]`);
+                    if (tile) {
+                        tile.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        tile.click();
+                    }
+                });
+                
+                // Optional: drag events for folder tiles
+                folderIcon.addEventListener('dragstart', handleItemDragStart);
+                folderIcon.addEventListener('dragover', handleItemDragOver);
+                folderIcon.addEventListener('dragleave', handleItemDragLeave);
+                folderIcon.addEventListener('drop', handleItemDrop);
+                folderIcon.addEventListener('dragend', handleItemDragEnd);
+
+                listContainer.appendChild(folderIcon);
+            } else {
+                // Render bookmark using standard item rendering which gives us `.leaf-wrapper`
+                const bmkItem = renderTreeItem(child);
+                listContainer.appendChild(bmkItem);
+            }
         });
         
         bmkPane.appendChild(listContainer);
@@ -229,6 +260,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     allFolders.forEach((folder, index) => {
         const folderTile = document.createElement('div');
         folderTile.className = 'folder-tile' + (index === 0 ? ' active' : '');
+        folderTile.dataset.id = folder.id;
         folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span>`;
         
         folderTile.addEventListener('click', () => {

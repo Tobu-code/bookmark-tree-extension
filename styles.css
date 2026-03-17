@@ -708,10 +708,59 @@ body.search-active #search-container {
     margin-left: 10px;
 }
 
-.bookmarks-pane-list {
+.bookmarks-pane-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    align-content: start;
+}
+
+.flat-folder-item {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+}
+
+.flat-folder-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--card-hover);
+}
+
+.flat-item-title {
+    margin-left: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+}
+
+/* Style the leaf-wrapper inside the grid to look like a card */
+.bookmarks-pane-grid .leaf-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 6px 8px; 
+    margin-bottom: 0;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+}
+
+.bookmarks-pane-grid .leaf-wrapper:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--card-hover);
+}
+
+.bookmarks-pane-grid .leaf-node {
+    padding: 8px; /* Give more padding inside to make it a better click target */
 }
 
 /* Scrollbars for panes */
