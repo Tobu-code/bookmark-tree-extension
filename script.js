@@ -221,12 +221,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
     const allFolders = [];
     if (bookmarksBar) {
-        // Make the bookmarks bar the first selectable folder
-        const rootFolder = Object.assign({}, bookmarksBar);
-        rootFolder.title = "书签栏";
-        allFolders.push(rootFolder);
-        
-        // Recursively find all other folders
+        // Only flatten child folders — the bookmarks bar itself is a container, not a user folder
         bookmarksBar.children.forEach(child => flattenFolders(child, allFolders));
     }
 
