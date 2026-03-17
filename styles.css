@@ -715,32 +715,6 @@ body.search-active #search-container {
     align-content: start;
 }
 
-.flat-folder-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
-}
-
-.flat-folder-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    background: var(--card-hover);
-}
-
-.flat-item-title {
-    margin-left: 10px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--text-color);
-}
 
 /* Style the leaf-wrapper inside the grid to look like a card */
 .bookmarks-pane-grid .leaf-wrapper {

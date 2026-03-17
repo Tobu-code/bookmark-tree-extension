@@ -126,12 +126,19 @@ const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill=
 
 // --- Bookmarks Logic ---
 
-function flattenFolders(node, folders = []) {
+function flattenFolders(node, folders = [], path = []) {
     if (node.children) {
+        let currentPath = [...path];
+        if (node.title) {
+             currentPath.push(node.title);
+        }
+
         if (node.id && node.id !== '0' && node.id !== '1' && node.title) {
+            // Store the full path joined by separator for display
+            node._fullPath = currentPath.join(' / ');
             folders.push(node);
         }
-        node.children.forEach(child => flattenFolders(child, folders));
+        node.children.forEach(child => flattenFolders(child, folders, currentPath));
     }
     return folders;
 }
@@ -210,44 +217,16 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         
         const header = document.createElement('div');
         header.className = 'bookmarks-pane-header';
-        header.innerHTML = `${FOLDER_ICON_SVG} <span>${folder.title}</span>`;
+        const displayTitle = folder._fullPath || folder.title;
+        header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
         bmkPane.appendChild(header);
 
         const listContainer = document.createElement('div');
         listContainer.className = 'bookmarks-pane-grid';
 
         folder.children.forEach(child => {
-            if (child.children) {
-                // Render sub-folder as a large tile
-                const folderIcon = document.createElement('div');
-                folderIcon.className = 'flat-folder-item';
-                
-                // Draggable props
-                folderIcon.setAttribute('draggable', 'true');
-                folderIcon.dataset.id = child.id;
-                folderIcon.dataset.parentId = child.parentId;
-                folderIcon.dataset.type = 'folder';
-                
-                folderIcon.innerHTML = `${FOLDER_ICON_SVG} <span class="flat-item-title">${child.title}</span>`;
-                
-                folderIcon.addEventListener('click', () => {
-                    // Click on folder tile inside the right pane selects it on the left pane
-                    const tile = dirPane.querySelector(`.folder-tile[data-id="${child.id}"]`);
-                    if (tile) {
-                        tile.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        tile.click();
-                    }
-                });
-                
-                // Optional: drag events for folder tiles
-                folderIcon.addEventListener('dragstart', handleItemDragStart);
-                folderIcon.addEventListener('dragover', handleItemDragOver);
-                folderIcon.addEventListener('dragleave', handleItemDragLeave);
-                folderIcon.addEventListener('drop', handleItemDrop);
-                folderIcon.addEventListener('dragend', handleItemDragEnd);
-
-                listContainer.appendChild(folderIcon);
-            } else {
+            // ONLY render leaf bookmark nodes in the right pane. Directories are already on the left.
+            if (!child.children) {
                 // Render bookmark using standard item rendering which gives us `.leaf-wrapper`
                 const bmkItem = renderTreeItem(child);
                 listContainer.appendChild(bmkItem);
