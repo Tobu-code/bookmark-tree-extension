@@ -663,6 +663,8 @@ body.search-active #search-container {
     /* Fix Chrome backdrop-filter scroll compositing bug */
     will-change: transform;
     transform: translateZ(0);
+    /* Smooth fade transition for hover-to-switch */
+    transition: opacity 0.12s ease-out, transform 0.12s ease-out;
 }
 
 
