@@ -307,8 +307,15 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         // Sort bookmarks by click frequency if enabled
         let childrenToRender = folder.children.filter(child => !child.children);
+        
+        // Append container synchronously to prevent race conditions during rapid re-renders
+        bmkPane.appendChild(listContainer);
+
         if (AUTO_SORT_BY_FREQUENCY) {
             chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
+                // If container is no longer in DOM (e.g., layout switched rapidly), abort
+                if (!document.body.contains(listContainer)) return;
+                
                 const freqData = result[STORAGE_KEY_FREQUENT_DATA] || {};
                 childrenToRender.sort((a, b) => {
                     const freqA = (freqData[a.url] && freqData[a.url].clickCount) || 0;
@@ -316,11 +323,9 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                     return freqB - freqA;
                 });
                 renderBookmarkItems(childrenToRender, listContainer, folder);
-                bmkPane.appendChild(listContainer);
             });
         } else {
             renderBookmarkItems(childrenToRender, listContainer, folder);
-            bmkPane.appendChild(listContainer);
         }
     };
 
