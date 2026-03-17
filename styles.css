@@ -630,21 +630,29 @@ body.search-active #search-container {
 }
 
 .directory-pane {
-    width: 480px; /* Significantly wider left pane */
+    width: 480px;
     flex-shrink: 0;
-    display: grid; /* Revert to grid for double column */
+    display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content;
-    gap: 12px; /* Keep the increased gap for breathing room */
+    gap: 12px;
     overflow-y: auto;
-    padding-right: 12px;
+    padding-right: 24px; /* More breathing room before separator */
+    border-right: 1px solid rgba(0, 0, 0, 0.06); /* Item 1: Subtle vertical separator */
+    /* Item 4: Bottom fade mask for scroll hint */
+    -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+}
+
+:root[data-theme="dark"] .directory-pane {
+    border-right-color: rgba(255, 255, 255, 0.06);
 }
 
 .bookmarks-pane {
     flex: 1;
-    /* Removed the solid background and border to let the wallpaper shine through */
     background: transparent;
     padding: 24px;
+    padding-top: 0; /* Item 11: Align top with left pane */
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -741,8 +749,12 @@ body.search-active #search-container {
     color: var(--text-color);
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid var(--border-color);
-    /* Reverted pill styling, made it a clean separator */
+    /* Item 6: Soft gradient separator instead of hard line */
+    border-bottom: none;
+    background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    background-position: bottom;
 }
 
 .bookmarks-pane-header span {
@@ -757,43 +769,90 @@ body.search-active #search-container {
 }
 
 
-/* Style the leaf-wrapper inside the grid to look like a glassmorphism card */
+/* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: var(--bg-overlay);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.25); /* Bright glass edge */
     border-radius: 16px;
-    padding: 12px; 
+    padding: 12px;
     margin-bottom: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+:root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
+    background: rgba(40, 35, 50, 0.45);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    background: var(--bg-overlay); /* Keep the glass effect */
-    border-color: var(--primary-color);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(174, 86, 48, 0.3);
+    background: rgba(255, 255, 255, 0.45);
+    border-color: rgba(174, 86, 48, 0.4); /* Glow with theme primary */
+}
+
+:root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
+    background: rgba(40, 35, 50, 0.55);
+    border-color: rgba(217, 119, 87, 0.4);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 4px; /* Adjust padding since the wrapper is now the card */
+    padding: 4px;
+    display: flex;
+    flex-direction: column; /* Stack icon row + URL preview vertically */
 }
 
-/* Scrollbars for panes */
+/* Item 8: URL preview line below the bookmark title */
+.bookmarks-pane-grid .leaf-node .bookmark-url-preview {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary, #888);
+    opacity: 0.55;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 28px; /* Align with the label (icon width + margin) */
+}
+
+/* Item 9: Fallback letter avatar for missing favicons */
+.bookmark-icon-fallback {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    vertical-align: middle;
+    text-transform: uppercase;
+}
+
+/* Item 12: Ultra-slim scrollbar with transparent track */
 .directory-pane::-webkit-scrollbar,
 .bookmarks-pane::-webkit-scrollbar {
-    width: 6px;
+    width: 4px; /* Slimmer */
+}
+.directory-pane::-webkit-scrollbar-track,
+.bookmarks-pane::-webkit-scrollbar-track {
+    background: transparent; /* Invisible track */
 }
 .directory-pane::-webkit-scrollbar-thumb,
 .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
 :root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb,
 :root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */

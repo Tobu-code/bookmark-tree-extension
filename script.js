@@ -137,7 +137,7 @@ function preloadImage(url) {
 
 
 
-const FOLDER_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+const FOLDER_ICON_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
 const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); vertical-align: middle; flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
 
 // --- Bookmarks Logic ---
@@ -237,7 +237,15 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const header = document.createElement('div');
         header.className = 'bookmarks-pane-header';
         const displayTitle = folder._fullPath || folder.title;
-        header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
+        // Item 5: Style breadcrumb - dim separators, bold last segment
+        const parts = displayTitle.split(' / ');
+        if (parts.length > 1) {
+            const lastPart = parts.pop();
+            const pathHtml = parts.map(p => `<span style="color: var(--text-secondary); font-weight: 400;">${p}</span>`).join('<span style="color: var(--text-secondary); opacity: 0.4; margin: 0 6px;">›</span>');
+            header.innerHTML = `${FOLDER_ICON_SVG} <span>${pathHtml}<span style="color: var(--text-secondary); opacity: 0.4; margin: 0 6px;">›</span><span style="color: var(--text-color); font-weight: bold;">${lastPart}</span></span>`;
+        } else {
+            header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
+        }
         bmkPane.appendChild(header);
 
         const listContainer = document.createElement('div');
@@ -269,6 +277,21 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 bmkItem.addEventListener('dragleave', handleItemDragLeave);
                 bmkItem.addEventListener('drop', handleItemDrop);
                 bmkItem.addEventListener('dragend', handleItemDragEnd);
+
+                // Item 8: Add URL preview line below the title
+                if (child.url) {
+                    const leafNode = bmkItem.querySelector('.leaf-node');
+                    if (leafNode) {
+                        const urlPreview = document.createElement('span');
+                        urlPreview.className = 'bookmark-url-preview';
+                        try {
+                            urlPreview.textContent = new URL(child.url).hostname;
+                        } catch (e) {
+                            urlPreview.textContent = child.url.substring(0, 40);
+                        }
+                        leafNode.appendChild(urlPreview);
+                    }
+                }
 
                 listContainer.appendChild(bmkItem);
             }
@@ -421,11 +444,27 @@ function createBookmarkIcon(iconData, size = 16) {
         img.src = iconData.src;
         img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
         img.addEventListener('error', function () {
-            const span = document.createElement('span');
-            span.className = 'bookmark-icon';
-            span.style.cssText = `font-size:${size}px;margin-right:8px;`;
-            span.textContent = '🔖';
-            this.replaceWith(span);
+            // Item 9: Generate a letter avatar fallback instead of generic emoji
+            const url = this.closest('a')?.href || '';
+            let letter = '?';
+            let bgColor = '#888';
+            try {
+                const hostname = new URL(url).hostname.replace('www.', '');
+                letter = hostname.charAt(0).toUpperCase();
+                // Generate a consistent color from the hostname
+                let hash = 0;
+                for (let i = 0; i < hostname.length; i++) {
+                    hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const h = Math.abs(hash) % 360;
+                bgColor = `hsl(${h}, 55%, 55%)`;
+            } catch (e) {}
+            const avatar = document.createElement('span');
+            avatar.className = 'bookmark-icon-fallback';
+            avatar.style.backgroundColor = bgColor;
+            avatar.textContent = letter;
+            avatar.style.marginRight = '8px';
+            this.replaceWith(avatar);
         });
         return img;
     } else if (iconData.type === 'svg') {
