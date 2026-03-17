@@ -819,14 +819,30 @@ body.search-active #search-container {
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 4px;
+    padding: 8px 4px;
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center all children horizontally */
+    text-align: center;
     /* Reset tree-mode hover effects that cause the double-border */
     border-left: none !important;
     transform: none !important;
     background: none !important;
     box-shadow: none !important;
+}
+
+/* Center the icon inside the card */
+.bookmarks-pane-grid .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
+    margin-right: 0 !important; /* Remove horizontal-layout margin */
+    margin-bottom: 6px;
+}
+
+/* Center the label */
+.bookmarks-pane-grid .leaf-node .bookmark-label {
+    margin-bottom: 2px;
+    text-align: center;
+    max-width: 100%;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
@@ -864,11 +880,13 @@ body.search-active #search-container {
     font-size: 11px;
     color: var(--text-secondary, #888);
     opacity: 0.55;
-    margin-top: 4px;
+    margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-left: 28px; /* Align with the label (icon width + margin) */
+    padding-left: 0; /* Centered layout, no offset needed */
+    text-align: center;
+    max-width: 100%;
 }
 
 /* Item 9: Fallback letter avatar for missing favicons */
