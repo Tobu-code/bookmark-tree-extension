@@ -10,6 +10,8 @@ const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
+const STORAGE_KEY_AUTO_SORT = 'settings_auto_sort_by_frequency';
+const STORAGE_KEY_FOLDER_FREQ_DATA = 'folder_frequency_data';
 const FREQUENT_BOOKMARK_COUNT = 6;
 const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
@@ -25,6 +27,8 @@ let HOVER_DELAY = 100;
 let LAYOUT_MODE = 'tree';
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
+let AUTO_SORT_BY_FREQUENCY = false;
+let FOLDER_FREQ_DATA = {};
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. UI Initialization (Sync)
@@ -41,7 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY,
-            STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS
+            STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
+            STORAGE_KEY_AUTO_SORT, STORAGE_KEY_FOLDER_FREQ_DATA
         ]),
         getBookmarks()
     ]);
@@ -73,6 +78,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
     else HIDDEN_FOLDERS = [];
+
+    AUTO_SORT_BY_FREQUENCY = settings[STORAGE_KEY_AUTO_SORT] === true;
+    FOLDER_FREQ_DATA = settings[STORAGE_KEY_FOLDER_FREQ_DATA] || {};
 
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
@@ -260,6 +268,15 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         bookmarksBar.children.forEach(child => flattenFolders(child, allFolders));
     }
 
+    // Sort folders by click frequency if enabled
+    if (AUTO_SORT_BY_FREQUENCY && Object.keys(FOLDER_FREQ_DATA).length > 0) {
+        allFolders.sort((a, b) => {
+            const freqA = (FOLDER_FREQ_DATA[a.id] && FOLDER_FREQ_DATA[a.id].clickCount) || 0;
+            const freqB = (FOLDER_FREQ_DATA[b.id] && FOLDER_FREQ_DATA[b.id].clickCount) || 0;
+            return freqB - freqA;
+        });
+    }
+
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
@@ -288,9 +305,28 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         listContainer.addEventListener('dragleave', handleItemDragLeave);
         listContainer.addEventListener('drop', handleItemDrop);
 
-        folder.children.forEach(child => {
-            // ONLY render leaf bookmark nodes in the right pane. Directories are already on the left.
-            if (!child.children) {
+        // Sort bookmarks by click frequency if enabled
+        let childrenToRender = folder.children.filter(child => !child.children);
+        if (AUTO_SORT_BY_FREQUENCY) {
+            chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
+                const freqData = result[STORAGE_KEY_FREQUENT_DATA] || {};
+                childrenToRender.sort((a, b) => {
+                    const freqA = (freqData[a.url] && freqData[a.url].clickCount) || 0;
+                    const freqB = (freqData[b.url] && freqData[b.url].clickCount) || 0;
+                    return freqB - freqA;
+                });
+                renderBookmarkItems(childrenToRender, listContainer, folder);
+                bmkPane.appendChild(listContainer);
+            });
+        } else {
+            renderBookmarkItems(childrenToRender, listContainer, folder);
+            bmkPane.appendChild(listContainer);
+        }
+    };
+
+    // Helper to render bookmark items into the grid container
+    const renderBookmarkItems = (children, listContainer, folder) => {
+        children.forEach(child => {
                 // Render bookmark using standard item rendering which gives us `.leaf-wrapper`
                 const bmkItem = renderTreeItem(child);
                 
@@ -324,10 +360,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 }
 
                 listContainer.appendChild(bmkItem);
-            }
         });
-        
-        bmkPane.appendChild(listContainer);
     };
 
     allFolders.forEach((folder) => {
@@ -366,6 +399,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         folderTile.addEventListener('click', () => {
             dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
             folderTile.classList.add('active');
+            // Track folder click frequency
+            trackFolderClick(folder.id, folder.title);
             renderBmkPane(folder);
         });
 
@@ -1582,6 +1617,16 @@ function initSettingsUI(settings) {
         }
     });
 
+    // 4.5 Auto-Sort by Frequency
+    const autoSortToggle = document.getElementById('auto-sort-toggle');
+    autoSortToggle.checked = AUTO_SORT_BY_FREQUENCY;
+    autoSortToggle.addEventListener('change', () => {
+        AUTO_SORT_BY_FREQUENCY = autoSortToggle.checked;
+        saveSetting(STORAGE_KEY_AUTO_SORT, AUTO_SORT_BY_FREQUENCY);
+        // Re-render to apply/remove sorting
+        chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+    });
+
     // 4. Background Settings
 
     // 更新模糊控制的启用/禁用状态
@@ -2365,6 +2410,28 @@ function trackBookmarkClick(url, title) {
         } else {
             chrome.storage.local.set({ [STORAGE_KEY_FREQUENT_DATA]: frequentData });
         }
+    });
+}
+
+/**
+ * Get top N frequent bookmarks sorted by Frecency score
+ */
+
+/**
+ * Track folder click frequency for auto-sort feature
+ */
+function trackFolderClick(folderId, title) {
+    chrome.storage.local.get([STORAGE_KEY_FOLDER_FREQ_DATA], (result) => {
+        const data = result[STORAGE_KEY_FOLDER_FREQ_DATA] || {};
+        if (data[folderId]) {
+            data[folderId].clickCount += 1;
+            data[folderId].lastClickTime = Date.now();
+            data[folderId].title = title;
+        } else {
+            data[folderId] = { title, clickCount: 1, lastClickTime: Date.now() };
+        }
+        FOLDER_FREQ_DATA = data;
+        chrome.storage.local.set({ [STORAGE_KEY_FOLDER_FREQ_DATA]: data });
     });
 }
 
