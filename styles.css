@@ -649,7 +649,7 @@ body.search-active #search-container {
 }
 
 :root[data-theme="dark"] .directory-pane {
-    border-right-color: rgba(255, 255, 255, 0.06);
+    border-right-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
@@ -801,6 +801,10 @@ body.search-active #search-container {
     background-position: bottom;
 }
 
+:root[data-theme="dark"] .bookmarks-pane-header {
+    background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
+}
+
 .bookmarks-pane-header span {
     margin-left: 10px;
 }
@@ -915,6 +919,10 @@ body.search-active #search-container {
     background-size: 100% 1px;
     background-repeat: no-repeat;
     background-position: bottom;
+}
+
+:root[data-theme="dark"] .directory-pane-header {
+    background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
 .directory-pane-header span {

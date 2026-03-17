@@ -14,3 +14,5 @@
   - 1. Added a subtle top gradient to the main container to improve date and search bar readability on bright backgrounds.
   - 2. Applied `drop-shadow` to bookmark icons to give them better depth and visual separation.
   - 3. Added a "Hover Focus" effect that slightly dims un-hovered items in the directory and bookmark panes, enhancing focus on the current target.
+- **Type**: Optimization (Flat Mode Dark Mode Adaptation)
+- **Content**: Adapted Flat Mode for better visibility in Dark Mode by reinforcing header separators with brand-themed gradients, increasing pane border opacity, and improving breadcrumb readability.

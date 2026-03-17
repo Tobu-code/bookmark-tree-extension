@@ -288,8 +288,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const parts = displayTitle.split(' / ');
         if (parts.length > 1) {
             const lastPart = parts.pop();
-            const pathHtml = parts.map(p => `<span style="color: var(--text-secondary); font-weight: 400;">${p}</span>`).join('<span style="color: var(--text-secondary); opacity: 0.4; margin: 0 6px;">›</span>');
-            header.innerHTML = `${FOLDER_ICON_SVG} <span>${pathHtml}<span style="color: var(--text-secondary); opacity: 0.4; margin: 0 6px;">›</span><span style="color: var(--text-color); font-weight: bold;">${lastPart}</span></span>`;
+            const pathHtml = parts.map(p => `<span style="color: var(--text-secondary); font-weight: 400;">${p}</span>`).join('<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span>');
+            header.innerHTML = `${FOLDER_ICON_SVG} <span>${pathHtml}<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span><span style="color: var(--text-color); font-weight: bold;">${lastPart}</span></span>`;
         } else {
             header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
         }
