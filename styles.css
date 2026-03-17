@@ -627,6 +627,7 @@ body.search-active #search-container {
     flex-direction: row;
     gap: 20px;
     padding: 10px 20px;
+    align-items: flex-start; /* Align both panes to the same top line */
 }
 
 .directory-pane {
@@ -662,18 +663,34 @@ body.search-active #search-container {
 .folder-tile {
     display: flex;
     align-items: center;
-    padding: 14px 20px; /* Increased padding */
-    border-radius: 14px; /* Slightly larger radius */
+    padding: 14px 20px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s;
-    background: var(--card-bg);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* Glassmorphism — matching tree mode card style */
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     color: var(--text-color);
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .folder-tile {
+    background: rgba(40, 35, 50, 0.45);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .folder-tile:hover {
-    background: var(--card-hover);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-color: rgba(174, 86, 48, 0.2);
+}
+
+:root[data-theme="dark"] .folder-tile:hover {
+    background: rgba(40, 35, 50, 0.6);
+    border-color: rgba(217, 119, 87, 0.2);
 }
 
 .folder-tile.active {
