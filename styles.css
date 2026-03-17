@@ -642,48 +642,42 @@ body.search-active #search-container {
 
 .bookmarks-pane {
     flex: 1;
-    background: var(--bg-overlay);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    /* Removed the solid background and border to let the wallpaper shine through */
+    background: transparent;
     padding: 24px;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
 }
 
-:root[data-theme="dark"] .bookmarks-pane {
-    border-color: rgba(217, 119, 87, 0.08);
-}
 
 .folder-tile {
     display: flex;
     align-items: center;
     padding: 10px 14px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
-    background: transparent;
+    background: var(--card-bg); /* Add slight persistent background to make the pill visible */
     color: var(--text-color);
+    border: 1px solid transparent;
 }
 
 .folder-tile:hover {
-    background: rgba(174, 86, 48, 0.08); /* Theme primary faint */
+    background: var(--card-hover);
+    transform: translateY(-1px);
 }
 
 .folder-tile.active {
-    background: rgba(174, 86, 48, 0.15);
+    background: var(--primary-color);
+    color: white; /* Contrast color for dark primary */
     font-weight: 600;
-}
-
-:root[data-theme="dark"] .folder-tile:hover {
-    background: rgba(217, 119, 87, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 :root[data-theme="dark"] .folder-tile.active {
-    background: rgba(217, 119, 87, 0.3);
+    background: var(--primary-color);
+    color: #fff;
 }
 
 .folder-tile-title {
@@ -739,14 +733,20 @@ body.search-active #search-container {
 }
 
 .bookmarks-pane-header {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 24px;
+    padding: 12px 24px;
+    border-radius: 40px; /* Pill shape */
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    align-self: flex-start; /* Don't stretch the pill across the pane */
 }
 
 .bookmarks-pane-header span {
@@ -761,25 +761,28 @@ body.search-active #search-container {
 }
 
 
-/* Style the leaf-wrapper inside the grid to look like a card */
+/* Style the leaf-wrapper inside the grid to look like a glassmorphism card */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: var(--card-bg);
+    background: var(--bg-overlay);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 6px 8px; 
+    border-radius: 16px;
+    padding: 12px; 
     margin-bottom: 0;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    background: var(--card-hover);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background: var(--bg-overlay); /* Keep the glass effect */
+    border-color: var(--primary-color);
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px; /* Give more padding inside to make it a better click target */
+    padding: 4px; /* Adjust padding since the wrapper is now the card */
 }
 
 /* Scrollbars for panes */
