@@ -13,6 +13,19 @@ const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const FREQUENT_BOOKMARK_COUNT = 6;
 const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
 
+// --- State and Constants ---
+let dragSrcEl = null;
+let OPEN_IN_NEW_TAB = true;
+let CURRENT_ICON_STYLE = 'default';
+let CURRENT_BG_IMAGE = null;
+let CURRENT_BG_BLUR = 0;
+let CURRENT_CONTAINER_BLUR = 0;
+let FREQUENT_ENABLED = true;
+let HOVER_DELAY = 100;
+let LAYOUT_MODE = 'tree';
+let HIDDEN_FOLDERS = [];
+let SHOW_HIDDEN_FOLDERS = false;
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. UI Initialization (Sync)
     initSearch();
@@ -122,8 +135,7 @@ function preloadImage(url) {
     });
 }
 
-// --- State and Constants ---
-let dragSrcEl = null;
+
 
 const FOLDER_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
 const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); vertical-align: middle; flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
@@ -1388,13 +1400,6 @@ function initSearch() {
 // --- Settings Logic (Cleaned) ---
 // Constants are defined at the top of the file
 
-let OPEN_IN_NEW_TAB = false;
-let CURRENT_ICON_STYLE = 'native'; // 'native', 'animals', or 'work'
-let CURRENT_BG_IMAGE = null;
-let CURRENT_BG_BLUR = 0;
-let CURRENT_CONTAINER_BLUR = 15; // 默认15px (档位3)
-let HOVER_DELAY = 300; // 默认300ms
-let LAYOUT_MODE = 'tree'; // 'tree' or 'flat'
 
 // Returns emoji or null for native favicon mode
 function getIconForBookmark(url) {
