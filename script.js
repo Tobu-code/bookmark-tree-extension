@@ -351,9 +351,15 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                         const urlPreview = document.createElement('span');
                         urlPreview.className = 'bookmark-url-preview';
                         try {
-                            urlPreview.textContent = new URL(child.url).hostname;
+                            let hostname = new URL(child.url).hostname.replace(/^www\./, '');
+                            // Simplify long subdomains: keep last 2 levels (e.g. 'laihua.cn')
+                            const parts = hostname.split('.');
+                            if (parts.length > 2 && hostname.length > 20) {
+                                hostname = parts.slice(-2).join('.');
+                            }
+                            urlPreview.textContent = hostname;
                         } catch (e) {
-                            urlPreview.textContent = child.url.substring(0, 40);
+                            urlPreview.textContent = child.url.substring(0, 30);
                         }
                         leafNode.appendChild(urlPreview);
                     }
