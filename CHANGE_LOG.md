@@ -148,3 +148,9 @@
 - **Type**: Optimization (Directory Hover Responsiveness)
 - **Content**: 优化平铺模式目录悬停跟手性：移除目录 hover 延迟定时器，改为进入即高亮并通过 `requestAnimationFrame` 调度内容区渲染，修复快速划过目录时“跳项高亮”导致的不连贯体验。
 - **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 19:11:27 +0800
+- **Type**: Refactor (Follow-Hand Interaction Upgrade)
+- **Content**: 交互体验升级：平铺模式书签卡片选中动效强化并提高跟手响应（更短过渡、更明显边框与阴影反馈）；树状模式子文件夹 hover 展开改为低延迟跟手（延迟上限 40ms）；移除树状模式子文件夹标题前的小箭头图标；同时增大平铺模式右侧列表与滚动条的安全间距，缓解贴边拥挤感。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

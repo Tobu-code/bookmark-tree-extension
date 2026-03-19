@@ -800,7 +800,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane {
     flex: 1;
     background: transparent;
-    padding: 0 4px;
+    padding: 0 18px 0 6px;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -1034,11 +1034,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     box-shadow: 0 8px 24px rgba(44, 33, 22, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.34);
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        opacity 0.3s ease;
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.18s ease;
     will-change: auto;
     transform: none;
 }
@@ -1050,16 +1050,16 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 14px 32px rgba(44, 33, 22, 0.18);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 34px rgba(44, 33, 22, 0.22);
     background: rgba(255, 255, 255, 0.96);
-    border-color: color-mix(in srgb, var(--primary-color) 36%, var(--border-color));
+    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color));
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
     background: rgba(42, 48, 60, 0.94);
-    border-color: rgba(225, 139, 100, 0.38);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+    border-color: rgba(225, 139, 100, 0.48);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
@@ -1318,13 +1318,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:hover {
-    transform: translateY(-12px);
+    transform: translateY(-10px) scale(1.01);
     background: var(--card-hover);
-    border-color: rgba(217, 119, 87, 0.15);
+    border-color: rgba(217, 119, 87, 0.26);
     z-index: 10;
     box-shadow:
-        0 20px 48px rgba(0, 0, 0, 0.25),
-        0 0 60px var(--glow-soft, rgba(217, 119, 87, 0.08));
+        0 22px 54px rgba(0, 0, 0, 0.3),
+        0 0 70px var(--glow-soft, rgba(217, 119, 87, 0.14));
 }
 
 .bookmark-card:active {
@@ -1665,10 +1665,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     /* Shadow for directory/folder titles */
+    transition: color 0.16s ease, transform 0.16s ease;
 }
 
 .sub-folder-header:hover {
     color: var(--primary-color);
+    transform: translateX(2px);
 }
 
 .sub-folder-content.hidden {

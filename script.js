@@ -941,7 +941,7 @@ function renderTreeItem(node) {
         // Let's use FOLDER_ICON_SVG
         const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
 
-        header.innerHTML = `<span style="margin-right:5px; transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
+        header.innerHTML = `${folderIcon} ${node.title}`;
 
         const childrenContainer = document.createElement('div');
         childrenContainer.className = 'sub-folder-content hidden';
@@ -963,13 +963,11 @@ function renderTreeItem(node) {
             if (isHidden) {
                 // Open and Lock
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
                 header.dataset.isLocked = 'true';
             } else {
                 if (header.dataset.isLocked === 'true') {
                     // Locked -> Unlock and Close
                     childrenContainer.classList.add('hidden');
-                    header.querySelector('.arrow').style.transform = 'rotate(0deg)';
                     header.dataset.isLocked = 'false';
                 } else {
                     // Hover-Open (Not Locked) -> Lock it
@@ -979,14 +977,14 @@ function renderTreeItem(node) {
             }
         });
 
-        // Auto-expand on hover with delay
+        // Auto-expand on hover with low-latency delay for smoother follow
         let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
             if (HOVER_DELAY === 1100) return; // "Closed" setting
+            const effectiveDelay = Math.min(HOVER_DELAY, 40);
             hoverTimer = setTimeout(() => {
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
-            }, HOVER_DELAY);
+            }, effectiveDelay);
         });
 
         wrapper.addEventListener('mouseleave', () => {
@@ -1000,7 +998,6 @@ function renderTreeItem(node) {
         wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(0deg)';
             }
         };
 
@@ -1389,7 +1386,7 @@ function renderTreeItemForModal(node) {
 
         const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
 
-        header.innerHTML = `<span style="margin-right:5px; transform: rotate(90deg); transition: transform 0.2s;" class="arrow">▶</span> ${folderIcon} ${node.title}`;
+        header.innerHTML = `${folderIcon} ${node.title}`;
         header.dataset.isLocked = 'true'; // Default open
 
         const childrenContainer = document.createElement('div');
@@ -1409,12 +1406,10 @@ function renderTreeItemForModal(node) {
 
             if (isHidden) {
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
                 header.dataset.isLocked = 'true';
             } else {
                 if (header.dataset.isLocked === 'true') {
                     childrenContainer.classList.add('hidden');
-                    header.querySelector('.arrow').style.transform = 'rotate(0deg)';
                     header.dataset.isLocked = 'false';
                 } else {
                     header.dataset.isLocked = 'true';
@@ -1422,14 +1417,14 @@ function renderTreeItemForModal(node) {
             }
         });
 
-        // Auto-expand on hover with delay
+        // Auto-expand on hover with low-latency delay for smoother follow
         let hoverTimer = null;
         wrapper.addEventListener('mouseenter', () => {
             if (HOVER_DELAY === 1100) return; // "Closed" setting
+            const effectiveDelay = Math.min(HOVER_DELAY, 40);
             hoverTimer = setTimeout(() => {
                 childrenContainer.classList.remove('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(90deg)';
-            }, HOVER_DELAY);
+            }, effectiveDelay);
         });
 
         wrapper.addEventListener('mouseleave', () => {
@@ -1443,7 +1438,6 @@ function renderTreeItemForModal(node) {
         wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
-                header.querySelector('.arrow').style.transform = 'rotate(0deg)';
             }
         };
 
