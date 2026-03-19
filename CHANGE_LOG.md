@@ -112,3 +112,9 @@
 - **Type**: Fix (Flat Directory Independent Order)
 - **Content**: 重构平铺目录排序模型为扩展内独立顺序：新增 `flat_directory_order` 本地持久化；目录置顶与拖拽排序均改为更新该顺序而非改写 Chrome 书签树结构，修复“置顶后回弹”和“刷新后顺序丢失”问题。
 - **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:34:33 +0800
+- **Type**: Refactor (Container Transparency Control)
+- **Content**: 将“主容器模糊程度”改为“主容器透明度程度”：设置面板文案与数值展示改为透明度百分比；容器滑杆逻辑从动态 `backdrop-filter` 调整为动态控制主容器背景透明度，拖动时补充平滑过渡。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`

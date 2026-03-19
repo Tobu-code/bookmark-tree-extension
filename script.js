@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
-        CURRENT_CONTAINER_BLUR = level * 5;
+        CURRENT_CONTAINER_BLUR = level;
     }
 
     if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await preloadImage(CURRENT_BG_IMAGE);
     }
     applyBackground();
-    applyContainerBlur();
+    applyContainerOpacity();
 
     // 7. Render Bookmarks
     renderBookmarksFromCache();
@@ -1952,9 +1952,13 @@ function initSettingsUI(settings) {
         chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
     });
 
-    // Blur Slider - 档位制 (0-10档，每档5px)
+    // Slider labels
     function getBlurLabel(level) {
         if (level === 0) return '关闭';
+        return `${level * 10}%`;
+    }
+
+    function getContainerOpacityLabel(level) {
         return `${level * 10}%`;
     }
 
@@ -1971,12 +1975,12 @@ function initSettingsUI(settings) {
         saveSetting(STORAGE_KEY_BG_BLUR, level); // 存储档位值
     });
 
-    // 主容器模糊滑块
+    // 主容器透明度滑块
     containerBlurInput.addEventListener('input', (e) => {
         const level = parseInt(e.target.value);
-        CURRENT_CONTAINER_BLUR = level * 5; // 每档5px
-        containerBlurValueDisplay.textContent = getBlurLabel(level);
-        applyContainerBlur();
+        CURRENT_CONTAINER_BLUR = level;
+        containerBlurValueDisplay.textContent = getContainerOpacityLabel(level);
+        applyContainerOpacity();
     });
 
     containerBlurInput.addEventListener('change', (e) => {
@@ -1995,13 +1999,13 @@ function initSettingsUI(settings) {
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
         containerBlurInput.value = level;
-        CURRENT_CONTAINER_BLUR = level * 5;
-        containerBlurValueDisplay.textContent = getBlurLabel(level);
+        CURRENT_CONTAINER_BLUR = level;
+        containerBlurValueDisplay.textContent = getContainerOpacityLabel(level);
     } else {
-        // 默认档位3 (15px)
-        containerBlurInput.value = 3;
-        CURRENT_CONTAINER_BLUR = 15;
-        containerBlurValueDisplay.textContent = getBlurLabel(3);
+        // 默认档位1（10% 透明）
+        containerBlurInput.value = 1;
+        CURRENT_CONTAINER_BLUR = 1;
+        containerBlurValueDisplay.textContent = getContainerOpacityLabel(1);
     }
 
     // 初始化模糊控制状态
@@ -2171,12 +2175,14 @@ function applyBackground() {
     }
 }
 
-function applyContainerBlur() {
+function applyContainerOpacity() {
     const container = document.querySelector('.container');
     if (!container) return;
 
-    container.style.backdropFilter = `blur(${CURRENT_CONTAINER_BLUR}px)`;
-    container.style.webkitBackdropFilter = `blur(${CURRENT_CONTAINER_BLUR}px)`;
+    const transparency = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR)) / 10;
+    const overlayAlpha = Math.max(0.3, 0.82 - transparency * 0.42);
+    container.style.background =
+        `linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), color-mix(in srgb, var(--bg-overlay) ${Math.round(overlayAlpha * 100)}%, transparent)`;
 }
 
 // --- Bookmark Item Drag Handlers ---
