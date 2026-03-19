@@ -100,3 +100,9 @@
 - **Type**: Feature (Directory Ordering UX)
 - **Content**: 目录功能增强：新增目录“置顶”按钮并支持一键移至同级首位；修复目录拖拽排序持久化问题（仅按目录项计算索引并写回 `chrome.bookmarks.move`，刷新后保持顺序）；优化目录悬停切换节奏（降低延迟、移除繁重过渡）使交互更灵敏且更丝滑。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:11:25 +0800
+- **Type**: Fix (Pin-To-Top Reliability)
+- **Content**: 修复目录“置顶”按钮偶发无效：将图标改为独立按钮并隔离拖拽事件，避免点击被拖拽/父层事件干扰；补充置顶移动双通道回退（先同父级 `parentId + index`，失败再仅 `index`），提升兼容性与成功率。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

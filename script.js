@@ -557,27 +557,46 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             ? `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
             : `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
 
-        const pinTopSvg = `<svg class="pin-top-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V4"/><path d="m6 10 6-6 6 6"/><path d="M5 20h14"/></svg>`;
-        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span><span class="folder-tile-actions">${pinTopSvg}${eyeSvg}</span>`;
+        const pinTopBtn = `<button type="button" class="folder-action-btn pin-top-btn" title="置顶目录" aria-label="置顶目录"><svg class="pin-top-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V4"/><path d="m6 10 6-6 6 6"/><path d="M5 20h14"/></svg></button>`;
+        const hideBtnHtml = `<button type="button" class="folder-action-btn hide-btn" title="${isHidden ? '取消隐藏目录' : '隐藏目录'}" aria-label="${isHidden ? '取消隐藏目录' : '隐藏目录'}">${eyeSvg}</button>`;
+        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span><span class="folder-tile-actions">${pinTopBtn}${hideBtnHtml}</span>`;
         
-        const hideBtn = folderTile.querySelector('.hide-icon');
-        const pinBtn = folderTile.querySelector('.pin-top-icon');
+        const hideBtn = folderTile.querySelector('.hide-btn');
+        const pinBtn = folderTile.querySelector('.pin-top-btn');
 
         pinBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
-            chrome.bookmarks.move(folder.id, { parentId: folder.parentId, index: 0 }, (res) => {
-                if (chrome.runtime.lastError) {
-                    console.error('Pin folder to top failed:', chrome.runtime.lastError.message);
-                    return;
-                }
+
+            const onMoveSuccess = (res) => {
                 console.log('Pinned folder to top:', res);
                 refreshBookmarkTreeCache((bookmarkTree) => {
                     renderBookmarks(bookmarkTree);
+                });
+            };
+
+            chrome.bookmarks.move(folder.id, { parentId: folder.parentId, index: 0 }, (res) => {
+                if (!chrome.runtime.lastError) {
+                    onMoveSuccess(res);
+                    return;
+                }
+
+                const firstError = chrome.runtime.lastError.message;
+                console.warn('Pin folder to top with parentId failed, retry without parentId:', firstError);
+
+                // Fallback: keep current parent, only reorder index.
+                chrome.bookmarks.move(folder.id, { index: 0 }, (retryRes) => {
+                    if (chrome.runtime.lastError) {
+                        console.error('Pin folder to top retry failed:', chrome.runtime.lastError.message);
+                        return;
+                    }
+                    onMoveSuccess(retryRes);
                 });
             });
         });
 
         hideBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
             if (isHidden) {
                 HIDDEN_FOLDERS = HIDDEN_FOLDERS.filter(id => id !== folder.id);
@@ -2143,6 +2162,8 @@ function applyContainerBlur() {
 
 function handleItemDragStart(e) {
     if (this.getAttribute('draggable') !== 'true') return;
+    const target = e.target instanceof Element ? e.target : null;
+    if (target && target.closest('.folder-tile-actions')) return;
     e.stopPropagation(); // Prevent card drag start
     this.style.opacity = '0.4';
     dragSrcEl = this; // Reuse global

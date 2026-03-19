@@ -878,11 +878,25 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex-shrink: 0;
 }
 
+.folder-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
 .hide-icon {
     opacity: 0;
     transition: opacity 0.2s, color 0.2s;
     color: var(--text-color);
     flex-shrink: 0;
+    pointer-events: none;
 }
 
 .pin-top-icon {
@@ -890,6 +904,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     transition: opacity 0.2s, color 0.2s;
     color: var(--text-color);
     flex-shrink: 0;
+    pointer-events: none;
 }
 
 .folder-tile:hover .hide-icon,
@@ -897,8 +912,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     opacity: 0.5;
 }
 
-.folder-tile .hide-icon:hover,
-.folder-tile .pin-top-icon:hover {
+.folder-tile .folder-action-btn:hover .hide-icon,
+.folder-tile .folder-action-btn:hover .pin-top-icon {
     opacity: 1;
     color: var(--primary-color);
 }
