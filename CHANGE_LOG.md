@@ -40,3 +40,9 @@
 - **Type**: Optimization (P2 Visual-First Performance)
 - **Content**: 在不牺牲视觉效果的前提下完成 P2 优化：将 `styles.css` 中广域 `transition: all` 替换为显式属性过渡，减少非必要动画开销；将 `build.js` 的高强度混淆降为轻量混淆，降低脚本体积与运行时解析负担。
 - **Impact**: `styles.css`、`build.js`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 16:57:20 +0800
+- **Type**: Docs (Workflow Rule Update)
+- **Content**: 在提示文档中新增规则：用户确认开发方案后，`CHANGE_LOG.md` 更新与 `git commit` 作为执行后闭环动作可直接执行，无需再次二次确认。
+- **Impact**: `AGENTS.md`、`GEMINI.md`、`CHANGE_LOG.md`
