@@ -747,6 +747,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
 }
 
+#bookmarks-tree.layout-tree {
+    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
+    padding: 26px var(--flat-side-gutter) 14px;
+}
+
 .directory-pane {
     width: 340px;
     flex-shrink: 0;
@@ -1011,8 +1016,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px 18px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 14px;
     align-content: start;
 }
 
@@ -1021,10 +1026,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-wrapper {
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
-    border-radius: 18px;
-    padding: 14px;
+    border-radius: 16px;
+    padding: 10px 12px;
     margin-bottom: 0;
-    min-height: 96px;
+    min-height: 84px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1115,13 +1120,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     font-size: 17px;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     padding: 0 0 10px 4px;
     padding-left: 4px;
     margin: 0 0 var(--flat-pane-header-gap) 0;
-    border-left: 3px solid var(--primary-color);
+    border-left: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     background-size: 100% 1px;
     background-repeat: no-repeat;
@@ -1151,7 +1156,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     max-width: 100%;
 }
 
-@media (max-width: 1439px) {
+@media (max-width: 1650px) {
+    .bookmarks-pane-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1280px) {
     .bookmarks-pane-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
