@@ -1759,58 +1759,91 @@ function initSettingsUI(settings) {
         blurControls.style.opacity = hasImage ? '1' : '0.5';
     }
 
-    // File Upload (with auto-compression for large images)
-    bgUpload.addEventListener('change', (e) => {
+    function saveBackgroundImage(dataUrl, onDone) {
+        CURRENT_BG_IMAGE = dataUrl;
+        updateBlurControlsState();
+        applyBackground();
+        saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
+            const hasError = !!chrome.runtime.lastError;
+            if (onDone) onDone(!hasError);
+        });
+    }
+
+    function compressImageDataUrl(sourceDataUrl, options = {}) {
+        const {
+            maxDim = 4096,
+            quality = 0.95,
+            mimeType = 'image/webp'
+        } = options;
+
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxDim || height > maxDim) {
+                    const ratio = Math.min(maxDim / width, maxDim / height);
+                    width = Math.round(width * ratio);
+                    height = Math.round(height * ratio);
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    resolve(sourceDataUrl);
+                    return;
+                }
+                ctx.drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL(mimeType, quality));
+            };
+            img.onerror = () => reject(new Error('image decode failed'));
+            img.src = sourceDataUrl;
+        });
+    }
+
+    // File Upload (high-fidelity first, then adaptive compression fallback)
+    bgUpload.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             const dataUrl = event.target.result;
-            
-            // Helper to save and apply image
-            const processSave = (finalDataUrl) => {
-                CURRENT_BG_IMAGE = finalDataUrl;
-                updateBlurControlsState();
-                applyBackground();
-                saveSetting(STORAGE_KEY_BG_IMAGE, finalDataUrl, () => {
-                    if (chrome.runtime.lastError) {
-                        console.error('Failed to save image:', chrome.runtime.lastError);
-                        alert('图片保存失败 (可能超出存储限制，请尝试更小的图片)');
-                    }
-                });
-            };
 
-            // If file is > 1.5MB, auto compress it to webp
-            if (file.size > 1.5 * 1024 * 1024) {
-                const img = new Image();
-                img.onload = () => {
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    // Cap dimensions to 2560px max to ensure safe memory/storage usage
-                    const MAX_DIM = 2560;
-                    if (width > MAX_DIM || height > MAX_DIM) {
-                        const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
-                        width = Math.round(width * ratio);
-                        height = Math.round(height * ratio);
-                    }
-                    
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Compress to 80% quality WebP
-                    const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
-                    processSave(compressedDataUrl);
-                };
-                img.src = dataUrl;
-            } else {
-                // Save original if it's small enough
-                processSave(dataUrl);
+            const trySave = (candidateDataUrl) => new Promise((resolve) => {
+                saveBackgroundImage(candidateDataUrl, resolve);
+            });
+
+            // Keep original data for typical images to preserve fidelity.
+            const PRESERVE_ORIGINAL_THRESHOLD = 4 * 1024 * 1024;
+            if (file.size <= PRESERVE_ORIGINAL_THRESHOLD) {
+                const ok = await trySave(dataUrl);
+                if (ok) return;
             }
+
+            // Adaptive fallback: gradually reduce size only when needed by storage constraints.
+            const compressionPresets = [
+                { maxDim: 4096, quality: 0.95 },
+                { maxDim: 3840, quality: 0.92 },
+                { maxDim: 3200, quality: 0.9 },
+                { maxDim: 2560, quality: 0.86 }
+            ];
+
+            for (const preset of compressionPresets) {
+                try {
+                    const compressedDataUrl = await compressImageDataUrl(dataUrl, preset);
+                    const ok = await trySave(compressedDataUrl);
+                    if (ok) return;
+                } catch (err) {
+                    console.error('Image compression failed:', err);
+                }
+            }
+
+            console.error('Failed to save image:', chrome.runtime.lastError);
+            alert('图片保存失败（存储限制导致）。可尝试更小图片或降低分辨率后重试。');
         };
         reader.readAsDataURL(file);
     });

@@ -64,3 +64,9 @@
 - **Type**: Optimization (Layout Symmetry)
 - **Content**: 平铺模式改为左右对称内边距（`--flat-side-gutter`）以与树状模式统一边界，同时将平铺书签块最小宽度由 `220px` 微调为 `210px`，在保持观感的同时留出右侧边距空间。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 17:20:13 +0800
+- **Type**: Fix (Background Image Clarity)
+- **Content**: 修复背景图清晰度过低问题：上传策略改为高保真优先，先尝试保存原图，再按 4096/3840/3200/2560 分级压缩回退；同时将背景层采样策略调整为浏览器原生 `image-rendering: auto`，避免强制采样导致画质劣化。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

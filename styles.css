@@ -150,10 +150,8 @@ h3,
     z-index: -1;
     transition: background-color 0.5s ease, opacity 0.5s ease;
 
-    /* High-quality image rendering */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: high-quality;
+    /* Keep browser-native image sampling for photo backgrounds */
+    image-rendering: auto;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: translateZ(0);
