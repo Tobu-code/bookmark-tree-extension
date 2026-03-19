@@ -28,3 +28,9 @@
 - **Type**: Optimization (Native Theme Readability)
 - **Content**: 优化原生浅色/深色主题下的新标签页可读性与层级感：提升容器遮罩与文本对比、强化目录选中态、优化卡片标题与域名节奏、增强滚动条可见性，并补充书签项键盘焦点态。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 16:43:52 +0800
+- **Type**: Optimization (Layout Consistency)
+- **Content**: 统一平铺模式与树状模式的主容器内边距基线，消除切换割裂；下调平铺模式目录/卡片标题与域名字号字重，并收紧卡片内边距与网格间距，提升精致感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
