@@ -795,7 +795,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     will-change: transform;
     transform: translateZ(0);
     /* Smooth fade transition for hover-to-switch */
-    transition: opacity 0.12s ease-out, transform 0.12s ease-out;
+    transition: opacity 0.16s ease-out, transform 0.16s ease-out;
 }
 
 
@@ -847,7 +847,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), 0 8px 22px rgba(44, 33, 22, 0.12);
 }
 
-.folder-tile:not(:has(.hide-icon:hover)):active {
+.folder-tile:not(:has(.hide-icon:hover, .pin-top-icon:hover)):active {
     transform: scale(0.97);
     transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -870,19 +870,35 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex-grow: 1;
 }
 
+.folder-tile-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
 .hide-icon {
     opacity: 0;
     transition: opacity 0.2s, color 0.2s;
     color: var(--text-color);
     flex-shrink: 0;
-    margin-left: 8px;
 }
 
-.folder-tile:hover .hide-icon {
+.pin-top-icon {
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
+
+.folder-tile:hover .hide-icon,
+.folder-tile:hover .pin-top-icon {
     opacity: 0.5;
 }
 
-.folder-tile .hide-icon:hover {
+.folder-tile .hide-icon:hover,
+.folder-tile .pin-top-icon:hover {
     opacity: 1;
     color: var(--primary-color);
 }

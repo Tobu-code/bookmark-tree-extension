@@ -94,3 +94,9 @@
 - **Type**: Refactor (Artistic Texture Pass)
 - **Content**: 完成“质感艺术”视觉通道：新增背景多层光晕与暗角叠层，容器增加柔高光与内边缘描线形成景深；搜索栏改为材质渐变玻璃并强化克制焦点环；目录与卡片统一为雾面玻璃语义（更柔圆角、更细腻阴影、更连贯 hover），整体从“组件感”提升为“氛围感”。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:05:36 +0800
+- **Type**: Feature (Directory Ordering UX)
+- **Content**: 目录功能增强：新增目录“置顶”按钮并支持一键移至同级首位；修复目录拖拽排序持久化问题（仅按目录项计算索引并写回 `chrome.bookmarks.move`，刷新后保持顺序）；优化目录悬停切换节奏（降低延迟、移除繁重过渡）使交互更灵敏且更丝滑。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

@@ -509,6 +509,27 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     let folderHoverTimer = null;
     let currentActiveFolder = null;
     const allowHoverSwitch = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const HOVER_SWITCH_DELAY_MS = 90;
+
+    const activateFolder = (folder, folderTile, animated = false) => {
+        if (currentActiveFolder === folder) return;
+        dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
+        folderTile.classList.add('active');
+        currentActiveFolder = folder;
+
+        if (animated) {
+            bmkPane.style.opacity = '0.94';
+            bmkPane.style.transform = 'translateY(2px)';
+            renderBmkPane(folder);
+            requestAnimationFrame(() => {
+                bmkPane.style.opacity = '1';
+                bmkPane.style.transform = 'translateY(0)';
+            });
+            return;
+        }
+
+        renderBmkPane(folder);
+    };
 
     const visibleFolders = allFolders.filter((folder) => {
         const isHidden = HIDDEN_FOLDERS.includes(folder.id);
@@ -532,13 +553,30 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         folderTile.dataset.type = 'folder';
         folderTile.setAttribute('draggable', 'true');
         
-        const eyeSvg = isHidden 
+        const eyeSvg = isHidden
             ? `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
             : `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
 
-        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span> ${eyeSvg}`;
+        const pinTopSvg = `<svg class="pin-top-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V4"/><path d="m6 10 6-6 6 6"/><path d="M5 20h14"/></svg>`;
+        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span><span class="folder-tile-actions">${pinTopSvg}${eyeSvg}</span>`;
         
         const hideBtn = folderTile.querySelector('.hide-icon');
+        const pinBtn = folderTile.querySelector('.pin-top-icon');
+
+        pinBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chrome.bookmarks.move(folder.id, { parentId: folder.parentId, index: 0 }, (res) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Pin folder to top failed:', chrome.runtime.lastError.message);
+                    return;
+                }
+                console.log('Pinned folder to top:', res);
+                refreshBookmarkTreeCache((bookmarkTree) => {
+                    renderBookmarks(bookmarkTree);
+                });
+            });
+        });
+
         hideBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (isHidden) {
@@ -553,24 +591,11 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         if (allowHoverSwitch) {
             folderTile.addEventListener('mouseenter', () => {
-                if (currentActiveFolder === folder) return; // Already active
+                if (currentActiveFolder === folder) return;
                 clearTimeout(folderHoverTimer);
                 folderHoverTimer = setTimeout(() => {
-                    dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
-                    folderTile.classList.add('active');
-                    currentActiveFolder = folder;
-                    // Smooth transition: fade out then in
-                    bmkPane.style.opacity = '0';
-                    bmkPane.style.transform = 'translateY(6px)';
-                    setTimeout(() => {
-                        renderBmkPane(folder);
-                        // Trigger reflow then fade in
-                        requestAnimationFrame(() => {
-                            bmkPane.style.opacity = '1';
-                            bmkPane.style.transform = 'translateY(0)';
-                        });
-                    }, 120); // Brief fade-out duration
-                }, 220); // Longer debounce to reduce accidental folder switching
+                    activateFolder(folder, folderTile, true);
+                }, HOVER_SWITCH_DELAY_MS);
             });
 
             folderTile.addEventListener('mouseleave', () => {
@@ -581,11 +606,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // Keep click as fallback (touch devices, accessibility)
         folderTile.addEventListener('click', () => {
             clearTimeout(folderHoverTimer);
-            if (currentActiveFolder === folder) return;
-            dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
-            folderTile.classList.add('active');
-            currentActiveFolder = folder;
-            renderBmkPane(folder);
+            activateFolder(folder, folderTile, false);
         });
 
         // Folder tile drag events for sorting folders
@@ -604,7 +625,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         firstTile.classList.add('active');
         const firstFolderId = firstTile.dataset.id;
         const firstFolder = visibleFolders.find(f => f.id === firstFolderId);
-        if (firstFolder) renderBmkPane(firstFolder);
+        if (firstFolder) {
+            currentActiveFolder = firstFolder;
+            renderBmkPane(firstFolder);
+        }
     }
 
     if (visibleFolders.length > FLAT_DIR_VISIBLE_LIMIT) {
@@ -2189,20 +2213,54 @@ function handleItemDrop(e) {
             return false;
         }
 
-        // Case 2: Reordering within the same parent (original logic)
+        // Case 2: Reordering folders in flat left pane (index must ignore header/buttons)
+        if (dragSrcEl.dataset.type === 'folder' && this.dataset.type === 'folder' &&
+            dragSrcEl.classList.contains('folder-tile') && this.classList.contains('folder-tile')) {
+            const parent = this.parentNode;
+            const folderSiblings = Array.from(parent.querySelectorAll('.folder-tile'));
+            const srcIndex = folderSiblings.indexOf(dragSrcEl);
+            const targetIndex = folderSiblings.indexOf(this);
+
+            if (srcIndex < targetIndex) {
+                parent.insertBefore(dragSrcEl, this.nextSibling);
+            } else {
+                parent.insertBefore(dragSrcEl, this);
+            }
+
+            const nextSiblings = Array.from(parent.querySelectorAll('.folder-tile'));
+            const newIndex = nextSiblings.indexOf(dragSrcEl);
+            const destParentId = this.dataset.parentId || dragSrcEl.dataset.parentId;
+
+            chrome.bookmarks.move(srcId, { parentId: destParentId, index: newIndex }, (res) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Move folder failed:', chrome.runtime.lastError.message);
+                } else {
+                    console.log('Moved folder item:', res);
+                    dragSrcEl.dataset.parentId = destParentId;
+                    refreshBookmarkTreeCache((bookmarkTree) => {
+                        renderBookmarks(bookmarkTree);
+                    });
+                }
+            });
+
+            dragSrcEl.style.opacity = '1';
+            return false;
+        }
+
+        // Case 3: Reordering within the same parent (bookmarks/subfolders)
         const parent = this.parentNode;
-        const allChildren = Array.from(parent.children);
+        const allChildren = Array.from(parent.children).filter((el) => !!el.dataset?.id);
         const srcIndex = allChildren.indexOf(dragSrcEl);
         const targetIndex = allChildren.indexOf(this);
 
-        let newIndex = targetIndex;
-
         if (dragSrcEl.parentNode === parent && srcIndex < targetIndex) {
             parent.insertBefore(dragSrcEl, this.nextSibling);
-            newIndex = targetIndex + 1;
         } else {
             parent.insertBefore(dragSrcEl, this);
         }
+
+        const orderedChildren = Array.from(parent.children).filter((el) => !!el.dataset?.id);
+        const newIndex = orderedChildren.indexOf(dragSrcEl);
 
         // API Update
         // Determine Destination Parent ID
