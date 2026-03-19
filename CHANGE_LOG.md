@@ -16,3 +16,9 @@
   - 3. Added a "Hover Focus" effect that slightly dims un-hovered items in the directory and bookmark panes, enhancing focus on the current target.
 - **Type**: Optimization (Flat Mode Dark Mode Adaptation)
 - **Content**: Adapted Flat Mode for better visibility in Dark Mode by reinforcing header separators with brand-themed gradients, increasing pane border opacity, and improving breadcrumb readability.
+
+## [2026-03-19]
+- **Time**: 2026-03-19 16:11:44 +0800
+- **Type**: Docs (Prompt Optimization)
+- **Content**: 优化 `AGENTS.md` 与 `GEMINI.md` 提示词文案，强化“编码前方案确认门禁 + 执行后自动记录变更日志 + 自动提交 git”的闭环流程，并统一两份文档规则。
+- **Impact**: `AGENTS.md`、`GEMINI.md`、`CHANGE_LOG.md`
