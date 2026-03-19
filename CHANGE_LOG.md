@@ -136,3 +136,9 @@
 - **Type**: Refactor (Layout Consistency & Density)
 - **Content**: 优化平铺与树状一致性和密度：目录标题改为与右侧同体系的无左边框样式；树状模式对齐平铺模式的左右内容边距；平铺书签网格调整为大屏 4 列，并缩小卡片高度/内边距，保持更紧凑且不过密的间距节奏。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:57:48 +0800
+- **Type**: Refactor (Directory Frame & Tree 4-Column)
+- **Content**: 弱化平铺模式左侧目录区外层框感：移除 `directory-pane` 的明显边框与背景承载；树状模式主卡片网格改为大屏 4 列展示，并补充 3/2/1 列响应式降级，保证不同宽度下的可读性与密度平衡。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
