@@ -19,14 +19,7 @@
     "https://*.googleapis.com/*",
     "*://*.chatgpt.com/*",
     "*://*.openai.com/*",
-    "*://*.grok.com/*",
-    "*://*.x.com/*",
     "*://*.chat.qwen.ai/*",
-    "*://*.kimi.com/*",
-    "*://*.kimi.moonshot.cn/*",
-    "*://*.longcat.chat/*",
-    "*://*.perplexity.ai/*",
-    "*://*.z.ai/*",
     "*://*.doubao.com/*"
   ],
   "declarative_net_request": {

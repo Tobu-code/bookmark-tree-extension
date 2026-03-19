@@ -5,15 +5,15 @@ const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
 const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
 const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
-const STORAGE_KEY_FREQUENT_DATA = 'frequent_bookmarks_data';
-const STORAGE_KEY_FREQUENT_ENABLED = 'settings_frequent_enabled';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
-const STORAGE_KEY_AUTO_SORT = 'settings_auto_sort_by_frequency';
-const STORAGE_KEY_FOLDER_FREQ_DATA = 'folder_frequency_data';
-const FREQUENT_BOOKMARK_COUNT = 6;
-const FRECENCY_DECAY_LAMBDA = 0.1; // Decay factor for time-based weighting
+const LEGACY_FREQUENCY_STORAGE_KEYS = [
+    'frequent_bookmarks_data',
+    'settings_frequent_enabled',
+    'settings_auto_sort_by_frequency',
+    'folder_frequency_data'
+];
 
 // --- State and Constants ---
 let dragSrcEl = null;
@@ -22,18 +22,98 @@ let CURRENT_ICON_STYLE = 'default';
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
 let CURRENT_CONTAINER_BLUR = 0;
-let FREQUENT_ENABLED = true;
 let HOVER_DELAY = 100;
 let LAYOUT_MODE = 'tree';
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
-let AUTO_SORT_BY_FREQUENCY = false;
-let FOLDER_FREQ_DATA = {};
+let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
+let BOOKMARK_TREE_CACHE = null;
+let BOOKMARK_SEARCH_INDEX = [];
+let BOOKMARK_SEARCH_BUCKETS = new Map();
+let AI_SIDEBAR_CONTROLLER = null;
+
+function buildBookmarkSearchIndex(bookmarkTreeNodes) {
+    const entries = [];
+    const buckets = new Map();
+
+    const addToBucket = (key, entry) => {
+        if (!key) return;
+        if (!buckets.has(key)) buckets.set(key, []);
+        buckets.get(key).push(entry);
+    };
+
+    const traverse = (nodes, path = '') => {
+        nodes.forEach(node => {
+            if (node.url) {
+                const title = node.title || '';
+                const url = node.url || '';
+                const titleLower = title.toLowerCase();
+                const urlLower = url.toLowerCase();
+                const pathLower = path.toLowerCase();
+                const entry = {
+                    title,
+                    url,
+                    path,
+                    searchText: `${titleLower} ${urlLower} ${pathLower}`
+                };
+                entries.push(entry);
+
+                const seedText = `${titleLower} ${urlLower} ${pathLower}`;
+                const tokens = seedText.split(/[\s/:._-]+/).filter(Boolean);
+                const keys = new Set();
+                tokens.forEach(token => {
+                    keys.add(token.slice(0, 1));
+                    keys.add(token.slice(0, 2));
+                });
+                keys.add(entry.searchText.slice(0, 1));
+                keys.add(entry.searchText.slice(0, 2));
+                keys.forEach((key) => addToBucket(key, entry));
+                return;
+            }
+
+            if (node.children) {
+                const nextPath = node.title ? (path ? `${path} > ${node.title}` : node.title) : path;
+                traverse(node.children, nextPath);
+            }
+        });
+    };
+
+    traverse(bookmarkTreeNodes);
+    return { entries, buckets };
+}
+
+function setBookmarkTreeCache(bookmarkTreeNodes) {
+    BOOKMARK_TREE_CACHE = bookmarkTreeNodes;
+    const { entries, buckets } = buildBookmarkSearchIndex(bookmarkTreeNodes);
+    BOOKMARK_SEARCH_INDEX = entries;
+    BOOKMARK_SEARCH_BUCKETS = buckets;
+}
+
+function refreshBookmarkTreeCache(callback) {
+    chrome.bookmarks.getTree((tree) => {
+        setBookmarkTreeCache(tree);
+        if (callback) callback(tree);
+    });
+}
+
+function renderBookmarksFromCache() {
+    if (BOOKMARK_TREE_CACHE) {
+        renderBookmarks(BOOKMARK_TREE_CACHE);
+        return;
+    }
+    refreshBookmarkTreeCache((tree) => renderBookmarks(tree));
+}
+
+function cleanupLegacyFrequencyStorage() {
+    chrome.storage.local.remove(LEGACY_FREQUENCY_STORAGE_KEYS);
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
+    cleanupLegacyFrequencyStorage();
+
     // 1. UI Initialization (Sync)
     initSearch();
-    initAiSidebar();
+    initAiSidebarLazy();
     initAmbientTime();
 
     // 2. Data Loading (Async)
@@ -44,12 +124,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
-            STORAGE_KEY_FREQUENT_DATA, STORAGE_KEY_FREQUENT_ENABLED, STORAGE_KEY_HOVER_DELAY,
-            STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_AUTO_SORT, STORAGE_KEY_FOLDER_FREQ_DATA
+            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS
         ]),
         getBookmarks()
     ]);
+    setBookmarkTreeCache(bookmarkTree);
 
     // 3. Apply Settings Global State
     if (settings[STORAGE_KEY_NEW_TAB] !== undefined) OPEN_IN_NEW_TAB = settings[STORAGE_KEY_NEW_TAB];
@@ -79,9 +158,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
     else HIDDEN_FOLDERS = [];
 
-    AUTO_SORT_BY_FREQUENCY = settings[STORAGE_KEY_AUTO_SORT] === true;
-    FOLDER_FREQ_DATA = settings[STORAGE_KEY_FOLDER_FREQ_DATA] || {};
-
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
     // For now, we assume initSettingsUI will be defined later or we call the modified initSettings.
@@ -99,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyContainerBlur();
 
     // 7. Render Bookmarks
-    renderBookmarks(bookmarkTree);
+    renderBookmarksFromCache();
 
     // 7.5 Layout Toggle Button (outside settings for quick access)
     const layoutToggleBtn = document.getElementById('layout-toggle-btn');
@@ -127,17 +203,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const layoutRadios = document.getElementsByName('layout-mode');
         layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
         // Re-render
-        chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+        renderBookmarksFromCache();
     });
 
-    // 8. Render Frequent Bookmarks (if enabled)
-    const frequentEnabled = settings[STORAGE_KEY_FREQUENT_ENABLED] !== false; // Default true
-    if (frequentEnabled) {
-        const frequentData = settings[STORAGE_KEY_FREQUENT_DATA] || {};
-        renderFrequentBookmarks(frequentData);
-    }
-
-    // 9. Reveal Page
+    // 8. Reveal Page
     // Use double requestAnimationFrame to ensure the browser has painted the background 
     // and layout is stable before triggering the opacity transition.
     requestAnimationFrame(() => {
@@ -213,11 +282,54 @@ function renderBookmarks(bookmarkTreeNodes) {
     }
 }
 
+function bindDelegatedItemDnD(container) {
+    if (!container || container.dataset.itemDndDelegated === 'true') return;
+    container.dataset.itemDndDelegated = 'true';
+
+    const getTarget = (e) => {
+        const eventTarget = e.target instanceof Element ? e.target : null;
+        if (!eventTarget) return null;
+        const target = eventTarget.closest('[data-type][draggable="true"], .bookmarks-pane-grid[data-type="folder"]');
+        return target && container.contains(target) ? target : null;
+    };
+
+    container.addEventListener('dragstart', (e) => {
+        const target = getTarget(e);
+        if (!target || target.classList.contains('bookmarks-pane-grid')) return;
+        handleItemDragStart.call(target, e);
+    });
+
+    container.addEventListener('dragover', (e) => {
+        const target = getTarget(e);
+        if (!target) return;
+        handleItemDragOver.call(target, e);
+    });
+
+    container.addEventListener('dragleave', (e) => {
+        const target = getTarget(e);
+        if (!target) return;
+        handleItemDragLeave.call(target, e);
+    });
+
+    container.addEventListener('drop', (e) => {
+        const target = getTarget(e);
+        if (!target) return;
+        handleItemDrop.call(target, e);
+    });
+
+    container.addEventListener('dragend', (e) => {
+        const target = getTarget(e);
+        if (!target || target.classList.contains('bookmarks-pane-grid')) return;
+        handleItemDragEnd.call(target, e);
+    });
+}
+
 function renderTreeBookmarks(bookmarkTreeNodes, container) {
     // Create a wrapper for top-level columns
     const topLevelContainer = document.createElement('div');
     topLevelContainer.className = 'top-level-container';
     container.appendChild(topLevelContainer);
+    bindDelegatedItemDnD(topLevelContainer);
 
     // We want to primarily show "Bookmarks Bar" content
     // Root -> [0] is usually the root node
@@ -268,15 +380,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         bookmarksBar.children.forEach(child => flattenFolders(child, allFolders));
     }
 
-    // Sort folders by click frequency if enabled
-    if (AUTO_SORT_BY_FREQUENCY && Object.keys(FOLDER_FREQ_DATA).length > 0) {
-        allFolders.sort((a, b) => {
-            const freqA = (FOLDER_FREQ_DATA[a.id] && FOLDER_FREQ_DATA[a.id].clickCount) || 0;
-            const freqB = (FOLDER_FREQ_DATA[b.id] && FOLDER_FREQ_DATA[b.id].clickCount) || 0;
-            return freqB - freqA;
-        });
-    }
-
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
@@ -301,53 +404,49 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // Make the grid container a drop target for reordering bookmarks inside this folder
         listContainer.dataset.type = 'folder';
         listContainer.dataset.id = folder.id;
-        listContainer.addEventListener('dragover', handleItemDragOver);
-        listContainer.addEventListener('dragleave', handleItemDragLeave);
-        listContainer.addEventListener('drop', handleItemDrop);
+        listContainer.dataset.parentId = folder.id;
 
-        // Sort bookmarks by click frequency if enabled
+        const getFlatDragTarget = (e) => {
+            const eventTarget = e.target instanceof Element ? e.target : null;
+            const item = eventTarget ? eventTarget.closest('.leaf-wrapper') : null;
+            return item && listContainer.contains(item) ? item : listContainer;
+        };
+
+        listContainer.addEventListener('dragstart', (e) => {
+            const target = getFlatDragTarget(e);
+            if (target === listContainer) return;
+            handleItemDragStart.call(target, e);
+        });
+
+        listContainer.addEventListener('dragover', (e) => {
+            handleItemDragOver.call(getFlatDragTarget(e), e);
+        });
+
+        listContainer.addEventListener('dragleave', (e) => {
+            handleItemDragLeave.call(getFlatDragTarget(e), e);
+        });
+
+        listContainer.addEventListener('drop', (e) => {
+            handleItemDrop.call(getFlatDragTarget(e), e);
+        });
+
+        listContainer.addEventListener('dragend', (e) => {
+            const target = getFlatDragTarget(e);
+            if (target === listContainer) return;
+            handleItemDragEnd.call(target, e);
+        });
+
         let childrenToRender = folder.children.filter(child => !child.children);
         
         // Append container synchronously to prevent race conditions during rapid re-renders
         bmkPane.appendChild(listContainer);
-
-        if (AUTO_SORT_BY_FREQUENCY) {
-            chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
-                // If container is no longer in DOM (e.g., layout switched rapidly), abort
-                if (!document.body.contains(listContainer)) return;
-                
-                const freqData = result[STORAGE_KEY_FREQUENT_DATA] || {};
-                childrenToRender.sort((a, b) => {
-                    const freqA = (freqData[a.url] && freqData[a.url].clickCount) || 0;
-                    const freqB = (freqData[b.url] && freqData[b.url].clickCount) || 0;
-                    return freqB - freqA;
-                });
-                renderBookmarkItems(childrenToRender, listContainer, folder);
-            });
-        } else {
-            renderBookmarkItems(childrenToRender, listContainer, folder);
-        }
+        renderBookmarkItems(childrenToRender, listContainer, folder);
     };
 
     // Helper to render bookmark items into the grid container
     const renderBookmarkItems = (children, listContainer, folder) => {
         children.forEach(child => {
-                // Render bookmark using standard item rendering which gives us `.leaf-wrapper`
-                const bmkItem = renderTreeItem(child);
-                
-                // bmkItem is a .leaf-wrapper, it already has drill-down drag events attached by renderTreeNode
-                // but let's ensure it has the correct visual style and drag attributes since it's flat mode.
-                bmkItem.setAttribute('draggable', 'true');
-                bmkItem.dataset.id = child.id;
-                bmkItem.dataset.parentId = child.parentId;
-                bmkItem.dataset.type = 'bookmark';
-                
-                // Add flat mode specific drop targets to leaf wrappers if needed
-                bmkItem.addEventListener('dragstart', handleItemDragStart);
-                bmkItem.addEventListener('dragover', handleItemDragOver);
-                bmkItem.addEventListener('dragleave', handleItemDragLeave);
-                bmkItem.addEventListener('drop', handleItemDrop);
-                bmkItem.addEventListener('dragend', handleItemDragEnd);
+                const bmkItem = renderFlatBookmarkItem(child);
 
                 // Item 8: Add URL preview line below the title
                 if (child.url) {
@@ -419,7 +518,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
                 folderTile.classList.add('active');
                 currentActiveFolder = folder;
-                trackFolderClick(folder.id, folder.title);
                 // Smooth transition: fade out then in
                 bmkPane.style.opacity = '0';
                 bmkPane.style.transform = 'translateY(6px)';
@@ -445,7 +543,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
             folderTile.classList.add('active');
             currentActiveFolder = folder;
-            trackFolderClick(folder.id, folder.title);
             renderBmkPane(folder);
         });
 
@@ -626,11 +723,6 @@ function createSimpleTile(node) {
     }
     leaf.style.padding = '0';
 
-    // Track click for frequent bookmarks
-    leaf.addEventListener('click', () => {
-        trackBookmarkClick(node.url, node.title);
-    });
-
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
     const iconElement = createBookmarkIcon(iconData, 20);
@@ -647,6 +739,37 @@ function createSimpleTile(node) {
     return card;
 }
 
+function renderFlatBookmarkItem(node) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'leaf-wrapper';
+    wrapper.setAttribute('draggable', 'true');
+    wrapper.dataset.id = node.id;
+    wrapper.dataset.parentId = node.parentId;
+    wrapper.dataset.type = 'bookmark';
+
+    const a = document.createElement('a');
+    a.className = 'leaf-node';
+    a.href = node.url;
+    if (OPEN_IN_NEW_TAB) {
+        a.target = '_blank';
+    }
+
+    const iconData = getIconForBookmark(node.url);
+    const iconElement = createBookmarkIcon(iconData, 18);
+    a.appendChild(iconElement);
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'bookmark-label';
+    labelSpan.textContent = node.title;
+    a.appendChild(labelSpan);
+
+    wrapper.appendChild(a);
+    const actions = createBookmarkActions(node, wrapper);
+    wrapper.appendChild(actions);
+
+    return wrapper;
+}
+
 // Recursive helper for list items
 function renderTreeItem(node) {
     if (node.url) {
@@ -660,24 +783,12 @@ function renderTreeItem(node) {
         wrapper.dataset.parentId = node.parentId; // Important for moving
         wrapper.dataset.type = 'bookmark';
 
-        // Drag Events
-        wrapper.addEventListener('dragstart', handleItemDragStart);
-        wrapper.addEventListener('dragover', handleItemDragOver);
-        wrapper.addEventListener('dragleave', handleItemDragLeave);
-        wrapper.addEventListener('drop', handleItemDrop);
-        wrapper.addEventListener('dragend', handleItemDragEnd);
-
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
         if (OPEN_IN_NEW_TAB) {
             a.target = '_blank';
         }
-
-        // Track click for frequent bookmarks
-        a.addEventListener('click', () => {
-            trackBookmarkClick(node.url, node.title);
-        });
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
@@ -706,13 +817,6 @@ function renderTreeItem(node) {
         wrapper.dataset.id = node.id;
         wrapper.dataset.parentId = node.parentId;
         wrapper.dataset.type = 'folder';
-
-        // Drag Events
-        wrapper.addEventListener('dragstart', handleItemDragStart);
-        wrapper.addEventListener('dragover', handleItemDragOver);
-        wrapper.addEventListener('dragleave', handleItemDragLeave);
-        wrapper.addEventListener('drop', handleItemDrop);
-        wrapper.addEventListener('dragend', handleItemDragEnd);
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
@@ -873,6 +977,7 @@ function deleteBookmark(node, wrapperEl) {
                 return;
             }
             console.log('Deleted bookmark:', node.id);
+            refreshBookmarkTreeCache();
             // Animate out
             wrapperEl.classList.add('bookmark-fade-out');
             wrapperEl.addEventListener('animationend', () => {
@@ -942,6 +1047,7 @@ function editBookmark(node, wrapperEl) {
                 return;
             }
             console.log('Updated bookmark:', updated);
+            refreshBookmarkTreeCache();
 
             // Update node object
             if (changes.title) node.title = changes.title;
@@ -995,6 +1101,7 @@ function editBookmark(node, wrapperEl) {
 // --- Drag & Drop Logic ---
 
 function handleDragStart(e) {
+    if (e.target !== this) return;
     this.style.opacity = '0.4';
     dragSrcEl = this;
     e.dataTransfer.effectAllowed = 'move';
@@ -1002,6 +1109,7 @@ function handleDragStart(e) {
 }
 
 function handleDragOver(e) {
+    if (e.target !== this) return false;
     if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
     }
@@ -1011,10 +1119,12 @@ function handleDragOver(e) {
 }
 
 function handleDragLeave(e) {
+    if (e.target !== this) return;
     this.classList.remove('drag-over');
 }
 
 function handleDrop(e) {
+    if (e.target !== this) return false;
     if (e.stopPropagation) {
         e.stopPropagation(); // Stops some browsers from redirecting.
     }
@@ -1042,6 +1152,7 @@ function handleDrop(e) {
 
         chrome.bookmarks.move(srcId, { index: targetIndex }, (res) => {
             console.log('Moved bookmark:', res);
+            refreshBookmarkTreeCache();
         });
 
         this.style.opacity = '1';
@@ -1051,6 +1162,7 @@ function handleDrop(e) {
 }
 
 function handleDragEnd(e) {
+    if (e.target !== this) return;
     this.style.opacity = '1';
     const items = document.querySelectorAll('.bookmark-card');
     items.forEach(item => item.classList.remove('drag-over'));
@@ -1080,6 +1192,7 @@ function showFolderModal(folderNode) {
             body.appendChild(renderTreeItemForModal(child));
         });
     }
+    bindDelegatedItemDnD(body);
 
     // Show modal
     modal.classList.remove('hidden');
@@ -1121,24 +1234,12 @@ function renderTreeItemForModal(node) {
         wrapper.dataset.parentId = node.parentId;
         wrapper.dataset.type = 'bookmark';
 
-        // Drag Events
-        wrapper.addEventListener('dragstart', handleItemDragStart);
-        wrapper.addEventListener('dragover', handleItemDragOver);
-        wrapper.addEventListener('dragleave', handleItemDragLeave);
-        wrapper.addEventListener('drop', handleItemDrop);
-        wrapper.addEventListener('dragend', handleItemDragEnd);
-
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
         if (OPEN_IN_NEW_TAB) {
             a.target = '_blank';
         }
-
-        // Track click for frequent bookmarks
-        a.addEventListener('click', () => {
-            trackBookmarkClick(node.url, node.title);
-        });
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
@@ -1167,13 +1268,6 @@ function renderTreeItemForModal(node) {
         wrapper.dataset.id = node.id;
         wrapper.dataset.parentId = node.parentId;
         wrapper.dataset.type = 'folder';
-
-        // Drag Events
-        wrapper.addEventListener('dragstart', handleItemDragStart);
-        wrapper.addEventListener('dragover', handleItemDragOver);
-        wrapper.addEventListener('dragleave', handleItemDragLeave);
-        wrapper.addEventListener('drop', handleItemDrop);
-        wrapper.addEventListener('dragend', handleItemDragEnd);
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
@@ -1259,32 +1353,8 @@ function initSearch() {
     let currentEngine = 'google';
     let currentUrl = 'https://www.google.com/search?q=';
     let selectedIndex = -1;
-    let allBookmarks = [];
-
-    // Collect all bookmarks for suggestions
-    function collectAllBookmarks() {
-        allBookmarks = [];
-        chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-            function traverse(nodes, path = '') {
-                nodes.forEach(node => {
-                    if (node.url) {
-                        allBookmarks.push({
-                            title: node.title,
-                            url: node.url,
-                            path: path
-                        });
-                    }
-                    if (node.children) {
-                        traverse(node.children, path ? `${path} > ${node.title}` : node.title);
-                    }
-                });
-            }
-            traverse(bookmarkTreeNodes);
-        });
-    }
-
-    // Collect bookmarks on init
-    collectAllBookmarks();
+    let activeMatches = [];
+    let inputDebounceTimer = null;
 
     // Show/hide picker with overlay
     function showPicker() {
@@ -1326,20 +1396,40 @@ function initSearch() {
     function hideSuggestions() {
         suggestions.classList.add('hidden');
         selectedIndex = -1;
+        activeMatches = [];
+    }
+
+    function openSearchMatch(bookmark) {
+        if (!bookmark) return;
+        if (OPEN_IN_NEW_TAB) {
+            window.open(bookmark.url, '_blank');
+        } else {
+            window.location.href = bookmark.url;
+        }
+        exitSearchMode();
+        input.value = '';
     }
 
     // Render suggestions
     function renderSuggestions(query) {
-        if (!query.trim()) {
+        const queryLower = query.trim().toLowerCase();
+        if (!queryLower) {
             hideSuggestions();
             return;
         }
 
-        const queryLower = query.toLowerCase();
-        const matches = allBookmarks.filter(b =>
-            b.title.toLowerCase().includes(queryLower) ||
-            b.url.toLowerCase().includes(queryLower)
-        ).slice(0, 10); // Limit to 10 results
+        const bucketKeys = [queryLower.slice(0, 2), queryLower.slice(0, 1)].filter(Boolean);
+        const candidateSet = new Set();
+        bucketKeys.forEach((key) => {
+            const bucket = BOOKMARK_SEARCH_BUCKETS.get(key);
+            if (bucket) bucket.forEach(item => candidateSet.add(item));
+        });
+        const source = candidateSet.size > 0 ? Array.from(candidateSet) : BOOKMARK_SEARCH_INDEX;
+
+        const matches = source
+            .filter(b => b.searchText.includes(queryLower))
+            .slice(0, 10); // Limit to 10 results
+        activeMatches = matches;
 
         if (matches.length === 0) {
             suggestions.innerHTML = '<div class="no-results">没有找到匹配的书签</div>';
@@ -1402,31 +1492,8 @@ function initSearch() {
             suggestions.appendChild(item);
         });
 
-        // Add click handlers
-        suggestions.querySelectorAll('.suggestion-item').forEach((item, index) => {
-            item.addEventListener('click', () => {
-                const url = item.dataset.url;
-                const bookmark = matches[index];
-                // Track click for frequent bookmarks
-                trackBookmarkClick(bookmark.url, bookmark.title);
-                if (OPEN_IN_NEW_TAB) {
-                    window.open(url, '_blank');
-                } else {
-                    window.location.href = url;
-                }
-                exitSearchMode();
-                input.value = '';
-            });
-        });
-
         showSuggestions();
         selectedIndex = -1;
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     function updateSelection() {
@@ -1480,6 +1547,14 @@ function initSearch() {
         hidePicker();
     });
 
+    suggestions.addEventListener('click', (e) => {
+        const eventTarget = e.target instanceof Element ? e.target : null;
+        const item = eventTarget ? eventTarget.closest('.suggestion-item') : null;
+        if (!item || !suggestions.contains(item)) return;
+        const index = Number(item.dataset.index);
+        openSearchMatch(activeMatches[index]);
+    });
+
     // Search overlay click to exit search mode
     searchOverlay.addEventListener('click', () => {
         exitSearchMode();
@@ -1509,20 +1584,7 @@ function initSearch() {
         } else if (e.key === 'Enter') {
             e.preventDefault();
             if (selectedIndex >= 0 && items[selectedIndex]) {
-                // Open selected suggestion
-                const url = items[selectedIndex].dataset.url;
-                // Get bookmark info from allBookmarks based on URL
-                const bookmark = allBookmarks.find(b => b.url === url);
-                if (bookmark) {
-                    trackBookmarkClick(bookmark.url, bookmark.title);
-                }
-                if (OPEN_IN_NEW_TAB) {
-                    window.open(url, '_blank');
-                } else {
-                    window.location.href = url;
-                }
-                exitSearchMode();
-                input.value = '';
+                openSearchMatch(activeMatches[selectedIndex]);
             } else {
                 // Web search
                 const query = input.value.trim();
@@ -1542,7 +1604,10 @@ function initSearch() {
     });
 
     input.addEventListener('input', (e) => {
-        renderSuggestions(input.value);
+        clearTimeout(inputDebounceTimer);
+        inputDebounceTimer = setTimeout(() => {
+            renderSuggestions(input.value);
+        }, 100);
     });
 }
 
@@ -1633,7 +1698,7 @@ function initSettingsUI(settings) {
                 CURRENT_ICON_STYLE = radio.value;
                 saveSetting(STORAGE_KEY_ICON_STYLE, CURRENT_ICON_STYLE);
                 // Re-render bookmarks
-                chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+                renderBookmarksFromCache();
             }
         });
 
@@ -1650,7 +1715,7 @@ function initSettingsUI(settings) {
                 LAYOUT_MODE = radio.value;
                 saveSetting(STORAGE_KEY_LAYOUT_MODE, LAYOUT_MODE);
                 // Re-render bookmarks
-                chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
+                renderBookmarksFromCache();
             }
         });
 
@@ -1660,16 +1725,6 @@ function initSettingsUI(settings) {
         } else if (!settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === 'tree') {
             radio.checked = true; // Default
         }
-    });
-
-    // 4.5 Auto-Sort by Frequency
-    const autoSortToggle = document.getElementById('auto-sort-toggle');
-    autoSortToggle.checked = AUTO_SORT_BY_FREQUENCY;
-    autoSortToggle.addEventListener('change', () => {
-        AUTO_SORT_BY_FREQUENCY = autoSortToggle.checked;
-        saveSetting(STORAGE_KEY_AUTO_SORT, AUTO_SORT_BY_FREQUENCY);
-        // Re-render to apply/remove sorting
-        chrome.bookmarks.getTree((tree) => renderBookmarks(tree));
     });
 
     // 4. Background Settings
@@ -1828,24 +1883,6 @@ function initSettingsUI(settings) {
             hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
         }
     }
-
-    // 6. Frequent Bookmarks Toggle
-    const frequentInputs = document.getElementsByName('frequent-enabled');
-    frequentInputs.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.checked) {
-                const enabled = radio.value === 'on';
-                saveSetting(STORAGE_KEY_FREQUENT_ENABLED, enabled);
-                toggleFrequentBookmarks(enabled);
-            }
-        });
-
-        // Initial state
-        const savedEnabled = settings[STORAGE_KEY_FREQUENT_ENABLED] !== false; // Default true
-        if ((radio.value === 'on') === savedEnabled) {
-            radio.checked = true;
-        }
-    });
 
     const exportBtn = document.getElementById('export-bookmarks-btn');
     if (exportBtn) {
@@ -2020,6 +2057,7 @@ function handleItemDragOver(e) {
         this.classList.add('drag-over-item');
         this.classList.remove('drag-into-folder');
     }
+    DRAG_HIGHLIGHTED_ELEMENTS.add(this);
     return false;
 }
 
@@ -2027,6 +2065,7 @@ function handleItemDragLeave(e) {
     e.stopPropagation();
     this.classList.remove('drag-over-item');
     this.classList.remove('drag-into-folder');
+    DRAG_HIGHLIGHTED_ELEMENTS.delete(this);
 }
 
 function handleItemDrop(e) {
@@ -2035,6 +2074,7 @@ function handleItemDrop(e) {
     }
     this.classList.remove('drag-over-item');
     this.classList.remove('drag-into-folder');
+    DRAG_HIGHLIGHTED_ELEMENTS.delete(this);
 
     // Check if we are dropping an item
     const type = e.dataTransfer.getData('type');
@@ -2052,8 +2092,8 @@ function handleItemDrop(e) {
                     console.error('Move into folder failed:', chrome.runtime.lastError.message);
                 } else {
                     console.log('Moved bookmark into folder:', res);
-                    // Refresh entire bookmark tree to reflect the change
-                    chrome.bookmarks.getTree((bookmarkTree) => {
+                    // Refresh cache and UI to reflect the change
+                    refreshBookmarkTreeCache((bookmarkTree) => {
                         renderBookmarks(bookmarkTree);
                     });
                 }
@@ -2097,6 +2137,7 @@ function handleItemDrop(e) {
             } else {
                 console.log('Moved bookmark item:', res);
                 dragSrcEl.dataset.parentId = destParentId;
+                refreshBookmarkTreeCache();
             }
         });
 
@@ -2108,49 +2149,51 @@ function handleItemDrop(e) {
 function handleItemDragEnd(e) {
     if (e.stopPropagation) e.stopPropagation();
     this.style.opacity = '1';
-    // Clean all drag visual states
-    document.querySelectorAll('.drag-over-item').forEach(el => el.classList.remove('drag-over-item'));
-    document.querySelectorAll('.drag-into-folder').forEach(el => el.classList.remove('drag-into-folder'));
+    // Clean only tracked drag highlight nodes to avoid full-DOM query on every drag end.
+    DRAG_HIGHLIGHTED_ELEMENTS.forEach((el) => {
+        el.classList.remove('drag-over-item');
+        el.classList.remove('drag-into-folder');
+    });
+    DRAG_HIGHLIGHTED_ELEMENTS.clear();
     dragSrcEl = null;
 }
 
 // --- AI Sidebar Logic ---
 
-function initAiSidebar() {
+function initAiSidebarLazy() {
     const toggleBtn = document.getElementById('ai-sidebar-btn');
+    if (!toggleBtn) return;
+
+    toggleBtn.addEventListener('click', () => {
+        if (!AI_SIDEBAR_CONTROLLER) {
+            AI_SIDEBAR_CONTROLLER = initAiSidebar();
+        }
+        AI_SIDEBAR_CONTROLLER.toggle();
+    });
+}
+
+function initAiSidebar() {
     const sidebar = document.getElementById('ai-sidebar');
     const sidebarOverlay = document.getElementById('ai-sidebar-overlay');
     const closeBtn = document.getElementById('ai-sidebar-close');
     const openNewWindowBtn = document.getElementById('ai-open-new-window');
-    const openFallbackBtn = document.getElementById('ai-open-gemini');
+    const openFallbackBtn = document.getElementById('ai-open-ai');
     const fallback = document.getElementById('ai-iframe-fallback');
     const aiTabs = document.querySelectorAll('.ai-tab');
 
     // Get all iframes
     const iframes = {
         google: document.getElementById('ai-iframe-google'),
-        gemini: document.getElementById('ai-iframe-gemini'),
         chatgpt: document.getElementById('ai-iframe-chatgpt'),
-        kimi: document.getElementById('ai-iframe-kimi'),
-        longcat: document.getElementById('ai-iframe-longcat'),
-        perplexity: document.getElementById('ai-iframe-perplexity'),
-        zai: document.getElementById('ai-iframe-zai'),
         doubao: document.getElementById('ai-iframe-doubao'),
-        grok: document.getElementById('ai-iframe-grok'),
         qwen: document.getElementById('ai-iframe-qwen')
     };
 
     // AI URLs mapping
     const aiUrls = {
         google: 'https://www.google.com/search?udm=50&aep=11',
-        gemini: 'https://gemini.google.com',
         chatgpt: 'https://chatgpt.com/',
-        kimi: 'https://kimi.moonshot.cn/',
-        longcat: 'https://longcat.chat/',
-        perplexity: 'https://www.perplexity.ai/',
-        zai: 'https://chat.z.ai/',
         doubao: 'https://www.doubao.com/chat/',
-        grok: 'https://grok.com/',
         qwen: 'https://chat.qwen.ai/'
     };
 
@@ -2255,13 +2298,12 @@ function initAiSidebar() {
     chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
         if (result[STORAGE_KEY_AI]) {
             const saved = result[STORAGE_KEY_AI];
-            currentAi = saved;
+            if (saved?.id && aiUrls[saved.id]) {
+                currentAi = saved;
+            }
             // updateCurrentAiDisplay(); // No longer needed as icon is static
         }
         updateActiveTab();
-
-        // Preload default AI iframe
-        preloadIframe(currentAi.id);
     });
 
     function updateCurrentAiDisplay() {
@@ -2292,22 +2334,39 @@ function initAiSidebar() {
 
             iframe.src = url;
             loadedIframes.add(aiId);
+            iframe.style.display = '';
 
-            iframe.addEventListener('load', () => {
-                iframe.classList.add('loaded');
-            });
+            if (!iframe.dataset.loadBound) {
+                iframe.addEventListener('load', () => {
+                    iframe.classList.add('loaded');
+                });
+                iframe.dataset.loadBound = 'true';
+            }
         }
+    }
+
+    function unloadIframe(aiId) {
+        const iframe = iframes[aiId];
+        if (!iframe || !loadedIframes.has(aiId)) return;
+        iframe.classList.remove('active');
+        iframe.classList.remove('loaded');
+        iframe.style.display = '';
+        iframe.src = 'about:blank';
+        loadedIframes.delete(aiId);
     }
 
     // Switch between AI iframes
     function switchToAi(aiId) {
-        Object.values(iframes).forEach(iframe => {
-            if (iframe) iframe.classList.remove('active');
+        Object.entries(iframes).forEach(([id, iframe]) => {
+            if (!iframe) return;
+            if (id !== aiId) unloadIframe(id);
         });
 
         const targetIframe = iframes[aiId];
         if (targetIframe) {
             targetIframe.classList.add('active');
+            if (fallback) fallback.classList.add('hidden');
+            targetIframe.style.display = '';
             if (!loadedIframes.has(aiId)) {
                 preloadIframe(aiId);
             }
@@ -2348,6 +2407,7 @@ function initAiSidebar() {
             if (!sidebar.classList.contains('active')) {
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
+                unloadIframe(currentAi.id);
             }
         }, 400);
     }
@@ -2357,7 +2417,8 @@ function initAiSidebar() {
     }
 
     function showFallback() {
-        if (iframe) iframe.style.display = 'none';
+        const activeFrame = document.querySelector('.ai-iframe.active');
+        if (activeFrame) activeFrame.style.display = 'none';
         if (fallback) fallback.classList.remove('hidden');
     }
 
@@ -2365,17 +2426,6 @@ function initAiSidebar() {
     aiTabs.forEach(tab => {
         tab.addEventListener('click', () => selectAi(tab));
     });
-
-    // Main button click - open sidebar
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            if (sidebar.classList.contains('active')) {
-                closeSidebar();
-            } else {
-                openSidebar();
-            }
-        });
-    }
 
     // Close button
     if (closeBtn) {
@@ -2406,169 +2456,16 @@ function initAiSidebar() {
             closeSidebar();
         }
     });
-}
 
-// ========================================
-// Frequent Bookmarks - Frecency Algorithm
-// ========================================
-
-/**
- * Calculate Frecency score for a bookmark
- * Score = clickCount * decayFactor(lastClickTime)
- * decayFactor = exp(-λ * hoursSinceClick / 24)
- */
-function calculateFrecency(data) {
-    const now = Date.now();
-    const hoursSinceClick = (now - data.lastClickTime) / (1000 * 60 * 60);
-    const decayFactor = Math.exp(-FRECENCY_DECAY_LAMBDA * hoursSinceClick / 24);
-    return data.clickCount * decayFactor;
-}
-
-/**
- * Track bookmark click and update frequency data
- */
-function trackBookmarkClick(url, title) {
-    chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
-        const frequentData = result[STORAGE_KEY_FREQUENT_DATA] || {};
-        const key = url; // Use URL as unique key
-
-        if (frequentData[key]) {
-            frequentData[key].clickCount += 1;
-            frequentData[key].lastClickTime = Date.now();
-            frequentData[key].title = title; // Update title in case it changed
-        } else {
-            frequentData[key] = {
-                url: url,
-                title: title,
-                clickCount: 1,
-                lastClickTime: Date.now()
-            };
+    return {
+        toggle() {
+            if (sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
         }
-
-        // Clean up old entries (keep top 50 to prevent storage bloat)
-        const entries = Object.entries(frequentData);
-        if (entries.length > 50) {
-            const sorted = entries.sort((a, b) => calculateFrecency(b[1]) - calculateFrecency(a[1]));
-            const trimmed = sorted.slice(0, 50);
-            const newData = Object.fromEntries(trimmed);
-            chrome.storage.local.set({ [STORAGE_KEY_FREQUENT_DATA]: newData });
-        } else {
-            chrome.storage.local.set({ [STORAGE_KEY_FREQUENT_DATA]: frequentData });
-        }
-    });
-}
-
-/**
- * Get top N frequent bookmarks sorted by Frecency score
- */
-
-/**
- * Track folder click frequency for auto-sort feature
- */
-function trackFolderClick(folderId, title) {
-    chrome.storage.local.get([STORAGE_KEY_FOLDER_FREQ_DATA], (result) => {
-        const data = result[STORAGE_KEY_FOLDER_FREQ_DATA] || {};
-        if (data[folderId]) {
-            data[folderId].clickCount += 1;
-            data[folderId].lastClickTime = Date.now();
-            data[folderId].title = title;
-        } else {
-            data[folderId] = { title, clickCount: 1, lastClickTime: Date.now() };
-        }
-        FOLDER_FREQ_DATA = data;
-        chrome.storage.local.set({ [STORAGE_KEY_FOLDER_FREQ_DATA]: data });
-    });
-}
-
-/**
- * Get top N frequent bookmarks sorted by Frecency score
- */
-function getTopFrequentBookmarks(frequentData, count = FREQUENT_BOOKMARK_COUNT) {
-    const entries = Object.entries(frequentData);
-    if (entries.length === 0) return [];
-
-    const scored = entries.map(([key, data]) => ({
-        ...data,
-        score: calculateFrecency(data)
-    }));
-
-    scored.sort((a, b) => b.score - a.score);
-    return scored.slice(0, count);
-}
-
-/**
- * Render frequent bookmarks section
- */
-function renderFrequentBookmarks(frequentData) {
-    const section = document.getElementById('frequent-bookmarks');
-    const container = section.querySelector('.suggested-items');
-
-    if (!section || !container) return;
-
-    const topBookmarks = getTopFrequentBookmarks(frequentData);
-
-    if (topBookmarks.length === 0) {
-        section.classList.add('hidden');
-        return;
-    }
-
-    container.innerHTML = '';
-
-    topBookmarks.forEach(bookmark => {
-        const item = document.createElement('a');
-        item.className = 'suggested-item';
-        item.href = bookmark.url;
-        if (OPEN_IN_NEW_TAB) {
-            item.target = '_blank';
-        }
-
-        // Track click when opened
-        item.addEventListener('click', () => {
-            trackBookmarkClick(bookmark.url, bookmark.title);
-        });
-
-        // Icon
-        const iconDiv = document.createElement('div');
-        iconDiv.className = 'suggested-item-icon';
-        try {
-            const img = document.createElement('img');
-            img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
-            img.addEventListener('error', function () {
-                this.replaceWith(document.createTextNode('·'));
-            });
-            iconDiv.appendChild(img);
-        } catch {
-            iconDiv.textContent = '·';
-        }
-        item.appendChild(iconDiv);
-
-        // Title
-        const titleSpan = document.createElement('span');
-        titleSpan.className = 'suggested-item-title';
-        titleSpan.textContent = bookmark.title || new URL(bookmark.url).hostname;
-        item.appendChild(titleSpan);
-
-        container.appendChild(item);
-    });
-
-    section.classList.remove('hidden');
-}
-
-/**
- * Toggle frequent bookmarks section visibility
- */
-function toggleFrequentBookmarks(enabled) {
-    const section = document.getElementById('frequent-bookmarks');
-    if (!section) return;
-
-    if (enabled) {
-        chrome.storage.local.get([STORAGE_KEY_FREQUENT_DATA], (result) => {
-            const frequentData = result[STORAGE_KEY_FREQUENT_DATA] || {};
-            renderFrequentBookmarks(frequentData);
-        });
-    } else {
-        section.classList.add('hidden');
-    }
+    };
 }
 
 // ========================================
