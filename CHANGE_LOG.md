@@ -22,3 +22,9 @@
 - **Type**: Docs (Prompt Optimization)
 - **Content**: 优化 `AGENTS.md` 与 `GEMINI.md` 提示词文案，强化“编码前方案确认门禁 + 执行后自动记录变更日志 + 自动提交 git”的闭环流程，并统一两份文档规则。
 - **Impact**: `AGENTS.md`、`GEMINI.md`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 16:30:15 +0800
+- **Type**: Optimization (Native Theme Readability)
+- **Content**: 优化原生浅色/深色主题下的新标签页可读性与层级感：提升容器遮罩与文本对比、强化目录选中态、优化卡片标题与域名节奏、增强滚动条可见性，并补充书签项键盘焦点态。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
