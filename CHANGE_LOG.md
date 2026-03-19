@@ -58,3 +58,9 @@
 - **Type**: Optimization (Layout Consistency)
 - **Content**: 调整平铺模式左侧基准边距，新增自适应左侧补偿（`--flat-left-gutter`），使“书签目录”模块与树状模式的主内容左边界更一致，降低模式切换时的视觉跳变。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 17:12:55 +0800
+- **Type**: Optimization (Layout Symmetry)
+- **Content**: 平铺模式改为左右对称内边距（`--flat-side-gutter`）以与树状模式统一边界，同时将平铺书签块最小宽度由 `220px` 微调为 `210px`，在保持观感的同时留出右侧边距空间。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

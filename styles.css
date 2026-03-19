@@ -671,9 +671,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: row;
     gap: 16px;
-    /* Align flat-mode left baseline with tree-mode centered first column */
-    --flat-left-gutter: clamp(10px, calc((100% - 1260px) / 2), 110px);
-    padding: 10px 10px 10px var(--flat-left-gutter);
+    /* Keep flat-mode left/right baseline aligned with tree-mode content area */
+    --flat-side-gutter: clamp(10px, calc((100% - 1260px) / 2), 110px);
+    padding: 10px var(--flat-side-gutter);
     align-items: flex-start; /* Align both panes to the same top line */
 }
 
@@ -872,7 +872,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 12px;
     align-content: start;
 }
