@@ -142,3 +142,9 @@
 - **Type**: Refactor (Directory Frame & Tree 4-Column)
 - **Content**: 弱化平铺模式左侧目录区外层框感：移除 `directory-pane` 的明显边框与背景承载；树状模式主卡片网格改为大屏 4 列展示，并补充 3/2/1 列响应式降级，保证不同宽度下的可读性与密度平衡。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 19:02:36 +0800
+- **Type**: Optimization (Directory Hover Responsiveness)
+- **Content**: 优化平铺模式目录悬停跟手性：移除目录 hover 延迟定时器，改为进入即高亮并通过 `requestAnimationFrame` 调度内容区渲染，修复快速划过目录时“跳项高亮”导致的不连贯体验。
+- **Impact**: `script.js`、`CHANGE_LOG.md`

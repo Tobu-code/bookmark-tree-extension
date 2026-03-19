@@ -547,11 +547,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         });
     };
 
-    // Shared debounce timer for hover-to-switch (fine pointer only)
-    let folderHoverTimer = null;
+    // Hover-to-switch: immediate activation + frame-scheduled render for smoothness
     let currentActiveFolder = null;
     const allowHoverSwitch = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    const HOVER_SWITCH_DELAY_MS = 90;
+    let pendingRenderFrame = null;
 
     const activateFolder = (folder, folderTile, animated = false) => {
         if (currentActiveFolder === folder) return;
@@ -559,13 +558,21 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         folderTile.classList.add('active');
         currentActiveFolder = folder;
 
+        if (pendingRenderFrame) {
+            cancelAnimationFrame(pendingRenderFrame);
+            pendingRenderFrame = null;
+        }
+
         if (animated) {
             bmkPane.style.opacity = '0.94';
             bmkPane.style.transform = 'translateY(2px)';
-            renderBmkPane(folder);
-            requestAnimationFrame(() => {
-                bmkPane.style.opacity = '1';
-                bmkPane.style.transform = 'translateY(0)';
+            pendingRenderFrame = requestAnimationFrame(() => {
+                renderBmkPane(folder);
+                requestAnimationFrame(() => {
+                    bmkPane.style.opacity = '1';
+                    bmkPane.style.transform = 'translateY(0)';
+                });
+                pendingRenderFrame = null;
             });
             return;
         }
@@ -631,21 +638,12 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         if (allowHoverSwitch) {
             folderTile.addEventListener('mouseenter', () => {
-                if (currentActiveFolder === folder) return;
-                clearTimeout(folderHoverTimer);
-                folderHoverTimer = setTimeout(() => {
-                    activateFolder(folder, folderTile, true);
-                }, HOVER_SWITCH_DELAY_MS);
-            });
-
-            folderTile.addEventListener('mouseleave', () => {
-                clearTimeout(folderHoverTimer);
+                activateFolder(folder, folderTile, true);
             });
         }
 
         // Keep click as fallback (touch devices, accessibility)
         folderTile.addEventListener('click', () => {
-            clearTimeout(folderHoverTimer);
             activateFolder(folder, folderTile, false);
         });
 
