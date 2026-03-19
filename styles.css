@@ -7,9 +7,9 @@
     /* Terracotta Orange */
     --text-color: #1a1a18;
     /* Deep Charcoal Black */
-    --text-secondary: #6b6a68;
+    --text-secondary: #5f5d59;
     /* Medium Grey */
-    --bg-overlay: rgba(245, 245, 240, 0.4);
+    --bg-overlay: rgba(245, 245, 240, 0.62);
     /* Creamy/Beige Tint */
     --card-bg: #FFFFFF;
     /* Pure White Cards */
@@ -34,10 +34,10 @@
     /* Terracotta/Clay - Core Brand Accent */
     --text-color: #F2F0E9;
     /* Off-white for primary text */
-    --text-secondary: #A8A6A3;
+    --text-secondary: #BDBAB6;
     /* Slightly warmer grey for secondary text */
 
-    --bg-overlay: rgba(26, 21, 35, 0.4);
+    --bg-overlay: rgba(26, 21, 35, 0.62);
     /* Deep purple-grey main background */
     --card-bg: #221D2A;
     /* Purple-tinted card background */
@@ -80,8 +80,8 @@
     :root:not([data-theme="light"]) {
         --primary-color: #D97757;
         --text-color: #F2F0E9;
-        --text-secondary: #A8A6A3;
-        --bg-overlay: rgba(26, 21, 35, 0.4);
+        --text-secondary: #BDBAB6;
+        --bg-overlay: rgba(26, 21, 35, 0.62);
         --card-bg: #221D2A;
         --card-hover: #2D2638;
         --border-color: rgba(217, 119, 87, 0.12);
@@ -174,11 +174,11 @@ h3,
     height: 94vh;
     margin: 3vh auto;
     border-radius: 24px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 40%), var(--bg-overlay);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.01) 32%, transparent 55%), var(--bg-overlay);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 36px 0 rgba(31, 38, 135, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     padding: 40px 20px;
@@ -233,7 +233,7 @@ body.loaded #background-layer {
 }
 
 .ambient-time.visible {
-    opacity: 0.75;
+    opacity: 0.8;
     /* 闲置时清晰显示 */
 }
 
@@ -257,7 +257,8 @@ body.loaded #background-layer {
 
 #search-input::placeholder {
     font-style: italic;
-    opacity: 0.5;
+    opacity: 0.72;
+    color: var(--text-secondary);
 }
 
 /* Wrapper looks like the old input - Claude Style Enhanced */
@@ -270,7 +271,7 @@ body.loaded #background-layer {
     /* More rounded, Claude-style */
     background: var(--card-bg);
     box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.12),
+        0 5px 18px rgba(0, 0, 0, 0.14),
         inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -325,7 +326,7 @@ body.loaded #background-layer {
     width: 58.5%;
     background: var(--card-bg);
     border-color: transparent;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.24);
     transform: translateY(-2px) scale(1.02);
 }
 
@@ -368,10 +369,10 @@ body.loaded #background-layer {
     font-size: 15px;
     /* Slightly smaller */
     font-weight: 500;
-    color: var(--text-secondary);
+    color: color-mix(in srgb, var(--text-color) 65%, var(--text-secondary));
     cursor: pointer;
     padding-right: 12px;
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid color-mix(in srgb, var(--border-color) 72%, var(--text-color));
     margin-right: 8px;
     min-width: 60px;
     text-align: center;
@@ -640,7 +641,8 @@ body.search-active #search-container {
     overflow-y: auto;
     padding-right: 32px; /* Increased right padding to create a wider safe corridor */
     padding-top: 0;
-    border-right: 1px solid rgba(0, 0, 0, 0.06);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 28%);
     -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
     /* Fix Chrome backdrop-filter scroll compositing bug */
@@ -649,12 +651,13 @@ body.search-active #search-container {
 }
 
 :root[data-theme="dark"] .directory-pane {
-    border-right-color: rgba(255, 255, 255, 0.12);
+    border-right-color: rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%);
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
 .directory-pane:hover .folder-tile:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.72;
 }
 
 .folder-tile {
@@ -665,7 +668,7 @@ body.search-active #search-container {
 .bookmarks-pane {
     flex: 1;
     background: transparent;
-    padding: 24px;
+    padding: 24px 28px;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -685,40 +688,40 @@ body.search-active #search-container {
     border-radius: 14px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.54);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
     /* Fix Chrome scroll compositing bug */
     will-change: transform;
 }
 
 :root[data-theme="dark"] .folder-tile {
-    background: rgba(40, 35, 50, 0.45);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(40, 35, 50, 0.58);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .folder-tile:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.72);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    border-color: rgba(174, 86, 48, 0.2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border-color: rgba(174, 86, 48, 0.3);
 }
 
 :root[data-theme="dark"] .folder-tile:hover {
-    background: rgba(40, 35, 50, 0.6);
-    border-color: rgba(217, 119, 87, 0.2);
+    background: rgba(40, 35, 50, 0.72);
+    border-color: rgba(217, 119, 87, 0.34);
 }
 
 .folder-tile.active {
-    background: rgba(217, 119, 87, 0.15);
+    background: rgba(217, 119, 87, 0.2);
     color: var(--primary-color);
     font-weight: 600;
     border-left: 3px solid var(--primary-color);
-    border-color: rgba(217, 119, 87, 0.3);
-    box-shadow: 0 2px 8px rgba(217, 119, 87, 0.1);
+    border-color: rgba(217, 119, 87, 0.38);
+    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.2), 0 4px 14px rgba(217, 119, 87, 0.16);
 }
 
 .folder-tile:not(:has(.hide-icon:hover)):active {
@@ -727,9 +730,10 @@ body.search-active #search-container {
 }
 
 :root[data-theme="dark"] .folder-tile.active {
-    background: rgba(217, 119, 87, 0.12);
+    background: rgba(217, 119, 87, 0.22);
     color: var(--primary-color);
-    border-color: rgba(217, 119, 87, 0.3);
+    border-color: rgba(217, 119, 87, 0.42);
+    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.22), 0 6px 20px rgba(0, 0, 0, 0.26);
 }
 
 .folder-tile-title {
@@ -737,8 +741,9 @@ body.search-active #search-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 16px; /* Increased font size */
-    font-weight: 500; /* Made slightly bolder */
+    font-size: 16px;
+    font-weight: 560;
+    letter-spacing: 0.1px;
     flex-grow: 1;
 }
 
@@ -819,10 +824,10 @@ body.search-active #search-container {
 
 /* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.56);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 16px;
     padding: 12px;
     margin-bottom: 0;
@@ -830,7 +835,7 @@ body.search-active #search-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     /* Fix Chrome scroll compositing bug with backdrop-filter */
     will-change: transform;
@@ -838,20 +843,20 @@ body.search-active #search-container {
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(40, 35, 50, 0.45);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(40, 35, 50, 0.62);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-3px) scale(1.015);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(174, 86, 48, 0.3);
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.72);
     border-color: rgba(174, 86, 48, 0.4); /* Glow with theme primary */
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background: rgba(40, 35, 50, 0.55);
+    background: rgba(40, 35, 50, 0.76);
     border-color: rgba(217, 119, 87, 0.4);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
 }
@@ -863,11 +868,11 @@ body.search-active #search-container {
 
 /* Optimization 3: Hover focus - dim others in bookmarks grid */
 .bookmarks-pane-grid:hover .leaf-wrapper:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.74;
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px 4px;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center all children horizontally */
@@ -884,12 +889,16 @@ body.search-active #search-container {
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important; /* Remove horizontal-layout margin */
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 550;
+    line-height: 1.25;
+    color: var(--text-color);
     text-align: center;
     max-width: 100%;
 }
@@ -934,8 +943,8 @@ body.search-active #search-container {
     display: block;
     font-size: 11px;
     color: var(--text-secondary, #888);
-    opacity: 0.55;
-    margin-top: 2px;
+    opacity: 0.8;
+    margin-top: 1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -963,7 +972,7 @@ body.search-active #search-container {
 /* Item 12: Ultra-slim scrollbar with transparent track */
 .directory-pane::-webkit-scrollbar,
 .bookmarks-pane::-webkit-scrollbar {
-    width: 4px; /* Slimmer */
+    width: 6px;
 }
 .directory-pane::-webkit-scrollbar-track,
 .bookmarks-pane::-webkit-scrollbar-track {
@@ -971,12 +980,23 @@ body.search-active #search-container {
 }
 .directory-pane::-webkit-scrollbar-thumb,
 .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.26);
     border-radius: 10px;
 }
+
+.directory-pane::-webkit-scrollbar-thumb:hover,
+.bookmarks-pane::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.42);
+}
+
 :root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb,
 :root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.26);
+}
+
+:root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb:hover,
+:root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */
@@ -1284,6 +1304,11 @@ body.search-active #search-container {
     /* Prepare for hover accent */
     overflow: hidden;
     min-width: 0;
+}
+
+.leaf-node:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--primary-color) 76%, white);
+    outline-offset: 2px;
 }
 
 /* Hover Effect - Claude Style Gradient */
@@ -2486,116 +2511,6 @@ input[type="file"] {
         right: 16px;
         width: 48px;
         height: 48px;
-    }
-}
-
-/* ========================================
-   Suggested Destinations - Minimalist Style
-   ======================================== */
-
-.suggested-section {
-    margin: -14px auto 40px auto;
-    padding: 0;
-    width: 65%;
-    max-width: 900px;
-    box-sizing: border-box;
-}
-
-.suggested-items {
-    display: flex;
-    gap: 6px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    padding-left: 101px;
-    overflow: visible;
-    /* 允许超出边界以防截断 */
-}
-
-.suggested-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    width: 120px;
-    flex-shrink: 0;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    opacity: 0.55;
-    box-sizing: border-box;
-}
-
-.suggested-item:hover {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.04);
-}
-
-:root[data-theme="dark"] .suggested-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .suggested-item:hover {
-        background: rgba(255, 255, 255, 0.06);
-    }
-}
-
-.suggested-item-icon {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-    opacity: 0.6;
-    filter: grayscale(40%);
-    transition: all 0.2s ease;
-}
-
-.suggested-item:hover .suggested-item-icon {
-    opacity: 1;
-    filter: grayscale(0%);
-}
-
-.suggested-item-icon img {
-    width: 100%;
-    height: 100%;
-    border-radius: 2px;
-}
-
-.suggested-item-title {
-    font-size: 13px;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    transition: color 0.2s ease;
-}
-
-.suggested-item:hover .suggested-item-title {
-    color: var(--text-color);
-}
-
-
-/* Responsive - Suggested Section */
-@media (max-width: 768px) {
-    .suggested-section {
-        width: 90%;
-        margin: -40px auto 30px auto;
-    }
-
-    .suggested-item-title {
-        max-width: 60px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 500px) {
-    .suggested-section {
-        display: none;
     }
 }
 
