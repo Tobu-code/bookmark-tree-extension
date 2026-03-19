@@ -588,6 +588,46 @@ body.search-active #search-container {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 10px;
+    transform-origin: 50% 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+@keyframes layoutSwitchFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.994);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+body.layout-switching #bookmarks-tree {
+    opacity: 0.88;
+    transform: translateY(2px) scale(0.995);
+}
+
+body.layout-switching #bookmarks-tree.layout-flat .directory-pane,
+body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane,
+body.layout-switching #bookmarks-tree.layout-flat .folder-tile,
+body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper,
+body.layout-switching #bookmarks-tree.layout-tree .top-level-container,
+body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
+    animation: layoutSwitchFadeIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #bookmarks-tree,
+    body.layout-switching #bookmarks-tree.layout-flat .directory-pane,
+    body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane,
+    body.layout-switching #bookmarks-tree.layout-flat .folder-tile,
+    body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper,
+    body.layout-switching #bookmarks-tree.layout-tree .top-level-container,
+    body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 
 /* Scrollbar styling - Mac/iOS Native Feel */

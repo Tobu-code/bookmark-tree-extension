@@ -31,6 +31,7 @@ let BOOKMARK_TREE_CACHE = null;
 let BOOKMARK_SEARCH_INDEX = [];
 let BOOKMARK_SEARCH_BUCKETS = new Map();
 let AI_SIDEBAR_CONTROLLER = null;
+let LAYOUT_SWITCH_TIMER = null;
 
 function buildBookmarkSearchIndex(bookmarkTreeNodes) {
     const entries = [];
@@ -102,6 +103,27 @@ function renderBookmarksFromCache() {
         return;
     }
     refreshBookmarkTreeCache((tree) => renderBookmarks(tree));
+}
+
+function renderBookmarksWithLayoutTransition() {
+    const body = document.body;
+    if (!body) {
+        renderBookmarksFromCache();
+        return;
+    }
+
+    // Restart class for repeated rapid toggles.
+    body.classList.remove('layout-switching');
+    void body.offsetWidth;
+    body.classList.add('layout-switching');
+
+    renderBookmarksFromCache();
+
+    if (LAYOUT_SWITCH_TIMER) clearTimeout(LAYOUT_SWITCH_TIMER);
+    LAYOUT_SWITCH_TIMER = setTimeout(() => {
+        body.classList.remove('layout-switching');
+        LAYOUT_SWITCH_TIMER = null;
+    }, 220);
 }
 
 function cleanupLegacyFrequencyStorage() {
@@ -203,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const layoutRadios = document.getElementsByName('layout-mode');
         layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
         // Re-render
-        renderBookmarksFromCache();
+        renderBookmarksWithLayoutTransition();
     });
 
     // 8. Reveal Page
@@ -1698,7 +1720,7 @@ function initSettingsUI(settings) {
                 CURRENT_ICON_STYLE = radio.value;
                 saveSetting(STORAGE_KEY_ICON_STYLE, CURRENT_ICON_STYLE);
                 // Re-render bookmarks
-                renderBookmarksFromCache();
+                renderBookmarksWithLayoutTransition();
             }
         });
 
