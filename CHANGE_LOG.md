@@ -124,3 +124,9 @@
 - **Type**: Fix (Scroll Compositing Stability)
 - **Content**: 修复平铺模式滚动时偶发白块/未加载占位问题：移除滚动容器上的 `mask-image + translateZ + will-change` 高风险组合，简化目录与书签卡片的滚动合成层；同时为左右滚动区补充 `overscroll-behavior` 与平滑滚动参数，提升滚动连续性并降低卡顿感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:44:18 +0800
+- **Type**: Fix (Independent Split-Scroll)
+- **Content**: 平铺模式改为左右独立滚动：固定 `#bookmarks-tree.layout-flat` 不滚动，左侧 `directory-pane` 与右侧 `bookmarks-pane` 各自管理纵向滚动；补充高度与最小高度约束，避免滚动联动与抢滚轮问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
