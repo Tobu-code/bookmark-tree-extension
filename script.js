@@ -9,6 +9,7 @@ const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
+const STORAGE_KEY_FLAT_DIRECTORY_ORDER = 'flat_directory_order';
 const LEGACY_FREQUENCY_STORAGE_KEYS = [
     'frequent_bookmarks_data',
     'settings_frequent_enabled',
@@ -28,6 +29,7 @@ let LAYOUT_MODE = 'tree';
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
 let FLAT_DIR_EXPANDED = false;
+let FLAT_DIRECTORY_ORDER = [];
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
 let BOOKMARK_SEARCH_INDEX = [];
@@ -107,6 +109,47 @@ function renderBookmarksFromCache() {
     refreshBookmarkTreeCache((tree) => renderBookmarks(tree));
 }
 
+function getFlatRootFolders(bookmarkTreeNodes) {
+    if (!bookmarkTreeNodes || !bookmarkTreeNodes[0]) return [];
+    const rootNode = bookmarkTreeNodes[0];
+    const bookmarksBar = rootNode.children.find(node => node.id === '1') || rootNode.children[0];
+    const folders = [];
+    if (bookmarksBar && bookmarksBar.children) {
+        bookmarksBar.children.forEach(child => flattenFolders(child, folders));
+    }
+    return folders;
+}
+
+function applyFlatDirectoryOrder(folders) {
+    if (!Array.isArray(folders) || folders.length === 0) return [];
+    if (!Array.isArray(FLAT_DIRECTORY_ORDER) || FLAT_DIRECTORY_ORDER.length === 0) return [...folders];
+
+    const byId = new Map(folders.map(folder => [folder.id, folder]));
+    const ordered = [];
+
+    FLAT_DIRECTORY_ORDER.forEach((id) => {
+        if (byId.has(id)) ordered.push(byId.get(id));
+    });
+
+    folders.forEach((folder) => {
+        if (!FLAT_DIRECTORY_ORDER.includes(folder.id)) ordered.push(folder);
+    });
+
+    return ordered;
+}
+
+function getOrderedFlatFolderIds() {
+    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(BOOKMARK_TREE_CACHE));
+    return allFolders.map(folder => folder.id);
+}
+
+function saveFlatDirectoryOrder(ids, callback) {
+    FLAT_DIRECTORY_ORDER = Array.from(new Set(ids));
+    chrome.storage.local.set({ [STORAGE_KEY_FLAT_DIRECTORY_ORDER]: FLAT_DIRECTORY_ORDER }, () => {
+        if (callback) callback();
+    });
+}
+
 function renderBookmarksWithLayoutTransition() {
     const body = document.body;
     if (!body) {
@@ -149,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_FLAT_DIR_EXPANDED
+            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_FLAT_DIRECTORY_ORDER
         ]),
         getBookmarks()
     ]);
@@ -187,6 +230,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         FLAT_DIR_EXPANDED = !!settings[STORAGE_KEY_FLAT_DIR_EXPANDED];
     } else {
         FLAT_DIR_EXPANDED = false;
+    }
+
+    if (Array.isArray(settings[STORAGE_KEY_FLAT_DIRECTORY_ORDER])) {
+        FLAT_DIRECTORY_ORDER = settings[STORAGE_KEY_FLAT_DIRECTORY_ORDER];
+    } else {
+        FLAT_DIRECTORY_ORDER = [];
     }
 
     // 4. Init Settings UI (Bindings)
@@ -403,14 +452,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     container.appendChild(dirPane);
     container.appendChild(bmkPane);
 
-    const rootNode = bookmarkTreeNodes[0];
-    let bookmarksBar = rootNode.children.find(node => node.id === '1') || rootNode.children[0];
-
-    const allFolders = [];
-    if (bookmarksBar) {
-        // Only flatten child folders — the bookmarks bar itself is a container, not a user folder
-        bookmarksBar.children.forEach(child => flattenFolders(child, allFolders));
-    }
+    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
 
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
@@ -567,31 +609,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         pinBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-
-            const onMoveSuccess = (res) => {
-                console.log('Pinned folder to top:', res);
-                refreshBookmarkTreeCache((bookmarkTree) => {
-                    renderBookmarks(bookmarkTree);
-                });
-            };
-
-            chrome.bookmarks.move(folder.id, { parentId: folder.parentId, index: 0 }, (res) => {
-                if (!chrome.runtime.lastError) {
-                    onMoveSuccess(res);
-                    return;
-                }
-
-                const firstError = chrome.runtime.lastError.message;
-                console.warn('Pin folder to top with parentId failed, retry without parentId:', firstError);
-
-                // Fallback: keep current parent, only reorder index.
-                chrome.bookmarks.move(folder.id, { index: 0 }, (retryRes) => {
-                    if (chrome.runtime.lastError) {
-                        console.error('Pin folder to top retry failed:', chrome.runtime.lastError.message);
-                        return;
-                    }
-                    onMoveSuccess(retryRes);
-                });
+            const currentOrderedIds = getOrderedFlatFolderIds();
+            const nextOrder = [folder.id, ...currentOrderedIds.filter(id => id !== folder.id)];
+            saveFlatDirectoryOrder(nextOrder, () => {
+                renderBookmarks(bookmarkTreeNodes);
             });
         });
 
@@ -2241,29 +2262,29 @@ function handleItemDrop(e) {
             const folderSiblings = Array.from(parent.querySelectorAll('.folder-tile'));
             const srcIndex = folderSiblings.indexOf(dragSrcEl);
             const targetIndex = folderSiblings.indexOf(this);
+            const moveAfterTarget = srcIndex < targetIndex;
 
-            if (srcIndex < targetIndex) {
+            if (moveAfterTarget) {
                 parent.insertBefore(dragSrcEl, this.nextSibling);
             } else {
                 parent.insertBefore(dragSrcEl, this);
             }
 
-            const nextSiblings = Array.from(parent.querySelectorAll('.folder-tile'));
-            const newIndex = nextSiblings.indexOf(dragSrcEl);
-            const destParentId = this.dataset.parentId || dragSrcEl.dataset.parentId;
+            const targetId = this.dataset.id;
+            const allOrderedIds = getOrderedFlatFolderIds();
+            const sourceGlobalIndex = allOrderedIds.indexOf(srcId);
+            const targetGlobalIndex = allOrderedIds.indexOf(targetId);
 
-            chrome.bookmarks.move(srcId, { parentId: destParentId, index: newIndex }, (res) => {
-                if (chrome.runtime.lastError) {
-                    console.error('Move folder failed:', chrome.runtime.lastError.message);
-                } else {
-                    console.log('Moved folder item:', res);
-                    dragSrcEl.dataset.parentId = destParentId;
-                    refreshBookmarkTreeCache((bookmarkTree) => {
-                        renderBookmarks(bookmarkTree);
-                    });
-                }
+            if (sourceGlobalIndex !== -1 && targetGlobalIndex !== -1) {
+                allOrderedIds.splice(sourceGlobalIndex, 1);
+                const adjustedTargetIndex = allOrderedIds.indexOf(targetId);
+                const insertIndex = moveAfterTarget ? adjustedTargetIndex + 1 : adjustedTargetIndex;
+                allOrderedIds.splice(insertIndex, 0, srcId);
+            }
+
+            saveFlatDirectoryOrder(allOrderedIds, () => {
+                renderBookmarksFromCache();
             });
-
             dragSrcEl.style.opacity = '1';
             return false;
         }
