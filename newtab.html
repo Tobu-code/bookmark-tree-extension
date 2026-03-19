@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小飞猪的希冀</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="background-layer" class="bg-gradient-1"></div>
+
+    <div class="container">
+        <div id="search-overlay" class="hidden"></div>
+        <div id="search-container">
+            <div id="ambient-time-container" class="ambient-time"></div>
+            <div class="search-wrapper">
+                <div id="engine-picker-container">
+                    <span id="search-engine-label">Google</span>
+                    <div id="engine-picker-overlay" class="hidden"></div>
+                    <div id="engine-wheel" class="hidden">
+                        <div class="wheel-option" data-engine="google" data-url="https://www.google.com/search?q=">
+                            Google</div>
+                        <div class="wheel-option" data-engine="bing" data-url="https://www.bing.com/search?q=">Bing
+                        </div>
+                        <div class="wheel-option" data-engine="baidu" data-url="https://www.baidu.com/s?wd=">Baidu</div>
+                    </div>
+                </div>
+                <input type="text" id="search-input" placeholder="Search bookmarks or search world..."
+                    autocomplete="off">
+                <button id="ai-sidebar-btn" title="Google AI">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                        <path d="M5 3v4" />
+                        <path d="M7 5H3" />
+                    </svg>
+                </button>
+                <div id="search-suggestions" class="hidden"></div>
+            </div>
+        </div>
+        <!-- Suggested Destinations (Frequent Bookmarks) -->
+        <div id="frequent-bookmarks" class="suggested-section hidden">
+            <div class="suggested-items"></div>
+        </div>
+        <div id="bookmarks-tree" class="tree-view"></div>
+        <button id="layout-toggle-btn" title="切换布局模式">
+            <!-- Tree icon (shown when current mode is tree, click to switch to flat) -->
+            <svg id="layout-icon-tree" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <!-- Flat icon (shown when current mode is flat, click to switch to tree) -->
+            <svg id="layout-icon-flat" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+        </button>
+        <button id="settings-btn" title="设置">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- AI Sidebar -->
+    <div id="ai-sidebar" class="ai-sidebar hidden">
+        <div class="ai-sidebar-header">
+            <div class="ai-tabs">
+                <div class="ai-tab active" draggable="true" data-ai="google"
+                    data-url="https://www.google.com/search?udm=50&aep=11" data-name="Google AI" title="Google AI">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">Google</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="gemini" data-url="https://gemini.google.com"
+                    data-name="Gemini" title="Gemini">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 3c.1-.1.2-.1.3 0l1.8 4.5a2 2 0 0 0 1.2 1.2l4.5 1.8c.1.1.1.2 0 .3l-4.5 1.8a2 2 0 0 0-1.2 1.2l-1.8 4.5c-.1.1-.2.1-.3 0l-1.8-4.5a2 2 0 0 0-1.2-1.2l-4.5-1.8c-.1-.1-.1-.2 0-.3l4.5-1.8a2 2 0 0 0 1.2-1.2L12 3Z"
+                                fill="url(#gemini-grad-tab)" />
+                            <defs>
+                                <linearGradient id="gemini-grad-tab" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4e82ee" />
+                                    <stop offset="100%" style="stop-color:#b06ab3" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">Gemini</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="chatgpt" data-url="https://chatgpt.com/"
+                    data-name="ChatGPT" title="ChatGPT">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10a37f">
+                            <path
+                                d="M22.28 7.53c-.52-1.99-1.95-3.56-3.88-4.12-1.93-.56-4.04-.13-5.59 1.13-1.55-1.26-3.66-1.69-5.59-1.13-1.93.56-3.36 2.13-3.88 4.12-.52 1.99-.09 4.12 1.15 5.68-.42.34-.8.74-1.12 1.19-1.32 1.87-1.5 4.28-.48 6.32 1.02 2.04 3.12 3.34 5.38 3.34.8 0 1.6-.17 2.34-.49 1.55 1.26 3.66 1.69 5.59 1.13-1.93-.56-3.36-2.13 3.88-4.12.52-1.99.09-4.12-1.15-5.68 1.24-1.56 1.67-3.69 1.15-5.68z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">ChatGPT</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="kimi" data-url="https://kimi.moonshot.cn/"
+                    data-name="Kimi" title="Kimi">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#8d3dff">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 14.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4.5L10 17h-1.5v-10h2v4.5L14 7h1.5l-3 4.5 3 5z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">Kimi</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="longcat" data-url="https://longcat.chat/"
+                    data-name="Longcat" title="Longcat">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4 11h-3v3h-2v-3H8v-2h3V8h2v3h3v2z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">龙猫</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="perplexity" data-url="https://www.perplexity.ai/"
+                    data-name="Perplexity" title="Perplexity">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1fb8cd">
+                            <path
+                                d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-4 4h8a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">Perplexity</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="zai" data-url="https://chat.z.ai/" data-name="ZAI"
+                    title="ZAI">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff4f00">
+                            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">ZAI</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="grok" data-url="https://grok.com/" data-name="Grok"
+                    title="Grok">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">Grok</span>
+                </div>
+                <div class="ai-tab" draggable="true" data-ai="qwen" data-url="https://chat.qwen.ai/" data-name="通义千问"
+                    title="通义千问">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#6033ff">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m15 15 4 4" stroke="white" stroke-width="2"></path>
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">千问</span>
+                </div>
+                <!-- Doubao Tab -->
+                <div class="ai-tab" draggable="true" data-ai="doubao" data-url="https://www.doubao.com/chat/"
+                    data-name="豆包" title="豆包">
+                    <span class="ai-tab-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#3D7EFF">
+                            <path
+                                d="M12,2C10.11,2 8.39,2.83 7.17,4.17C6.61,4.78 6.1,5.5 5.5,6.31C3.5,6.5 2,8.4 2,10.5C2,12.8 3.6,14.7 5.7,14.9C6.1,15.7 6.6,16.4 7.2,17C8.4,18.3 10.1,19.1 12,19.1C13.9,19.1 15.6,18.3 16.8,17C17.4,16.4 17.9,15.7 18.3,14.9C20.4,14.7 22,12.8 22,10.5C22,8.4 20.5,6.5 18.3,6.3C17.9,5.5 17.4,4.8 16.8,4.2C15.6,2.8 13.9,2 12,2M12,4C13.4,4 14.6,4.6 15.5,5.5C16,6 16.4,6.6 16.6,7.3C14.1,6.5 11.1,6.5 8.4,7.3L8.4,7.3C8.6,6.6 9,6 9.5,5.5C10.4,4.6 11.6,4 12,4M5.5,8.1C6,8.1 6.3,8.4 6.3,8.9C6.3,9.4 6,9.7 5.5,9.7C5,9.7 4.7,9.4 4.7,8.9C4.7,8.4 5,8.1 5.5,8.1M18.5,8.1C19,8.1 19.3,8.4 19.3,8.9C19.3,9.4 19,9.7 18.5,9.7C18,9.7 17.7,9.4 17.7,8.9C17.7,8.4 18,8.1 18.5,8.1M12,10.1A1.1,1.1 0 0,1 13.1,11.2A1.1,1.1 0 0,1 12,12.3A1.1,1.1 0 0,1 10.9,11.2A1.1,1.1 0 0,1 12,10.1M7.2,12.5C8.4,13.8 10.1,14.6 12,14.6C13.9,14.6 15.6,13.8 16.8,12.5L16.8,12.5C16.4,14.1 15.1,15.3 13.5,15.6C13,15.7 12.5,15.8 12,15.8C11.5,15.8 11,15.7 10.5,15.6C8.9,15.3 7.6,14.1 7.2,12.5L7.2,12.5Z" />
+                        </svg>
+                    </span>
+                    <span class="ai-tab-name">豆包</span>
+                </div>
+            </div>
+            <div class="ai-sidebar-actions">
+                <button id="ai-open-new-window" class="ai-action-btn" title="在新窗口打开">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path
+                            d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                    </svg>
+                </button>
+                <button id="ai-sidebar-close" class="ai-action-btn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="ai-sidebar-content">
+            <!-- Multiple iframes for state preservation -->
+            <iframe id="ai-iframe-google" class="ai-iframe active" data-ai="google" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-gemini" class="ai-iframe" data-ai="gemini" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-chatgpt" class="ai-iframe" data-ai="chatgpt" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-kimi" class="ai-iframe" data-ai="kimi" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-longcat" class="ai-iframe" data-ai="longcat" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-perplexity" class="ai-iframe" data-ai="perplexity" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-zai" class="ai-iframe" data-ai="zai" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-doubao" class="ai-iframe" data-ai="doubao" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-grok" class="ai-iframe" data-ai="grok" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+            <iframe id="ai-iframe-qwen" class="ai-iframe" data-ai="qwen" frameborder="0"
+                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
+
+            <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
+                <div class="ai-placeholder-icon">🔍</div>
+                <p>无法直接嵌入 AI 搜索</p>
+                <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
+                <button id="ai-open-gemini" class="ai-open-btn">在弹窗中打开</button>
+            </div>
+        </div>
+    </div>
+    <div id="ai-sidebar-overlay" class="ai-sidebar-overlay hidden"></div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal" class="close"></span>
+            <h2>设置</h2>
+
+            <div class="setting-item">
+                <label>外观主题</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="light"><span>浅色</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="dark"><span>深色</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="theme" value="system"><span>自动</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>布局模式</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="layout-mode" value="tree" checked><span>树状</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="layout-mode" value="flat"><span>平铺</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>按频率自动排序</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="checkbox" id="auto-sort-toggle"><span>启用后，常点的目录和书签会自动排在前面</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>链接打开方式</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="self"><span>当前页</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="link-target" value="blank" checked><span>新标签页</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>图标风格</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="icon-style" value="native" checked><span>原生</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="icon-style" value="theme"><span>主题</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>书签管理</label>
+                <div style="margin-top: 10px;">
+                    <button id="export-bookmarks-btn" class="confirm-btn confirm-btn-primary" style="padding: 8px 16px; font-size: 13px; width: 100%;">
+                        一键导出所有书签
+                    </button>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
+                        导出为标准的 HTML 文件，可导入到其他浏览器
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>背景设置</label>
+                <div class="file-upload-container">
+                    <input type="file" id="bg-image-upload" accept="image/*">
+                    <button id="clear-bg" title="恢复默认背景">恢复</button>
+                </div>
+                <div id="blur-controls" style="margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <label style="font-size: 13px; font-weight: normal;">背景模糊程度</label>
+                        <span id="bg-blur-value" style="font-size: 12px; color: var(--text-secondary);">关闭</span>
+                    </div>
+                    <input type="range" id="bg-blur" min="0" max="10" step="1" value="0">
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px; margin-top: 15px;">
+                        <label style="font-size: 13px; font-weight: normal;">主容器模糊程度</label>
+                        <span id="container-blur-value" style="font-size: 12px; color: var(--text-secondary);">关闭</span>
+                    </div>
+                    <input type="range" id="container-blur" min="0" max="10" step="1" value="3">
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>文件夹展开延迟</label>
+                <div style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span style="font-size: 13px; color: var(--text-secondary);">鼠标悬浮后延迟展开时间</span>
+                        <span id="hover-delay-value" style="font-size: 12px; color: var(--text-secondary);">300ms</span>
+                    </div>
+                    <input type="range" id="hover-delay" min="0" max="1100" step="100" value="300">
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>常用书签</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="frequent-enabled" value="off"><span>关闭</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="frequent-enabled" value="on" checked><span>开启</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Folder Expand Modal -->
+    <div id="folder-modal" class="modal hidden">
+        <div class="folder-modal-content">
+            <div class="folder-modal-header">
+                <span class="folder-modal-icon"></span>
+                <span class="folder-modal-title"></span>
+                <span id="close-folder-modal" class="close"></span>
+            </div>
+            <div class="folder-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog (Delete) -->
+    <div id="confirm-dialog" class="modal hidden">
+        <div class="confirm-dialog-content">
+            <div class="confirm-dialog-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF5F56" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </div>
+            <div class="confirm-dialog-title">确认删除</div>
+            <div class="confirm-dialog-message" id="confirm-dialog-message">确定要删除这个书签吗？</div>
+            <div class="confirm-dialog-actions">
+                <button id="confirm-dialog-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
+                <button id="confirm-dialog-ok" class="confirm-btn confirm-btn-danger">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Bookmark Dialog -->
+    <div id="edit-bookmark-dialog" class="modal hidden">
+        <div class="edit-dialog-content">
+            <div class="edit-dialog-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span class="edit-dialog-title">编辑书签</span>
+            </div>
+            <div class="edit-dialog-body">
+                <div class="edit-field">
+                    <label for="edit-bookmark-title">名称</label>
+                    <input type="text" id="edit-bookmark-title" placeholder="书签名称" autocomplete="off">
+                </div>
+                <div class="edit-field">
+                    <label for="edit-bookmark-url">地址</label>
+                    <input type="text" id="edit-bookmark-url" placeholder="https://..." autocomplete="off">
+                </div>
+            </div>
+            <div class="edit-dialog-actions">
+                <button id="edit-bookmark-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
+                <button id="edit-bookmark-save" class="confirm-btn confirm-btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
