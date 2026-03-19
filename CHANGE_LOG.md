@@ -34,3 +34,9 @@
 - **Type**: Optimization (Layout Consistency)
 - **Content**: 统一平铺模式与树状模式的主容器内边距基线，消除切换割裂；下调平铺模式目录/卡片标题与域名字号字重，并收紧卡片内边距与网格间距，提升精致感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 16:55:23 +0800
+- **Type**: Optimization (P2 Visual-First Performance)
+- **Content**: 在不牺牲视觉效果的前提下完成 P2 优化：将 `styles.css` 中广域 `transition: all` 替换为显式属性过渡，减少非必要动画开销；将 `build.js` 的高强度混淆降为轻量混淆，降低脚本体积与运行时解析负担。
+- **Impact**: `styles.css`、`build.js`、`CHANGE_LOG.md`
