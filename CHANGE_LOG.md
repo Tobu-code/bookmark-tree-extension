@@ -70,3 +70,9 @@
 - **Type**: Fix (Background Image Clarity)
 - **Content**: 修复背景图清晰度过低问题：上传策略改为高保真优先，先尝试保存原图，再按 4096/3840/3200/2560 分级压缩回退；同时将背景层采样策略调整为浏览器原生 `image-rendering: auto`，避免强制采样导致画质劣化。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 17:29:53 +0800
+- **Type**: Refactor (Flat Layout De-clutter)
+- **Content**: 执行 Phase 1 页面减负：降低容器与背景竞争度、收紧搜索区上下空间并弱化时间文案存在感；平铺模式改为更清晰的左右主次（目录窄化为单列、右侧书签卡片固定断点列数 3/2/1、卡片高度与间距提升）；目录切换改为“点击优先 + 仅细鼠标设备延迟 hover”，减少误触导致的频繁切换与视觉抖动。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`

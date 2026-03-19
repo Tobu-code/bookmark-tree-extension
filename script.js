@@ -495,9 +495,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         });
     };
 
-    // Shared debounce timer for hover-to-switch
+    // Shared debounce timer for hover-to-switch (fine pointer only)
     let folderHoverTimer = null;
     let currentActiveFolder = null;
+    const allowHoverSwitch = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     allFolders.forEach((folder) => {
         // Skip hidden folders unless SHOW_HIDDEN_FOLDERS is true
@@ -532,31 +533,32 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             });
         });
 
-        // Hover-to-switch: mouseenter with debounce for smooth experience
-        folderTile.addEventListener('mouseenter', () => {
-            if (currentActiveFolder === folder) return; // Already active
-            clearTimeout(folderHoverTimer);
-            folderHoverTimer = setTimeout(() => {
-                dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
-                folderTile.classList.add('active');
-                currentActiveFolder = folder;
-                // Smooth transition: fade out then in
-                bmkPane.style.opacity = '0';
-                bmkPane.style.transform = 'translateY(6px)';
-                setTimeout(() => {
-                    renderBmkPane(folder);
-                    // Trigger reflow then fade in
-                    requestAnimationFrame(() => {
-                        bmkPane.style.opacity = '1';
-                        bmkPane.style.transform = 'translateY(0)';
-                    });
-                }, 120); // Brief fade-out duration
-            }, 80); // Debounce: 80ms feels responsive but prevents accidental triggers
-        });
+        if (allowHoverSwitch) {
+            folderTile.addEventListener('mouseenter', () => {
+                if (currentActiveFolder === folder) return; // Already active
+                clearTimeout(folderHoverTimer);
+                folderHoverTimer = setTimeout(() => {
+                    dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
+                    folderTile.classList.add('active');
+                    currentActiveFolder = folder;
+                    // Smooth transition: fade out then in
+                    bmkPane.style.opacity = '0';
+                    bmkPane.style.transform = 'translateY(6px)';
+                    setTimeout(() => {
+                        renderBmkPane(folder);
+                        // Trigger reflow then fade in
+                        requestAnimationFrame(() => {
+                            bmkPane.style.opacity = '1';
+                            bmkPane.style.transform = 'translateY(0)';
+                        });
+                    }, 120); // Brief fade-out duration
+                }, 220); // Longer debounce to reduce accidental folder switching
+            });
 
-        folderTile.addEventListener('mouseleave', () => {
-            clearTimeout(folderHoverTimer);
-        });
+            folderTile.addEventListener('mouseleave', () => {
+                clearTimeout(folderHoverTimer);
+            });
+        }
 
         // Keep click as fallback (touch devices, accessibility)
         folderTile.addEventListener('click', () => {
@@ -602,9 +604,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // or just append it as the last item in the grid, spanning both columns.
         toggleHiddenBtn.style.gridColumn = '1 / -1';
         dirPane.appendChild(toggleHiddenBtn);
-    }
-    if (allFolders.length > 0) {
-        renderBmkPane(allFolders[0]);
     }
 }
 

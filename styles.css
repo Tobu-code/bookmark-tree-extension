@@ -9,7 +9,7 @@
     /* Deep Charcoal Black */
     --text-secondary: #5f5d59;
     /* Medium Grey */
-    --bg-overlay: rgba(245, 245, 240, 0.62);
+    --bg-overlay: rgba(245, 245, 240, 0.78);
     /* Creamy/Beige Tint */
     --card-bg: #FFFFFF;
     /* Pure White Cards */
@@ -37,7 +37,7 @@
     --text-secondary: #BDBAB6;
     /* Slightly warmer grey for secondary text */
 
-    --bg-overlay: rgba(26, 21, 35, 0.62);
+    --bg-overlay: rgba(26, 21, 35, 0.78);
     /* Deep purple-grey main background */
     --card-bg: #221D2A;
     /* Purple-tinted card background */
@@ -81,7 +81,7 @@
         --primary-color: #D97757;
         --text-color: #F2F0E9;
         --text-secondary: #BDBAB6;
-        --bg-overlay: rgba(26, 21, 35, 0.62);
+        --bg-overlay: rgba(26, 21, 35, 0.78);
         --card-bg: #221D2A;
         --card-hover: #2D2638;
         --border-color: rgba(217, 119, 87, 0.12);
@@ -168,18 +168,18 @@ h3,
 
 /* Main Container - Dashboard Style */
 .container {
-    width: 94%;
-    height: 94vh;
-    margin: 3vh auto;
+    width: 90%;
+    height: 92vh;
+    margin: 4vh auto;
     border-radius: 24px;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.01) 32%, transparent 55%), var(--bg-overlay);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 10px 36px 0 rgba(31, 38, 135, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 14px 40px 0 rgba(31, 38, 135, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    padding: 40px 20px;
+    padding: 28px 28px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -202,8 +202,8 @@ body.loaded #background-layer {
 
 /* Search Bar */
 #search-container {
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: 24px;
+    margin-bottom: 22px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -231,12 +231,12 @@ body.loaded #background-layer {
 }
 
 .ambient-time.visible {
-    opacity: 0.8;
+    opacity: 0.58;
     /* 闲置时清晰显示 */
 }
 
 .ambient-time.dimmed {
-    opacity: 0.4;
+    opacity: 0.24;
     /* 输入或交互时适当降低存在感 */
 }
 
@@ -585,7 +585,7 @@ body.search-active #search-container {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 10px;
+    padding: 8px 6px;
     transform-origin: 50% 0;
     transition: opacity 0.18s ease, transform 0.18s ease;
 }
@@ -668,22 +668,22 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 16px;
+    gap: 24px;
     /* Keep flat-mode left/right baseline aligned with tree-mode content area */
-    --flat-side-gutter: clamp(10px, calc((100% - 1260px) / 2), 110px);
-    padding: 10px var(--flat-side-gutter);
+    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
+    padding: 16px var(--flat-side-gutter);
     align-items: flex-start; /* Align both panes to the same top line */
 }
 
 .directory-pane {
-    width: 480px;
+    width: 340px;
     flex-shrink: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 14px 24px;
+    gap: 10px;
     overflow-y: auto;
-    padding-right: 24px;
+    padding-right: 20px;
     padding-top: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 28%);
@@ -701,7 +701,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Optimization 3: Hover focus - dim others in directory pane */
 .directory-pane:hover .folder-tile:not(:hover) {
-    opacity: 0.72;
+    opacity: 0.92;
 }
 
 .folder-tile {
@@ -717,7 +717,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane {
     flex: 1;
     background: transparent;
-    padding: 0 10px;
+    padding: 0 4px;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -733,8 +733,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .folder-tile {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
-    border-radius: 14px;
+    padding: 11px 14px;
+    border-radius: 12px;
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
@@ -742,9 +742,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         opacity 0.3s ease;
-    background: rgba(255, 255, 255, 0.54);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.68);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--text-color);
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
@@ -753,29 +753,29 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .folder-tile {
-    background: rgba(40, 35, 50, 0.58);
+    background: rgba(40, 35, 50, 0.72);
     border-color: rgba(255, 255, 255, 0.1);
 }
 
 .folder-tile:hover {
-    background: rgba(255, 255, 255, 0.72);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     border-color: rgba(174, 86, 48, 0.3);
 }
 
 :root[data-theme="dark"] .folder-tile:hover {
-    background: rgba(40, 35, 50, 0.72);
+    background: rgba(40, 35, 50, 0.8);
     border-color: rgba(217, 119, 87, 0.34);
 }
 
 .folder-tile.active {
-    background: rgba(217, 119, 87, 0.2);
+    background: rgba(217, 119, 87, 0.18);
     color: var(--primary-color);
     font-weight: 600;
     border-left: 3px solid var(--primary-color);
     border-color: rgba(217, 119, 87, 0.38);
-    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.2), 0 4px 14px rgba(217, 119, 87, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.2), 0 3px 10px rgba(217, 119, 87, 0.14);
 }
 
 .folder-tile:not(:has(.hide-icon:hover)):active {
@@ -850,8 +850,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: 17px;
     font-weight: bold;
     color: var(--text-color);
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
     /* Item 6: Soft gradient separator instead of hard line */
     border-bottom: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
@@ -870,22 +870,22 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 18px;
     align-content: start;
 }
 
 
 /* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.56);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 16px;
-    padding: 10px;
+    border-radius: 18px;
+    padding: 14px;
     margin-bottom: 0;
-    min-height: 82px;
+    min-height: 96px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -901,20 +901,20 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(40, 35, 50, 0.62);
+    background: rgba(40, 35, 50, 0.74);
     border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-3px) scale(1.015);
+    transform: translateY(-2px) scale(1.01);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(174, 86, 48, 0.3);
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.82);
     border-color: rgba(174, 86, 48, 0.4); /* Glow with theme primary */
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background: rgba(40, 35, 50, 0.76);
+    background: rgba(40, 35, 50, 0.82);
     border-color: rgba(217, 119, 87, 0.4);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
 }
@@ -926,11 +926,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Optimization 3: Hover focus - dim others in bookmarks grid */
 .bookmarks-pane-grid:hover .leaf-wrapper:not(:hover) {
-    opacity: 0.74;
+    opacity: 0.9;
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px 4px;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center all children horizontally */
@@ -999,16 +999,56 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Item 8: URL preview line below the bookmark title */
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
-    font-size: 10px;
+    font-size: 11px;
     color: var(--text-secondary, #888);
     opacity: 0.8;
-    margin-top: 0;
+    margin-top: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0; /* Centered layout, no offset needed */
     text-align: center;
     max-width: 100%;
+}
+
+@media (max-width: 1439px) {
+    .bookmarks-pane-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 899px) {
+    #bookmarks-tree.layout-flat {
+        flex-direction: column;
+        gap: 18px;
+        padding: 10px 8px;
+    }
+
+    .directory-pane {
+        width: 100%;
+        max-height: 220px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 12px;
+        padding-right: 8px;
+        padding-bottom: 10px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    :root[data-theme="dark"] .directory-pane {
+        border-bottom-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .bookmarks-pane {
+        width: 100%;
+        padding: 0;
+    }
+
+    .bookmarks-pane-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Item 9: Fallback letter avatar for missing favicons */
