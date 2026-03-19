@@ -25,6 +25,8 @@
     /* Added for Modal Readability */
     --glass-bg: rgba(255, 255, 255, 0.9);
     --glass-border: rgba(0, 0, 0, 0.08);
+    --flat-pane-header-height: 52px;
+    --flat-pane-header-gap: 12px;
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -203,7 +205,7 @@ body.loaded #background-layer {
 /* Search Bar */
 #search-container {
     margin-top: 24px;
-    margin-bottom: 22px;
+    margin-bottom: 34px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -671,7 +673,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     gap: 24px;
     /* Keep flat-mode left/right baseline aligned with tree-mode content area */
     --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 16px var(--flat-side-gutter);
+    padding: 26px var(--flat-side-gutter) 14px;
     align-items: flex-start; /* Align both panes to the same top line */
 }
 
@@ -835,6 +837,34 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     margin-top: 10px;
 }
 
+.directory-more-btn {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 10px;
+    color: var(--text-secondary, #888);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+    background: rgba(255, 255, 255, 0.2);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.directory-more-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+    border-color: rgba(174, 86, 48, 0.3);
+}
+
+:root[data-theme="dark"] .directory-more-btn {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+:root[data-theme="dark"] .directory-more-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(217, 119, 87, 0.3);
+}
+
 .toggle-hidden-btn:hover {
     background: rgba(0, 0, 0, 0.05);
     color: var(--text-color);
@@ -850,8 +880,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: 17px;
     font-weight: bold;
     color: var(--text-color);
-    margin-bottom: 20px;
-    padding-bottom: 14px;
+    min-height: var(--flat-pane-header-height);
+    margin: 0 0 var(--flat-pane-header-gap) 0;
+    padding: 0 0 10px 4px;
     /* Item 6: Soft gradient separator instead of hard line */
     border-bottom: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
@@ -978,9 +1009,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: 17px;
     font-weight: bold;
     color: var(--text-color);
-    padding-bottom: 6px;
+    min-height: var(--flat-pane-header-height);
+    padding: 0 0 10px 4px;
     padding-left: 4px;
-    margin-bottom: 2px;
+    margin: 0 0 var(--flat-pane-header-gap) 0;
     border-left: 3px solid var(--primary-color);
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     background-size: 100% 1px;
@@ -1021,7 +1053,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     #bookmarks-tree.layout-flat {
         flex-direction: column;
         gap: 18px;
-        padding: 10px 8px;
+        padding: 16px 8px 8px;
     }
 
     .directory-pane {
@@ -1048,6 +1080,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
     .bookmarks-pane-grid {
         grid-template-columns: 1fr;
+    }
+
+    :root {
+        --flat-pane-header-height: 44px;
+        --flat-pane-header-gap: 10px;
     }
 }
 

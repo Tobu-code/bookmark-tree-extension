@@ -8,6 +8,7 @@ const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
+const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const LEGACY_FREQUENCY_STORAGE_KEYS = [
     'frequent_bookmarks_data',
     'settings_frequent_enabled',
@@ -26,6 +27,7 @@ let HOVER_DELAY = 100;
 let LAYOUT_MODE = 'tree';
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
+let FLAT_DIR_EXPANDED = false;
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
 let BOOKMARK_SEARCH_INDEX = [];
@@ -146,7 +148,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
-            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS
+            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
+            STORAGE_KEY_FLAT_DIR_EXPANDED
         ]),
         getBookmarks()
     ]);
@@ -179,6 +182,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
     else HIDDEN_FOLDERS = [];
+
+    if (settings[STORAGE_KEY_FLAT_DIR_EXPANDED] !== undefined) {
+        FLAT_DIR_EXPANDED = !!settings[STORAGE_KEY_FLAT_DIR_EXPANDED];
+    } else {
+        FLAT_DIR_EXPANDED = false;
+    }
 
     // 4. Init Settings UI (Bindings)
     // We defer this call until we have the function definition, or we can hoist the logic.
@@ -378,6 +387,7 @@ function renderTreeBookmarks(bookmarkTreeNodes, container) {
 }
 
 function renderFlatBookmarks(bookmarkTreeNodes, container) {
+    const FLAT_DIR_VISIBLE_LIMIT = 8;
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
 
@@ -500,10 +510,18 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     let currentActiveFolder = null;
     const allowHoverSwitch = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    allFolders.forEach((folder) => {
+    const visibleFolders = allFolders.filter((folder) => {
+        const isHidden = HIDDEN_FOLDERS.includes(folder.id);
+        return !(isHidden && !SHOW_HIDDEN_FOLDERS);
+    });
+    const shouldClampFolders = visibleFolders.length > FLAT_DIR_VISIBLE_LIMIT && !FLAT_DIR_EXPANDED;
+    const foldersToRender = shouldClampFolders
+        ? visibleFolders.slice(0, FLAT_DIR_VISIBLE_LIMIT)
+        : visibleFolders;
+
+    foldersToRender.forEach((folder) => {
         // Skip hidden folders unless SHOW_HIDDEN_FOLDERS is true
         const isHidden = HIDDEN_FOLDERS.includes(folder.id);
-        if (isHidden && !SHOW_HIDDEN_FOLDERS) return;
 
         const folderTile = document.createElement('div');
         folderTile.className = 'folder-tile';
@@ -585,8 +603,22 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     if (firstTile) {
         firstTile.classList.add('active');
         const firstFolderId = firstTile.dataset.id;
-        const firstFolder = allFolders.find(f => f.id === firstFolderId);
+        const firstFolder = visibleFolders.find(f => f.id === firstFolderId);
         if (firstFolder) renderBmkPane(firstFolder);
+    }
+
+    if (visibleFolders.length > FLAT_DIR_VISIBLE_LIMIT) {
+        const moreToggleBtn = document.createElement('div');
+        moreToggleBtn.className = 'directory-more-btn';
+        const remainingCount = Math.max(0, visibleFolders.length - FLAT_DIR_VISIBLE_LIMIT);
+        moreToggleBtn.textContent = FLAT_DIR_EXPANDED ? '收起目录' : `展开更多目录 (+${remainingCount})`;
+        moreToggleBtn.addEventListener('click', () => {
+            FLAT_DIR_EXPANDED = !FLAT_DIR_EXPANDED;
+            chrome.storage.local.set({ [STORAGE_KEY_FLAT_DIR_EXPANDED]: FLAT_DIR_EXPANDED }, () => {
+                renderBookmarks(bookmarkTreeNodes);
+            });
+        });
+        dirPane.appendChild(moreToggleBtn);
     }
 
     // Add "Manage Hidden Folders" toggle at the bottom of the left pane
