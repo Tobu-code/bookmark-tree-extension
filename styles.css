@@ -756,11 +756,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding-top: 0;
     border-right: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
     background: linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 52%, transparent), transparent 30%);
-    -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
-    /* Fix Chrome backdrop-filter scroll compositing bug */
-    will-change: transform;
-    transform: translateZ(0);
+    /* Avoid mask/transform compositing glitches while scrolling in Chrome */
+    -webkit-mask-image: none;
+    mask-image: none;
+    will-change: auto;
+    transform: none;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 :root[data-theme="dark"] .directory-pane {
@@ -791,9 +794,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* Fix Chrome backdrop-filter scroll compositing bug */
-    will-change: transform;
-    transform: translateZ(0);
+    /* Keep scroll layer simple to avoid white flashing tiles */
+    will-change: auto;
+    transform: none;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     /* Smooth fade transition for hover-to-switch */
     transition: opacity 0.16s ease-out, transform 0.16s ease-out;
 }
@@ -811,14 +817,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         opacity 0.3s ease;
-    background: rgba(255, 250, 245, 0.86);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 250, 245, 0.9);
     color: var(--text-color);
     border: 1px solid color-mix(in srgb, var(--border-color) 95%, transparent);
     box-shadow: 0 1px 3px rgba(44, 33, 22, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-    /* Fix Chrome scroll compositing bug */
-    will-change: transform;
+    will-change: auto;
 }
 
 :root[data-theme="dark"] .folder-tile {
@@ -1007,9 +1010,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
     border-radius: 18px;
     padding: 14px;
@@ -1024,9 +1025,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
         opacity 0.3s ease;
-    /* Fix Chrome scroll compositing bug with backdrop-filter */
-    will-change: transform;
-    transform: translateZ(0);
+    will-change: auto;
+    transform: none;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {

@@ -118,3 +118,9 @@
 - **Type**: Refactor (Container Transparency Control)
 - **Content**: 将“主容器模糊程度”改为“主容器透明度程度”：设置面板文案与数值展示改为透明度百分比；容器滑杆逻辑从动态 `backdrop-filter` 调整为动态控制主容器背景透明度，拖动时补充平滑过渡。
 - **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 18:42:03 +0800
+- **Type**: Fix (Scroll Compositing Stability)
+- **Content**: 修复平铺模式滚动时偶发白块/未加载占位问题：移除滚动容器上的 `mask-image + translateZ + will-change` 高风险组合，简化目录与书签卡片的滚动合成层；同时为左右滚动区补充 `overscroll-behavior` 与平滑滚动参数，提升滚动连续性并降低卡顿感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
