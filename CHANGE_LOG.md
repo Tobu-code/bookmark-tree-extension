@@ -52,3 +52,9 @@
 - **Type**: Docs (Workflow Rule Update)
 - **Content**: 在提示文档中新增规则：用户确认开发方案后，`CHANGE_LOG.md` 更新与 `git commit` 作为执行后闭环动作可直接执行，无需再次二次确认。
 - **Impact**: `AGENTS.md`、`GEMINI.md`、`CHANGE_LOG.md`
+
+## [2026-03-19]
+- **Time**: 2026-03-19 17:08:44 +0800
+- **Type**: Optimization (Layout Consistency)
+- **Content**: 调整平铺模式左侧基准边距，新增自适应左侧补偿（`--flat-left-gutter`），使“书签目录”模块与树状模式的主内容左边界更一致，降低模式切换时的视觉跳变。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

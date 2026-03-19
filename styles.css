@@ -671,7 +671,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: row;
     gap: 16px;
-    padding: 10px;
+    /* Align flat-mode left baseline with tree-mode centered first column */
+    --flat-left-gutter: clamp(10px, calc((100% - 1260px) / 2), 110px);
+    padding: 10px 10px 10px var(--flat-left-gutter);
     align-items: flex-start; /* Align both panes to the same top line */
 }
 
