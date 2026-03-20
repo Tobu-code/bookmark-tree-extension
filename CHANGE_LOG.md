@@ -202,3 +202,9 @@
 - **Type**: Fix (Flat Pane Scroll Clipping)
 - **Content**: 修复平铺模式头部“穿越叠层”问题：左右面板均改为“头部 + 独立滚动体”结构（目录头/书签头固定在面板上层，列表内容在内部容器滚动），实现到顶部即被头部下缘截断，不再穿过标题区域。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 11:26:25 +0800
+- **Type**: Release (v3.0.0)
+- **Content**: 发布 `v3.0.0`。本版本包含：1) 插件与项目版本号统一升级至 `3.0.0`；2) 插件图标重绘（16/48/128 及源图）提升小尺寸识别度与品牌一致性；3) 平铺模式滚动交互修复与稳定性增强（右侧列表等高一致、左右标题固定、头部与内容分层滚动并到顶截断）；4) 构建与发布包产出流程校验通过。
+- **Impact**: `manifest.json`、`package.json`、`package-lock.json`、`icon.png`、`icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`script.js`、`styles.css`、`CHANGE_LOG.md`、`release/小飞猪的书签_v3.0.0_20260320_1126.zip`
