@@ -160,3 +160,9 @@
 - **Type**: Fix (Container Transparency-Blur Fusion)
 - **Content**: 修复“主容器透明度调高但通透感不明显”问题：将主容器滑杆改为透明度与磨砂感联动映射（透明度越高，背景 alpha 越低且 blur 越小，保留最小 blur 保障可读性），并在设置项补充联动说明文案。
 - **Impact**: `script.js`、`newtab.html`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 09:42:45 +0800
+- **Type**: Fix (HD Background Preservation)
+- **Content**: 修复高分辨率背景图上传后易发糊问题：背景上传改为“始终先尝试原图保存”，仅在存储失败时按 6144→5120→4096→3200→2560 分级压缩回退；并在 `bg-blur=0` 时关闭滤镜路径（`filter:none`），避免 `blur(0)` 带来的额外软化。
+- **Impact**: `script.js`、`CHANGE_LOG.md`

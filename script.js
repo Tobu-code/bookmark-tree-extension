@@ -1858,7 +1858,7 @@ function initSettingsUI(settings) {
 
     function compressImageDataUrl(sourceDataUrl, options = {}) {
         const {
-            maxDim = 4096,
+            maxDim = 6144,
             quality = 0.95,
             mimeType = 'image/webp'
         } = options;
@@ -1899,24 +1899,24 @@ function initSettingsUI(settings) {
         const reader = new FileReader();
         reader.onload = async (event) => {
             const dataUrl = event.target.result;
+            const normalizedMime = (file.type || '').toLowerCase() === 'image/jpg' ? 'image/jpeg' : (file.type || '').toLowerCase();
+            const preferredMime = ['image/jpeg', 'image/webp'].includes(normalizedMime) ? normalizedMime : 'image/webp';
 
             const trySave = (candidateDataUrl) => new Promise((resolve) => {
                 saveBackgroundImage(candidateDataUrl, resolve);
             });
 
-            // Keep original data for typical images to preserve fidelity.
-            const PRESERVE_ORIGINAL_THRESHOLD = 4 * 1024 * 1024;
-            if (file.size <= PRESERVE_ORIGINAL_THRESHOLD) {
-                const ok = await trySave(dataUrl);
-                if (ok) return;
-            }
+            // Always try original first to maximize fidelity.
+            const originalOk = await trySave(dataUrl);
+            if (originalOk) return;
 
             // Adaptive fallback: gradually reduce size only when needed by storage constraints.
             const compressionPresets = [
-                { maxDim: 4096, quality: 0.95 },
-                { maxDim: 3840, quality: 0.92 },
-                { maxDim: 3200, quality: 0.9 },
-                { maxDim: 2560, quality: 0.86 }
+                { maxDim: 6144, quality: 0.98, mimeType: preferredMime },
+                { maxDim: 5120, quality: 0.96, mimeType: preferredMime },
+                { maxDim: 4096, quality: 0.94, mimeType: preferredMime },
+                { maxDim: 3200, quality: 0.92, mimeType: 'image/webp' },
+                { maxDim: 2560, quality: 0.9, mimeType: 'image/webp' }
             ];
 
             for (const preset of compressionPresets) {
@@ -2151,19 +2151,18 @@ function applyBackground() {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
     }
 
-    bgLayer.style.filter = `blur(${CURRENT_BG_BLUR}px)`;
+    if (CURRENT_BG_BLUR > 0) {
+        bgLayer.style.filter = `blur(${CURRENT_BG_BLUR}px)`;
+        bgLayer.style.transform = 'scale(1.05)';
+    } else {
+        bgLayer.style.filter = 'none';
+        bgLayer.style.transform = 'scale(1)';
+    }
     if (aiSidebar) {
         // Base blur of 40px plus user's background blur
         const totalBlur = 40 + parseInt(CURRENT_BG_BLUR);
         aiSidebar.style.backdropFilter = `blur(${totalBlur}px)`;
         aiSidebar.style.webkitBackdropFilter = `blur(${totalBlur}px)`;
-    }
-
-    // Scale up slightly to avoid blurred edges if blurring
-    if (CURRENT_BG_BLUR > 0) {
-        bgLayer.style.transform = 'scale(1.05)';
-    } else {
-        bgLayer.style.transform = 'scale(1)';
     }
 }
 
