@@ -154,3 +154,9 @@
 - **Type**: Refactor (Follow-Hand Interaction Upgrade)
 - **Content**: 交互体验升级：平铺模式书签卡片选中动效强化并提高跟手响应（更短过渡、更明显边框与阴影反馈）；树状模式子文件夹 hover 展开改为低延迟跟手（延迟上限 40ms）；移除树状模式子文件夹标题前的小箭头图标；同时增大平铺模式右侧列表与滚动条的安全间距，缓解贴边拥挤感。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 09:37:17 +0800
+- **Type**: Fix (Container Transparency-Blur Fusion)
+- **Content**: 修复“主容器透明度调高但通透感不明显”问题：将主容器滑杆改为透明度与磨砂感联动映射（透明度越高，背景 alpha 越低且 blur 越小，保留最小 blur 保障可读性），并在设置项补充联动说明文案。
+- **Impact**: `script.js`、`newtab.html`、`CHANGE_LOG.md`

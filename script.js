@@ -2171,10 +2171,17 @@ function applyContainerOpacity() {
     const container = document.querySelector('.container');
     if (!container) return;
 
-    const transparency = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR)) / 10;
-    const overlayAlpha = Math.max(0.3, 0.82 - transparency * 0.42);
+    const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
+    const transparency = level / 10;
+    // Blend transparency and frosted blur together:
+    // higher transparency -> lower blur, but keep a minimum for readability.
+    const overlayAlpha = Math.max(0.28, 0.82 - transparency * 0.52);
+    const blurPx = Math.max(2, Math.round(18 - transparency * 16));
+
     container.style.background =
         `linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), color-mix(in srgb, var(--bg-overlay) ${Math.round(overlayAlpha * 100)}%, transparent)`;
+    container.style.backdropFilter = `blur(${blurPx}px)`;
+    container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
 }
 
 // --- Bookmark Item Drag Handlers ---
