@@ -172,3 +172,9 @@
 - **Type**: Fix (AI Sidebar Default Sync)
 - **Content**: 修复 AI 侧边栏“Tab 高亮与实际加载 iframe 不一致”问题：新增统一 `syncAiState` 流程，在恢复本地偏好后同时同步 tab 高亮与 iframe 切换；并在切换时强制清理所有 iframe 的陈旧 `active` 状态，避免初始化竞态导致错位。
 - **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 10:53:30 +0800
+- **Type**: Feature (Icon Refresh & Version 3.0.0)
+- **Content**: 重绘并替换插件图标为统一“书签树”视觉风格（16/48/128 与源图一致），提升小尺寸识别度与品牌一致性；同时将项目与插件版本号统一升级到 `3.0.0`，并完成构建校验。
+- **Impact**: `icon.png`、`icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`manifest.json`、`package.json`、`package-lock.json`、`CHANGE_LOG.md`
