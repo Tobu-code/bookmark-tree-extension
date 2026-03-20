@@ -184,3 +184,9 @@
 - **Type**: Fix (Flat Grid Height Consistency)
 - **Content**: 修复平铺模式右侧书签列表下拉时卡片高度不一致问题：为网格增加固定自动行高并统一卡片等高布局，补齐标题单行截断约束，消除滚动过程中的行高抖动与高低错位。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 11:03:51 +0800
+- **Type**: Fix (Flat Pane Sticky Header)
+- **Content**: 修复平铺模式右侧书签列表滚动时顶部信息跟随上移问题：将右侧标题/面包屑区域改为 `sticky` 固定顶部，并补充半透明背景与模糊层，确保仅列表内容滚动、顶部保持稳定可见。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
