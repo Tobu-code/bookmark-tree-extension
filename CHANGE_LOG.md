@@ -178,3 +178,9 @@
 - **Type**: Feature (Icon Refresh & Version 3.0.0)
 - **Content**: 重绘并替换插件图标为统一“书签树”视觉风格（16/48/128 与源图一致），提升小尺寸识别度与品牌一致性；同时将项目与插件版本号统一升级到 `3.0.0`，并完成构建校验。
 - **Impact**: `icon.png`、`icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`manifest.json`、`package.json`、`package-lock.json`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 10:56:01 +0800
+- **Type**: Fix (Flat Grid Height Consistency)
+- **Content**: 修复平铺模式右侧书签列表下拉时卡片高度不一致问题：为网格增加固定自动行高并统一卡片等高布局，补齐标题单行截断约束，消除滚动过程中的行高抖动与高低错位。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
