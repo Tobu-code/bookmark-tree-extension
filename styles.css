@@ -1003,9 +1003,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     z-index: 16;
     /* Item 6: Soft gradient separator instead of hard line */
     border-bottom: none;
-    background-color: color-mix(in srgb, var(--bg-overlay) 88%, transparent);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     background-size: 100% 1px;
     background-repeat: no-repeat;
@@ -1013,7 +1013,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .bookmarks-pane-header {
-    background-color: rgba(20, 24, 31, 0.78);
+    background: transparent;
     background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
@@ -1144,7 +1144,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding: 0 0 10px 4px;
     padding-left: 4px;
     margin: 0 0 var(--flat-pane-header-gap) 0;
+    position: sticky;
+    top: 0;
+    z-index: 16;
     border-left: none;
+    background: transparent;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     background-size: 100% 1px;
     background-repeat: no-repeat;
