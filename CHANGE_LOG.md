@@ -166,3 +166,9 @@
 - **Type**: Fix (HD Background Preservation)
 - **Content**: 修复高分辨率背景图上传后易发糊问题：背景上传改为“始终先尝试原图保存”，仅在存储失败时按 6144→5120→4096→3200→2560 分级压缩回退；并在 `bg-blur=0` 时关闭滤镜路径（`filter:none`），避免 `blur(0)` 带来的额外软化。
 - **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 10:06:59 +0800
+- **Type**: Fix (AI Sidebar Default Sync)
+- **Content**: 修复 AI 侧边栏“Tab 高亮与实际加载 iframe 不一致”问题：新增统一 `syncAiState` 流程，在恢复本地偏好后同时同步 tab 高亮与 iframe 切换；并在切换时强制清理所有 iframe 的陈旧 `active` 状态，避免初始化竞态导致错位。
+- **Impact**: `script.js`、`CHANGE_LOG.md`

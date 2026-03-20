@@ -2485,15 +2485,19 @@ function initAiSidebar() {
 
 
     // Load saved AI preference
+    function syncAiState() {
+        updateActiveTab();
+        switchToAi(currentAi.id);
+    }
+
     chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
         if (result[STORAGE_KEY_AI]) {
             const saved = result[STORAGE_KEY_AI];
             if (saved?.id && aiUrls[saved.id]) {
                 currentAi = saved;
             }
-            // updateCurrentAiDisplay(); // No longer needed as icon is static
         }
-        updateActiveTab();
+        syncAiState();
     });
 
     function updateCurrentAiDisplay() {
@@ -2549,6 +2553,8 @@ function initAiSidebar() {
     function switchToAi(aiId) {
         Object.entries(iframes).forEach(([id, iframe]) => {
             if (!iframe) return;
+            // Always clear stale active state, even if iframe was never loaded
+            iframe.classList.remove('active');
             if (id !== aiId) unloadIframe(id);
         });
 
