@@ -445,6 +445,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     dirHeader.className = 'directory-pane-header';
     dirHeader.innerHTML = `${FOLDER_ICON_SVG} <span>书签目录</span>`;
     dirPane.appendChild(dirHeader);
+
+    const dirScroll = document.createElement('div');
+    dirScroll.className = 'directory-pane-scroll';
+    dirPane.appendChild(dirScroll);
     
     const bmkPane = document.createElement('div');
     bmkPane.className = 'bookmarks-pane';
@@ -471,6 +475,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
         }
         bmkPane.appendChild(header);
+
+        const bmkPaneScroll = document.createElement('div');
+        bmkPaneScroll.className = 'bookmarks-pane-scroll';
+        bmkPane.appendChild(bmkPaneScroll);
 
         const listContainer = document.createElement('div');
         listContainer.className = 'bookmarks-pane-grid';
@@ -513,7 +521,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         let childrenToRender = folder.children.filter(child => !child.children);
         
         // Append container synchronously to prevent race conditions during rapid re-renders
-        bmkPane.appendChild(listContainer);
+        bmkPaneScroll.appendChild(listContainer);
         renderBookmarkItems(childrenToRender, listContainer, folder);
     };
 
@@ -654,7 +662,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         folderTile.addEventListener('drop', handleItemDrop);
         folderTile.addEventListener('dragend', handleItemDragEnd);
         
-        dirPane.appendChild(folderTile);
+        dirScroll.appendChild(folderTile);
     });
 
     // Automatically select the first visible folder
@@ -680,7 +688,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 renderBookmarks(bookmarkTreeNodes);
             });
         });
-        dirPane.appendChild(moreToggleBtn);
+        dirScroll.appendChild(moreToggleBtn);
     }
 
     // Add "Manage Hidden Folders" toggle at the bottom of the left pane
@@ -697,7 +705,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // Wrap the original dirPane content in a scrollable div and put this button at the bottom fixed
         // or just append it as the last item in the grid, spanning both columns.
         toggleHiddenBtn.style.gridColumn = '1 / -1';
-        dirPane.appendChild(toggleHiddenBtn);
+        dirScroll.appendChild(toggleHiddenBtn);
     }
 }
 

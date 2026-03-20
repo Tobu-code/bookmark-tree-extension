@@ -196,3 +196,9 @@
 - **Type**: Fix (Flat Dual Sticky Header Polish)
 - **Content**: 优化平铺模式双侧固定头部表现：右侧固定标题去除白底与模糊层，恢复透明无边框视觉；左侧“书签目录”标题同步改为 `sticky` 固定，滚动目录列表时头部不再上移。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-20]
+- **Time**: 2026-03-20 11:18:20 +0800
+- **Type**: Fix (Flat Pane Scroll Clipping)
+- **Content**: 修复平铺模式头部“穿越叠层”问题：左右面板均改为“头部 + 独立滚动体”结构（目录头/书签头固定在面板上层，列表内容在内部容器滚动），实现到顶部即被头部下缘截断，不再穿过标题区域。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
