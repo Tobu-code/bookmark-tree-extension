@@ -3,62 +3,64 @@
 
 :root {
     /* Claude Light Mode - Refined */
-    --primary-color: #ae5630;
+    --primary-color: #b8623b;
     /* Terracotta Orange */
     --text-color: #1a1a18;
     /* Deep Charcoal Black */
-    --text-secondary: #6b6a68;
+    --text-secondary: #6d675f;
     /* Medium Grey */
-    --bg-overlay: rgba(245, 245, 240, 0.4);
+    --bg-overlay: rgba(248, 246, 241, 0.82);
     /* Creamy/Beige Tint */
-    --card-bg: #FFFFFF;
+    --card-bg: #fffdf9;
     /* Pure White Cards */
-    --card-hover: #F5F5F0;
+    --card-hover: #f8f3eb;
     /* Subtle Beige Hover */
-    --border-color: rgba(0, 0, 0, 0.08);
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.035);
+    --border-color: rgba(110, 78, 53, 0.12);
+    --shadow-sm: 0 4px 12px rgba(42, 30, 20, 0.06);
+    --shadow-md: 0 18px 44px rgba(40, 30, 20, 0.12);
     /* Specific Claude shadow */
     --modal-bg: #FFFFFF;
     --modal-text: #1a1a18;
 
     /* Added for Modal Readability */
-    --glass-bg: rgba(255, 255, 255, 0.9);
-    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-bg: rgba(255, 253, 250, 0.92);
+    --glass-border: rgba(110, 78, 53, 0.1);
+    --flat-pane-header-height: 52px;
+    --flat-pane-header-gap: 12px;
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
 :root[data-theme="dark"] {
     /* Core Brand */
-    --primary-color: #D97757;
+    --primary-color: #e18b64;
     /* Terracotta/Clay - Core Brand Accent */
     --text-color: #F2F0E9;
     /* Off-white for primary text */
-    --text-secondary: #A8A6A3;
+    --text-secondary: #BDBAB6;
     /* Slightly warmer grey for secondary text */
 
-    --bg-overlay: rgba(26, 21, 35, 0.4);
-    /* Deep purple-grey main background */
-    --card-bg: #221D2A;
-    /* Purple-tinted card background */
-    --card-hover: #2D2638;
-    /* Warmer purple hover state */
-    --border-color: rgba(217, 119, 87, 0.12);
+    --bg-overlay: rgba(21, 23, 29, 0.74);
+    /* Deep slate main background */
+    --card-bg: #1f232b;
+    /* Slate card background */
+    --card-hover: #2a303a;
+    /* Hover state */
+    --border-color: rgba(255, 255, 255, 0.12);
     /* Warm-tinted borders */
 
     /* Enhanced Shadows & Effects */
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 40px rgba(217, 119, 87, 0.15);
+    --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
+    --shadow-glow: 0 0 32px rgba(225, 139, 100, 0.14);
     /* New: Glow effect */
-    --modal-bg: #221D2A;
+    --modal-bg: #1f232b;
     --modal-text: #F2F0E9;
 
     /* New: Glass & Glow Variables */
-    --glow-color: rgba(217, 119, 87, 0.25);
-    --glow-soft: rgba(217, 119, 87, 0.1);
-    --glass-bg: rgba(34, 29, 42, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    --glow-color: rgba(225, 139, 100, 0.25);
+    --glow-soft: rgba(225, 139, 100, 0.1);
+    --glass-bg: rgba(31, 35, 43, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.08);
     --highlight-top: rgba(255, 255, 255, 0.04);
 }
 
@@ -78,22 +80,22 @@
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #D97757;
+        --primary-color: #e18b64;
         --text-color: #F2F0E9;
-        --text-secondary: #A8A6A3;
-        --bg-overlay: rgba(26, 21, 35, 0.4);
-        --card-bg: #221D2A;
-        --card-hover: #2D2638;
-        --border-color: rgba(217, 119, 87, 0.12);
-        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.4);
-        --shadow-glow: 0 0 40px rgba(217, 119, 87, 0.15);
-        --modal-bg: #221D2A;
+        --text-secondary: #BDBAB6;
+        --bg-overlay: rgba(21, 23, 29, 0.74);
+        --card-bg: #1f232b;
+        --card-hover: #2a303a;
+        --border-color: rgba(255, 255, 255, 0.12);
+        --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
+        --shadow-glow: 0 0 32px rgba(225, 139, 100, 0.14);
+        --modal-bg: #1f232b;
         --modal-text: #F2F0E9;
-        --glow-color: rgba(217, 119, 87, 0.25);
-        --glow-soft: rgba(217, 119, 87, 0.1);
-        --glass-bg: rgba(34, 29, 42, 0.85);
-        --glass-border: rgba(255, 255, 255, 0.06);
+        --glow-color: rgba(225, 139, 100, 0.25);
+        --glow-soft: rgba(225, 139, 100, 0.1);
+        --glass-bg: rgba(31, 35, 43, 0.88);
+        --glass-border: rgba(255, 255, 255, 0.08);
         --highlight-top: rgba(255, 255, 255, 0.04);
     }
 
@@ -121,7 +123,7 @@ html {
     padding: 0;
     width: 100%;
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     /* Modern System Font Stack */
     overflow: hidden;
 }
@@ -150,10 +152,8 @@ h3,
     z-index: -1;
     transition: background-color 0.5s ease, opacity 0.5s ease;
 
-    /* High-quality image rendering */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: high-quality;
+    /* Keep browser-native image sampling for photo backgrounds */
+    image-rendering: auto;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: translateZ(0);
@@ -163,25 +163,56 @@ h3,
     opacity: 0;
 }
 
+#background-layer::before,
+#background-layer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+#background-layer::before {
+    background:
+        radial-gradient(circle at 18% 20%, rgba(255, 210, 168, 0.22), transparent 42%),
+        radial-gradient(circle at 82% 14%, rgba(171, 206, 255, 0.2), transparent 38%),
+        radial-gradient(circle at 74% 82%, rgba(255, 170, 152, 0.14), transparent 40%);
+    mix-blend-mode: screen;
+}
+
+#background-layer::after {
+    background: linear-gradient(180deg, rgba(20, 16, 12, 0.08) 0%, rgba(20, 16, 12, 0.22) 100%);
+}
+
 /* Dark Theme overrides for background - Deep Purple-Grey */
 :root[data-theme="dark"] #background-layer {
     background-color: #1A1523;
 }
 
+:root[data-theme="dark"] #background-layer::before {
+    background:
+        radial-gradient(circle at 20% 24%, rgba(225, 139, 100, 0.18), transparent 44%),
+        radial-gradient(circle at 84% 18%, rgba(110, 164, 255, 0.16), transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(171, 126, 255, 0.14), transparent 42%);
+}
+
+:root[data-theme="dark"] #background-layer::after {
+    background: linear-gradient(180deg, rgba(8, 10, 14, 0.24) 0%, rgba(8, 10, 14, 0.45) 100%);
+}
+
 /* Main Container - Dashboard Style */
 .container {
-    width: 94%;
-    height: 94vh;
-    margin: 3vh auto;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 40%), var(--bg-overlay);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    width: 90%;
+    height: 92vh;
+    margin: 4vh auto;
+    border-radius: 28px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), var(--bg-overlay);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-md);
+    border: 1px solid color-mix(in srgb, var(--border-color) 92%, white 8%);
     display: flex;
     flex-direction: column;
-    padding: 40px 20px;
+    padding: 28px 28px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -189,7 +220,39 @@ h3,
     /* Pre-load state */
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, background 0.18s ease-out;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+        linear-gradient(158deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 42%, transparent 72%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 30%);
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    opacity: 0.55;
+}
+
+:root[data-theme="dark"] .container::before {
+    background:
+        linear-gradient(158deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 42%, transparent 72%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 28%);
+}
+
+:root[data-theme="dark"] .container::after {
+    border-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.6;
 }
 
 body.loaded .container {
@@ -204,8 +267,8 @@ body.loaded #background-layer {
 
 /* Search Bar */
 #search-container {
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: 24px;
+    margin-bottom: 34px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -233,12 +296,12 @@ body.loaded #background-layer {
 }
 
 .ambient-time.visible {
-    opacity: 0.75;
+    opacity: 0.58;
     /* 闲置时清晰显示 */
 }
 
 .ambient-time.dimmed {
-    opacity: 0.4;
+    opacity: 0.24;
     /* 输入或交互时适当降低存在感 */
 }
 
@@ -256,8 +319,9 @@ body.loaded #background-layer {
 }
 
 #search-input::placeholder {
-    font-style: italic;
-    opacity: 0.5;
+    font-style: normal;
+    opacity: 0.76;
+    color: var(--text-secondary);
 }
 
 /* Wrapper looks like the old input - Claude Style Enhanced */
@@ -266,16 +330,24 @@ body.loaded #background-layer {
     align-items: center;
     width: 58.5%;
     max-width: 800px;
-    border-radius: 20px;
+    border-radius: 18px;
     /* More rounded, Claude-style */
-    background: var(--card-bg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 252, 247, 0.92) 100%);
     box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.12),
+        0 6px 18px rgba(44, 33, 22, 0.12),
         inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding-left: 20px;
     position: relative;
+}
+
+:root[data-theme="dark"] .search-wrapper {
+    background: linear-gradient(180deg, rgba(34, 40, 50, 0.96) 0%, rgba(28, 33, 42, 0.94) 100%);
 }
 
 /* Flowing glow border animation */
@@ -299,8 +371,8 @@ body.loaded #background-layer {
 .search-wrapper::before {
     content: '';
     position: absolute;
-    inset: -2px;
-    border-radius: 22px;
+    inset: -1px;
+    border-radius: 19px;
     background: conic-gradient(from var(--border-angle, 0deg),
             transparent 0%,
             transparent 25%,
@@ -316,22 +388,22 @@ body.loaded #background-layer {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 20px;
-    background: var(--card-bg);
+    border-radius: 18px;
+    background: transparent;
     z-index: -1;
 }
 
 .search-wrapper:focus-within {
     width: 58.5%;
     background: var(--card-bg);
-    border-color: transparent;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    transform: translateY(-2px) scale(1.02);
+    border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
+    box-shadow: 0 12px 32px rgba(44, 33, 22, 0.17), 0 0 0 4px color-mix(in srgb, var(--primary-color) 16%, transparent);
+    transform: translateY(-1px) scale(1.008);
 }
 
 .search-wrapper:focus-within::before {
-    opacity: 1;
-    animation: flowingBorder 3s linear infinite;
+    opacity: 0;
+    animation: none;
     background: conic-gradient(from var(--border-angle, 0deg),
             transparent 0%,
             rgba(217, 119, 87, 0.3) 10%,
@@ -354,7 +426,7 @@ body.loaded #background-layer {
             rgba(217, 119, 87, 0.4) 50%,
             transparent 60%,
             transparent 100%);
-    filter: blur(1px);
+    filter: none;
 }
 
 /* Engine Picker Container */
@@ -368,10 +440,10 @@ body.loaded #background-layer {
     font-size: 15px;
     /* Slightly smaller */
     font-weight: 500;
-    color: var(--text-secondary);
+    color: color-mix(in srgb, var(--text-color) 65%, var(--text-secondary));
     cursor: pointer;
     padding-right: 12px;
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid color-mix(in srgb, var(--border-color) 72%, var(--text-color));
     margin-right: 8px;
     min-width: 60px;
     text-align: center;
@@ -429,7 +501,7 @@ body.loaded #background-layer {
     font-weight: 500;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .wheel-option:hover {
@@ -499,7 +571,7 @@ body.search-active #search-container {
     align-items: center;
     padding: 12px 16px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -582,7 +654,47 @@ body.search-active #search-container {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 10px;
+    padding: 8px 6px;
+    transform-origin: 50% 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+@keyframes layoutSwitchFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.994);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+body.layout-switching #bookmarks-tree {
+    opacity: 0.88;
+    transform: translateY(2px) scale(0.995);
+}
+
+body.layout-switching #bookmarks-tree.layout-flat .directory-pane,
+body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane,
+body.layout-switching #bookmarks-tree.layout-flat .folder-tile,
+body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper,
+body.layout-switching #bookmarks-tree.layout-tree .top-level-container,
+body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
+    animation: layoutSwitchFadeIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #bookmarks-tree,
+    body.layout-switching #bookmarks-tree.layout-flat .directory-pane,
+    body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane,
+    body.layout-switching #bookmarks-tree.layout-flat .folder-tile,
+    body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper,
+    body.layout-switching #bookmarks-tree.layout-tree .top-level-container,
+    body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 
 /* Scrollbar styling - Mac/iOS Native Feel */
@@ -625,111 +737,143 @@ body.search-active #search-container {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    padding: 10px 20px;
+    gap: 24px;
+    /* Keep flat-mode left/right baseline aligned with tree-mode content area */
+    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
+    padding: 26px var(--flat-side-gutter) 14px;
     align-items: flex-start; /* Align both panes to the same top line */
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#bookmarks-tree.layout-tree {
+    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
+    padding: 26px var(--flat-side-gutter) 14px;
 }
 
 .directory-pane {
-    width: 480px;
+    width: 340px;
     flex-shrink: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 16px 32px; /* Increased horizontal gap for safe hover path */
+    gap: 10px;
+    min-height: 0;
+    height: 100%;
     overflow-y: auto;
-    padding-right: 32px; /* Increased right padding to create a wider safe corridor */
+    overflow-x: hidden;
+    padding-right: 20px;
     padding-top: 0;
-    border-right: 1px solid rgba(0, 0, 0, 0.06);
-    -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
-    /* Fix Chrome backdrop-filter scroll compositing bug */
-    will-change: transform;
-    transform: translateZ(0);
+    border-right: none;
+    background: transparent;
+    /* Avoid mask/transform compositing glitches while scrolling in Chrome */
+    -webkit-mask-image: none;
+    mask-image: none;
+    will-change: auto;
+    transform: none;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 :root[data-theme="dark"] .directory-pane {
-    border-right-color: rgba(255, 255, 255, 0.06);
+    border-right: none;
+    background: transparent;
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
 .directory-pane:hover .folder-tile:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.92;
 }
 
 .folder-tile {
     /* ... existing props ... */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.3s ease;
 }
 
 .bookmarks-pane {
     flex: 1;
     background: transparent;
-    padding: 24px;
+    padding: 0 18px 0 6px;
     padding-top: 0;
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    height: 100%;
     overflow-y: auto;
-    /* Fix Chrome backdrop-filter scroll compositing bug */
-    will-change: transform;
-    transform: translateZ(0);
+    overflow-x: hidden;
+    /* Keep scroll layer simple to avoid white flashing tiles */
+    will-change: auto;
+    transform: none;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     /* Smooth fade transition for hover-to-switch */
-    transition: opacity 0.12s ease-out, transform 0.12s ease-out;
+    transition: opacity 0.16s ease-out, transform 0.16s ease-out;
 }
 
 
 .folder-tile {
     display: flex;
     align-items: center;
-    padding: 14px 20px;
+    padding: 11px 14px;
     border-radius: 14px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.3s ease;
+    background: rgba(255, 250, 245, 0.9);
     color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    /* Fix Chrome scroll compositing bug */
-    will-change: transform;
+    border: 1px solid color-mix(in srgb, var(--border-color) 95%, transparent);
+    box-shadow: 0 1px 3px rgba(44, 33, 22, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    will-change: auto;
 }
 
 :root[data-theme="dark"] .folder-tile {
-    background: rgba(40, 35, 50, 0.45);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(39, 45, 56, 0.82);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .folder-tile:hover {
-    background: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    border-color: rgba(174, 86, 48, 0.2);
+    background: rgba(255, 252, 248, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(44, 33, 22, 0.11);
+    border-color: color-mix(in srgb, var(--primary-color) 36%, var(--border-color));
 }
 
 :root[data-theme="dark"] .folder-tile:hover {
-    background: rgba(40, 35, 50, 0.6);
-    border-color: rgba(217, 119, 87, 0.2);
+    background: rgba(45, 52, 64, 0.9);
+    border-color: rgba(225, 139, 100, 0.34);
 }
 
 .folder-tile.active {
-    background: rgba(217, 119, 87, 0.15);
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
     color: var(--primary-color);
-    font-weight: 600;
-    border-left: 3px solid var(--primary-color);
-    border-color: rgba(217, 119, 87, 0.3);
-    box-shadow: 0 2px 8px rgba(217, 119, 87, 0.1);
+    font-weight: 620;
+    border-left: 2px solid var(--primary-color);
+    border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), 0 8px 22px rgba(44, 33, 22, 0.12);
 }
 
-.folder-tile:not(:has(.hide-icon:hover)):active {
+.folder-tile:not(:has(.hide-icon:hover, .pin-top-icon:hover)):active {
     transform: scale(0.97);
     transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 :root[data-theme="dark"] .folder-tile.active {
-    background: rgba(217, 119, 87, 0.12);
+    background: rgba(217, 119, 87, 0.22);
     color: var(--primary-color);
-    border-color: rgba(217, 119, 87, 0.3);
+    border-color: rgba(217, 119, 87, 0.42);
+    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.22), 0 6px 20px rgba(0, 0, 0, 0.26);
 }
 
 .folder-tile-title {
@@ -737,9 +881,31 @@ body.search-active #search-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 16px; /* Increased font size */
-    font-weight: 500; /* Made slightly bolder */
+    font-size: 14px;
+    font-weight: 520;
+    letter-spacing: 0;
     flex-grow: 1;
+}
+
+.folder-tile-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.folder-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
 }
 
 .hide-icon {
@@ -747,14 +913,24 @@ body.search-active #search-container {
     transition: opacity 0.2s, color 0.2s;
     color: var(--text-color);
     flex-shrink: 0;
-    margin-left: 8px;
+    pointer-events: none;
 }
 
-.folder-tile:hover .hide-icon {
+.pin-top-icon {
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+    color: var(--text-color);
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+.folder-tile:hover .hide-icon,
+.folder-tile:hover .pin-top-icon {
     opacity: 0.5;
 }
 
-.folder-tile .hide-icon:hover {
+.folder-tile .folder-action-btn:hover .hide-icon,
+.folder-tile .folder-action-btn:hover .pin-top-icon {
     opacity: 1;
     color: var(--primary-color);
 }
@@ -776,6 +952,34 @@ body.search-active #search-container {
     margin-top: 10px;
 }
 
+.directory-more-btn {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 10px;
+    color: var(--text-secondary, #888);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+    background: rgba(255, 255, 255, 0.2);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.directory-more-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+    border-color: rgba(174, 86, 48, 0.3);
+}
+
+:root[data-theme="dark"] .directory-more-btn {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+:root[data-theme="dark"] .directory-more-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(217, 119, 87, 0.3);
+}
+
 .toggle-hidden-btn:hover {
     background: rgba(0, 0, 0, 0.05);
     color: var(--text-color);
@@ -788,11 +992,12 @@ body.search-active #search-container {
 .bookmarks-pane-header {
     display: flex;
     align-items: center;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 600;
     color: var(--text-color);
-    margin-bottom: 24px;
-    padding-bottom: 16px;
+    min-height: var(--flat-pane-header-height);
+    margin: 0 0 var(--flat-pane-header-gap) 0;
+    padding: 0 0 10px 4px;
     /* Item 6: Soft gradient separator instead of hard line */
     border-bottom: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
@@ -801,55 +1006,60 @@ body.search-active #search-container {
     background-position: bottom;
 }
 
+:root[data-theme="dark"] .bookmarks-pane-header {
+    background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
+}
+
 .bookmarks-pane-header span {
     margin-left: 10px;
 }
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 14px;
     align-content: start;
 }
 
 
 /* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
     border-radius: 16px;
-    padding: 12px;
+    padding: 10px 12px;
     margin-bottom: 0;
-    min-height: 90px; /* Equal-height cards */
+    min-height: 84px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    /* Fix Chrome scroll compositing bug with backdrop-filter */
-    will-change: transform;
-    transform: translateZ(0);
+    box-shadow: 0 8px 24px rgba(44, 33, 22, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.18s ease;
+    will-change: auto;
+    transform: none;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(40, 35, 50, 0.45);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(37, 43, 54, 0.88);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(174, 86, 48, 0.3);
-    background: rgba(255, 255, 255, 0.45);
-    border-color: rgba(174, 86, 48, 0.4); /* Glow with theme primary */
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 34px rgba(44, 33, 22, 0.22);
+    background: rgba(255, 255, 255, 0.96);
+    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color));
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background: rgba(40, 35, 50, 0.55);
-    border-color: rgba(217, 119, 87, 0.4);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(217, 119, 87, 0.3);
+    background: rgba(42, 48, 60, 0.94);
+    border-color: rgba(225, 139, 100, 0.48);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
@@ -859,11 +1069,11 @@ body.search-active #search-container {
 
 /* Optimization 3: Hover focus - dim others in bookmarks grid */
 .bookmarks-pane-grid:hover .leaf-wrapper:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.9;
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px 4px;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
     align-items: center; /* Center all children horizontally */
@@ -886,8 +1096,13 @@ body.search-active #search-container {
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: 560;
+    line-height: 1.3;
+    color: var(--text-color);
     text-align: center;
     max-width: 100%;
+    letter-spacing: 0.1px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
@@ -904,17 +1119,22 @@ body.search-active #search-container {
     grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 600;
     color: var(--text-color);
-    padding-bottom: 8px;
+    min-height: var(--flat-pane-header-height);
+    padding: 0 0 10px 4px;
     padding-left: 4px;
-    margin-bottom: 4px;
-    border-left: 3px solid var(--primary-color);
+    margin: 0 0 var(--flat-pane-header-gap) 0;
+    border-left: none;
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     background-size: 100% 1px;
     background-repeat: no-repeat;
     background-position: bottom;
+}
+
+:root[data-theme="dark"] .directory-pane-header {
+    background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
 .directory-pane-header span {
@@ -925,15 +1145,70 @@ body.search-active #search-container {
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
     font-size: 11px;
-    color: var(--text-secondary, #888);
-    opacity: 0.55;
-    margin-top: 2px;
+    color: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
+    opacity: 0.92;
+    margin-top: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0; /* Centered layout, no offset needed */
     text-align: center;
     max-width: 100%;
+}
+
+@media (max-width: 1650px) {
+    .bookmarks-pane-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1280px) {
+    .bookmarks-pane-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 899px) {
+    #bookmarks-tree.layout-flat {
+        flex-direction: column;
+        gap: 18px;
+        padding: 16px 8px 8px;
+        height: auto;
+        overflow: visible;
+    }
+
+    .directory-pane {
+        width: 100%;
+        max-height: 220px;
+        height: auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 12px;
+        padding-right: 8px;
+        padding-bottom: 10px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    :root[data-theme="dark"] .directory-pane {
+        border-bottom-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .bookmarks-pane {
+        width: 100%;
+        height: auto;
+        padding: 0;
+    }
+
+    .bookmarks-pane-grid {
+        grid-template-columns: 1fr;
+    }
+
+    :root {
+        --flat-pane-header-height: 44px;
+        --flat-pane-header-gap: 10px;
+    }
 }
 
 /* Item 9: Fallback letter avatar for missing favicons */
@@ -955,7 +1230,7 @@ body.search-active #search-container {
 /* Item 12: Ultra-slim scrollbar with transparent track */
 .directory-pane::-webkit-scrollbar,
 .bookmarks-pane::-webkit-scrollbar {
-    width: 4px; /* Slimmer */
+    width: 6px;
 }
 .directory-pane::-webkit-scrollbar-track,
 .bookmarks-pane::-webkit-scrollbar-track {
@@ -963,22 +1238,31 @@ body.search-active #search-container {
 }
 .directory-pane::-webkit-scrollbar-thumb,
 .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.26);
     border-radius: 10px;
 }
+
+.directory-pane::-webkit-scrollbar-thumb:hover,
+.bookmarks-pane::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.42);
+}
+
 :root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb,
 :root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.26);
+}
+
+:root[data-theme="dark"] .directory-pane::-webkit-scrollbar-thumb:hover,
+:root[data-theme="dark"] .bookmarks-pane::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */
 .top-level-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 360px);
-    grid-gap: 40px 60px;
-    /* Increased horizontal breathing room */
-    gap: 40px 60px;
-    justify-content: center;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    justify-content: stretch;
     padding: 12px 0 100px 0;
     width: 100%;
     box-sizing: border-box;
@@ -988,7 +1272,7 @@ body.search-active #search-container {
     background: var(--bg-overlay);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    width: 360px;
+    width: 100%;
     height: 380px;
     border-radius: 24px;
     /* More rounded, Claude-style */
@@ -998,12 +1282,34 @@ body.search-active #search-container {
         0 4px 24px rgba(0, 0, 0, 0.15),
         inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
-    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        background-color 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        border-color 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: grab;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+}
+
+@media (max-width: 1650px) {
+    .top-level-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 1280px) {
+    .top-level-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 899px) {
+    .top-level-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Dark mode: subtle warm border tint */
@@ -1012,13 +1318,13 @@ body.search-active #search-container {
 }
 
 .bookmark-card:hover {
-    transform: translateY(-12px);
+    transform: translateY(-10px) scale(1.01);
     background: var(--card-hover);
-    border-color: rgba(217, 119, 87, 0.15);
+    border-color: rgba(217, 119, 87, 0.26);
     z-index: 10;
     box-shadow:
-        0 20px 48px rgba(0, 0, 0, 0.25),
-        0 0 60px var(--glow-soft, rgba(217, 119, 87, 0.08));
+        0 22px 54px rgba(0, 0, 0, 0.3),
+        0 0 70px var(--glow-soft, rgba(217, 119, 87, 0.14));
 }
 
 .bookmark-card:active {
@@ -1052,7 +1358,7 @@ body.search-active #search-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: transform 0.2s, opacity 0.2s, color 0.2s, background-color 0.2s;
     font-size: 10px;
     color: transparent;
     border: none;
@@ -1266,7 +1572,13 @@ body.search-active #search-container {
     /* Slightly smaller radius for list items */
     text-decoration: none;
     color: var(--text-color);
-    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        padding-left 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        padding-right 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        background 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-left-color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
     transform-origin: center center;
     position: relative;
@@ -1276,6 +1588,11 @@ body.search-active #search-container {
     /* Prepare for hover accent */
     overflow: hidden;
     min-width: 0;
+}
+
+.leaf-node:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--primary-color) 76%, white);
+    outline-offset: 2px;
 }
 
 /* Hover Effect - Claude Style Gradient */
@@ -1348,10 +1665,12 @@ body.search-active #search-container {
     align-items: center;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     /* Shadow for directory/folder titles */
+    transition: color 0.16s ease, transform 0.16s ease;
 }
 
 .sub-folder-header:hover {
     color: var(--primary-color);
+    transform: translateX(2px);
 }
 
 .sub-folder-content.hidden {
@@ -1432,7 +1751,11 @@ body.search-active #search-container {
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -1469,7 +1792,11 @@ body.search-active #search-container {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -1625,7 +1952,7 @@ body.search-active #search-container {
     font-size: 14px;
     color: var(--text-color);
     outline: none;
-    transition: all 0.2s;
+    transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
     line-height: 1.5;
     min-height: 46px;
 }
@@ -1791,7 +2118,7 @@ input[type=range]::-moz-range-thumb {
     padding: 0 10px;
     cursor: pointer;
     border-radius: 8px;
-    transition: all 0.2s;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, opacity 0.2s;
     font-size: 13px;
     font-weight: 500;
     color: var(--text-secondary);
@@ -1889,7 +2216,7 @@ input[type="file"] {
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
-    transition: all 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
     min-height: 36px;
     /* Consistent button height */
@@ -2010,7 +2337,10 @@ input[type="file"] {
     border: none;
     cursor: pointer;
     box-shadow: none;
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+        color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+        box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2146,7 +2476,12 @@ input[type="file"] {
     padding: 8px 14px;
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.25s ease-out;
+    transition: background-color 0.25s ease-out,
+        border-color 0.25s ease-out,
+        color 0.25s ease-out,
+        box-shadow 0.25s ease-out,
+        opacity 0.25s ease-out,
+        transform 0.25s ease-out;
     background: transparent;
     border: 1px solid transparent;
     user-select: none;
@@ -2306,7 +2641,7 @@ input[type="file"] {
     align-items: center;
     justify-content: center;
     color: var(--text-secondary, #A8A6A3);
-    transition: all 0.2s;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .ai-action-btn svg {
@@ -2418,7 +2753,7 @@ input[type="file"] {
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
     box-shadow: 0 4px 16px rgba(66, 133, 244, 0.3);
 }
 
@@ -2481,116 +2816,6 @@ input[type="file"] {
     }
 }
 
-/* ========================================
-   Suggested Destinations - Minimalist Style
-   ======================================== */
-
-.suggested-section {
-    margin: -14px auto 40px auto;
-    padding: 0;
-    width: 65%;
-    max-width: 900px;
-    box-sizing: border-box;
-}
-
-.suggested-items {
-    display: flex;
-    gap: 6px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    padding-left: 101px;
-    overflow: visible;
-    /* 允许超出边界以防截断 */
-}
-
-.suggested-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    width: 120px;
-    flex-shrink: 0;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    opacity: 0.55;
-    box-sizing: border-box;
-}
-
-.suggested-item:hover {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.04);
-}
-
-:root[data-theme="dark"] .suggested-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .suggested-item:hover {
-        background: rgba(255, 255, 255, 0.06);
-    }
-}
-
-.suggested-item-icon {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-    opacity: 0.6;
-    filter: grayscale(40%);
-    transition: all 0.2s ease;
-}
-
-.suggested-item:hover .suggested-item-icon {
-    opacity: 1;
-    filter: grayscale(0%);
-}
-
-.suggested-item-icon img {
-    width: 100%;
-    height: 100%;
-    border-radius: 2px;
-}
-
-.suggested-item-title {
-    font-size: 13px;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    transition: color 0.2s ease;
-}
-
-.suggested-item:hover .suggested-item-title {
-    color: var(--text-color);
-}
-
-
-/* Responsive - Suggested Section */
-@media (max-width: 768px) {
-    .suggested-section {
-        width: 90%;
-        margin: -40px auto 30px auto;
-    }
-
-    .suggested-item-title {
-        max-width: 60px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 500px) {
-    .suggested-section {
-        display: none;
-    }
-}
-
 /* ============================================
    Bookmark Actions (Move & Delete Buttons)
    ============================================ */
@@ -2626,7 +2851,7 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     padding: 0;
     background: var(--bg-overlay, rgba(245, 245, 240, 0.8));
     backdrop-filter: blur(8px);
@@ -2749,7 +2974,7 @@ input[type="file"] {
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .confirm-btn-cancel {
@@ -2860,7 +3085,7 @@ input[type="file"] {
     font-size: 14px;
     color: var(--text-color);
     outline: none;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .edit-field input:focus {

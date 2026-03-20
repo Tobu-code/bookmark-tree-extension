@@ -41,10 +41,6 @@
                 <div id="search-suggestions" class="hidden"></div>
             </div>
         </div>
-        <!-- Suggested Destinations (Frequent Bookmarks) -->
-        <div id="frequent-bookmarks" class="suggested-section hidden">
-            <div class="suggested-items"></div>
-        </div>
         <div id="bookmarks-tree" class="tree-view"></div>
         <button id="layout-toggle-btn" title="切换布局模式">
             <!-- Tree icon (shown when current mode is tree, click to switch to flat) -->
@@ -99,23 +95,6 @@
                     </span>
                     <span class="ai-tab-name">Google</span>
                 </div>
-                <div class="ai-tab" draggable="true" data-ai="gemini" data-url="https://gemini.google.com"
-                    data-name="Gemini" title="Gemini">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M12 3c.1-.1.2-.1.3 0l1.8 4.5a2 2 0 0 0 1.2 1.2l4.5 1.8c.1.1.1.2 0 .3l-4.5 1.8a2 2 0 0 0-1.2 1.2l-1.8 4.5c-.1.1-.2.1-.3 0l-1.8-4.5a2 2 0 0 0-1.2-1.2l-4.5-1.8c-.1-.1-.1-.2 0-.3l4.5-1.8a2 2 0 0 0 1.2-1.2L12 3Z"
-                                fill="url(#gemini-grad-tab)" />
-                            <defs>
-                                <linearGradient id="gemini-grad-tab" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#4e82ee" />
-                                    <stop offset="100%" style="stop-color:#b06ab3" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Gemini</span>
-                </div>
                 <div class="ai-tab" draggable="true" data-ai="chatgpt" data-url="https://chatgpt.com/"
                     data-name="ChatGPT" title="ChatGPT">
                     <span class="ai-tab-icon">
@@ -125,53 +104,6 @@
                         </svg>
                     </span>
                     <span class="ai-tab-name">ChatGPT</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="kimi" data-url="https://kimi.moonshot.cn/"
-                    data-name="Kimi" title="Kimi">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#8d3dff">
-                            <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 14.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4.5L10 17h-1.5v-10h2v4.5L14 7h1.5l-3 4.5 3 5z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Kimi</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="longcat" data-url="https://longcat.chat/"
-                    data-name="Longcat" title="Longcat">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4 11h-3v3h-2v-3H8v-2h3V8h2v3h3v2z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">龙猫</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="perplexity" data-url="https://www.perplexity.ai/"
-                    data-name="Perplexity" title="Perplexity">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1fb8cd">
-                            <path
-                                d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-4 4h8a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Perplexity</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="zai" data-url="https://chat.z.ai/" data-name="ZAI"
-                    title="ZAI">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff4f00">
-                            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">ZAI</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="grok" data-url="https://grok.com/" data-name="Grok"
-                    title="Grok">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Grok</span>
                 </div>
                 <div class="ai-tab" draggable="true" data-ai="qwen" data-url="https://chat.qwen.ai/" data-name="通义千问"
                     title="通义千问">
@@ -183,7 +115,6 @@
                     </span>
                     <span class="ai-tab-name">千问</span>
                 </div>
-                <!-- Doubao Tab -->
                 <div class="ai-tab" draggable="true" data-ai="doubao" data-url="https://www.doubao.com/chat/"
                     data-name="豆包" title="豆包">
                     <span class="ai-tab-icon">
@@ -214,21 +145,9 @@
             <!-- Multiple iframes for state preservation -->
             <iframe id="ai-iframe-google" class="ai-iframe active" data-ai="google" frameborder="0"
                 allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-gemini" class="ai-iframe" data-ai="gemini" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
             <iframe id="ai-iframe-chatgpt" class="ai-iframe" data-ai="chatgpt" frameborder="0"
                 allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-kimi" class="ai-iframe" data-ai="kimi" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-longcat" class="ai-iframe" data-ai="longcat" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-perplexity" class="ai-iframe" data-ai="perplexity" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-zai" class="ai-iframe" data-ai="zai" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
             <iframe id="ai-iframe-doubao" class="ai-iframe" data-ai="doubao" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-grok" class="ai-iframe" data-ai="grok" frameborder="0"
                 allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
             <iframe id="ai-iframe-qwen" class="ai-iframe" data-ai="qwen" frameborder="0"
                 allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
@@ -237,7 +156,7 @@
                 <div class="ai-placeholder-icon">🔍</div>
                 <p>无法直接嵌入 AI 搜索</p>
                 <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
-                <button id="ai-open-gemini" class="ai-open-btn">在弹窗中打开</button>
+                <button id="ai-open-ai" class="ai-open-btn">在弹窗中打开</button>
             </div>
         </div>
     </div>
@@ -271,15 +190,6 @@
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="layout-mode" value="flat"><span>平铺</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>按频率自动排序</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="checkbox" id="auto-sort-toggle"><span>启用后，常点的目录和书签会自动排在前面</span>
                     </label>
                 </div>
             </div>
@@ -334,10 +244,13 @@
                     <input type="range" id="bg-blur" min="0" max="10" step="1" value="0">
 
                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px; margin-top: 15px;">
-                        <label style="font-size: 13px; font-weight: normal;">主容器模糊程度</label>
-                        <span id="container-blur-value" style="font-size: 12px; color: var(--text-secondary);">关闭</span>
+                        <label style="font-size: 13px; font-weight: normal;">主容器透明度程度</label>
+                        <span id="container-blur-value" style="font-size: 12px; color: var(--text-secondary);">0%</span>
                     </div>
                     <input type="range" id="container-blur" min="0" max="10" step="1" value="3">
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 6px;">
+                        透明度与磨砂感联动调整
+                    </div>
                 </div>
             </div>
 
@@ -352,17 +265,6 @@
                 </div>
             </div>
 
-            <div class="setting-item">
-                <label>常用书签</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="frequent-enabled" value="off"><span>关闭</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="frequent-enabled" value="on" checked><span>开启</span>
-                    </label>
-                </div>
-            </div>
         </div>
     </div>
 

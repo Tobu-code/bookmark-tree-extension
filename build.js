@@ -61,33 +61,21 @@ async function build() {
     const scriptPath = path.join(rootDir, 'script.js');
     if (fs.existsSync(scriptPath)) {
         const scriptContent = await fs.readFile(scriptPath, 'utf8');
+        // 轻量混淆：保留基础保护，避免高强度变形带来的体积和运行时开销。
         const obfuscationResult = JavaScriptObfuscator.obfuscate(scriptContent, {
             compact: true,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 0.75,
-            deadCodeInjection: true,
-            deadCodeInjectionThreshold: 0.4,
+            controlFlowFlattening: false,
+            deadCodeInjection: false,
             debugProtection: false,
             disableConsoleOutput: true,
             identifierNamesGenerator: 'hexadecimal',
             log: false,
-            numbersToExpressions: true,
+            numbersToExpressions: false,
             renameGlobals: false,
-            selfDefending: true,
+            selfDefending: false,
             simplify: true,
-            splitStrings: true,
-            splitStringsChunkLength: 10,
-            stringArray: true,
-            stringArrayCallsTransform: true,
-            stringArrayEncoding: ['base64', 'rc4'],
-            stringArrayIndexShift: true,
-            stringArrayRotate: true,
-            stringArrayShuffle: true,
-            stringArrayWrappersCount: 1,
-            stringArrayWrappersChainedCalls: true,
-            stringArrayWrappersParametersMaxCount: 2,
-            stringArrayWrappersType: 'variable',
-            stringArrayThreshold: 0.75,
+            splitStrings: false,
+            stringArray: false,
             unicodeEscapeSequence: false
         });
 
