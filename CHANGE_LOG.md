@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-03-23]
+- **Time**: 2026-03-23 17:05:00 +0800
+- **Type**: Feature (Icon Redesign)
+- **Content**: 响应用户要求，重新设计插件为主体为白色、背景为纯绿色的极简艺术风格图标。使用程序化方案提取 AI 概念图的核心镂空主体，生成完全居中、去阴影的纯净方图，并替换了项目目录下 `16x16`, `48x48`, `128x128` 三个标准尺寸。
+- **Impact**: `icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`
+
 ## [2026-03-17]
 - **Type**: Feature (Visual Haptic Feedback)
 - **Content**: Added visual spring animation (`transform: scale(0.97)` on `:active`) to `.folder-tile`, `.leaf-wrapper`, and `.bookmark-card` to provide pseudo-haptic physical feedback upon user clicks.
