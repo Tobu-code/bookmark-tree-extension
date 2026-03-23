@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-23]
+- **Time**: 2026-03-23 18:01:00 +0800
+- **Type**: Feature (Premium Icon Redesign & Bug Fix)
+- **Content**: 重新设计并应用了高级 3D 质感的“丝带树”图标（精简树叶版）。修复了图像裁剪时被存为 JPEG 导致 Chrome 插件图标变灰的问题，强制转换为 True PNG 格式，并重新打包了最新版本 `v3.0.0` 发布文件。
+- **Impact**: `icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`icon.png`、`release/小飞猪的书签_v3.0.0_20260323_1759.zip`、`CHANGE_LOG.md`
+
+## [2026-03-23]
 - **Time**: 2026-03-23 17:05:00 +0800
 - **Type**: Feature (Icon Redesign)
 - **Content**: 响应用户要求，重新设计插件为主体为白色、背景为纯绿色的极简艺术风格图标。使用程序化方案提取 AI 概念图的核心镂空主体，生成完全居中、去阴影的纯净方图，并替换了项目目录下 `16x16`, `48x48`, `128x128` 三个标准尺寸。
