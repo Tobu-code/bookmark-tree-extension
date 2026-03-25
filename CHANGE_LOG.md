@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-03-25]
+- **Time**: 2026-03-25 15:55:03 +0800
+- **Type**: Refactor (UI Consistency & Motion Polish)
+- **Content**: 对新标签页书签界面做一轮收束型改版：统一中英文文案与 `lang` 标识，新增书签区域加载/空状态/错误状态，移除 AI 占位与图标回退中的 emoji 表达；同时统一暖色视觉语言，削弱 AI 面板、搜索框、书签卡片与悬浮按钮中过强的蓝紫色和夸张动效，补强 `prefers-reduced-motion` 与交互焦点细节，提升整体一致性与完成度。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
 ## [2026-03-23]
 - **Time**: 2026-03-23 18:01:00 +0800
 - **Type**: Feature (Premium Icon Redesign & Bug Fix)

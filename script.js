@@ -94,8 +94,59 @@ function setBookmarkTreeCache(bookmarkTreeNodes) {
     BOOKMARK_SEARCH_BUCKETS = buckets;
 }
 
+function renderBookmarkState(type = 'loading', message = '') {
+    const container = document.getElementById('bookmarks-tree');
+    if (!container) return;
+
+    container.innerHTML = '';
+    container.className = 'tree-view';
+
+    const state = document.createElement('div');
+    state.className = `tree-state tree-state-${type}`;
+    state.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    state.setAttribute('aria-live', 'polite');
+
+    const copy = document.createElement('div');
+    copy.className = 'tree-state-copy';
+
+    const title = document.createElement('strong');
+    const description = document.createElement('span');
+
+    if (type === 'empty') {
+        title.textContent = '这里还没有可展示的书签';
+        description.textContent = message || '先收藏几个常用站点，首页会立即变得充实。';
+    } else if (type === 'error') {
+        title.textContent = '书签内容暂时不可用';
+        description.textContent = message || '读取书签失败，请刷新页面后重试。';
+    } else {
+        title.textContent = '正在准备你的书签空间';
+        description.textContent = message || '稍候片刻，常用目录和搜索索引正在加载。';
+    }
+
+    copy.appendChild(title);
+    copy.appendChild(description);
+    state.appendChild(copy);
+
+    if (type === 'loading') {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'tree-state-skeleton';
+        skeleton.setAttribute('aria-hidden', 'true');
+        for (let i = 0; i < 3; i += 1) {
+            skeleton.appendChild(document.createElement('span'));
+        }
+        state.appendChild(skeleton);
+    }
+
+    container.appendChild(state);
+}
+
 function refreshBookmarkTreeCache(callback) {
     chrome.bookmarks.getTree((tree) => {
+        if (chrome.runtime.lastError) {
+            console.error('Failed to read bookmarks tree:', chrome.runtime.lastError.message);
+            renderBookmarkState('error', '读取书签失败，请刷新页面后重试。');
+            return;
+        }
         setBookmarkTreeCache(tree);
         if (callback) callback(tree);
     });
@@ -106,6 +157,7 @@ function renderBookmarksFromCache() {
         renderBookmarks(BOOKMARK_TREE_CACHE);
         return;
     }
+    renderBookmarkState('loading');
     refreshBookmarkTreeCache((tree) => renderBookmarks(tree));
 }
 
@@ -350,6 +402,11 @@ function flattenFolders(node, folders = [], path = []) {
 
 function renderBookmarks(bookmarkTreeNodes) {
     const container = document.getElementById('bookmarks-tree');
+    if (!container) return;
+    if (!bookmarkTreeNodes || !bookmarkTreeNodes[0]) {
+        renderBookmarkState('empty');
+        return;
+    }
     container.innerHTML = ''; // Clear previous
     container.className = 'tree-view'; // reset
 
@@ -405,12 +462,6 @@ function bindDelegatedItemDnD(container) {
 }
 
 function renderTreeBookmarks(bookmarkTreeNodes, container) {
-    // Create a wrapper for top-level columns
-    const topLevelContainer = document.createElement('div');
-    topLevelContainer.className = 'top-level-container';
-    container.appendChild(topLevelContainer);
-    bindDelegatedItemDnD(topLevelContainer);
-
     // We want to primarily show "Bookmarks Bar" content
     // Root -> [0] is usually the root node
     const rootNode = bookmarkTreeNodes[0];
@@ -422,21 +473,36 @@ function renderTreeBookmarks(bookmarkTreeNodes, container) {
         bookmarksBar = rootNode.children[0];
     }
 
-    if (bookmarksBar && bookmarksBar.children) {
-        bookmarksBar.children.forEach(child => {
-            if (child.children) { // Is Folder
-                const card = createBookmarkCard(child);
-                topLevelContainer.appendChild(card);
-            } else {
-                const card = createSimpleTile(child);
-                topLevelContainer.appendChild(card);
-            }
-        });
+    if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
+        renderBookmarkState('empty', '书签栏还是空的，先收藏几个常用站点吧。');
+        return;
     }
+
+    // Create a wrapper for top-level columns
+    const topLevelContainer = document.createElement('div');
+    topLevelContainer.className = 'top-level-container';
+    container.appendChild(topLevelContainer);
+    bindDelegatedItemDnD(topLevelContainer);
+
+    bookmarksBar.children.forEach(child => {
+        if (child.children) { // Is Folder
+            const card = createBookmarkCard(child);
+            topLevelContainer.appendChild(card);
+        } else {
+            const card = createSimpleTile(child);
+            topLevelContainer.appendChild(card);
+        }
+    });
 }
 
 function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const FLAT_DIR_VISIBLE_LIMIT = 8;
+    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
+    if (allFolders.length === 0) {
+        renderBookmarkState('empty', '当前没有可平铺的书签目录，可切回树状模式查看顶层书签。');
+        return;
+    }
+
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
 
@@ -455,8 +521,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     
     container.appendChild(dirPane);
     container.appendChild(bmkPane);
-
-    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
 
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
@@ -731,6 +795,16 @@ function createBookmarkCard(folderNode) {
     const expandBtn = document.createElement('button');
     expandBtn.className = 'expand-btn';
     expandBtn.title = '放大查看';
+    expandBtn.setAttribute('aria-label', `展开查看 ${folderNode.title}`);
+    expandBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+    `;
     expandBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         showFolderModal(folderNode);
@@ -774,7 +848,7 @@ function createBookmarkIcon(iconData, size = 16) {
         img.src = iconData.src;
         img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
         img.addEventListener('error', function () {
-            // Item 9: Generate a letter avatar fallback instead of generic emoji
+            // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
             let letter = '?';
             let bgColor = '#888';
@@ -810,14 +884,6 @@ function createBookmarkIcon(iconData, size = 16) {
         span.textContent = iconData.value;
         return span;
     }
-}
-
-function getRandomEmoji() {
-    const emojis = [
-        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
-        '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅'
-    ];
-    return emojis[Math.floor(Math.random() * emojis.length)];
 }
 
 function createSimpleTile(node) {
@@ -1574,11 +1640,17 @@ function initSearch() {
                 // Use extension's favicon service
                 img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
                 img.addEventListener('error', function () {
-                    this.replaceWith(document.createTextNode('🔖'));
+                    const fallback = document.createElement('span');
+                    fallback.className = 'suggestion-icon-fallback';
+                    fallback.innerHTML = BOOKMARK_ICON_SVG;
+                    this.replaceWith(fallback);
                 });
                 iconDiv.appendChild(img);
             } catch {
-                iconDiv.textContent = '🔖';
+                const fallback = document.createElement('span');
+                fallback.className = 'suggestion-icon-fallback';
+                fallback.innerHTML = BOOKMARK_ICON_SVG;
+                iconDiv.appendChild(fallback);
             }
             item.appendChild(iconDiv);
 
@@ -1732,7 +1804,7 @@ function initSearch() {
 // Constants are defined at the top of the file
 
 
-// Returns emoji or null for native favicon mode
+// Returns native favicon data, with SVG fallback when favicon service is unavailable
 function getIconForBookmark(url) {
     if (CURRENT_ICON_STYLE === 'theme') {
         return { type: 'svg', value: BOOKMARK_ICON_SVG };
@@ -1744,7 +1816,7 @@ function getIconForBookmark(url) {
                 src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
             };
         } catch {
-            return { type: 'emoji', value: '🔖' }; // fallback
+            return { type: 'svg', value: BOOKMARK_ICON_SVG };
         }
     }
 }
@@ -2402,7 +2474,6 @@ function initAiSidebar() {
     let currentAi = {
         id: 'google',
         url: aiUrls.google,
-        icon: '🔍',
         name: 'Google AI'
     };
 
