@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-25]
+- **Time**: 2026-03-25 17:16:30 +0800
+- **Type**: Fix (Tree Scroll Paint & AI Sidebar Density)
+- **Content**: 修复树状模式下书签卡片滚动时偶发空白后延迟渲染问题：降低卡片毛玻璃强度，给 `card-content` 增加独立绘制上下文并移除列表项 3D/位移链路，减轻滚动中的合成压力；同时优化 AI 侧边栏融合性，收紧侧栏宽度与顶部密度（tab 间距、padding、操作按钮尺寸），缓解去缩放后“顶部过宽、割裂感强”的问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-25]
 - **Time**: 2026-03-25 17:08:10 +0800
 - **Type**: Refactor (PC Sidebar & Accessibility Polish)
 - **Content**: 完成本轮 PC 端精修：AI 侧栏改为 iframe 原生 1:1 渲染（移除 0.8 缩放补偿），并同步收紧侧栏宽度、玻璃强度与头部节奏，降低嵌入割裂感；主容器高度改为 `clamp` 桌面视口策略以提升小高度窗口鲁棒性；搜索输入框补齐 `aria-autocomplete/controls/expanded`，建议列表项补充稳定 id 与 `aria-activedescendant` 联动，完善键盘选中状态的可访问性同步。

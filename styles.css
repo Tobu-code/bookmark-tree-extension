@@ -1362,8 +1362,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmark-card {
     background: var(--bg-overlay);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     width: 100%;
     height: 380px;
     border-radius: 24px;
@@ -1619,7 +1619,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex: 1;
     scrollbar-width: thin;
     padding: 0 15px;
-    /* Add horizontal padding to prevent scaled items from clipping */
+    /* Keep the scroll area in its own paint context to avoid delayed repaint while scrolling */
+    contain: paint;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .card-content::-webkit-scrollbar {
@@ -1645,8 +1649,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .leaf-wrapper {
     display: block;
     margin-bottom: 8px;
-    /* Slightly more breathing room */
-    transform-style: preserve-3d;
+    transform-style: flat;
 }
 
 .leaf-node {
@@ -1656,8 +1659,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-radius: 12px;
     text-decoration: none;
     color: var(--text-color);
-    transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        background 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transition: background 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         border-left-color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1683,7 +1685,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             rgba(217, 119, 87, 0.12) 0%,
             rgba(217, 119, 87, 0.04) 100%);
     border-left-color: var(--primary-color);
-    transform: translateX(2px);
     z-index: 20;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
@@ -2531,7 +2532,7 @@ input[type="file"] {
     position: fixed;
     top: 0;
     right: 0;
-    width: min(70vw, 1120px);
+    width: min(60vw, 960px);
     height: 100vh;
     /* Glass effect: semi-transparent with blur */
     background: rgba(255, 250, 245, 0.72);
@@ -2556,8 +2557,8 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 20px;
-    min-height: 52px;
+    padding: 10px 14px;
+    min-height: 46px;
     box-sizing: border-box;
     background: rgba(255, 255, 255, 0.3);
     border-bottom: 1px solid color-mix(in srgb, var(--border-color) 92%, transparent);
@@ -2575,7 +2576,7 @@ input[type="file"] {
 /* AI Tabs Container */
 .ai-tabs {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
@@ -2590,9 +2591,9 @@ input[type="file"] {
 .ai-tab {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
-    border-radius: 10px;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -2654,7 +2655,7 @@ input[type="file"] {
 }
 
 .ai-tab-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.02em;
 }
@@ -2671,7 +2672,7 @@ input[type="file"] {
 /* Actions - Theme Matched */
 .ai-sidebar-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     opacity: 0.7;
     transition: opacity 0.2s;
 }
@@ -2681,9 +2682,9 @@ input[type="file"] {
 }
 
 .ai-action-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -2695,8 +2696,8 @@ input[type="file"] {
 }
 
 .ai-action-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
 }
 
 .ai-action-btn:hover {
