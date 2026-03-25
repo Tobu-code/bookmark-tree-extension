@@ -1605,12 +1605,15 @@ function initSearch() {
 
     function showSuggestions() {
         suggestions.classList.remove('hidden');
+        input.setAttribute('aria-expanded', 'true');
     }
 
     function hideSuggestions() {
         suggestions.classList.add('hidden');
         selectedIndex = -1;
         activeMatches = [];
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
     }
 
     function openSearchMatch(bookmark) {
@@ -1660,6 +1663,7 @@ function initSearch() {
             const item = document.createElement('button');
             item.type = 'button';
             item.className = 'suggestion-item';
+            item.id = `search-suggestion-${index}`;
             item.dataset.index = index;
             item.dataset.url = bookmark.url;
             item.setAttribute('role', 'option');
@@ -1725,6 +1729,11 @@ function initSearch() {
             item.classList.toggle('selected', isSelected);
             item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
         });
+        if (selectedIndex >= 0 && items[selectedIndex]) {
+            input.setAttribute('aria-activedescendant', items[selectedIndex].id);
+        } else {
+            input.removeAttribute('aria-activedescendant');
+        }
         // Scroll selected into view
         if (selectedIndex >= 0 && items[selectedIndex]) {
             items[selectedIndex].scrollIntoView({ block: 'nearest' });
