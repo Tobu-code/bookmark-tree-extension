@@ -1,5 +1,29 @@
 # Change Log
 
+## [2026-03-25]
+- **Time**: 2026-03-25 17:16:30 +0800
+- **Type**: Fix (Tree Scroll Paint & AI Sidebar Density)
+- **Content**: 修复树状模式下书签卡片滚动时偶发空白后延迟渲染问题：降低卡片毛玻璃强度，给 `card-content` 增加独立绘制上下文并移除列表项 3D/位移链路，减轻滚动中的合成压力；同时优化 AI 侧边栏融合性，收紧侧栏宽度与顶部密度（tab 间距、padding、操作按钮尺寸），缓解去缩放后“顶部过宽、割裂感强”的问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-25]
+- **Time**: 2026-03-25 17:08:10 +0800
+- **Type**: Refactor (PC Sidebar & Accessibility Polish)
+- **Content**: 完成本轮 PC 端精修：AI 侧栏改为 iframe 原生 1:1 渲染（移除 0.8 缩放补偿），并同步收紧侧栏宽度、玻璃强度与头部节奏，降低嵌入割裂感；主容器高度改为 `clamp` 桌面视口策略以提升小高度窗口鲁棒性；搜索输入框补齐 `aria-autocomplete/controls/expanded`，建议列表项补充稳定 id 与 `aria-activedescendant` 联动，完善键盘选中状态的可访问性同步。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-25]
+- **Time**: 2026-03-25 16:55:48 +0800
+- **Type**: Refactor (PC UI Semantics & Visual Hierarchy)
+- **Content**: 面向 PC 端 Chrome 新标签页场景完成一轮 UI 精修：将搜索引擎切换、搜索建议与 AI 标签改为更规范的可聚焦交互元素，补充键盘导航和 `aria` 状态同步；移除设置区与面包屑渲染中的内联样式/脚本拼接样式，改为统一类名体系；收敛悬浮按钮与 AI 侧栏视觉权重，统一焦点可见性样式，并清理未使用的遗留主题分支，提升一致性与可维护性。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-25]
+- **Time**: 2026-03-25 15:55:03 +0800
+- **Type**: Refactor (UI Consistency & Motion Polish)
+- **Content**: 对新标签页书签界面做一轮收束型改版：统一中英文文案与 `lang` 标识，新增书签区域加载/空状态/错误状态，移除 AI 占位与图标回退中的 emoji 表达；同时统一暖色视觉语言，削弱 AI 面板、搜索框、书签卡片与悬浮按钮中过强的蓝紫色和夸张动效，补强 `prefers-reduced-motion` 与交互焦点细节，提升整体一致性与完成度。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
 ## [2026-03-23]
 - **Time**: 2026-03-23 18:01:00 +0800
 - **Type**: Feature (Premium Icon Redesign & Bug Fix)

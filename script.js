@@ -87,6 +87,41 @@ function buildBookmarkSearchIndex(bookmarkTreeNodes) {
     return { entries, buckets };
 }
 
+function buildFolderBreadcrumb(container, displayTitle) {
+    if (!container) return;
+
+    const icon = document.createElement('span');
+    icon.className = 'pane-breadcrumb-icon';
+    icon.innerHTML = FOLDER_ICON_SVG;
+    container.appendChild(icon);
+
+    const text = document.createElement('span');
+    text.className = 'pane-breadcrumb';
+    const parts = String(displayTitle || '').split(' / ').filter(Boolean);
+
+    if (parts.length <= 1) {
+        text.textContent = displayTitle || '';
+        container.appendChild(text);
+        return;
+    }
+
+    parts.forEach((part, index) => {
+        const segment = document.createElement('span');
+        segment.className = index === parts.length - 1 ? 'pane-breadcrumb-current' : 'pane-breadcrumb-segment';
+        segment.textContent = part;
+        text.appendChild(segment);
+
+        if (index < parts.length - 1) {
+            const separator = document.createElement('span');
+            separator.className = 'pane-breadcrumb-separator';
+            separator.textContent = '›';
+            text.appendChild(separator);
+        }
+    });
+
+    container.appendChild(text);
+}
+
 function setBookmarkTreeCache(bookmarkTreeNodes) {
     BOOKMARK_TREE_CACHE = bookmarkTreeNodes;
     const { entries, buckets } = buildBookmarkSearchIndex(bookmarkTreeNodes);
@@ -94,8 +129,59 @@ function setBookmarkTreeCache(bookmarkTreeNodes) {
     BOOKMARK_SEARCH_BUCKETS = buckets;
 }
 
+function renderBookmarkState(type = 'loading', message = '') {
+    const container = document.getElementById('bookmarks-tree');
+    if (!container) return;
+
+    container.innerHTML = '';
+    container.className = 'tree-view';
+
+    const state = document.createElement('div');
+    state.className = `tree-state tree-state-${type}`;
+    state.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    state.setAttribute('aria-live', 'polite');
+
+    const copy = document.createElement('div');
+    copy.className = 'tree-state-copy';
+
+    const title = document.createElement('strong');
+    const description = document.createElement('span');
+
+    if (type === 'empty') {
+        title.textContent = '这里还没有可展示的书签';
+        description.textContent = message || '先收藏几个常用站点，首页会立即变得充实。';
+    } else if (type === 'error') {
+        title.textContent = '书签内容暂时不可用';
+        description.textContent = message || '读取书签失败，请刷新页面后重试。';
+    } else {
+        title.textContent = '正在准备你的书签空间';
+        description.textContent = message || '稍候片刻，常用目录和搜索索引正在加载。';
+    }
+
+    copy.appendChild(title);
+    copy.appendChild(description);
+    state.appendChild(copy);
+
+    if (type === 'loading') {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'tree-state-skeleton';
+        skeleton.setAttribute('aria-hidden', 'true');
+        for (let i = 0; i < 3; i += 1) {
+            skeleton.appendChild(document.createElement('span'));
+        }
+        state.appendChild(skeleton);
+    }
+
+    container.appendChild(state);
+}
+
 function refreshBookmarkTreeCache(callback) {
     chrome.bookmarks.getTree((tree) => {
+        if (chrome.runtime.lastError) {
+            console.error('Failed to read bookmarks tree:', chrome.runtime.lastError.message);
+            renderBookmarkState('error', '读取书签失败，请刷新页面后重试。');
+            return;
+        }
         setBookmarkTreeCache(tree);
         if (callback) callback(tree);
     });
@@ -106,6 +192,7 @@ function renderBookmarksFromCache() {
         renderBookmarks(BOOKMARK_TREE_CACHE);
         return;
     }
+    renderBookmarkState('loading');
     refreshBookmarkTreeCache((tree) => renderBookmarks(tree));
 }
 
@@ -264,12 +351,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     function updateLayoutToggleIcon() {
         if (LAYOUT_MODE === 'flat') {
-            layoutIconTree.style.display = 'none';
-            layoutIconFlat.style.display = 'block';
+            layoutIconTree.classList.add('icon-hidden');
+            layoutIconFlat.classList.remove('icon-hidden');
             layoutToggleBtn.title = '切换到树状模式';
         } else {
-            layoutIconTree.style.display = 'block';
-            layoutIconFlat.style.display = 'none';
+            layoutIconTree.classList.remove('icon-hidden');
+            layoutIconFlat.classList.add('icon-hidden');
             layoutToggleBtn.title = '切换到平铺模式';
         }
     }
@@ -323,8 +410,8 @@ function preloadImage(url) {
 
 
 
-const FOLDER_ICON_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
-const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); vertical-align: middle; flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+const FOLDER_ICON_SVG = `<svg class="bookmark-svg-icon folder-svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+const BOOKMARK_ICON_SVG = `<svg class="bookmark-svg-icon bookmark-file-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
 
 // --- Bookmarks Logic ---
 
@@ -350,6 +437,11 @@ function flattenFolders(node, folders = [], path = []) {
 
 function renderBookmarks(bookmarkTreeNodes) {
     const container = document.getElementById('bookmarks-tree');
+    if (!container) return;
+    if (!bookmarkTreeNodes || !bookmarkTreeNodes[0]) {
+        renderBookmarkState('empty');
+        return;
+    }
     container.innerHTML = ''; // Clear previous
     container.className = 'tree-view'; // reset
 
@@ -405,12 +497,6 @@ function bindDelegatedItemDnD(container) {
 }
 
 function renderTreeBookmarks(bookmarkTreeNodes, container) {
-    // Create a wrapper for top-level columns
-    const topLevelContainer = document.createElement('div');
-    topLevelContainer.className = 'top-level-container';
-    container.appendChild(topLevelContainer);
-    bindDelegatedItemDnD(topLevelContainer);
-
     // We want to primarily show "Bookmarks Bar" content
     // Root -> [0] is usually the root node
     const rootNode = bookmarkTreeNodes[0];
@@ -422,21 +508,36 @@ function renderTreeBookmarks(bookmarkTreeNodes, container) {
         bookmarksBar = rootNode.children[0];
     }
 
-    if (bookmarksBar && bookmarksBar.children) {
-        bookmarksBar.children.forEach(child => {
-            if (child.children) { // Is Folder
-                const card = createBookmarkCard(child);
-                topLevelContainer.appendChild(card);
-            } else {
-                const card = createSimpleTile(child);
-                topLevelContainer.appendChild(card);
-            }
-        });
+    if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
+        renderBookmarkState('empty', '书签栏还是空的，先收藏几个常用站点吧。');
+        return;
     }
+
+    // Create a wrapper for top-level columns
+    const topLevelContainer = document.createElement('div');
+    topLevelContainer.className = 'top-level-container';
+    container.appendChild(topLevelContainer);
+    bindDelegatedItemDnD(topLevelContainer);
+
+    bookmarksBar.children.forEach(child => {
+        if (child.children) { // Is Folder
+            const card = createBookmarkCard(child);
+            topLevelContainer.appendChild(card);
+        } else {
+            const card = createSimpleTile(child);
+            topLevelContainer.appendChild(card);
+        }
+    });
 }
 
 function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const FLAT_DIR_VISIBLE_LIMIT = 8;
+    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
+    if (allFolders.length === 0) {
+        renderBookmarkState('empty', '当前没有可平铺的书签目录，可切回树状模式查看顶层书签。');
+        return;
+    }
+
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
 
@@ -456,8 +557,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     container.appendChild(dirPane);
     container.appendChild(bmkPane);
 
-    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
-
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
@@ -465,15 +564,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const header = document.createElement('div');
         header.className = 'bookmarks-pane-header';
         const displayTitle = folder._fullPath || folder.title;
-        // Item 5: Style breadcrumb - dim separators, bold last segment
-        const parts = displayTitle.split(' / ');
-        if (parts.length > 1) {
-            const lastPart = parts.pop();
-            const pathHtml = parts.map(p => `<span style="color: var(--text-secondary); font-weight: 400;">${p}</span>`).join('<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span>');
-            header.innerHTML = `${FOLDER_ICON_SVG} <span>${pathHtml}<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span><span style="color: var(--text-color); font-weight: bold;">${lastPart}</span></span>`;
-        } else {
-            header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
-        }
+        buildFolderBreadcrumb(header, displayTitle);
         bmkPane.appendChild(header);
 
         const bmkPaneScroll = document.createElement('div');
@@ -731,6 +822,16 @@ function createBookmarkCard(folderNode) {
     const expandBtn = document.createElement('button');
     expandBtn.className = 'expand-btn';
     expandBtn.title = '放大查看';
+    expandBtn.setAttribute('aria-label', `展开查看 ${folderNode.title}`);
+    expandBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+    `;
     expandBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         showFolderModal(folderNode);
@@ -774,7 +875,7 @@ function createBookmarkIcon(iconData, size = 16) {
         img.src = iconData.src;
         img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
         img.addEventListener('error', function () {
-            // Item 9: Generate a letter avatar fallback instead of generic emoji
+            // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
             let letter = '?';
             let bgColor = '#888';
@@ -810,14 +911,6 @@ function createBookmarkIcon(iconData, size = 16) {
         span.textContent = iconData.value;
         return span;
     }
-}
-
-function getRandomEmoji() {
-    const emojis = [
-        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
-        '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅'
-    ];
-    return emojis[Math.floor(Math.random() * emojis.length)];
 }
 
 function createSimpleTile(node) {
@@ -947,7 +1040,7 @@ function renderTreeItem(node) {
         // Add folder icon if in theme mode, or just always add it for consistency?
         // User asked to "replace all bookmark icons... directory and bookmarks"
         // Let's use FOLDER_ICON_SVG
-        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
 
         header.innerHTML = `${folderIcon} ${node.title}`;
 
@@ -1392,7 +1485,7 @@ function renderTreeItemForModal(node) {
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
 
-        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
 
         header.innerHTML = `${folderIcon} ${node.title}`;
         header.dataset.isLocked = 'true'; // Default open
@@ -1477,18 +1570,22 @@ function initSearch() {
     function showPicker() {
         wheel.classList.remove('hidden');
         overlay.classList.remove('hidden');
+        label.setAttribute('aria-expanded', 'true');
         updateActiveOption();
     }
 
     function hidePicker() {
         wheel.classList.add('hidden');
         overlay.classList.add('hidden');
+        label.setAttribute('aria-expanded', 'false');
     }
 
     // Update active state
     function updateActiveOption() {
         options.forEach(opt => {
-            opt.classList.toggle('active', opt.dataset.engine === currentEngine);
+            const isActive = opt.dataset.engine === currentEngine;
+            opt.classList.toggle('active', isActive);
+            opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
     }
 
@@ -1508,12 +1605,15 @@ function initSearch() {
 
     function showSuggestions() {
         suggestions.classList.remove('hidden');
+        input.setAttribute('aria-expanded', 'true');
     }
 
     function hideSuggestions() {
         suggestions.classList.add('hidden');
         selectedIndex = -1;
         activeMatches = [];
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
     }
 
     function openSearchMatch(bookmark) {
@@ -1560,10 +1660,13 @@ function initSearch() {
             const pathParts = bookmark.path.split(' > ');
             const shortPath = pathParts.length > 1 ? pathParts[pathParts.length - 1] : '';
 
-            const item = document.createElement('div');
+            const item = document.createElement('button');
+            item.type = 'button';
             item.className = 'suggestion-item';
+            item.id = `search-suggestion-${index}`;
             item.dataset.index = index;
             item.dataset.url = bookmark.url;
+            item.setAttribute('role', 'option');
 
             // Icon (CSP-compliant)
             const iconDiv = document.createElement('div');
@@ -1574,11 +1677,17 @@ function initSearch() {
                 // Use extension's favicon service
                 img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
                 img.addEventListener('error', function () {
-                    this.replaceWith(document.createTextNode('🔖'));
+                    const fallback = document.createElement('span');
+                    fallback.className = 'suggestion-icon-fallback';
+                    fallback.innerHTML = BOOKMARK_ICON_SVG;
+                    this.replaceWith(fallback);
                 });
                 iconDiv.appendChild(img);
             } catch {
-                iconDiv.textContent = '🔖';
+                const fallback = document.createElement('span');
+                fallback.className = 'suggestion-icon-fallback';
+                fallback.innerHTML = BOOKMARK_ICON_SVG;
+                iconDiv.appendChild(fallback);
             }
             item.appendChild(iconDiv);
 
@@ -1616,8 +1725,15 @@ function initSearch() {
     function updateSelection() {
         const items = suggestions.querySelectorAll('.suggestion-item');
         items.forEach((item, index) => {
-            item.classList.toggle('selected', index === selectedIndex);
+            const isSelected = index === selectedIndex;
+            item.classList.toggle('selected', isSelected);
+            item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
         });
+        if (selectedIndex >= 0 && items[selectedIndex]) {
+            input.setAttribute('aria-activedescendant', items[selectedIndex].id);
+        } else {
+            input.removeAttribute('aria-activedescendant');
+        }
         // Scroll selected into view
         if (selectedIndex >= 0 && items[selectedIndex]) {
             items[selectedIndex].scrollIntoView({ block: 'nearest' });
@@ -1647,6 +1763,16 @@ function initSearch() {
         }
     });
 
+    label.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            showPicker();
+            if (options[0]) options[0].focus();
+        } else if (e.key === 'Escape') {
+            hidePicker();
+        }
+    });
+
     // Click option to select
     options.forEach(opt => {
         opt.addEventListener('click', () => {
@@ -1656,6 +1782,24 @@ function initSearch() {
             updateActiveOption();
             chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
             hidePicker();
+            input.focus();
+        });
+
+        opt.addEventListener('keydown', (e) => {
+            const optionList = Array.from(options);
+            const currentIndex = optionList.indexOf(opt);
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                optionList[(currentIndex + 1) % optionList.length]?.focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                optionList[(currentIndex - 1 + optionList.length) % optionList.length]?.focus();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                hidePicker();
+                label.focus();
+            }
         });
     });
 
@@ -1732,7 +1876,7 @@ function initSearch() {
 // Constants are defined at the top of the file
 
 
-// Returns emoji or null for native favicon mode
+// Returns native favicon data, with SVG fallback when favicon service is unavailable
 function getIconForBookmark(url) {
     if (CURRENT_ICON_STYLE === 'theme') {
         return { type: 'svg', value: BOOKMARK_ICON_SVG };
@@ -1744,7 +1888,7 @@ function getIconForBookmark(url) {
                 src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
             };
         } catch {
-            return { type: 'emoji', value: '🔖' }; // fallback
+            return { type: 'svg', value: BOOKMARK_ICON_SVG };
         }
     }
 }
@@ -2402,7 +2546,6 @@ function initAiSidebar() {
     let currentAi = {
         id: 'google',
         url: aiUrls.google,
-        icon: '🔍',
         name: 'Google AI'
     };
 
@@ -2515,7 +2658,9 @@ function initAiSidebar() {
     function updateActiveTab() {
         // Re-query tabs as they might have been reordered in DOM
         document.querySelectorAll('.ai-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.ai === currentAi.id);
+            const isActive = tab.dataset.ai === currentAi.id;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
     }
 
