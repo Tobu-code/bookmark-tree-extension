@@ -27,6 +27,12 @@
     --glass-border: rgba(110, 78, 53, 0.1);
     --flat-pane-header-height: 52px;
     --flat-pane-header-gap: 12px;
+    --floating-actions-size: 40px;
+    --floating-actions-gap: 8px;
+    --floating-actions-offset-right: 24px;
+    --floating-actions-offset-bottom: 24px;
+    --floating-actions-safe-bottom: calc(var(--floating-actions-offset-bottom) + env(safe-area-inset-bottom, 0px));
+    --floating-actions-stack-height: calc(var(--floating-actions-size) * 2 + var(--floating-actions-gap));
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -774,7 +780,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #bookmarks-tree.layout-tree {
     --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 26px var(--flat-side-gutter) 14px;
+    padding: 26px var(--flat-side-gutter) calc(14px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
+    scroll-padding-bottom: calc(var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom) + 16px);
 }
 
 .directory-pane {
@@ -1829,10 +1836,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Layout toggle button — sits above the settings gear */
 #layout-toggle-btn {
     position: fixed;
-    bottom: 72px; /* Above the settings gear */
-    right: 24px;
-    width: 40px;
-    height: 40px;
+    bottom: calc(var(--floating-actions-safe-bottom) + var(--floating-actions-size) + var(--floating-actions-gap));
+    right: var(--floating-actions-offset-right);
+    width: var(--floating-actions-size);
+    height: var(--floating-actions-size);
     border-radius: 12px;
     background: var(--glass-bg, rgba(255, 255, 255, 0.1));
     backdrop-filter: blur(12px);
@@ -1871,10 +1878,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #settings-btn {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 40px;
-    height: 40px;
+    bottom: var(--floating-actions-safe-bottom);
+    right: var(--floating-actions-offset-right);
+    width: var(--floating-actions-size);
+    height: var(--floating-actions-size);
     border-radius: 12px;
     background: var(--glass-bg, rgba(255, 255, 255, 0.1));
     backdrop-filter: blur(12px);
@@ -2858,6 +2865,15 @@ input[type="file"] {
         right: 16px;
         width: 48px;
         height: 48px;
+    }
+}
+
+@media (max-width: 980px), (max-height: 760px) {
+    :root {
+        --floating-actions-size: 38px;
+        --floating-actions-gap: 8px;
+        --floating-actions-offset-right: 16px;
+        --floating-actions-offset-bottom: 16px;
     }
 }
 

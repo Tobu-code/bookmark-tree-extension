@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-25]
+- **Time**: 2026-03-25 18:07:41 +0800
+- **Type**: Fix (Tree Mode Floating Actions Overlap)
+- **Content**: 修复树状模式在小屏幕下右下角操作按钮与书签目录重叠的问题：为布局切换/设置按钮引入统一安全区变量（含 `safe-area-inset-bottom`），并为 `#bookmarks-tree.layout-tree` 增加底部滚动留白与 `scroll-padding-bottom`，确保底部书签项可滚动到按钮上方完整可见；同时补充小屏与低高度窗口的按钮偏移自适应参数。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-25]
 - **Time**: 2026-03-25 17:16:30 +0800
 - **Type**: Fix (Tree Scroll Paint & AI Sidebar Density)
 - **Content**: 修复树状模式下书签卡片滚动时偶发空白后延迟渲染问题：降低卡片毛玻璃强度，给 `card-content` 增加独立绘制上下文并移除列表项 3D/位移链路，减轻滚动中的合成压力；同时优化 AI 侧边栏融合性，收紧侧栏宽度与顶部密度（tab 间距、padding、操作按钮尺寸），缓解去缩放后“顶部过宽、割裂感强”的问题。
