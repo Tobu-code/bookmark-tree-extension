@@ -87,6 +87,41 @@ function buildBookmarkSearchIndex(bookmarkTreeNodes) {
     return { entries, buckets };
 }
 
+function buildFolderBreadcrumb(container, displayTitle) {
+    if (!container) return;
+
+    const icon = document.createElement('span');
+    icon.className = 'pane-breadcrumb-icon';
+    icon.innerHTML = FOLDER_ICON_SVG;
+    container.appendChild(icon);
+
+    const text = document.createElement('span');
+    text.className = 'pane-breadcrumb';
+    const parts = String(displayTitle || '').split(' / ').filter(Boolean);
+
+    if (parts.length <= 1) {
+        text.textContent = displayTitle || '';
+        container.appendChild(text);
+        return;
+    }
+
+    parts.forEach((part, index) => {
+        const segment = document.createElement('span');
+        segment.className = index === parts.length - 1 ? 'pane-breadcrumb-current' : 'pane-breadcrumb-segment';
+        segment.textContent = part;
+        text.appendChild(segment);
+
+        if (index < parts.length - 1) {
+            const separator = document.createElement('span');
+            separator.className = 'pane-breadcrumb-separator';
+            separator.textContent = '›';
+            text.appendChild(separator);
+        }
+    });
+
+    container.appendChild(text);
+}
+
 function setBookmarkTreeCache(bookmarkTreeNodes) {
     BOOKMARK_TREE_CACHE = bookmarkTreeNodes;
     const { entries, buckets } = buildBookmarkSearchIndex(bookmarkTreeNodes);
@@ -316,12 +351,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     function updateLayoutToggleIcon() {
         if (LAYOUT_MODE === 'flat') {
-            layoutIconTree.style.display = 'none';
-            layoutIconFlat.style.display = 'block';
+            layoutIconTree.classList.add('icon-hidden');
+            layoutIconFlat.classList.remove('icon-hidden');
             layoutToggleBtn.title = '切换到树状模式';
         } else {
-            layoutIconTree.style.display = 'block';
-            layoutIconFlat.style.display = 'none';
+            layoutIconTree.classList.remove('icon-hidden');
+            layoutIconFlat.classList.add('icon-hidden');
             layoutToggleBtn.title = '切换到平铺模式';
         }
     }
@@ -375,8 +410,8 @@ function preloadImage(url) {
 
 
 
-const FOLDER_ICON_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color); vertical-align: middle; flex-shrink: 0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
-const BOOKMARK_ICON_SVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); vertical-align: middle; flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+const FOLDER_ICON_SVG = `<svg class="bookmark-svg-icon folder-svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+const BOOKMARK_ICON_SVG = `<svg class="bookmark-svg-icon bookmark-file-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
 
 // --- Bookmarks Logic ---
 
@@ -529,15 +564,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const header = document.createElement('div');
         header.className = 'bookmarks-pane-header';
         const displayTitle = folder._fullPath || folder.title;
-        // Item 5: Style breadcrumb - dim separators, bold last segment
-        const parts = displayTitle.split(' / ');
-        if (parts.length > 1) {
-            const lastPart = parts.pop();
-            const pathHtml = parts.map(p => `<span style="color: var(--text-secondary); font-weight: 400;">${p}</span>`).join('<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span>');
-            header.innerHTML = `${FOLDER_ICON_SVG} <span>${pathHtml}<span style="color: var(--text-secondary); opacity: 0.7; margin: 0 6px;">›</span><span style="color: var(--text-color); font-weight: bold;">${lastPart}</span></span>`;
-        } else {
-            header.innerHTML = `${FOLDER_ICON_SVG} <span>${displayTitle}</span>`;
-        }
+        buildFolderBreadcrumb(header, displayTitle);
         bmkPane.appendChild(header);
 
         const bmkPaneScroll = document.createElement('div');
@@ -1013,7 +1040,7 @@ function renderTreeItem(node) {
         // Add folder icon if in theme mode, or just always add it for consistency?
         // User asked to "replace all bookmark icons... directory and bookmarks"
         // Let's use FOLDER_ICON_SVG
-        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
 
         header.innerHTML = `${folderIcon} ${node.title}`;
 
@@ -1458,7 +1485,7 @@ function renderTreeItemForModal(node) {
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
 
-        const folderIcon = `<span style="display:inline-flex; align-items:center; margin-right:6px; transform: scale(0.8);">${FOLDER_ICON_SVG}</span>`;
+        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
 
         header.innerHTML = `${folderIcon} ${node.title}`;
         header.dataset.isLocked = 'true'; // Default open
@@ -1543,18 +1570,22 @@ function initSearch() {
     function showPicker() {
         wheel.classList.remove('hidden');
         overlay.classList.remove('hidden');
+        label.setAttribute('aria-expanded', 'true');
         updateActiveOption();
     }
 
     function hidePicker() {
         wheel.classList.add('hidden');
         overlay.classList.add('hidden');
+        label.setAttribute('aria-expanded', 'false');
     }
 
     // Update active state
     function updateActiveOption() {
         options.forEach(opt => {
-            opt.classList.toggle('active', opt.dataset.engine === currentEngine);
+            const isActive = opt.dataset.engine === currentEngine;
+            opt.classList.toggle('active', isActive);
+            opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
     }
 
@@ -1626,10 +1657,12 @@ function initSearch() {
             const pathParts = bookmark.path.split(' > ');
             const shortPath = pathParts.length > 1 ? pathParts[pathParts.length - 1] : '';
 
-            const item = document.createElement('div');
+            const item = document.createElement('button');
+            item.type = 'button';
             item.className = 'suggestion-item';
             item.dataset.index = index;
             item.dataset.url = bookmark.url;
+            item.setAttribute('role', 'option');
 
             // Icon (CSP-compliant)
             const iconDiv = document.createElement('div');
@@ -1688,7 +1721,9 @@ function initSearch() {
     function updateSelection() {
         const items = suggestions.querySelectorAll('.suggestion-item');
         items.forEach((item, index) => {
-            item.classList.toggle('selected', index === selectedIndex);
+            const isSelected = index === selectedIndex;
+            item.classList.toggle('selected', isSelected);
+            item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
         });
         // Scroll selected into view
         if (selectedIndex >= 0 && items[selectedIndex]) {
@@ -1719,6 +1754,16 @@ function initSearch() {
         }
     });
 
+    label.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            showPicker();
+            if (options[0]) options[0].focus();
+        } else if (e.key === 'Escape') {
+            hidePicker();
+        }
+    });
+
     // Click option to select
     options.forEach(opt => {
         opt.addEventListener('click', () => {
@@ -1728,6 +1773,24 @@ function initSearch() {
             updateActiveOption();
             chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
             hidePicker();
+            input.focus();
+        });
+
+        opt.addEventListener('keydown', (e) => {
+            const optionList = Array.from(options);
+            const currentIndex = optionList.indexOf(opt);
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                optionList[(currentIndex + 1) % optionList.length]?.focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                optionList[(currentIndex - 1 + optionList.length) % optionList.length]?.focus();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                hidePicker();
+                label.focus();
+            }
         });
     });
 
@@ -2586,7 +2649,9 @@ function initAiSidebar() {
     function updateActiveTab() {
         // Re-query tabs as they might have been reordered in DOM
         document.querySelectorAll('.ai-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.ai === currentAi.id);
+            const isActive = tab.dataset.ai === currentAi.id;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
     }
 

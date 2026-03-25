@@ -17,14 +17,23 @@
             <div id="ambient-time-container" class="ambient-time"></div>
             <div class="search-wrapper">
                 <div id="engine-picker-container">
-                    <span id="search-engine-label">Google</span>
+                    <button id="search-engine-label" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        Google
+                    </button>
                     <div id="engine-picker-overlay" class="hidden"></div>
-                    <div id="engine-wheel" class="hidden">
-                        <div class="wheel-option" data-engine="google" data-url="https://www.google.com/search?q=">
-                            Google</div>
-                        <div class="wheel-option" data-engine="bing" data-url="https://www.bing.com/search?q=">Bing
-                        </div>
-                        <div class="wheel-option" data-engine="baidu" data-url="https://www.baidu.com/s?wd=">Baidu</div>
+                    <div id="engine-wheel" class="hidden" role="listbox" aria-label="搜索引擎">
+                        <button type="button" class="wheel-option" role="option" data-engine="google"
+                            data-url="https://www.google.com/search?q=">
+                            Google
+                        </button>
+                        <button type="button" class="wheel-option" role="option" data-engine="bing"
+                            data-url="https://www.bing.com/search?q=">
+                            Bing
+                        </button>
+                        <button type="button" class="wheel-option" role="option" data-engine="baidu"
+                            data-url="https://www.baidu.com/s?wd=">
+                            Baidu
+                        </button>
                     </div>
                 </div>
                 <input type="text" id="search-input" placeholder="搜索书签，或直接搜索全网..." autocomplete="off"
@@ -38,7 +47,7 @@
                         <path d="M7 5H3" />
                     </svg>
                 </button>
-                <div id="search-suggestions" class="hidden" aria-live="polite"></div>
+                <div id="search-suggestions" class="hidden" aria-live="polite" role="listbox" aria-label="搜索建议"></div>
             </div>
         </div>
         <div id="bookmarks-tree" class="tree-view" aria-live="polite">
@@ -63,7 +72,7 @@
                 <rect x="3" y="14" width="7" height="7"></rect>
             </svg>
             <!-- Flat icon (shown when current mode is flat, click to switch to tree) -->
-            <svg id="layout-icon-flat" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <svg id="layout-icon-flat" class="icon-hidden" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="8" y1="6" x2="21" y2="6"></line>
                 <line x1="8" y1="12" x2="21" y2="12"></line>
                 <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -87,7 +96,7 @@
     <div id="ai-sidebar" class="ai-sidebar hidden">
         <div class="ai-sidebar-header">
             <div class="ai-tabs">
-                <div class="ai-tab active" draggable="true" data-ai="google"
+                <button type="button" class="ai-tab active" draggable="true" data-ai="google"
                     data-url="https://www.google.com/search?udm=50&aep=11" data-name="Google AI" title="Google AI">
                     <span class="ai-tab-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24">
@@ -106,8 +115,8 @@
                         </svg>
                     </span>
                     <span class="ai-tab-name">Google</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="chatgpt" data-url="https://chatgpt.com/"
+                </button>
+                <button type="button" class="ai-tab" draggable="true" data-ai="chatgpt" data-url="https://chatgpt.com/"
                     data-name="ChatGPT" title="ChatGPT">
                     <span class="ai-tab-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="#10a37f">
@@ -116,8 +125,8 @@
                         </svg>
                     </span>
                     <span class="ai-tab-name">ChatGPT</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="qwen" data-url="https://chat.qwen.ai/" data-name="通义千问"
+                </button>
+                <button type="button" class="ai-tab" draggable="true" data-ai="qwen" data-url="https://chat.qwen.ai/" data-name="通义千问"
                     title="通义千问">
                     <span class="ai-tab-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="#6033ff">
@@ -126,8 +135,8 @@
                         </svg>
                     </span>
                     <span class="ai-tab-name">千问</span>
-                </div>
-                <div class="ai-tab" draggable="true" data-ai="doubao" data-url="https://www.doubao.com/chat/"
+                </button>
+                <button type="button" class="ai-tab" draggable="true" data-ai="doubao" data-url="https://www.doubao.com/chat/"
                     data-name="豆包" title="豆包">
                     <span class="ai-tab-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="#3D7EFF">
@@ -136,7 +145,7 @@
                         </svg>
                     </span>
                     <span class="ai-tab-name">豆包</span>
-                </div>
+                </button>
             </div>
             <div class="ai-sidebar-actions">
                 <button id="ai-open-new-window" class="ai-action-btn" title="在新窗口打开">
@@ -184,7 +193,7 @@
 
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
-            <span id="close-modal" class="close"></span>
+            <button id="close-modal" class="close" type="button" aria-label="关闭设置"></button>
             <h2>设置</h2>
 
             <div class="setting-item">
@@ -240,11 +249,11 @@
 
             <div class="setting-item">
                 <label>书签管理</label>
-                <div style="margin-top: 10px;">
-                    <button id="export-bookmarks-btn" class="confirm-btn confirm-btn-primary" style="padding: 8px 16px; font-size: 13px; width: 100%;">
+                <div class="settings-stack">
+                    <button id="export-bookmarks-btn" class="confirm-btn confirm-btn-primary settings-action-btn">
                         一键导出所有书签
                     </button>
-                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; text-align: center;">
+                    <div class="settings-helper-copy settings-helper-copy-centered">
                         导出为标准的 HTML 文件，可导入到其他浏览器
                     </div>
                 </div>
@@ -256,19 +265,19 @@
                     <input type="file" id="bg-image-upload" accept="image/*">
                     <button id="clear-bg" title="恢复默认背景">恢复</button>
                 </div>
-                <div id="blur-controls" style="margin-top: 15px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <label style="font-size: 13px; font-weight: normal;">背景模糊程度</label>
-                        <span id="bg-blur-value" style="font-size: 12px; color: var(--text-secondary);">关闭</span>
+                <div id="blur-controls" class="settings-stack settings-stack-md">
+                    <div class="settings-range-header">
+                        <label class="settings-inline-label" for="bg-blur">背景模糊程度</label>
+                        <span id="bg-blur-value" class="settings-range-value">关闭</span>
                     </div>
                     <input type="range" id="bg-blur" min="0" max="10" step="1" value="0">
 
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px; margin-top: 15px;">
-                        <label style="font-size: 13px; font-weight: normal;">主容器透明度程度</label>
-                        <span id="container-blur-value" style="font-size: 12px; color: var(--text-secondary);">0%</span>
+                    <div class="settings-range-header settings-range-header-spaced">
+                        <label class="settings-inline-label" for="container-blur">主容器透明度程度</label>
+                        <span id="container-blur-value" class="settings-range-value">0%</span>
                     </div>
                     <input type="range" id="container-blur" min="0" max="10" step="1" value="3">
-                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 6px;">
+                    <div class="settings-helper-copy settings-helper-copy-sm">
                         透明度与磨砂感联动调整
                     </div>
                 </div>
@@ -276,10 +285,10 @@
 
             <div class="setting-item">
                 <label>文件夹展开延迟</label>
-                <div style="margin-top: 10px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span style="font-size: 13px; color: var(--text-secondary);">鼠标悬浮后延迟展开时间</span>
-                        <span id="hover-delay-value" style="font-size: 12px; color: var(--text-secondary);">300ms</span>
+                <div class="settings-stack">
+                    <div class="settings-range-header">
+                        <span class="settings-inline-label">鼠标悬浮后延迟展开时间</span>
+                        <span id="hover-delay-value" class="settings-range-value">300ms</span>
                     </div>
                     <input type="range" id="hover-delay" min="0" max="1100" step="100" value="300">
                 </div>
@@ -294,7 +303,7 @@
             <div class="folder-modal-header">
                 <span class="folder-modal-icon"></span>
                 <span class="folder-modal-title"></span>
-                <span id="close-folder-modal" class="close"></span>
+                <button id="close-folder-modal" class="close" type="button" aria-label="关闭文件夹弹窗"></button>
             </div>
             <div class="folder-modal-body"></div>
         </div>
