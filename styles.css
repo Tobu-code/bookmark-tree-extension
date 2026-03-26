@@ -833,7 +833,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .directory-pane {
-    width: 300px;
+    width: 284px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;

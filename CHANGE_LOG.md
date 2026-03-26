@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-26]
+- **Time**: 2026-03-26 17:21:06 +0800
+- **Type**: Refactor (Flat Directory Width Fine-tune)
+- **Content**: 按反馈对平铺模式左侧书签目录做小幅收窄微调：`directory-pane` 宽度由 `300px` 调整为 `284px`，在不改变交互结构的前提下释放右侧书签内容区空间，优化左右视觉权重。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
 - **Time**: 2026-03-26 17:10:20 +0800
 - **Type**: Revert (Tree Header Style Alignment)
 - **Content**: 按反馈回滚“树状模式顶部去分隔线”改动，恢复树状书签卡片头部原有分隔线与间距表现。
