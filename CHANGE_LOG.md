@@ -280,3 +280,9 @@
 - **Type**: Refactor (Interaction Final Polish)
 - **Content**: 完成交互细节收官：统一焦点可视化体系（`focus-outline` + `focus-ring`）并覆盖主要交互控件；优化拖拽反馈（拖拽中、投放目标、文件夹吸附）的强度与阴影层次，降低生硬边框感；微调确认弹窗与编辑弹窗的标题权重、正文行高和阴影强度，提升可读性与操作确认感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 11:17:36 +0800
+- **Type**: Fix (Small-Screen Floating Actions Overlap & UI Consistency)
+- **Content**: 修复小屏下右下角浮动按钮与内容区重叠问题：为平铺/树状布局统一补充与浮动按钮联动的底部安全区和滚动留白；同步收敛两种布局的标题与选中态强度差异；并将主列表、面板、弹窗的滚动条样式统一为全局 token，提升跨模式一致性。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
