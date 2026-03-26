@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-26]
+- **Time**: 2026-03-26 15:31:35 +0800
+- **Type**: Fix (Tree Fullscreen Scroll White Flash)
+- **Content**: 修复树状模式全屏目录在书签数量较多时上下滚动偶发白屏后延迟恢复的问题：为树状卡片增加性能护栏，滚动场景下关闭卡片毛玻璃合成并改用更稳定背景；同时移除 `card-content` 中 `translateZ/backface-visibility` 强制 3D 合成链路，保留局部绘制隔离以降低 Chrome 滚动重绘抖动。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
 - **Time**: 2026-03-26 15:24:27 +0800
 - **Type**: Refactor (AI Sidebar Branding & Golden Ratio Width)
 - **Content**: 按部署要求恢复 AI 侧栏顶部品牌一致性：调整 Google 标签名为原生命名，升级通义千问/豆包标签为更贴近原生语义的图标表达，并将“千问”文案改为“通义千问”；同时将桌面端 AI 侧栏宽度从 `60vw` 调整为 `61.8vw`（黄金分割），并适当放宽上限以匹配大屏视觉占比。

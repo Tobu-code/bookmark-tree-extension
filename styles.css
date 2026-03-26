@@ -1444,6 +1444,18 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
 }
 
+/* Tree mode performance guard:
+   avoid heavy backdrop compositing on many cards while scrolling */
+#bookmarks-tree.layout-tree .bookmark-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg-overlay) 86%, white 14%);
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {
+    background: color-mix(in srgb, var(--bg-overlay) 92%, #1a1f28 8%);
+}
+
 @media (max-width: 1650px) {
     .top-level-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1689,11 +1701,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex: 1;
     scrollbar-width: thin;
     padding: 0 10px;
-    /* Keep the scroll area in its own paint context to avoid delayed repaint while scrolling */
+    /* Keep scroll area paint-local but avoid forced 3D compositing (can flash white in Chrome) */
     contain: paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    will-change: auto;
+    transform: none;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    -webkit-overflow-scrolling: auto;
 }
 
 .card-content::-webkit-scrollbar {
