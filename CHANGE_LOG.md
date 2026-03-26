@@ -1,5 +1,47 @@
 # Change Log
 
+## [2026-03-26]
+- **Time**: 2026-03-26 17:21:06 +0800
+- **Type**: Refactor (Flat Directory Width Fine-tune)
+- **Content**: 按反馈对平铺模式左侧书签目录做小幅收窄微调：`directory-pane` 宽度由 `300px` 调整为 `284px`，在不改变交互结构的前提下释放右侧书签内容区空间，优化左右视觉权重。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 17:10:20 +0800
+- **Type**: Revert (Tree Header Style Alignment)
+- **Content**: 按反馈回滚“树状模式顶部去分隔线”改动，恢复树状书签卡片头部原有分隔线与间距表现。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 16:57:13 +0800
+- **Type**: Fix (Flat Bookmark Title Truncation)
+- **Content**: 修复平铺模式下书签标题被明显截断的问题：将书签网格行高从固定值改为 `minmax` 自适应，标题由单行省略改为两行限高显示（`line-clamp: 2`），并提前在更常见桌面宽度切换为 3 列；同时为平铺/树状/弹窗中的书签标题补充 `title` 提示，确保截断时仍可查看完整名称。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 16:36:29 +0800
+- **Type**: Refactor (Flat/Tree Density Rebalance)
+- **Content**: 完成平铺与树状两种模式的密度重平衡：平铺模式收窄左侧目录列、提升外边距并限制右侧书签区最大宽度，同时拉开书签网格与卡片内间距；树状模式提高顶部与底部留白、增大卡片间距并提前在更大屏宽切换到 3 列布局，缓解左右与上下拥挤感，整体阅读节奏更松弛。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 15:31:35 +0800
+- **Type**: Fix (Tree Fullscreen Scroll White Flash)
+- **Content**: 修复树状模式全屏目录在书签数量较多时上下滚动偶发白屏后延迟恢复的问题：为树状卡片增加性能护栏，滚动场景下关闭卡片毛玻璃合成并改用更稳定背景；同时移除 `card-content` 中 `translateZ/backface-visibility` 强制 3D 合成链路，保留局部绘制隔离以降低 Chrome 滚动重绘抖动。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 15:24:27 +0800
+- **Type**: Refactor (AI Sidebar Branding & Golden Ratio Width)
+- **Content**: 按部署要求恢复 AI 侧栏顶部品牌一致性：调整 Google 标签名为原生命名，升级通义千问/豆包标签为更贴近原生语义的图标表达，并将“千问”文案改为“通义千问”；同时将桌面端 AI 侧栏宽度从 `60vw` 调整为 `61.8vw`（黄金分割），并适当放宽上限以匹配大屏视觉占比。
+- **Impact**: `newtab.html`、`styles.css`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-03-25]
+- **Time**: 2026-03-25 18:07:41 +0800
+- **Type**: Fix (Tree Mode Floating Actions Overlap)
+- **Content**: 修复树状模式在小屏幕下右下角操作按钮与书签目录重叠的问题：为布局切换/设置按钮引入统一安全区变量（含 `safe-area-inset-bottom`），并为 `#bookmarks-tree.layout-tree` 增加底部滚动留白与 `scroll-padding-bottom`，确保底部书签项可滚动到按钮上方完整可见；同时补充小屏与低高度窗口的按钮偏移自适应参数。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-03-25]
 - **Time**: 2026-03-25 17:16:30 +0800
 - **Type**: Fix (Tree Scroll Paint & AI Sidebar Density)
@@ -244,3 +286,39 @@
 - **Type**: Release (v3.0.0)
 - **Content**: 发布 `v3.0.0`。本版本包含：1) 插件与项目版本号统一升级至 `3.0.0`；2) 插件图标重绘（16/48/128 及源图）提升小尺寸识别度与品牌一致性；3) 平铺模式滚动交互修复与稳定性增强（右侧列表等高一致、左右标题固定、头部与内容分层滚动并到顶截断）；4) 构建与发布包产出流程校验通过。
 - **Impact**: `manifest.json`、`package.json`、`package-lock.json`、`icon.png`、`icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`script.js`、`styles.css`、`CHANGE_LOG.md`、`release/小飞猪的书签_v3.0.0_20260320_1126.zip`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:24:16 +0800
+- **Type**: Refactor (UI Polish / Motion System)
+- **Content**: 完成作品级质感第一轮优化：新增全局动效与阴影设计令牌（时长、曲线、层级阴影、焦点环），统一搜索区/树状卡片/平铺卡片/目录项/右下浮动按钮/AI 侧栏/确认按钮的过渡节奏；收敛 hover 与 active 的位移与缩放幅度，降低高亮叠加强度，增强页面主次层级稳定性与整体高级感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:27:00 +0800
+- **Type**: Refactor (Visual Hierarchy / Focus Mode)
+- **Content**: 完成第二轮信息层级重排：新增搜索沉浸态与 AI 侧栏沉浸态（`search-active` / `ai-sidebar-open`）的视觉降噪规则；搜索激活时弱化书签区与浮动操作按钮，侧栏打开时自动降低主内容竞争强度并隐藏右下浮动按钮；同步优化浮动控件默认存在感（默认半低透明，hover 恢复全强度），让主焦点更稳定。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:32:32 +0800
+- **Type**: Refactor (Typography Density & Spacing Rhythm)
+- **Content**: 完成第三轮排版密度与留白节奏优化：统一搜索区与主内容区的垂直间距；压缩平铺模式网格行高与卡片内边距，降低目录项与标题区体积；树状模式卡片尺寸、头部间距与列表行高同步收敛；并细化 `1650/1280/899/768` 断点下的密度渐进策略，提升跨尺寸浏览稳定性与高级感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:38:12 +0800
+- **Type**: Refactor (Typography Hierarchy & Contrast Tuning)
+- **Content**: 完成第四轮字体层级与对比度微调：新增文本层级变量（title/body/caption/micro、muted/subtle）；统一搜索输入、内容标题、目录标题、面包屑、书签标题与 URL 辅助信息的字号/字重/字距；提升弱信息在深浅主题下的可读性并降低生硬对比，整体阅读层级更清晰稳定。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:43:15 +0800
+- **Type**: Refactor (Interaction Final Polish)
+- **Content**: 完成交互细节收官：统一焦点可视化体系（`focus-outline` + `focus-ring`）并覆盖主要交互控件；优化拖拽反馈（拖拽中、投放目标、文件夹吸附）的强度与阴影层次，降低生硬边框感；微调确认弹窗与编辑弹窗的标题权重、正文行高和阴影强度，提升可读性与操作确认感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 11:22:39 +0800
+- **Type**: Revert
+- **Content**: 按用户要求回滚提交 `0bb914f`（`fix(ui): 修复小屏浮动按钮遮挡并统一视觉细节`），撤销该次对小屏底部安全区、标题一致性与滚动条 token 的调整。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

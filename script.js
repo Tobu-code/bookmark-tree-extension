@@ -948,6 +948,8 @@ function createSimpleTile(node) {
     labelSpan.className = 'bookmark-label';
     labelSpan.style.fontWeight = 'bold';
     labelSpan.textContent = node.title;
+    labelSpan.title = node.title || '';
+    leaf.title = node.title || '';
     leaf.appendChild(labelSpan);
 
     wrapper.appendChild(leaf);
@@ -977,6 +979,8 @@ function renderFlatBookmarkItem(node) {
     const labelSpan = document.createElement('span');
     labelSpan.className = 'bookmark-label';
     labelSpan.textContent = node.title;
+    labelSpan.title = node.title || '';
+    a.title = node.title || '';
     a.appendChild(labelSpan);
 
     wrapper.appendChild(a);
@@ -1014,6 +1018,8 @@ function renderTreeItem(node) {
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
         labelSpan.textContent = node.title;
+        labelSpan.title = node.title || '';
+        a.title = node.title || '';
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
@@ -1462,6 +1468,8 @@ function renderTreeItemForModal(node) {
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
         labelSpan.textContent = node.title;
+        labelSpan.title = node.title || '';
+        a.title = node.title || '';
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
@@ -2546,7 +2554,7 @@ function initAiSidebar() {
     let currentAi = {
         id: 'google',
         url: aiUrls.google,
-        name: 'Google AI'
+        name: 'Google'
     };
 
     // Track which iframes have been loaded
@@ -2739,6 +2747,7 @@ function initAiSidebar() {
     }
 
     function openSidebar() {
+        document.body.classList.add('ai-sidebar-open');
         sidebar.classList.remove('hidden');
         requestAnimationFrame(() => {
             sidebar.classList.add('active');
@@ -2754,6 +2763,7 @@ function initAiSidebar() {
         sidebarOverlay.classList.remove('active');
         setTimeout(() => {
             if (!sidebar.classList.contains('active')) {
+                document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
                 unloadIframe(currentAi.id);
