@@ -1523,13 +1523,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     position: relative;
 }
 
-/* Keep tree-mode header style aligned with flat-mode "clean top" look */
-#bookmarks-tree.layout-tree .card-header {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 10px;
-}
-
 /* Expand Button */
 .expand-btn {
     position: absolute;

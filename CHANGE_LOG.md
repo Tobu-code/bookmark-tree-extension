@@ -1,12 +1,6 @@
 # Change Log
 
 ## [2026-03-26]
-- **Time**: 2026-03-26 17:04:06 +0800
-- **Type**: Refactor (Tree Header Style Alignment)
-- **Content**: 树状模式书签卡片头部样式与平铺目录顶部风格对齐：去除 `card-header` 底部分隔线，并收紧对应下内边距与标题区间距，呈现“顶部无边框线”的一致视觉效果。
-- **Impact**: `styles.css`、`CHANGE_LOG.md`
-
-## [2026-03-26]
 - **Time**: 2026-03-26 16:57:13 +0800
 - **Type**: Fix (Flat Bookmark Title Truncation)
 - **Content**: 修复平铺模式下书签标题被明显截断的问题：将书签网格行高从固定值改为 `minmax` 自适应，标题由单行省略改为两行限高显示（`line-clamp: 2`），并提前在更常见桌面宽度切换为 3 列；同时为平铺/树状/弹窗中的书签标题补充 `title` 提示，确保截断时仍可查看完整名称。
