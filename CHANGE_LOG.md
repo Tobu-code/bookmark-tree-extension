@@ -262,3 +262,9 @@
 - **Type**: Refactor (Visual Hierarchy / Focus Mode)
 - **Content**: 完成第二轮信息层级重排：新增搜索沉浸态与 AI 侧栏沉浸态（`search-active` / `ai-sidebar-open`）的视觉降噪规则；搜索激活时弱化书签区与浮动操作按钮，侧栏打开时自动降低主内容竞争强度并隐藏右下浮动按钮；同步优化浮动控件默认存在感（默认半低透明，hover 恢复全强度），让主焦点更稳定。
 - **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:32:32 +0800
+- **Type**: Refactor (Typography Density & Spacing Rhythm)
+- **Content**: 完成第三轮排版密度与留白节奏优化：统一搜索区与主内容区的垂直间距；压缩平铺模式网格行高与卡片内边距，降低目录项与标题区体积；树状模式卡片尺寸、头部间距与列表行高同步收敛；并细化 `1650/1280/899/768` 断点下的密度渐进策略，提升跨尺寸浏览稳定性与高级感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

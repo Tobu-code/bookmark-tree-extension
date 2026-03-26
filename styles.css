@@ -292,8 +292,8 @@ body.loaded #background-layer {
 
 /* Search Bar */
 #search-container {
-    margin-top: 24px;
-    margin-bottom: 34px;
+    margin-top: 20px;
+    margin-bottom: 26px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -302,20 +302,20 @@ body.loaded #background-layer {
 }
 
 .ambient-time {
-    width: 58.5%;
+    width: 60%;
     max-width: 800px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     color: color-mix(in srgb, var(--text-secondary) 84%, var(--text-color));
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     pointer-events: none;
     display: flex;
     justify-content: flex-start;
-    letter-spacing: 0.28px;
+    letter-spacing: 0.2px;
     white-space: pre-wrap;
 }
 
@@ -329,9 +329,9 @@ body.loaded #background-layer {
 
 #search-input {
     flex: 1;
-    padding: 18px 12px;
+    padding: 16px 12px;
     /* Reduced vertical padding */
-    font-size: 18px;
+    font-size: 17px;
     /* Slightly smaller text */
     border: none;
     background: transparent;
@@ -352,7 +352,7 @@ body.loaded #background-layer {
     align-items: center;
     width: 58.5%;
     max-width: 800px;
-    border-radius: 16px;
+    border-radius: 15px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 252, 247, 0.92) 100%);
     box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
@@ -361,7 +361,7 @@ body.loaded #background-layer {
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
         color var(--motion-medium) var(--ease-standard);
-    padding-left: 18px;
+    padding-left: 16px;
     position: relative;
 }
 
@@ -804,10 +804,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: 20px;
     /* Keep flat-mode left/right baseline aligned with tree-mode content area */
     --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 26px var(--flat-side-gutter) 14px;
+    padding: 22px var(--flat-side-gutter) 12px;
     align-items: flex-start; /* Align both panes to the same top line */
     height: 100%;
     min-height: 0;
@@ -816,12 +816,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #bookmarks-tree.layout-tree {
     --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 26px var(--flat-side-gutter) calc(14px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
+    padding: 22px var(--flat-side-gutter) calc(14px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
     scroll-padding-bottom: calc(var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom) + 16px);
 }
 
 .directory-pane {
-    width: 340px;
+    width: 324px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -838,12 +838,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 10px;
+    gap: 8px;
     min-height: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 20px;
+    padding-right: 14px;
     /* Avoid mask/transform compositing glitches while scrolling in Chrome */
     -webkit-mask-image: none;
     mask-image: none;
@@ -877,7 +877,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane {
     flex: 1;
     background: transparent;
-    padding: 0 18px 0 6px;
+    padding: 0 14px 0 4px;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -910,8 +910,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .folder-tile {
     display: flex;
     align-items: center;
-    padding: 11px 14px;
-    border-radius: 14px;
+    padding: 10px 12px;
+    border-radius: 13px;
     cursor: pointer;
     transition: transform var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
@@ -965,11 +965,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .folder-tile-title {
-    margin-left: 12px; /* Increased margin */
+    margin-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 520;
     letter-spacing: 0;
     flex-grow: 1;
@@ -1080,12 +1080,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-header {
     display: flex;
     align-items: center;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     margin: 0 0 var(--flat-pane-header-gap) 0;
-    padding: 0 0 10px 4px;
+    padding: 0 0 8px 4px;
     /* Item 6: Soft gradient separator instead of hard line */
     border-bottom: none;
     background: transparent;
@@ -1137,8 +1137,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 96px;
-    gap: 14px 14px;
+    grid-auto-rows: 90px;
+    gap: 12px 12px;
     align-content: start;
     align-items: stretch;
 }
@@ -1148,8 +1148,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-wrapper {
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
-    border-radius: 16px;
-    padding: 10px 12px;
+    border-radius: 14px;
+    padding: 9px 10px;
     margin-bottom: 0;
     min-height: 0;
     height: 100%;
@@ -1218,15 +1218,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important; /* Remove horizontal-layout margin */
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 2px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 540;
-    line-height: 1.25;
+    line-height: 1.2;
     color: var(--text-color);
     text-align: center;
     max-width: 100%;
@@ -1276,10 +1276,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Item 8: URL preview line below the bookmark title */
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     color: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
     opacity: 0.92;
-    margin-top: 4px;
+    margin-top: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1291,20 +1291,22 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 @media (max-width: 1650px) {
     .bookmarks-pane-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 88px;
     }
 }
 
 @media (max-width: 1280px) {
     .bookmarks-pane-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: 86px;
     }
 }
 
 @media (max-width: 899px) {
     #bookmarks-tree.layout-flat {
         flex-direction: column;
-        gap: 18px;
-        padding: 16px 8px 8px;
+        gap: 14px;
+        padding: 14px 8px 8px;
         height: auto;
         overflow: visible;
     }
@@ -1397,9 +1399,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    gap: 20px;
     justify-content: stretch;
-    padding: 12px 0 100px 0;
+    padding: 10px 0 92px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -1409,10 +1411,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     width: 100%;
-    height: 380px;
-    border-radius: 24px;
+    height: 356px;
+    border-radius: 22px;
     /* More rounded, Claude-style */
-    padding: 24px;
+    padding: 20px;
     box-sizing: border-box;
     box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
@@ -1432,17 +1434,29 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     .top-level-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .bookmark-card {
+        height: 344px;
+    }
 }
 
 @media (max-width: 1280px) {
     .top-level-container {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .bookmark-card {
+        height: 332px;
+    }
 }
 
 @media (max-width: 899px) {
     .top-level-container {
         grid-template-columns: 1fr;
+    }
+
+    .bookmark-card {
+        height: 320px;
     }
 }
 
@@ -1471,8 +1485,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .card-header {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
     position: relative;
 }
@@ -1617,7 +1631,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .card-title {
     font-weight: 650;
-    font-size: 18px;
+    font-size: 17px;
     margin-left: 12px;
     flex: 1;
     white-space: nowrap;
@@ -1660,7 +1674,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow-x: hidden;
     flex: 1;
     scrollbar-width: thin;
-    padding: 0 15px;
+    padding: 0 10px;
     /* Keep the scroll area in its own paint context to avoid delayed repaint while scrolling */
     contain: paint;
     transform: translateZ(0);
@@ -1690,15 +1704,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .leaf-wrapper {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     transform-style: flat;
 }
 
 .leaf-node {
     display: flex;
     align-items: center;
-    padding: 7px 58px 7px 10px;
-    border-radius: 12px;
+    padding: 6px 52px 6px 9px;
+    border-radius: 11px;
     text-decoration: none;
     color: var(--text-color);
     transition: background var(--motion-fast) var(--ease-standard),
@@ -2907,11 +2921,11 @@ body.ai-sidebar-open #ai-sidebar-btn {
     }
 
     .search-wrapper {
-        width: 70%;
+        width: 82%;
     }
 
     .search-wrapper:focus-within {
-        width: 80%;
+        width: 88%;
     }
 }
 
