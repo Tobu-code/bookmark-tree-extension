@@ -948,6 +948,8 @@ function createSimpleTile(node) {
     labelSpan.className = 'bookmark-label';
     labelSpan.style.fontWeight = 'bold';
     labelSpan.textContent = node.title;
+    labelSpan.title = node.title || '';
+    leaf.title = node.title || '';
     leaf.appendChild(labelSpan);
 
     wrapper.appendChild(leaf);
@@ -977,6 +979,8 @@ function renderFlatBookmarkItem(node) {
     const labelSpan = document.createElement('span');
     labelSpan.className = 'bookmark-label';
     labelSpan.textContent = node.title;
+    labelSpan.title = node.title || '';
+    a.title = node.title || '';
     a.appendChild(labelSpan);
 
     wrapper.appendChild(a);
@@ -1014,6 +1018,8 @@ function renderTreeItem(node) {
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
         labelSpan.textContent = node.title;
+        labelSpan.title = node.title || '';
+        a.title = node.title || '';
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
@@ -1462,6 +1468,8 @@ function renderTreeItemForModal(node) {
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
         labelSpan.textContent = node.title;
+        labelSpan.title = node.title || '';
+        a.title = node.title || '';
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
