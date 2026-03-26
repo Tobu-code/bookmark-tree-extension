@@ -282,7 +282,7 @@
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
 
 ## [2026-03-26]
-- **Time**: 2026-03-26 11:17:36 +0800
-- **Type**: Fix (Small-Screen Floating Actions Overlap & UI Consistency)
-- **Content**: 修复小屏下右下角浮动按钮与内容区重叠问题：为平铺/树状布局统一补充与浮动按钮联动的底部安全区和滚动留白；同步收敛两种布局的标题与选中态强度差异；并将主列表、面板、弹窗的滚动条样式统一为全局 token，提升跨模式一致性。
+- **Time**: 2026-03-26 11:22:39 +0800
+- **Type**: Revert
+- **Content**: 按用户要求回滚提交 `0bb914f`（`fix(ui): 修复小屏浮动按钮遮挡并统一视觉细节`），撤销该次对小屏底部安全区、标题一致性与滚动条 token 的调整。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
