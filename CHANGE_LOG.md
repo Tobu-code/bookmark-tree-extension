@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-03-26]
+- **Time**: 2026-03-26 16:36:29 +0800
+- **Type**: Refactor (Flat/Tree Density Rebalance)
+- **Content**: 完成平铺与树状两种模式的密度重平衡：平铺模式收窄左侧目录列、提升外边距并限制右侧书签区最大宽度，同时拉开书签网格与卡片内间距；树状模式提高顶部与底部留白、增大卡片间距并提前在更大屏宽切换到 3 列布局，缓解左右与上下拥挤感，整体阅读节奏更松弛。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
 - **Time**: 2026-03-26 15:31:35 +0800
 - **Type**: Fix (Tree Fullscreen Scroll White Flash)
 - **Content**: 修复树状模式全屏目录在书签数量较多时上下滚动偶发白屏后延迟恢复的问题：为树状卡片增加性能护栏，滚动场景下关闭卡片毛玻璃合成并改用更稳定背景；同时移除 `card-content` 中 `translateZ/backface-visibility` 强制 3D 合成链路，保留局部绘制隔离以降低 Chrome 滚动重绘抖动。

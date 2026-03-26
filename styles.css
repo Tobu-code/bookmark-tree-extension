@@ -816,10 +816,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 24px;
     /* Keep flat-mode left/right baseline aligned with tree-mode content area */
-    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 22px var(--flat-side-gutter) 12px;
+    --flat-side-gutter: clamp(24px, calc((100% - 1320px) / 2), 156px);
+    padding: 24px var(--flat-side-gutter) 16px;
     align-items: flex-start; /* Align both panes to the same top line */
     height: 100%;
     min-height: 0;
@@ -827,13 +827,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-tree {
-    --flat-side-gutter: clamp(16px, calc((100% - 1280px) / 2), 128px);
-    padding: 22px var(--flat-side-gutter) calc(14px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
+    --tree-side-gutter: clamp(24px, calc((100% - 1360px) / 2), 164px);
+    padding: 30px var(--tree-side-gutter) calc(18px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
     scroll-padding-bottom: calc(var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom) + 16px);
 }
 
 .directory-pane {
-    width: 324px;
+    width: 300px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -888,8 +888,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane {
     flex: 1;
+    width: 100%;
+    max-width: 1040px;
+    margin-right: auto;
     background: transparent;
-    padding: 0 14px 0 4px;
+    padding: 0 10px 0 0;
     padding-top: 0;
     display: flex;
     flex-direction: column;
@@ -1152,7 +1155,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-auto-rows: 90px;
-    gap: 12px 12px;
+    gap: 16px 16px;
     align-content: start;
     align-items: stretch;
 }
@@ -1163,7 +1166,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
     border-radius: 14px;
-    padding: 9px 10px;
+    padding: 10px 12px;
     margin-bottom: 0;
     min-height: 0;
     height: 100%;
@@ -1211,7 +1214,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px 6px;
+    padding: 10px 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1305,7 +1308,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 @media (max-width: 1650px) {
     .bookmarks-pane-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        grid-auto-rows: 88px;
+        grid-auto-rows: 90px;
     }
 }
 
@@ -1413,9 +1416,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+    gap: 24px;
     justify-content: stretch;
-    padding: 10px 0 92px 0;
+    padding: 18px 0 108px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -1425,7 +1428,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     width: 100%;
-    height: 356px;
+    height: 350px;
     border-radius: 22px;
     /* More rounded, Claude-style */
     padding: 20px;
@@ -1456,17 +1459,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: color-mix(in srgb, var(--bg-overlay) 92%, #1a1f28 8%);
 }
 
-@media (max-width: 1650px) {
+@media (max-width: 1800px) {
     .top-level-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .bookmark-card {
-        height: 344px;
+        height: 340px;
     }
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1320px) {
     .top-level-container {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1511,7 +1514,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .card-header {
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
     position: relative;
