@@ -2546,7 +2546,7 @@ function initAiSidebar() {
     let currentAi = {
         id: 'google',
         url: aiUrls.google,
-        name: 'Google AI'
+        name: 'Google'
     };
 
     // Track which iframes have been loaded

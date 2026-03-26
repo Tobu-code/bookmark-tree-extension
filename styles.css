@@ -2612,7 +2612,7 @@ input[type="file"] {
     position: fixed;
     top: 0;
     right: 0;
-    width: min(60vw, 960px);
+    width: min(61.8vw, 1100px);
     height: 100vh;
     /* Glass effect: semi-transparent with blur */
     background: rgba(255, 250, 245, 0.72);
