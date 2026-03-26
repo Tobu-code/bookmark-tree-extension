@@ -44,6 +44,14 @@
     --elev-shadow-2: 0 12px 28px rgba(28, 21, 14, 0.13);
     --elev-shadow-3: 0 18px 40px rgba(28, 21, 14, 0.16);
     --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
+
+    /* Typography tokens */
+    --font-size-title: 17px;
+    --font-size-body: 14px;
+    --font-size-caption: 12px;
+    --font-size-micro: 10px;
+    --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
+    --text-subtle: color-mix(in srgb, var(--text-secondary) 72%, var(--text-color) 28%);
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -82,6 +90,8 @@
     --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
     --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
     --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
+    --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
+    --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -304,10 +314,10 @@ body.loaded #background-layer {
 .ambient-time {
     width: 60%;
     max-width: 800px;
-    font-size: 14px;
+    font-size: var(--font-size-caption);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--text-secondary) 84%, var(--text-color));
+    color: var(--text-subtle);
     margin-bottom: 10px;
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -331,7 +341,8 @@ body.loaded #background-layer {
     flex: 1;
     padding: 16px 12px;
     /* Reduced vertical padding */
-    font-size: 17px;
+    font-size: 16px;
+    letter-spacing: 0.1px;
     /* Slightly smaller text */
     border: none;
     background: transparent;
@@ -342,8 +353,8 @@ body.loaded #background-layer {
 
 #search-input::placeholder {
     font-style: normal;
-    opacity: 0.76;
-    color: var(--text-secondary);
+    opacity: 0.84;
+    color: var(--text-subtle);
 }
 
 /* Wrapper looks like the old input - Claude Style Enhanced */
@@ -1080,8 +1091,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-header {
     display: flex;
     align-items: center;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--font-size-title);
+    font-weight: 620;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     margin: 0 0 var(--flat-pane-header-gap) 0;
@@ -1119,19 +1130,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .pane-breadcrumb-segment {
-    color: var(--text-secondary);
-    font-weight: 450;
+    color: var(--text-subtle);
+    font-weight: 480;
+    font-size: var(--font-size-caption);
 }
 
 .pane-breadcrumb-separator {
-    color: var(--text-secondary);
+    color: var(--text-subtle);
     opacity: 0.7;
     margin: 0 6px;
 }
 
 .pane-breadcrumb-current {
     color: var(--text-color);
-    font-weight: 700;
+    font-weight: 640;
+    font-size: 13px;
 }
 
 .bookmarks-pane-grid {
@@ -1227,13 +1240,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: 13px;
     font-weight: 540;
     line-height: 1.2;
-    color: var(--text-color);
+    color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
     text-align: center;
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.08px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
@@ -1250,8 +1263,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    font-size: 17px;
-    font-weight: 600;
+    font-size: var(--font-size-title);
+    font-weight: 620;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     padding: 0 0 10px 4px;
@@ -1277,8 +1290,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
     font-size: 10px;
-    color: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
-    opacity: 0.92;
+    color: var(--text-muted);
+    opacity: 0.98;
     margin-top: 3px;
     white-space: nowrap;
     overflow: hidden;
@@ -1630,8 +1643,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .card-title {
-    font-weight: 650;
-    font-size: 17px;
+    font-weight: 640;
+    font-size: var(--font-size-title);
     margin-left: 12px;
     flex: 1;
     white-space: nowrap;
@@ -1785,7 +1798,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-label {
-    font-size: 14px;
+    font-size: var(--font-size-body);
+    letter-spacing: 0.06px;
+    color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1799,11 +1814,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .sub-folder-header {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 620;
     padding: 4px 0;
     color: var(--text-color);
-    opacity: 0.85;
+    opacity: 0.9;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2522,8 +2537,8 @@ input[type="file"] {
 }
 
 .description {
-    font-size: 14px;
-    color: var(--text-color);
+    font-size: 13px;
+    color: var(--text-subtle);
     margin: 5px 0 10px;
     line-height: 1.5;
     max-width: 360px;
@@ -2734,9 +2749,9 @@ body.ai-sidebar-open #ai-sidebar-btn {
 }
 
 .ai-tab-name {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
+    font-size: 12px;
+    font-weight: 560;
+    letter-spacing: 0.015em;
 }
 
 .ai-tab.active .ai-tab-name {
@@ -3087,8 +3102,8 @@ body.ai-sidebar-open #ai-sidebar-btn {
 }
 
 .confirm-dialog-message {
-    font-size: 14px;
-    color: var(--text-secondary);
+    font-size: 13px;
+    color: var(--text-subtle);
     margin-bottom: 24px;
     line-height: 1.5;
 }

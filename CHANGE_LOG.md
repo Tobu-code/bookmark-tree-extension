@@ -268,3 +268,9 @@
 - **Type**: Refactor (Typography Density & Spacing Rhythm)
 - **Content**: 完成第三轮排版密度与留白节奏优化：统一搜索区与主内容区的垂直间距；压缩平铺模式网格行高与卡片内边距，降低目录项与标题区体积；树状模式卡片尺寸、头部间距与列表行高同步收敛；并细化 `1650/1280/899/768` 断点下的密度渐进策略，提升跨尺寸浏览稳定性与高级感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:38:12 +0800
+- **Type**: Refactor (Typography Hierarchy & Contrast Tuning)
+- **Content**: 完成第四轮字体层级与对比度微调：新增文本层级变量（title/body/caption/micro、muted/subtle）；统一搜索输入、内容标题、目录标题、面包屑、书签标题与 URL 辅助信息的字号/字重/字距；提升弱信息在深浅主题下的可读性并降低生硬对比，整体阅读层级更清晰稳定。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
