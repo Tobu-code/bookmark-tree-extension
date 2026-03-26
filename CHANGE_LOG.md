@@ -322,3 +322,9 @@
 - **Type**: Revert
 - **Content**: 按用户要求回滚提交 `0bb914f`（`fix(ui): 修复小屏浮动按钮遮挡并统一视觉细节`），撤销该次对小屏底部安全区、标题一致性与滚动条 token 的调整。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 18:01:28 +0800
+- **Type**: Chore (Merge)
+- **Content**: 将分支 `feature/feature-ui-anlaysis-0325` 合并至 `main`，同步纳入界面分析与样式调优相关变更，并完成主干收敛。
+- **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
