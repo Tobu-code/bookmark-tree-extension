@@ -481,9 +481,9 @@ body.loaded #background-layer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 24px;
     z-index: 50;
     pointer-events: none;
@@ -505,6 +505,26 @@ body.search-active .search-wrapper {
 body.search-active #search-container {
     z-index: 100;
     position: relative;
+}
+
+/* Focus mode: dim secondary regions when searching */
+body.search-active #bookmarks-tree {
+    opacity: 0.62;
+    transform: translateY(1px) scale(0.996);
+}
+
+body.search-active .ambient-time {
+    opacity: 0.2;
+}
+
+body.search-active #layout-toggle-btn,
+body.search-active #settings-btn {
+    opacity: 0.36;
+    transform: none;
+}
+
+body.search-active #ai-sidebar-btn {
+    opacity: 0.72;
 }
 
 /* Search Suggestions Dropdown */
@@ -630,7 +650,8 @@ body.search-active #search-container {
     overflow-x: hidden;
     padding: 8px 6px;
     transform-origin: 50% 0;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition: opacity var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
 }
 
 .tree-state {
@@ -1871,6 +1892,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
+    opacity: 0.84;
 }
 
 #layout-toggle-btn svg {
@@ -1888,6 +1910,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     color: var(--primary-color);
     box-shadow: var(--elev-shadow-2);
     transform: translateY(-1px);
+    opacity: 1;
 }
 
 #settings-btn {
@@ -1914,6 +1937,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
+    opacity: 0.84;
 }
 
 #settings-btn svg {
@@ -1927,6 +1951,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
     box-shadow: var(--elev-shadow-2);
+    opacity: 1;
 }
 
 /* Remove tooltip - cleaner look */
@@ -2520,6 +2545,7 @@ input[type="file"] {
     margin-right: 10px;
     flex-shrink: 0;
     position: relative;
+    opacity: 0.88;
 }
 
 #ai-sidebar-btn::before {
@@ -2536,6 +2562,7 @@ input[type="file"] {
     transform: translateY(-1px);
     box-shadow: var(--elev-shadow-1);
     border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+    opacity: 1;
 }
 
 #ai-sidebar-btn:active {
@@ -2592,6 +2619,23 @@ input[type="file"] {
 
 .ai-sidebar.active {
     transform: translateX(0);
+}
+
+/* Focus mode: when AI panel is open, reduce background competition */
+body.ai-sidebar-open #search-container {
+    opacity: 0.84;
+}
+
+body.ai-sidebar-open #bookmarks-tree {
+    opacity: 0.56;
+    transform: scale(0.995);
+}
+
+body.ai-sidebar-open #layout-toggle-btn,
+body.ai-sidebar-open #settings-btn,
+body.ai-sidebar-open #ai-sidebar-btn {
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* AI Tabs Container */

@@ -2739,6 +2739,7 @@ function initAiSidebar() {
     }
 
     function openSidebar() {
+        document.body.classList.add('ai-sidebar-open');
         sidebar.classList.remove('hidden');
         requestAnimationFrame(() => {
             sidebar.classList.add('active');
@@ -2754,6 +2755,7 @@ function initAiSidebar() {
         sidebarOverlay.classList.remove('active');
         setTimeout(() => {
             if (!sidebar.classList.contains('active')) {
+                document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
                 unloadIframe(currentAi.id);

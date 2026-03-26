@@ -256,3 +256,9 @@
 - **Type**: Refactor (UI Polish / Motion System)
 - **Content**: 完成作品级质感第一轮优化：新增全局动效与阴影设计令牌（时长、曲线、层级阴影、焦点环），统一搜索区/树状卡片/平铺卡片/目录项/右下浮动按钮/AI 侧栏/确认按钮的过渡节奏；收敛 hover 与 active 的位移与缩放幅度，降低高亮叠加强度，增强页面主次层级稳定性与整体高级感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:27:00 +0800
+- **Type**: Refactor (Visual Hierarchy / Focus Mode)
+- **Content**: 完成第二轮信息层级重排：新增搜索沉浸态与 AI 侧栏沉浸态（`search-active` / `ai-sidebar-open`）的视觉降噪规则；搜索激活时弱化书签区与浮动操作按钮，侧栏打开时自动降低主内容竞争强度并隐藏右下浮动按钮；同步优化浮动控件默认存在感（默认半低透明，hover 恢复全强度），让主焦点更稳定。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
