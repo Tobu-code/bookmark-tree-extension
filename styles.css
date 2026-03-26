@@ -33,6 +33,17 @@
     --floating-actions-offset-bottom: 24px;
     --floating-actions-safe-bottom: calc(var(--floating-actions-offset-bottom) + env(safe-area-inset-bottom, 0px));
     --floating-actions-stack-height: calc(var(--floating-actions-size) * 2 + var(--floating-actions-gap));
+
+    /* Motion tokens (quality pass) */
+    --motion-fast: 150ms;
+    --motion-medium: 240ms;
+    --motion-slow: 360ms;
+    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --elev-shadow-1: 0 6px 16px rgba(28, 21, 14, 0.09);
+    --elev-shadow-2: 0 12px 28px rgba(28, 21, 14, 0.13);
+    --elev-shadow-3: 0 18px 40px rgba(28, 21, 14, 0.16);
+    --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -68,6 +79,9 @@
     --glass-bg: rgba(31, 35, 43, 0.88);
     --glass-border: rgba(255, 255, 255, 0.08);
     --highlight-top: rgba(255, 255, 255, 0.04);
+    --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
+    --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
+    --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -216,7 +230,7 @@ h3,
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), var(--bg-overlay);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--elev-shadow-2);
     border: 1px solid color-mix(in srgb, var(--border-color) 92%, white 8%);
     display: flex;
     flex-direction: column;
@@ -228,7 +242,10 @@ h3,
     /* Pre-load state */
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out, background 0.18s ease-out;
+    transition: opacity var(--motion-slow) var(--ease-standard),
+        transform var(--motion-slow) var(--ease-standard),
+        background var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard);
 }
 
 .container::before {
@@ -281,7 +298,7 @@ body.loaded #background-layer {
     flex-direction: column;
     align-items: center;
     position: relative;
-    z-index: 100;
+    z-index: 110;
 }
 
 .ambient-time {
@@ -337,15 +354,13 @@ body.loaded #background-layer {
     max-width: 800px;
     border-radius: 16px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 252, 247, 0.92) 100%);
-    box-shadow:
-        0 8px 22px rgba(44, 33, 22, 0.1),
-        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
+    box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-        color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard);
     padding-left: 18px;
     position: relative;
 }
@@ -358,7 +373,7 @@ body.loaded #background-layer {
     width: 58.5%;
     background: var(--card-bg);
     border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
-    box-shadow: 0 12px 28px rgba(44, 33, 22, 0.14), 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
+    box-shadow: var(--elev-shadow-2), var(--focus-ring);
     transform: translateY(-1px);
 }
 
@@ -473,7 +488,7 @@ body.loaded #background-layer {
     z-index: 50;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--motion-medium) var(--ease-standard);
 }
 
 #search-overlay.active {
@@ -718,7 +733,7 @@ body.layout-switching #bookmarks-tree.layout-flat .folder-tile,
 body.layout-switching #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper,
 body.layout-switching #bookmarks-tree.layout-tree .top-level-container,
 body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
-    animation: layoutSwitchFadeIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: layoutSwitchFadeIn var(--motion-fast) var(--ease-standard);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -830,12 +845,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .folder-tile {
     /* ... existing props ... */
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        opacity 0.3s ease;
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard),
+        opacity var(--motion-medium) var(--ease-standard);
 }
 
 .bookmarks-pane {
@@ -866,7 +881,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane {
     /* Smooth fade transition for hover-to-switch */
-    transition: opacity 0.16s ease-out, transform 0.16s ease-out;
+    transition: opacity var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
 }
 
 
@@ -876,12 +892,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding: 11px 14px;
     border-radius: 14px;
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-        opacity 0.3s ease;
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard),
+        opacity var(--motion-medium) var(--ease-standard);
     background: rgba(255, 250, 245, 0.9);
     color: var(--text-color);
     border: 1px solid color-mix(in srgb, var(--border-color) 95%, transparent);
@@ -897,7 +913,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .folder-tile:hover {
     background: rgba(255, 252, 248, 0.95);
     transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(44, 33, 22, 0.11);
+    box-shadow: var(--elev-shadow-1);
     border-color: color-mix(in srgb, var(--primary-color) 36%, var(--border-color));
 }
 
@@ -912,12 +928,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-weight: 620;
     border-left: 2px solid var(--primary-color);
     border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), 0 8px 22px rgba(44, 33, 22, 0.12);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), var(--elev-shadow-1);
 }
 
 .folder-tile:not(:has(.hide-icon:hover, .pin-top-icon:hover)):active {
-    transform: scale(0.97);
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.985);
+    transition: transform var(--motion-fast) var(--ease-emphasized);
 }
 
 :root[data-theme="dark"] .folder-tile.active {
@@ -1120,12 +1136,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    box-shadow: 0 8px 24px rgba(44, 33, 22, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.34);
-    transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        background-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.18s ease;
+    box-shadow: var(--elev-shadow-1), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    transition: transform var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
     will-change: auto;
     transform: none;
 }
@@ -1137,8 +1153,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 10: Hover glow with border highlight animation */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 14px 28px rgba(44, 33, 22, 0.16);
+    transform: translateY(-1px);
+    box-shadow: var(--elev-shadow-2);
     background: rgba(255, 255, 255, 0.96);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color));
 }
@@ -1150,8 +1166,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
-    transform: scale(0.97);
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.988);
+    transition: transform var(--motion-fast) var(--ease-emphasized);
 }
 
 /* Optimization 3: Hover focus - dim others in bookmarks grid */
@@ -1377,15 +1393,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     /* More rounded, Claude-style */
     padding: 24px;
     box-sizing: border-box;
-    box-shadow:
-        0 8px 26px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
+    box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
-    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-        background-color 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-        opacity 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        opacity var(--motion-medium) var(--ease-standard);
     cursor: grab;
     display: flex;
     flex-direction: column;
@@ -1417,11 +1431,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     background: var(--card-hover);
     border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
     z-index: 10;
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--elev-shadow-3);
 }
 
 .bookmark-card:active {
@@ -1429,8 +1443,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:not(:has(.expand-btn:hover, .card-content:hover)):active {
-    transform: scale(0.97);
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.988);
+    transition: transform var(--motion-fast) var(--ease-emphasized);
 }
 
 .card-header {
@@ -1666,10 +1680,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-radius: 12px;
     text-decoration: none;
     color: var(--text-color);
-    transition: background 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        border-left-color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: background var(--motion-fast) var(--ease-standard),
+        border-left-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard);
     cursor: pointer;
     transform-origin: center center;
     position: relative;
@@ -1693,7 +1707,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             rgba(217, 119, 87, 0.04) 100%);
     border-left-color: var(--primary-color);
     z-index: 20;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
 }
 
 .bookmark-icon {
@@ -1845,13 +1859,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    box-shadow: 0 6px 14px rgba(18, 13, 9, 0.12);
+    box-shadow: var(--elev-shadow-1);
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -1872,8 +1886,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: color-mix(in srgb, var(--card-hover) 88%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
-    box-shadow: 0 12px 24px rgba(18, 13, 9, 0.16);
-    transform: translateY(-2px);
+    box-shadow: var(--elev-shadow-2);
+    transform: translateY(-1px);
 }
 
 #settings-btn {
@@ -1887,14 +1901,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    box-shadow: 0 6px 14px rgba(18, 13, 9, 0.12);
+    box-shadow: var(--elev-shadow-1);
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -1908,11 +1922,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #settings-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     background: color-mix(in srgb, var(--card-hover) 88%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
-    box-shadow: 0 12px 24px rgba(18, 13, 9, 0.16);
+    box-shadow: var(--elev-shadow-2);
 }
 
 /* Remove tooltip - cleaner look */
@@ -1932,8 +1946,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -2492,12 +2506,12 @@ input[type="file"] {
     border: 1px solid color-mix(in srgb, var(--primary-color) 14%, var(--border-color));
     cursor: pointer;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
-        color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
-        background-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
-        border-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
-        box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
-        opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2520,12 +2534,12 @@ input[type="file"] {
     background: color-mix(in srgb, var(--primary-color) 11%, transparent);
     color: var(--primary-color);
     transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(174, 86, 48, 0.1);
+    box-shadow: var(--elev-shadow-1);
     border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
 }
 
 #ai-sidebar-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.99);
 }
 
 #ai-sidebar-btn svg {
@@ -2545,12 +2559,12 @@ input[type="file"] {
     background: rgba(255, 250, 245, 0.72);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    box-shadow: -24px 0 64px rgba(17, 12, 8, 0.28);
+    box-shadow: -18px 0 46px rgba(17, 12, 8, 0.24);
     z-index: 1001;
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.2, 1, 0.4, 1);
+    transition: transform var(--motion-slow) var(--ease-standard);
     border-left: 1px solid rgba(174, 86, 48, 0.08);
 }
 
@@ -2605,12 +2619,12 @@ input[type="file"] {
     appearance: none;
     -webkit-appearance: none;
     font-family: inherit;
-    transition: background-color 0.25s ease-out,
-        border-color 0.25s ease-out,
-        color 0.25s ease-out,
-        box-shadow 0.25s ease-out,
-        opacity 0.25s ease-out,
-        transform 0.25s ease-out;
+    transition: background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        opacity var(--motion-medium) var(--ease-standard),
+        transform var(--motion-medium) var(--ease-standard);
     background: transparent;
     border: 1px solid transparent;
     user-select: none;
@@ -2630,7 +2644,7 @@ input[type="file"] {
     background: color-mix(in srgb, var(--primary-color) 10%, transparent);
     border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
     color: var(--primary-color, #D97757);
-    box-shadow: 0 8px 18px rgba(44, 33, 22, 0.06);
+    box-shadow: var(--elev-shadow-1);
     font-weight: 600;
 }
 
@@ -2681,7 +2695,7 @@ input[type="file"] {
     display: flex;
     gap: 6px;
     opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: opacity var(--motion-fast) var(--ease-standard);
 }
 
 .ai-sidebar-actions:hover {
@@ -2699,7 +2713,10 @@ input[type="file"] {
     align-items: center;
     justify-content: center;
     color: var(--text-secondary, #A8A6A3);
-    transition: background-color 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: background-color var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .ai-action-btn svg {
@@ -2831,7 +2848,7 @@ input[type="file"] {
     z-index: 1000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--motion-medium) var(--ease-standard);
 }
 
 .ai-sidebar-overlay.active {
@@ -3031,7 +3048,10 @@ input[type="file"] {
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    transition: background-color var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
 }
 
 #search-engine-label:focus-visible,
@@ -3073,7 +3093,7 @@ input[type="file"]:focus-visible {
 
 .confirm-btn-danger:hover {
     background: #ff3b30;
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: 0 4px 16px rgba(255, 95, 86, 0.4);
 }
 
@@ -3084,7 +3104,7 @@ input[type="file"]:focus-visible {
 .bookmark-action-btn.edit-btn:hover {
     background: color-mix(in srgb, var(--primary-color) 12%, transparent);
     color: var(--primary-color);
-    transform: scale(1.06);
+    transform: scale(1.03);
     box-shadow: 0 2px 8px rgba(174, 86, 48, 0.16);
 }
 
@@ -3096,7 +3116,7 @@ input[type="file"]:focus-visible {
 
 .confirm-btn-primary:hover {
     filter: brightness(1.1);
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: 0 4px 16px rgba(174, 86, 48, 0.4);
 }
 
