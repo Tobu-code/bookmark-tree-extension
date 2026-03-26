@@ -274,3 +274,9 @@
 - **Type**: Refactor (Typography Hierarchy & Contrast Tuning)
 - **Content**: 完成第四轮字体层级与对比度微调：新增文本层级变量（title/body/caption/micro、muted/subtle）；统一搜索输入、内容标题、目录标题、面包屑、书签标题与 URL 辅助信息的字号/字重/字距；提升弱信息在深浅主题下的可读性并降低生硬对比，整体阅读层级更清晰稳定。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-03-26]
+- **Time**: 2026-03-26 10:43:15 +0800
+- **Type**: Refactor (Interaction Final Polish)
+- **Content**: 完成交互细节收官：统一焦点可视化体系（`focus-outline` + `focus-ring`）并覆盖主要交互控件；优化拖拽反馈（拖拽中、投放目标、文件夹吸附）的强度与阴影层次，降低生硬边框感；微调确认弹窗与编辑弹窗的标题权重、正文行高和阴影强度，提升可读性与操作确认感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

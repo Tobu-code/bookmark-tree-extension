@@ -44,6 +44,7 @@
     --elev-shadow-2: 0 12px 28px rgba(28, 21, 14, 0.13);
     --elev-shadow-3: 0 18px 40px rgba(28, 21, 14, 0.16);
     --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
+    --focus-outline: 2px solid color-mix(in srgb, var(--primary-color) 82%, white);
 
     /* Typography tokens */
     --font-size-title: 17px;
@@ -1744,8 +1745,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .leaf-node:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--primary-color) 76%, white);
+    outline: var(--focus-outline);
     outline-offset: 2px;
+    box-shadow: var(--focus-ring);
 }
 
 /* Hover Effect - Claude Style Gradient */
@@ -1838,20 +1840,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Drag & Drop Visuals */
 .dragging {
-    opacity: 0.5;
-    transform: scale(0.95);
-    box-shadow: none;
+    opacity: 0.66;
+    transform: scale(0.985);
+    box-shadow: 0 8px 18px rgba(24, 18, 12, 0.12);
 }
 
 .drag-over {
-    border: 2px dashed var(--primary-color);
-    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--primary-color) 72%, transparent);
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 26%, transparent);
 }
 
 .drag-over-item>.leaf-node,
 .drag-over-item>.sub-folder-header {
-    background: color-mix(in srgb, var(--primary-color) 18%, transparent) !important;
-    box-shadow: 0 0 0 2px var(--primary-color) inset;
+    background: color-mix(in srgb, var(--primary-color) 14%, transparent) !important;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-color) 72%, transparent) inset, 0 6px 14px rgba(24, 18, 12, 0.09);
     border-radius: 8px;
 }
 
@@ -3073,7 +3076,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 .confirm-dialog-content {
     border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.26);
     border: 1px solid var(--border-color);
     background: var(--glass-bg, rgba(255, 255, 255, 0.95));
     backdrop-filter: blur(40px);
@@ -3095,8 +3098,8 @@ body.ai-sidebar-open #ai-sidebar-btn {
 }
 
 .confirm-dialog-title {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 19px;
+    font-weight: 680;
     color: var(--text-color);
     margin-bottom: 8px;
 }
@@ -3105,7 +3108,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
     font-size: 13px;
     color: var(--text-subtle);
     margin-bottom: 24px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .confirm-dialog-actions {
@@ -3141,8 +3144,9 @@ body.ai-sidebar-open #ai-sidebar-btn {
 #clear-bg:focus-visible,
 input[type=range]:focus-visible,
 input[type="file"]:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--primary-color) 82%, white);
+    outline: var(--focus-outline);
     outline-offset: 2px;
+    box-shadow: var(--focus-ring);
 }
 
 .confirm-btn-cancel {
@@ -3195,7 +3199,7 @@ input[type="file"]:focus-visible {
 
 .edit-dialog-content {
     border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.26);
     border: 1px solid var(--border-color);
     background: var(--glass-bg, rgba(255, 255, 255, 0.95));
     backdrop-filter: blur(40px);
@@ -3221,8 +3225,8 @@ input[type="file"]:focus-visible {
 }
 
 .edit-dialog-title {
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: 680;
+    font-size: 19px;
     color: var(--primary-color);
 }
 
@@ -3235,10 +3239,11 @@ input[type="file"]:focus-visible {
 
 .edit-field label {
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
-    margin-bottom: 6px;
+    margin-bottom: 7px;
+    letter-spacing: 0.08px;
 }
 
 .edit-field input {
@@ -3256,7 +3261,7 @@ input[type="file"]:focus-visible {
 
 .edit-field input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(174, 86, 48, 0.12);
+    box-shadow: var(--focus-ring);
     background: var(--card-bg, #fff);
 }
 
