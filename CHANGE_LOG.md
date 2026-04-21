@@ -328,3 +328,9 @@
 - **Type**: Chore (Merge)
 - **Content**: 将分支 `feature/feature-ui-anlaysis-0325` 合并至 `main`，同步纳入界面分析与样式调优相关变更，并完成主干收敛。
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
+
+## [2026-04-21]
+- **Time**: 2026-04-21 21:42:38 +0800
+- **Type**: Fix (Theme / Auto Mode)
+- **Content**: 修复“外观选择=自动”在夜间主题下卡片与文字色彩未正确切换的问题：系统主题模式改为显式同步 `data-theme=dark|light`，并重构系统主题监听与清理逻辑，确保夜间切换即时生效且无残留监听。
+- **Impact**: `script.js`、`CHANGE_LOG.md`

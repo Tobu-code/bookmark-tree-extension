@@ -2235,9 +2235,32 @@ function initSettingsUI(settings) {
 
 function applyTheme(theme) {
     const root = document.documentElement;
+    const cleanupSystemThemeListener = () => {
+        if (root._themeMediaQuery && root._themeListener) {
+            root._themeMediaQuery.removeEventListener('change', root._themeListener);
+        }
+        root._themeMediaQuery = null;
+        root._themeListener = null;
+    };
+
     if (theme === 'system') {
-        root.removeAttribute('data-theme');
+        cleanupSystemThemeListener();
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const syncThemeFromSystem = () => {
+            root.setAttribute('data-theme', darkModeQuery.matches ? 'dark' : 'light');
+        };
+
+        const handleSystemThemeChange = () => {
+            syncThemeFromSystem();
+        };
+
+        syncThemeFromSystem();
+        root._themeMediaQuery = darkModeQuery;
+        root._themeListener = handleSystemThemeChange;
+        darkModeQuery.addEventListener('change', handleSystemThemeChange);
     } else {
+        cleanupSystemThemeListener();
         root.setAttribute('data-theme', theme);
     }
 }
