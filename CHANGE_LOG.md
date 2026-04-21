@@ -334,3 +334,9 @@
 - **Type**: Fix (Theme / Auto Mode)
 - **Content**: 修复“外观选择=自动”在夜间主题下卡片与文字色彩未正确切换的问题：系统主题模式改为显式同步 `data-theme=dark|light`，并重构系统主题监听与清理逻辑，确保夜间切换即时生效且无残留监听。
 - **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-04-21]
+- **Time**: 2026-04-21 21:57:09 +0800
+- **Type**: Feature (AI Sidebar) / Refactor (Dark Theme Tokens)
+- **Content**: 新增 AI 侧栏 Kimi 入口（标签与 iframe 映射）；同步优化深色主题主色与次级文字对比度、发光色值，并提升书签标题在深色背景下可读性；调整 AI 侧栏宽度上限以提升大屏使用空间。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`

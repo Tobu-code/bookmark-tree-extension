@@ -58,12 +58,12 @@
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
 :root[data-theme="dark"] {
     /* Core Brand */
-    --primary-color: #e18b64;
-    /* Terracotta/Clay - Core Brand Accent */
+    --primary-color: #f5a67a;
+    /* Brighter terracotta for better contrast */
     --text-color: #F2F0E9;
     /* Off-white for primary text */
-    --text-secondary: #BDBAB6;
-    /* Slightly warmer grey for secondary text */
+    --text-secondary: #C5C2BD;
+    /* Brighter grey for better readability */
 
     --bg-overlay: rgba(21, 23, 29, 0.74);
     /* Deep slate main background */
@@ -77,14 +77,14 @@
     /* Enhanced Shadows & Effects */
     --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-    --shadow-glow: 0 0 32px rgba(225, 139, 100, 0.14);
+    --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
     /* New: Glow effect */
     --modal-bg: #1f232b;
     --modal-text: #F2F0E9;
 
     /* New: Glass & Glow Variables */
-    --glow-color: rgba(225, 139, 100, 0.25);
-    --glow-soft: rgba(225, 139, 100, 0.1);
+    --glow-color: rgba(245, 166, 122, 0.25);
+    --glow-soft: rgba(245, 166, 122, 0.1);
     --glass-bg: rgba(31, 35, 43, 0.88);
     --glass-border: rgba(255, 255, 255, 0.08);
     --highlight-top: rgba(255, 255, 255, 0.04);
@@ -111,20 +111,20 @@
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #e18b64;
+        --primary-color: #f5a67a;
         --text-color: #F2F0E9;
-        --text-secondary: #BDBAB6;
+        --text-secondary: #C5C2BD;
         --bg-overlay: rgba(21, 23, 29, 0.74);
         --card-bg: #1f232b;
         --card-hover: #2a303a;
         --border-color: rgba(255, 255, 255, 0.12);
         --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
         --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-        --shadow-glow: 0 0 32px rgba(225, 139, 100, 0.14);
+        --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
         --modal-bg: #1f232b;
         --modal-text: #F2F0E9;
-        --glow-color: rgba(225, 139, 100, 0.25);
-        --glow-soft: rgba(225, 139, 100, 0.1);
+        --glow-color: rgba(245, 166, 122, 0.25);
+        --glow-soft: rgba(245, 166, 122, 0.1);
         --glass-bg: rgba(31, 35, 43, 0.88);
         --glass-border: rgba(255, 255, 255, 0.08);
         --highlight-top: rgba(255, 255, 255, 0.04);
@@ -1822,7 +1822,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmark-label {
     font-size: var(--font-size-body);
     letter-spacing: 0.06px;
-    color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
+    color: var(--text-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2632,7 +2632,7 @@ input[type="file"] {
     position: fixed;
     top: 0;
     right: 0;
-    width: min(61.8vw, 1100px);
+    width: min(75vw, 1400px);
     height: 100vh;
     /* Glass effect: semi-transparent with blur */
     background: rgba(255, 250, 245, 0.72);

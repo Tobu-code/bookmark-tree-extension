@@ -2559,7 +2559,8 @@ function initAiSidebar() {
         google: document.getElementById('ai-iframe-google'),
         chatgpt: document.getElementById('ai-iframe-chatgpt'),
         doubao: document.getElementById('ai-iframe-doubao'),
-        qwen: document.getElementById('ai-iframe-qwen')
+        qwen: document.getElementById('ai-iframe-qwen'),
+        kimi: document.getElementById('ai-iframe-kimi')
     };
 
     // AI URLs mapping
@@ -2567,7 +2568,8 @@ function initAiSidebar() {
         google: 'https://www.google.com/search?udm=50&aep=11',
         chatgpt: 'https://chatgpt.com/',
         doubao: 'https://www.doubao.com/chat/',
-        qwen: 'https://chat.qwen.ai/'
+        qwen: 'https://chat.qwen.ai/',
+        kimi: 'https://kimi.moonshot.cn/'
     };
 
     const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
