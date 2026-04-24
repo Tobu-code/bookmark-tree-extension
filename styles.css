@@ -2247,12 +2247,59 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     box-shadow: none;
 }
 
+.ai-provider-item.is-dragging {
+    opacity: 0.48;
+    transform: scale(0.985);
+}
+
+.ai-provider-item.is-drag-over {
+    border-color: color-mix(in srgb, var(--primary-color) 34%, var(--border-color));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+
 .ai-provider-meta {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     min-width: 0;
     flex: 1;
+}
+
+.ai-provider-drag-handle {
+    width: 30px;
+    height: 34px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border: 1px solid color-mix(in srgb, var(--border-color) 92%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--card-bg) 95%, transparent);
+    color: var(--text-secondary);
+    cursor: grab;
+    flex: 0 0 auto;
+    transition: border-color var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard);
+}
+
+.ai-provider-drag-handle span {
+    width: 10px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.8;
+}
+
+.ai-provider-drag-handle:hover {
+    color: var(--primary-color);
+    border-color: color-mix(in srgb, var(--primary-color) 24%, transparent);
+    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+}
+
+.ai-provider-drag-handle:active {
+    cursor: grabbing;
 }
 
 .ai-provider-icon {
@@ -2411,6 +2458,40 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     color: var(--text-secondary);
     text-align: center;
     background: color-mix(in srgb, var(--card-bg) 94%, transparent);
+}
+
+.settings-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translate(-50%, 16px);
+    min-width: 220px;
+    max-width: min(520px, calc(100vw - 32px));
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(27, 31, 38, 0.92);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.24);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1200;
+    transition: opacity var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
+}
+
+.settings-toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.settings-toast[data-variant="success"] {
+    background: rgba(20, 113, 79, 0.94);
+}
+
+.settings-toast[data-variant="warning"] {
+    background: rgba(148, 76, 22, 0.96);
 }
 
 /* Unified Input Styles (Modal Only) */
@@ -3208,6 +3289,10 @@ body.ai-sidebar-open #ai-sidebar-btn {
     .ai-provider-actions-main,
     .ai-provider-actions-secondary {
         justify-content: flex-start;
+    }
+
+    .ai-provider-meta {
+        width: 100%;
     }
 
     .ai-settings-intro {

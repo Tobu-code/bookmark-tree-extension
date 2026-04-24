@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 17:51:14 +0800
+- **Type**: Refactor (AI Settings Drag Sort & Toast Feedback)
+- **Content**: 为设置弹窗中的 AI 配置区补充更顺滑的交互反馈：新增卡片拖拽句柄与拖拽排序高亮，保留上移/下移按钮作为兜底；同时引入底部轻提示 toast，替代新增 AI、启停、设默认、排序、权限拒绝等场景下会打断操作流的 `alert` 提示。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 17:38:54 +0800
 - **Type**: Refactor (AI Settings Panel Polish)
 - **Content**: 对设置弹窗中的 AI 配置区做一轮精修：补充“AI 服务管理”信息头，优化自定义 AI 表单层级与字段标题；同时重构 AI 服务卡片的主次操作区、标签徽标、启用开关与按钮形态，统一圆角、间距和 hover 阴影，小屏下也保持更稳定的纵向排版与按钮对齐。

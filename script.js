@@ -2519,8 +2519,22 @@ function initSettingsUI(settings) {
     const aiProviderNameInput = document.getElementById('ai-provider-name');
     const aiProviderUrlInput = document.getElementById('ai-provider-url');
     const aiProviderAddBtn = document.getElementById('ai-provider-add');
+    const settingsToast = document.getElementById('settings-toast');
     let aiSettingsState = normalizeAiProviders(settings[STORAGE_KEY_AI_CONFIG], settings[STORAGE_KEY_AI_ORDER]);
     let aiSelectedId = settings[STORAGE_KEY_AI]?.id || getFirstEnabledAiProvider(aiSettingsState)?.id || null;
+    let aiDraggedProviderId = null;
+    let aiToastTimer = null;
+
+    function showSettingsToast(message, variant = 'default') {
+        if (!settingsToast || !message) return;
+        settingsToast.textContent = message;
+        settingsToast.dataset.variant = variant;
+        settingsToast.classList.add('is-visible');
+        clearTimeout(aiToastTimer);
+        aiToastTimer = setTimeout(() => {
+            settingsToast.classList.remove('is-visible');
+        }, 2200);
+    }
 
     function getEnabledAiCount() {
         return aiSettingsState.filter((provider) => provider.enabled !== false).length;
@@ -2550,7 +2564,7 @@ function initSettingsUI(settings) {
             await syncDynamicAiRules(aiSettingsState);
         } catch (error) {
             console.error('Failed to sync AI dynamic rules:', error);
-            alert('AI 站点规则同步失败，侧边栏可能只能通过弹窗打开。');
+            showSettingsToast('AI 站点规则同步失败，侧栏可能只能用弹窗打开。', 'warning');
         }
         renderAiProviderList();
         notifyAiSidebarRefresh();
@@ -2569,8 +2583,11 @@ function initSettingsUI(settings) {
             const disabled = provider.enabled === false;
             const isSelected = provider.id === aiSelectedId;
             return `
-                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
+                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}" draggable="true">
                     <div class="ai-provider-meta">
+                        <button type="button" class="ai-provider-drag-handle" data-drag-handle aria-label="拖拽排序" title="拖拽排序">
+                            <span></span><span></span><span></span>
+                        </button>
                         <span class="ai-provider-icon">${provider.icon || ''}</span>
                         <div class="ai-provider-copy">
                             <div class="ai-provider-title-row">
@@ -2607,6 +2624,18 @@ function initSettingsUI(settings) {
         const [provider] = aiSettingsState.splice(currentIndex, 1);
         aiSettingsState.splice(targetIndex, 0, provider);
         await commitAiSettings();
+        showSettingsToast('AI 服务顺序已更新。');
+    }
+
+    async function reorderAiProviders(draggedId, targetId) {
+        if (!draggedId || !targetId || draggedId === targetId) return;
+        const currentIndex = aiSettingsState.findIndex((provider) => provider.id === draggedId);
+        const targetIndex = aiSettingsState.findIndex((provider) => provider.id === targetId);
+        if (currentIndex < 0 || targetIndex < 0) return;
+        const [provider] = aiSettingsState.splice(currentIndex, 1);
+        aiSettingsState.splice(targetIndex, 0, provider);
+        await commitAiSettings();
+        showSettingsToast('AI 服务顺序已更新。');
     }
 
     if (aiProviderList) {
@@ -2625,6 +2654,7 @@ function initSettingsUI(settings) {
             if (action === 'default') {
                 aiSelectedId = provider.id;
                 await commitAiSettings();
+                showSettingsToast(`${provider.name} 已设为默认 AI。`, 'success');
                 return;
             }
 
@@ -2639,11 +2669,13 @@ function initSettingsUI(settings) {
             }
 
             if (action === 'remove' && !provider.builtIn) {
+                const providerName = provider.name;
                 aiSettingsState = aiSettingsState.filter((entry) => entry.id !== providerId);
                 if (aiSelectedId === providerId) {
                     aiSelectedId = getFirstEnabledAiProvider(aiSettingsState)?.id || null;
                 }
                 await commitAiSettings();
+                showSettingsToast(`${providerName} 已从 AI 列表移除。`);
             }
         });
 
@@ -2660,7 +2692,7 @@ function initSettingsUI(settings) {
             const enable = toggle.checked;
             if (!enable && getEnabledAiCount() <= 1 && provider.enabled !== false) {
                 toggle.checked = true;
-                alert('至少保留一个启用中的 AI 服务。');
+                showSettingsToast('至少保留一个启用中的 AI 服务。', 'warning');
                 return;
             }
 
@@ -2668,7 +2700,7 @@ function initSettingsUI(settings) {
                 const granted = await requestAiOriginPermission(provider.url);
                 if (!granted) {
                     toggle.checked = false;
-                    alert('未获得站点权限，已保留为停用状态。');
+                    showSettingsToast('未获得站点权限，已保留为停用状态。', 'warning');
                     return;
                 }
             }
@@ -2678,6 +2710,52 @@ function initSettingsUI(settings) {
                 aiSelectedId = getFirstEnabledAiProvider(aiSettingsState.filter((entry) => entry.id !== provider.id).concat([{ ...provider, enabled: false }]))?.id || null;
             }
             await commitAiSettings();
+            showSettingsToast(enable ? `${provider.name} 已启用。` : `${provider.name} 已停用。`);
+        });
+
+        aiProviderList.addEventListener('dragstart', (event) => {
+            const item = event.target.closest('.ai-provider-item');
+            if (!item || !event.target.closest('[data-drag-handle]')) {
+                event.preventDefault();
+                return;
+            }
+            aiDraggedProviderId = item.dataset.aiId;
+            item.classList.add('is-dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', aiDraggedProviderId);
+        });
+
+        aiProviderList.addEventListener('dragend', (event) => {
+            const item = event.target.closest('.ai-provider-item');
+            if (item) item.classList.remove('is-dragging');
+            aiDraggedProviderId = null;
+            aiProviderList.querySelectorAll('.is-drag-over').forEach((element) => element.classList.remove('is-drag-over'));
+        });
+
+        aiProviderList.addEventListener('dragover', (event) => {
+            if (!aiDraggedProviderId) return;
+            event.preventDefault();
+            const item = event.target.closest('.ai-provider-item');
+            if (!item || item.dataset.aiId === aiDraggedProviderId) return;
+            aiProviderList.querySelectorAll('.is-drag-over').forEach((element) => {
+                if (element !== item) element.classList.remove('is-drag-over');
+            });
+            item.classList.add('is-drag-over');
+        });
+
+        aiProviderList.addEventListener('dragleave', (event) => {
+            const item = event.target.closest('.ai-provider-item');
+            if (!item) return;
+            item.classList.remove('is-drag-over');
+        });
+
+        aiProviderList.addEventListener('drop', async (event) => {
+            if (!aiDraggedProviderId) return;
+            event.preventDefault();
+            const item = event.target.closest('.ai-provider-item');
+            if (!item) return;
+            item.classList.remove('is-drag-over');
+            await reorderAiProviders(aiDraggedProviderId, item.dataset.aiId);
         });
     }
 
@@ -2687,7 +2765,7 @@ function initSettingsUI(settings) {
             const url = normalizeAiUrl(aiProviderUrlInput.value);
 
             if (!name || !url) {
-                alert('请输入有效的 AI 名称和网址。');
+                showSettingsToast('请输入有效的 AI 名称和网址。', 'warning');
                 return;
             }
 
@@ -2700,7 +2778,7 @@ function initSettingsUI(settings) {
             });
 
             if (!provider) {
-                alert('AI 配置无效，请检查后重试。');
+                showSettingsToast('AI 配置无效，请检查后重试。', 'warning');
                 return;
             }
 
@@ -2714,8 +2792,10 @@ function initSettingsUI(settings) {
             aiProviderUrlInput.value = '';
 
             if (!granted) {
-                alert('站点已添加，但因未授权访问，当前保持停用状态。');
+                showSettingsToast('站点已添加，但因未授权访问，当前保持停用状态。', 'warning');
+                return;
             }
+            showSettingsToast(`${provider.name} 已添加到 AI 列表。`, 'success');
         });
     }
 
