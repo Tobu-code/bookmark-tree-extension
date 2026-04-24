@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 17:57:33
+- **Type**: Refactor
+- **Content**: 优化设置弹窗 UI：将弹窗宽度从 420px 增加至 560px；同时优化 AI 服务列表的网址显示，采用单行截断方案防止长链接破坏布局。
+- **Impact**: `styles.css`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 17:53:52
 - **Type**: Fix
 - **Content**: 修复 DeepSeek 的默认对话网址，从 `https://deepseek.com/chat` 更新为官方推荐的 `https://chat.deepseek.com/`，并同步更新权限与网络请求规则。
