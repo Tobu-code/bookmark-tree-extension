@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 23:37:47 +0800
+- **Type**: Fix (AI Switch Visual Centering)
+- **Content**: 将 AI 服务卡片中的启用开关改为“真实 input + 自定义视觉标记”的实现方式，移除浏览器原生 checkbox 的基线干扰，确保勾选图标与“已启用/已停用”文案在胶囊按钮中真正居中对齐。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 23:26:10 +0800
 - **Type**: Fix (AI Toggle Alignment & DeepSeek Sidebar Fallback)
 - **Content**: 修正 AI 服务卡片中“已启用/已停用”开关的图标与文字未落在同一中心线的问题；同时为 DeepSeek 增加侧边栏专属回退策略，不再尝试内嵌其会拒绝 iframe 的聊天页，而是直接展示引导说明并允许一键在新窗口打开。
