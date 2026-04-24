@@ -2181,25 +2181,70 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: 13px;
 }
 
+.ai-settings-intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg,
+            color-mix(in srgb, var(--primary-color) 10%, transparent) 0%,
+            color-mix(in srgb, var(--card-bg) 94%, transparent) 100%);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 10%, var(--border-color));
+}
+
+.ai-settings-title-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ai-settings-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-color);
+    letter-spacing: 0.01em;
+}
+
+.ai-settings-caption {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
 .ai-provider-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .ai-provider-item {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 14px;
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid color-mix(in srgb, var(--border-color) 88%, transparent);
-    background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+    gap: 16px;
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--border-color) 86%, transparent);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, white 48%, transparent) 0%, transparent 100%),
+        color-mix(in srgb, var(--card-bg) 94%, transparent);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    transition: transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
+}
+
+.ai-provider-item:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--primary-color) 18%, var(--border-color));
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
 }
 
 .ai-provider-item.is-disabled {
-    opacity: 0.72;
+    opacity: 0.68;
+    box-shadow: none;
 }
 
 .ai-provider-meta {
@@ -2211,14 +2256,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .ai-provider-icon {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--primary-color) 11%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 12%, transparent);
     flex: 0 0 auto;
 }
 
@@ -2246,27 +2292,38 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-radius: 999px;
     font-size: 11px;
     line-height: 1.4;
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    background: color-mix(in srgb, var(--primary-color) 9%, transparent);
     color: var(--text-secondary);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 10%, transparent);
 }
 
 .ai-provider-default-tag {
     color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 13%, transparent);
 }
 
 .ai-provider-url {
     font-size: 12px;
     color: var(--text-secondary);
     word-break: break-all;
+    line-height: 1.55;
 }
 
 .ai-provider-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.ai-provider-actions-main,
+.ai-provider-actions-secondary {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 8px;
-    flex: 0 0 auto;
 }
 
 .ai-provider-switch {
@@ -2275,25 +2332,44 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     gap: 6px;
     font-size: 12px;
     color: var(--text-secondary);
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--card-bg) 95%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) 92%, transparent);
+}
+
+.ai-provider-switch input {
+    accent-color: var(--primary-color);
 }
 
 .ai-provider-action-btn {
     border: 1px solid color-mix(in srgb, var(--border-color) 92%, transparent);
-    background: transparent;
+    background: color-mix(in srgb, var(--card-bg) 94%, transparent);
     color: var(--text-color);
-    border-radius: 10px;
-    padding: 6px 10px;
+    border-radius: 999px;
+    min-height: 34px;
+    padding: 6px 12px;
     font: inherit;
+    font-size: 12px;
+    font-weight: 560;
     cursor: pointer;
     transition: background-color var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard);
+        color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .ai-provider-action-btn:hover:not(:disabled) {
     background: color-mix(in srgb, var(--primary-color) 10%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 24%, transparent);
     color: var(--primary-color);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.ai-provider-action-btn-primary {
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 18%, transparent);
 }
 
 .ai-provider-action-btn:disabled {
@@ -2309,16 +2385,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-form {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto;
-    gap: 10px;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.35fr) auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.ai-provider-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ai-provider-form-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
 .ai-provider-empty {
-    padding: 16px;
-    border-radius: 14px;
+    padding: 18px;
+    border-radius: 16px;
     border: 1px dashed color-mix(in srgb, var(--border-color) 88%, transparent);
     color: var(--text-secondary);
     text-align: center;
+    background: color-mix(in srgb, var(--card-bg) 94%, transparent);
 }
 
 /* Unified Input Styles (Modal Only) */
@@ -3109,7 +3201,17 @@ body.ai-sidebar-open #ai-sidebar-btn {
     }
 
     .ai-provider-actions {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .ai-provider-actions-main,
+    .ai-provider-actions-secondary {
         justify-content: flex-start;
+    }
+
+    .ai-settings-intro {
+        align-items: flex-start;
     }
 
     .search-wrapper {

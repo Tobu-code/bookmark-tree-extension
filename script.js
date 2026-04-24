@@ -2582,14 +2582,18 @@ function initSettingsUI(settings) {
                         </div>
                     </div>
                     <div class="ai-provider-actions">
-                        <label class="ai-provider-switch">
-                            <input type="checkbox" data-action="toggle" ${disabled ? '' : 'checked'}>
-                            <span>${disabled ? '已停用' : '已启用'}</span>
-                        </label>
-                        <button type="button" class="ai-provider-action-btn" data-action="default" ${isSelected ? 'disabled' : ''}>设为默认</button>
-                        <button type="button" class="ai-provider-action-btn" data-action="move-up" ${index === 0 ? 'disabled' : ''}>上移</button>
-                        <button type="button" class="ai-provider-action-btn" data-action="move-down" ${index === aiSettingsState.length - 1 ? 'disabled' : ''}>下移</button>
-                        ${provider.builtIn ? '' : '<button type="button" class="ai-provider-action-btn ai-provider-action-btn-danger" data-action="remove">删除</button>'}
+                        <div class="ai-provider-actions-main">
+                            <label class="ai-provider-switch">
+                                <input type="checkbox" data-action="toggle" ${disabled ? '' : 'checked'}>
+                                <span>${disabled ? '已停用' : '已启用'}</span>
+                            </label>
+                            <button type="button" class="ai-provider-action-btn ai-provider-action-btn-primary" data-action="default" ${isSelected ? 'disabled' : ''}>设为默认</button>
+                        </div>
+                        <div class="ai-provider-actions-secondary">
+                            <button type="button" class="ai-provider-action-btn" data-action="move-up" ${index === 0 ? 'disabled' : ''}>上移</button>
+                            <button type="button" class="ai-provider-action-btn" data-action="move-down" ${index === aiSettingsState.length - 1 ? 'disabled' : ''}>下移</button>
+                            ${provider.builtIn ? '' : '<button type="button" class="ai-provider-action-btn ai-provider-action-btn-danger" data-action="remove">删除</button>'}
+                        </div>
                     </div>
                 </div>
             `;

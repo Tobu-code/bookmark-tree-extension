@@ -237,13 +237,25 @@
             <div class="setting-item">
                 <label>AI 侧边栏</label>
                 <div class="settings-stack settings-stack-md">
+                    <div class="ai-settings-intro">
+                        <div class="ai-settings-title-row">
+                            <span class="ai-settings-title">AI 服务管理</span>
+                            <span class="ai-settings-caption">支持预置与自定义站点</span>
+                        </div>
+                    </div>
                     <div class="settings-helper-copy">
                         可配置启用项、默认项与排序；自定义 AI 站点首次启用时会申请站点权限。
                     </div>
                     <div id="ai-provider-list" class="ai-provider-list" aria-live="polite"></div>
                     <div class="ai-provider-form">
+                        <div class="ai-provider-form-field">
+                            <span class="ai-provider-form-label">名称</span>
                         <input type="text" id="ai-provider-name" placeholder="AI 名称，如 DeepSeek" maxlength="24" autocomplete="off">
+                        </div>
+                        <div class="ai-provider-form-field">
+                            <span class="ai-provider-form-label">网址</span>
                         <input type="url" id="ai-provider-url" placeholder="https://deepseek.com/chat" autocomplete="off">
+                        </div>
                         <button id="ai-provider-add" type="button" class="confirm-btn confirm-btn-primary">添加 AI</button>
                     </div>
                     <div class="settings-helper-copy settings-helper-copy-sm">

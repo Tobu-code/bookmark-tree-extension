@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 17:38:54 +0800
+- **Type**: Refactor (AI Settings Panel Polish)
+- **Content**: 对设置弹窗中的 AI 配置区做一轮精修：补充“AI 服务管理”信息头，优化自定义 AI 表单层级与字段标题；同时重构 AI 服务卡片的主次操作区、标签徽标、启用开关与按钮形态，统一圆角、间距和 hover 阴影，小屏下也保持更稳定的纵向排版与按钮对齐。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 17:07:28 +0800
 - **Type**: Feature (Configurable AI Sidebar)
 - **Content**: 将 AI 侧边栏从硬编码入口改为配置驱动：新增 DeepSeek 预置项，设置弹窗支持启用/停用、默认项、排序和自定义 AI 网站新增；同步接入运行时站点权限与动态 DNR 规则，使后续新增 AI 站点无需继续改源码，若目标站点无法嵌入则自动回退为弹窗打开。
