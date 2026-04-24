@@ -2044,8 +2044,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     -webkit-backdrop-filter: blur(40px);
     color: var(--modal-text);
     padding: 32px;
-    width: 420px;
-    max-width: 90vw;
+    width: min(760px, 92vw);
+    max-width: 92vw;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -3272,6 +3272,12 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .modal-content {
+        width: min(680px, 94vw);
+        max-width: 94vw;
+        padding: 26px 22px;
+    }
+
     .ai-sidebar {
         width: 100%;
     }
@@ -3313,6 +3319,13 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 /* Responsive adjustments */
 @media (max-width: 500px) {
+    .modal-content {
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+        padding: 22px 18px;
+        border-radius: 22px;
+    }
+
     .ai-sidebar {
         width: 100%;
     }
