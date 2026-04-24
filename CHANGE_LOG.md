@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-04-24]
+- **Time**: 2026-04-24 17:07:28 +0800
+- **Type**: Feature (Configurable AI Sidebar)
+- **Content**: 将 AI 侧边栏从硬编码入口改为配置驱动：新增 DeepSeek 预置项，设置弹窗支持启用/停用、默认项、排序和自定义 AI 网站新增；同步接入运行时站点权限与动态 DNR 规则，使后续新增 AI 站点无需继续改源码，若目标站点无法嵌入则自动回退为弹窗打开。
+- **Impact**: `manifest.json`、`newtab.html`、`rules.json`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
 ## [2026-03-26]
 - **Time**: 2026-03-26 17:21:06 +0800
 - **Type**: Refactor (Flat Directory Width Fine-tune)

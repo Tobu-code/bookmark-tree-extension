@@ -96,75 +96,7 @@
     <!-- AI Sidebar -->
     <div id="ai-sidebar" class="ai-sidebar hidden">
         <div class="ai-sidebar-header">
-            <div class="ai-tabs">
-                <button type="button" class="ai-tab active" draggable="true" data-ai="google"
-                    data-url="https://www.google.com/search?udm=50&aep=11" data-name="Google" title="Google">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24">
-                            <path
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                fill="#34A853" />
-                            <path
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                fill="#EA4335" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Google</span>
-                </button>
-                <button type="button" class="ai-tab" draggable="true" data-ai="chatgpt" data-url="https://chatgpt.com/"
-                    data-name="ChatGPT" title="ChatGPT">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10a37f">
-                            <path
-                                d="M22.28 7.53c-.52-1.99-1.95-3.56-3.88-4.12-1.93-.56-4.04-.13-5.59 1.13-1.55-1.26-3.66-1.69-5.59-1.13-1.93.56-3.36 2.13-3.88 4.12-.52 1.99-.09 4.12 1.15 5.68-.42.34-.8.74-1.12 1.19-1.32 1.87-1.5 4.28-.48 6.32 1.02 2.04 3.12 3.34 5.38 3.34.8 0 1.6-.17 2.34-.49 1.55 1.26 3.66 1.69 5.59 1.13-1.93-.56-3.36-2.13 3.88-4.12.52-1.99.09-4.12-1.15-5.68 1.24-1.56 1.67-3.69 1.15-5.68z" />
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">ChatGPT</span>
-                </button>
-                <button type="button" class="ai-tab" draggable="true" data-ai="qwen" data-url="https://chat.qwen.ai/" data-name="通义千问"
-                    title="通义千问">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                            <path
-                                d="M12 3a9 9 0 1 0 6.6 15.1l2.18 2.18a1 1 0 0 0 1.41-1.41l-2.18-2.18A9 9 0 0 0 12 3zm0 2a7 7 0 1 1-4.95 11.95A7 7 0 0 1 12 5z"
-                                fill="#6B46FF"></path>
-                            <circle cx="12" cy="12" r="2.6" fill="#6B46FF"></circle>
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">通义千问</span>
-                </button>
-                <button type="button" class="ai-tab" draggable="true" data-ai="doubao" data-url="https://www.doubao.com/chat/"
-                    data-name="豆包" title="豆包">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                            <path
-                                d="M8.2 4.8a7.8 7.8 0 0 1 7.6 0 7.4 7.4 0 0 1 3.6 6.5 7.4 7.4 0 0 1-3.6 6.5 7.8 7.8 0 0 1-7.6 0 7.4 7.4 0 0 1-3.6-6.5 7.4 7.4 0 0 1 3.6-6.5z"
-                                fill="#3D7EFF"></path>
-                            <circle cx="9" cy="11" r="1.2" fill="white"></circle>
-                            <circle cx="15" cy="11" r="1.2" fill="white"></circle>
-                            <path d="M8.8 14.3c.8.8 1.9 1.2 3.2 1.2s2.4-.4 3.2-1.2" stroke="white" stroke-width="1.4"
-                                stroke-linecap="round"></path>
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">豆包</span>
-                </button>
-                <button type="button" class="ai-tab" draggable="true" data-ai="kimi" data-url="https://kimi.moonshot.cn/"
-                    data-name="Kimi" title="Kimi">
-                    <span class="ai-tab-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10" fill="#0066FF"></circle>
-                            <path d="M12 6v12M6 12h12" stroke="white" stroke-width="2" stroke-linecap="round"></path>
-                        </svg>
-                    </span>
-                    <span class="ai-tab-name">Kimi</span>
-                </button>
-            </div>
+            <div id="ai-tabs" class="ai-tabs" aria-label="AI 服务列表"></div>
             <div class="ai-sidebar-actions">
                 <button id="ai-open-new-window" class="ai-action-btn" title="在新窗口打开">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -180,19 +112,7 @@
                 </button>
             </div>
         </div>
-        <div class="ai-sidebar-content">
-            <!-- Multiple iframes for state preservation -->
-            <iframe id="ai-iframe-google" class="ai-iframe active" data-ai="google" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-chatgpt" class="ai-iframe" data-ai="chatgpt" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-doubao" class="ai-iframe" data-ai="doubao" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-qwen" class="ai-iframe" data-ai="qwen" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-            <iframe id="ai-iframe-kimi" class="ai-iframe" data-ai="kimi" frameborder="0"
-                allow="clipboard-read; clipboard-write; compute-pressure"></iframe>
-
+        <div id="ai-sidebar-content" class="ai-sidebar-content">
             <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
                 <div class="ai-placeholder-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.9"
@@ -311,6 +231,24 @@
                         <span id="hover-delay-value" class="settings-range-value">300ms</span>
                     </div>
                     <input type="range" id="hover-delay" min="0" max="1100" step="100" value="300">
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label>AI 侧边栏</label>
+                <div class="settings-stack settings-stack-md">
+                    <div class="settings-helper-copy">
+                        可配置启用项、默认项与排序；自定义 AI 站点首次启用时会申请站点权限。
+                    </div>
+                    <div id="ai-provider-list" class="ai-provider-list" aria-live="polite"></div>
+                    <div class="ai-provider-form">
+                        <input type="text" id="ai-provider-name" placeholder="AI 名称，如 DeepSeek" maxlength="24" autocomplete="off">
+                        <input type="url" id="ai-provider-url" placeholder="https://deepseek.com/chat" autocomplete="off">
+                        <button id="ai-provider-add" type="button" class="confirm-btn confirm-btn-primary">添加 AI</button>
+                    </div>
+                    <div class="settings-helper-copy settings-helper-copy-sm">
+                        侧边栏只负责展示网站本身，不做页面适配；若嵌入失败，会自动回退为弹窗打开。
+                    </div>
                 </div>
             </div>
 

@@ -6,6 +6,7 @@
   "permissions": [
     "bookmarks",
     "storage",
+    "permissions",
     "declarativeNetRequest",
     "favicon"
   ],
@@ -20,7 +21,13 @@
     "*://*.chatgpt.com/*",
     "*://*.openai.com/*",
     "*://*.chat.qwen.ai/*",
-    "*://*.doubao.com/*"
+    "*://*.doubao.com/*",
+    "*://*.kimi.moonshot.cn/*",
+    "*://deepseek.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

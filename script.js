@@ -10,12 +10,68 @@ const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const STORAGE_KEY_FLAT_DIRECTORY_ORDER = 'flat_directory_order';
+const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
+const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
+const STORAGE_KEY_AI_CONFIG = 'bookmark_tree_ai_config_v2';
 const LEGACY_FREQUENCY_STORAGE_KEYS = [
     'frequent_bookmarks_data',
     'settings_frequent_enabled',
     'settings_auto_sort_by_frequency',
     'folder_frequency_data'
 ];
+const AI_DYNAMIC_RULE_START = 1000;
+const AI_DYNAMIC_RULE_END = 1499;
+const BUILTIN_AI_PROVIDERS = Object.freeze([
+    {
+        id: 'google',
+        name: 'Google',
+        url: 'https://www.google.com/search?udm=50&aep=11',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path></svg>'
+    },
+    {
+        id: 'chatgpt',
+        name: 'ChatGPT',
+        url: 'https://chatgpt.com/',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="#10a37f"><path d="M22.28 7.53c-.52-1.99-1.95-3.56-3.88-4.12-1.93-.56-4.04-.13-5.59 1.13-1.55-1.26-3.66-1.69-5.59-1.13-1.93.56-3.36 2.13-3.88 4.12-.52 1.99-.09 4.12 1.15 5.68-.42.34-.8.74-1.12 1.19-1.32 1.87-1.5 4.28-.48 6.32 1.02 2.04 3.12 3.34 5.38 3.34.8 0 1.6-.17 2.34-.49 1.55 1.26 3.66 1.69 5.59 1.13 1.93-.56 3.36-2.13 3.88-4.12.52-1.99.09-4.12-1.15-5.68 1.24-1.56 1.67-3.69 1.15-5.68z"></path></svg>'
+    },
+    {
+        id: 'qwen',
+        name: '通义千问',
+        url: 'https://chat.qwen.ai/',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 6.6 15.1l2.18 2.18a1 1 0 0 0 1.41-1.41l-2.18-2.18A9 9 0 0 0 12 3zm0 2a7 7 0 1 1-4.95 11.95A7 7 0 0 1 12 5z" fill="#6B46FF"></path><circle cx="12" cy="12" r="2.6" fill="#6B46FF"></circle></svg>'
+    },
+    {
+        id: 'doubao',
+        name: '豆包',
+        url: 'https://www.doubao.com/chat/',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 4.8a7.8 7.8 0 0 1 7.6 0 7.4 7.4 0 0 1 3.6 6.5 7.4 7.4 0 0 1-3.6 6.5 7.8 7.8 0 0 1-7.6 0 7.4 7.4 0 0 1-3.6-6.5 7.4 7.4 0 0 1 3.6-6.5z" fill="#3D7EFF"></path><circle cx="9" cy="11" r="1.2" fill="white"></circle><circle cx="15" cy="11" r="1.2" fill="white"></circle><path d="M8.8 14.3c.8.8 1.9 1.2 3.2 1.2s2.4-.4 3.2-1.2" stroke="white" stroke-width="1.4" stroke-linecap="round"></path></svg>'
+    },
+    {
+        id: 'kimi',
+        name: 'Kimi',
+        url: 'https://kimi.moonshot.cn/',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0066FF"></circle><path d="M12 6v12M6 12h12" stroke="white" stroke-width="2" stroke-linecap="round"></path></svg>'
+    },
+    {
+        id: 'deepseek',
+        name: 'DeepSeek',
+        url: 'https://deepseek.com/chat',
+        enabled: true,
+        builtIn: true,
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#395BFF"></circle><path d="M8 8.2h5.1a3.7 3.7 0 0 1 0 7.4H8z" fill="white"></path><path d="M12.2 12h4.1" stroke="white" stroke-width="1.8" stroke-linecap="round"></path></svg>'
+    }
+]);
+const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
 
 // --- State and Constants ---
 let dragSrcEl = null;
@@ -36,6 +92,240 @@ let BOOKMARK_SEARCH_INDEX = [];
 let BOOKMARK_SEARCH_BUCKETS = new Map();
 let AI_SIDEBAR_CONTROLLER = null;
 let LAYOUT_SWITCH_TIMER = null;
+
+function storageGet(keys) {
+    return new Promise((resolve) => chrome.storage.local.get(keys, resolve));
+}
+
+function storageSet(payload) {
+    return new Promise((resolve) => chrome.storage.local.set(payload, resolve));
+}
+
+function getDynamicRules() {
+    return new Promise((resolve) => chrome.declarativeNetRequest.getDynamicRules(resolve));
+}
+
+function updateDynamicRules(options) {
+    return new Promise((resolve, reject) => {
+        chrome.declarativeNetRequest.updateDynamicRules(options, () => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError.message));
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
+function cloneAiProvider(provider) {
+    return { ...provider };
+}
+
+function getBuiltinAiProviders() {
+    return BUILTIN_AI_PROVIDERS.map(cloneAiProvider);
+}
+
+function sanitizeAiName(name) {
+    return String(name || '').trim().replace(/\s+/g, ' ').slice(0, 24);
+}
+
+function normalizeAiUrl(rawUrl) {
+    const input = String(rawUrl || '').trim();
+    if (!input) return null;
+
+    try {
+        const candidate = /^https?:\/\//i.test(input) ? input : `https://${input}`;
+        const url = new URL(candidate);
+        if (!['http:', 'https:'].includes(url.protocol)) return null;
+        url.hash = '';
+        return url.toString();
+    } catch (error) {
+        return null;
+    }
+}
+
+function createCustomAiId(name, url) {
+    const seed = `${name}-${url}-${Date.now()}`;
+    const slug = seed
+        .toLowerCase()
+        .replace(/https?:\/\//g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 32);
+    return `custom-${slug || 'ai'}`;
+}
+
+function serializeAiProvider(provider) {
+    const payload = {
+        id: provider.id,
+        name: provider.name,
+        url: provider.url,
+        enabled: provider.enabled !== false,
+        builtIn: !!provider.builtIn
+    };
+    if (!provider.builtIn) {
+        payload.icon = provider.icon || '';
+    }
+    return payload;
+}
+
+function sanitizeCustomAiProvider(rawProvider) {
+    if (!rawProvider || BUILTIN_AI_PROVIDER_MAP.has(rawProvider.id)) return null;
+    const name = sanitizeAiName(rawProvider.name);
+    const url = normalizeAiUrl(rawProvider.url);
+    if (!name || !url) return null;
+
+    return {
+        id: String(rawProvider.id || createCustomAiId(name, url)),
+        name,
+        url,
+        enabled: rawProvider.enabled !== false,
+        builtIn: false,
+        icon: rawProvider.icon || '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.22"></circle><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>'
+    };
+}
+
+function normalizeAiProviders(rawProviders, legacyOrder) {
+    const builtins = getBuiltinAiProviders();
+    const ordered = [];
+    const seen = new Set();
+
+    const pushProvider = (provider) => {
+        if (!provider || !provider.id || seen.has(provider.id)) return;
+        ordered.push(provider);
+        seen.add(provider.id);
+    };
+
+    if (Array.isArray(rawProviders) && rawProviders.length) {
+        rawProviders.forEach((item) => {
+            if (BUILTIN_AI_PROVIDER_MAP.has(item?.id)) {
+                const builtin = cloneAiProvider(BUILTIN_AI_PROVIDER_MAP.get(item.id));
+                builtin.enabled = item.enabled !== false;
+                pushProvider(builtin);
+                return;
+            }
+
+            pushProvider(sanitizeCustomAiProvider(item));
+        });
+    } else if (Array.isArray(legacyOrder) && legacyOrder.length) {
+        const builtinById = new Map(builtins.map((provider) => [provider.id, provider]));
+        legacyOrder.forEach((id) => {
+            if (builtinById.has(id)) {
+                pushProvider(cloneAiProvider(builtinById.get(id)));
+                builtinById.delete(id);
+            }
+        });
+    }
+
+    builtins.forEach((provider) => pushProvider(cloneAiProvider(provider)));
+    return ordered;
+}
+
+function findAiProviderById(providers, providerId) {
+    return providers.find((provider) => provider.id === providerId) || null;
+}
+
+function getFirstEnabledAiProvider(providers) {
+    return providers.find((provider) => provider.enabled !== false) || providers[0] || null;
+}
+
+async function loadAiPreferences() {
+    const stored = await storageGet([STORAGE_KEY_AI_CONFIG, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI]);
+    const providers = normalizeAiProviders(stored[STORAGE_KEY_AI_CONFIG], stored[STORAGE_KEY_AI_ORDER]);
+    const selectedId = stored[STORAGE_KEY_AI]?.id;
+    const selectedProvider = findAiProviderById(providers, selectedId);
+    const activeProvider = selectedProvider?.enabled !== false ? selectedProvider : getFirstEnabledAiProvider(providers);
+
+    return {
+        providers,
+        selectedId: activeProvider?.id || null
+    };
+}
+
+async function persistAiProviders(providers) {
+    const normalizedProviders = normalizeAiProviders(providers);
+    await storageSet({
+        [STORAGE_KEY_AI_CONFIG]: normalizedProviders.map(serializeAiProvider),
+        [STORAGE_KEY_AI_ORDER]: normalizedProviders.map((provider) => provider.id)
+    });
+    return normalizedProviders;
+}
+
+async function persistSelectedAi(provider) {
+    if (!provider) return;
+    await storageSet({
+        [STORAGE_KEY_AI]: {
+            id: provider.id,
+            name: provider.name,
+            url: provider.url
+        }
+    });
+}
+
+function getAiOriginPattern(urlString) {
+    const url = new URL(urlString);
+    return `${url.origin}/*`;
+}
+
+function buildDynamicAiRule(ruleId, provider) {
+    const url = new URL(provider.url);
+
+    return {
+        id: ruleId,
+        priority: 1,
+        action: {
+            type: 'modifyHeaders',
+            responseHeaders: [
+                { header: 'X-Frame-Options', operation: 'remove' },
+                { header: 'Content-Security-Policy', operation: 'remove' },
+                { header: 'Content-Security-Policy-Report-Only', operation: 'remove' },
+                { header: 'Cross-Origin-Opener-Policy', operation: 'remove' },
+                { header: 'Cross-Origin-Embedder-Policy', operation: 'remove' },
+                { header: 'Cross-Origin-Resource-Policy', operation: 'remove' },
+                { header: 'Access-Control-Allow-Origin', operation: 'set', value: '*' }
+            ]
+        },
+        condition: {
+            urlFilter: `${url.origin}/*`,
+            resourceTypes: ['sub_frame', 'xmlhttprequest', 'script', 'image', 'font', 'stylesheet']
+        }
+    };
+}
+
+async function syncDynamicAiRules(providers) {
+    const dynamicProviders = providers
+        .filter((provider) => !provider.builtIn && provider.enabled !== false)
+        .slice(0, AI_DYNAMIC_RULE_END - AI_DYNAMIC_RULE_START + 1);
+
+    const existingRules = await getDynamicRules();
+    const managedRuleIds = existingRules
+        .filter((rule) => rule.id >= AI_DYNAMIC_RULE_START && rule.id <= AI_DYNAMIC_RULE_END)
+        .map((rule) => rule.id);
+
+    const newRules = dynamicProviders.map((provider, index) => buildDynamicAiRule(AI_DYNAMIC_RULE_START + index, provider));
+
+    await updateDynamicRules({
+        removeRuleIds: managedRuleIds,
+        addRules: newRules
+    });
+}
+
+function requestAiOriginPermission(urlString) {
+    return new Promise((resolve) => {
+        chrome.permissions.request({ origins: [getAiOriginPattern(urlString)] }, (granted) => {
+            resolve(Boolean(granted));
+        });
+    });
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 function buildBookmarkSearchIndex(bookmarkTreeNodes) {
     const entries = [];
@@ -279,7 +569,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_FLAT_DIRECTORY_ORDER
+            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_FLAT_DIRECTORY_ORDER,
+            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
         ]),
         getBookmarks()
     ]);
@@ -2224,6 +2515,208 @@ function initSettingsUI(settings) {
         });
     }
 
+    const aiProviderList = document.getElementById('ai-provider-list');
+    const aiProviderNameInput = document.getElementById('ai-provider-name');
+    const aiProviderUrlInput = document.getElementById('ai-provider-url');
+    const aiProviderAddBtn = document.getElementById('ai-provider-add');
+    let aiSettingsState = normalizeAiProviders(settings[STORAGE_KEY_AI_CONFIG], settings[STORAGE_KEY_AI_ORDER]);
+    let aiSelectedId = settings[STORAGE_KEY_AI]?.id || getFirstEnabledAiProvider(aiSettingsState)?.id || null;
+
+    function getEnabledAiCount() {
+        return aiSettingsState.filter((provider) => provider.enabled !== false).length;
+    }
+
+    function ensureSelectedAi() {
+        const selected = findAiProviderById(aiSettingsState, aiSelectedId);
+        if (selected && selected.enabled !== false) return;
+        aiSelectedId = getFirstEnabledAiProvider(aiSettingsState)?.id || null;
+    }
+
+    function notifyAiSidebarRefresh() {
+        if (AI_SIDEBAR_CONTROLLER?.refresh) {
+            AI_SIDEBAR_CONTROLLER.refresh();
+        }
+    }
+
+    async function commitAiSettings() {
+        aiSettingsState = await persistAiProviders(aiSettingsState);
+        ensureSelectedAi();
+        const selectedProvider = findAiProviderById(aiSettingsState, aiSelectedId) || getFirstEnabledAiProvider(aiSettingsState);
+        if (selectedProvider) {
+            aiSelectedId = selectedProvider.id;
+            await persistSelectedAi(selectedProvider);
+        }
+        try {
+            await syncDynamicAiRules(aiSettingsState);
+        } catch (error) {
+            console.error('Failed to sync AI dynamic rules:', error);
+            alert('AI 站点规则同步失败，侧边栏可能只能通过弹窗打开。');
+        }
+        renderAiProviderList();
+        notifyAiSidebarRefresh();
+    }
+
+    function renderAiProviderList() {
+        if (!aiProviderList) return;
+        ensureSelectedAi();
+
+        if (!aiSettingsState.length) {
+            aiProviderList.innerHTML = '<div class="ai-provider-empty">暂无可用 AI 服务</div>';
+            return;
+        }
+
+        aiProviderList.innerHTML = aiSettingsState.map((provider, index) => {
+            const disabled = provider.enabled === false;
+            const isSelected = provider.id === aiSelectedId;
+            return `
+                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
+                    <div class="ai-provider-meta">
+                        <span class="ai-provider-icon">${provider.icon || ''}</span>
+                        <div class="ai-provider-copy">
+                            <div class="ai-provider-title-row">
+                                <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
+                                <span class="ai-provider-badge">${provider.builtIn ? '预置' : '自定义'}</span>
+                                ${isSelected ? '<span class="ai-provider-default-tag">默认</span>' : ''}
+                            </div>
+                            <div class="ai-provider-url">${escapeHtml(provider.url)}</div>
+                        </div>
+                    </div>
+                    <div class="ai-provider-actions">
+                        <label class="ai-provider-switch">
+                            <input type="checkbox" data-action="toggle" ${disabled ? '' : 'checked'}>
+                            <span>${disabled ? '已停用' : '已启用'}</span>
+                        </label>
+                        <button type="button" class="ai-provider-action-btn" data-action="default" ${isSelected ? 'disabled' : ''}>设为默认</button>
+                        <button type="button" class="ai-provider-action-btn" data-action="move-up" ${index === 0 ? 'disabled' : ''}>上移</button>
+                        <button type="button" class="ai-provider-action-btn" data-action="move-down" ${index === aiSettingsState.length - 1 ? 'disabled' : ''}>下移</button>
+                        ${provider.builtIn ? '' : '<button type="button" class="ai-provider-action-btn ai-provider-action-btn-danger" data-action="remove">删除</button>'}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function moveAiProvider(providerId, delta) {
+        const currentIndex = aiSettingsState.findIndex((provider) => provider.id === providerId);
+        const targetIndex = currentIndex + delta;
+        if (currentIndex < 0 || targetIndex < 0 || targetIndex >= aiSettingsState.length) return;
+        const [provider] = aiSettingsState.splice(currentIndex, 1);
+        aiSettingsState.splice(targetIndex, 0, provider);
+        await commitAiSettings();
+    }
+
+    if (aiProviderList) {
+        aiProviderList.addEventListener('click', async (event) => {
+            const actionTarget = event.target.closest('[data-action]');
+            if (!actionTarget) return;
+
+            const item = actionTarget.closest('[data-ai-id]');
+            if (!item) return;
+
+            const providerId = item.dataset.aiId;
+            const provider = findAiProviderById(aiSettingsState, providerId);
+            if (!provider) return;
+
+            const action = actionTarget.dataset.action;
+            if (action === 'default') {
+                aiSelectedId = provider.id;
+                await commitAiSettings();
+                return;
+            }
+
+            if (action === 'move-up') {
+                await moveAiProvider(providerId, -1);
+                return;
+            }
+
+            if (action === 'move-down') {
+                await moveAiProvider(providerId, 1);
+                return;
+            }
+
+            if (action === 'remove' && !provider.builtIn) {
+                aiSettingsState = aiSettingsState.filter((entry) => entry.id !== providerId);
+                if (aiSelectedId === providerId) {
+                    aiSelectedId = getFirstEnabledAiProvider(aiSettingsState)?.id || null;
+                }
+                await commitAiSettings();
+            }
+        });
+
+        aiProviderList.addEventListener('change', async (event) => {
+            const toggle = event.target.closest('input[data-action="toggle"]');
+            if (!toggle) return;
+
+            const item = toggle.closest('[data-ai-id]');
+            if (!item) return;
+
+            const provider = findAiProviderById(aiSettingsState, item.dataset.aiId);
+            if (!provider) return;
+
+            const enable = toggle.checked;
+            if (!enable && getEnabledAiCount() <= 1 && provider.enabled !== false) {
+                toggle.checked = true;
+                alert('至少保留一个启用中的 AI 服务。');
+                return;
+            }
+
+            if (enable && !provider.builtIn) {
+                const granted = await requestAiOriginPermission(provider.url);
+                if (!granted) {
+                    toggle.checked = false;
+                    alert('未获得站点权限，已保留为停用状态。');
+                    return;
+                }
+            }
+
+            provider.enabled = enable;
+            if (!enable && aiSelectedId === provider.id) {
+                aiSelectedId = getFirstEnabledAiProvider(aiSettingsState.filter((entry) => entry.id !== provider.id).concat([{ ...provider, enabled: false }]))?.id || null;
+            }
+            await commitAiSettings();
+        });
+    }
+
+    if (aiProviderAddBtn && aiProviderNameInput && aiProviderUrlInput) {
+        aiProviderAddBtn.addEventListener('click', async () => {
+            const name = sanitizeAiName(aiProviderNameInput.value);
+            const url = normalizeAiUrl(aiProviderUrlInput.value);
+
+            if (!name || !url) {
+                alert('请输入有效的 AI 名称和网址。');
+                return;
+            }
+
+            const granted = await requestAiOriginPermission(url);
+            const provider = sanitizeCustomAiProvider({
+                id: createCustomAiId(name, url),
+                name,
+                url,
+                enabled: granted
+            });
+
+            if (!provider) {
+                alert('AI 配置无效，请检查后重试。');
+                return;
+            }
+
+            aiSettingsState.push(provider);
+            if (!aiSelectedId || getEnabledAiCount() === 0) {
+                aiSelectedId = provider.id;
+            }
+
+            await commitAiSettings();
+            aiProviderNameInput.value = '';
+            aiProviderUrlInput.value = '';
+
+            if (!granted) {
+                alert('站点已添加，但因未授权访问，当前保持停用状态。');
+            }
+        });
+    }
+
+    renderAiProviderList();
+
     btn.onclick = () => modal.classList.remove('hidden');
     close.onclick = () => modal.classList.add('hidden');
     window.onclick = (event) => {
@@ -2552,42 +3045,193 @@ function initAiSidebar() {
     const openNewWindowBtn = document.getElementById('ai-open-new-window');
     const openFallbackBtn = document.getElementById('ai-open-ai');
     const fallback = document.getElementById('ai-iframe-fallback');
-    const aiTabs = document.querySelectorAll('.ai-tab');
-
-    // Get all iframes
-    const iframes = {
-        google: document.getElementById('ai-iframe-google'),
-        chatgpt: document.getElementById('ai-iframe-chatgpt'),
-        doubao: document.getElementById('ai-iframe-doubao'),
-        qwen: document.getElementById('ai-iframe-qwen'),
-        kimi: document.getElementById('ai-iframe-kimi')
-    };
-
-    // AI URLs mapping
-    const aiUrls = {
-        google: 'https://www.google.com/search?udm=50&aep=11',
-        chatgpt: 'https://chatgpt.com/',
-        doubao: 'https://www.doubao.com/chat/',
-        qwen: 'https://chat.qwen.ai/',
-        kimi: 'https://kimi.moonshot.cn/'
-    };
-
-    const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
-    const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
-
-    // Current AI state
-    let currentAi = {
-        id: 'google',
-        url: aiUrls.google,
-        name: 'Google'
-    };
-
-    // Track which iframes have been loaded
+    const tabsContainer = document.getElementById('ai-tabs');
+    const contentContainer = document.getElementById('ai-sidebar-content');
+    const fallbackTitle = fallback ? fallback.querySelector('p') : null;
+    const fallbackHint = fallback ? fallback.querySelector('.ai-placeholder-hint') : null;
+    const iframes = new Map();
     const loadedIframes = new Set();
-
-    // --- Drag and Drop Sorting for AI Tabs ---
-    const tabsContainer = document.querySelector('.ai-tabs');
+    let aiProviders = [];
+    let currentAiId = null;
     let draggedTab = null;
+
+    function getCurrentAi() {
+        return findAiProviderById(aiProviders, currentAiId) || getFirstEnabledAiProvider(aiProviders);
+    }
+
+    function buildAiTab(provider) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ai-tab';
+        button.draggable = true;
+        button.dataset.ai = provider.id;
+        button.dataset.url = provider.url;
+        button.dataset.name = provider.name;
+        button.title = provider.name;
+        button.innerHTML = `
+            <span class="ai-tab-icon">${provider.icon || ''}</span>
+            <span class="ai-tab-name">${escapeHtml(provider.name)}</span>
+        `;
+        return button;
+    }
+
+    function buildAiIframe(provider) {
+        const iframe = document.createElement('iframe');
+        iframe.id = `ai-iframe-${provider.id}`;
+        iframe.className = 'ai-iframe';
+        iframe.dataset.ai = provider.id;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'clipboard-read; clipboard-write; compute-pressure');
+        iframe.addEventListener('error', () => showFallback('无法直接嵌入 AI 网站', '安全策略阻止了嵌入，可改用新窗口打开。'));
+        return iframe;
+    }
+
+    function buildAiUrl(provider) {
+        let url = provider.url;
+        if (provider.id === 'google') {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+                (document.documentElement.getAttribute('data-theme') === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark && !url.includes('theme=1')) {
+                url += '&theme=1';
+            }
+        }
+        return url;
+    }
+
+    function showFallback(title, hint) {
+        const activeFrame = contentContainer.querySelector('.ai-iframe.active');
+        if (activeFrame) activeFrame.style.display = 'none';
+        if (fallbackTitle) fallbackTitle.textContent = title || '无法直接嵌入 AI 网站';
+        if (fallbackHint) fallbackHint.textContent = hint || '安全策略阻止了嵌入';
+        if (fallback) fallback.classList.remove('hidden');
+    }
+
+    function hideFallback() {
+        if (fallback) fallback.classList.add('hidden');
+    }
+
+    function updateActiveTab() {
+        tabsContainer.querySelectorAll('.ai-tab').forEach((tab) => {
+            const isActive = tab.dataset.ai === currentAiId;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+    }
+
+    function preloadIframe(provider) {
+        const iframe = iframes.get(provider.id);
+        if (!iframe || loadedIframes.has(provider.id)) return;
+
+        iframe.src = buildAiUrl(provider);
+        loadedIframes.add(provider.id);
+        iframe.style.display = '';
+
+        if (!iframe.dataset.loadBound) {
+            iframe.addEventListener('load', () => {
+                iframe.classList.add('loaded');
+            });
+            iframe.dataset.loadBound = 'true';
+        }
+    }
+
+    function unloadIframe(providerId) {
+        const iframe = iframes.get(providerId);
+        if (!iframe || !loadedIframes.has(providerId)) return;
+        iframe.classList.remove('active', 'loaded');
+        iframe.style.display = '';
+        iframe.src = 'about:blank';
+        loadedIframes.delete(providerId);
+    }
+
+    function switchToAi(aiId) {
+        const targetProvider = findAiProviderById(aiProviders, aiId);
+        if (!targetProvider || targetProvider.enabled === false) {
+            showFallback('当前没有可用的 AI 服务', '请在设置中启用至少一个 AI 站点。');
+            return;
+        }
+
+        currentAiId = aiId;
+        updateActiveTab();
+
+        iframes.forEach((iframe, id) => {
+            iframe.classList.remove('active');
+            if (id !== aiId) unloadIframe(id);
+        });
+
+        const targetIframe = iframes.get(aiId);
+        if (!targetIframe) {
+            showFallback('当前没有可用的 AI 服务', '请在设置中启用至少一个 AI 站点。');
+            return;
+        }
+
+        hideFallback();
+        targetIframe.classList.add('active');
+        targetIframe.style.display = '';
+
+        if (!loadedIframes.has(aiId)) {
+            preloadIframe(targetProvider);
+        }
+    }
+
+    async function selectAiById(aiId) {
+        const provider = findAiProviderById(aiProviders, aiId);
+        if (!provider || provider.enabled === false || aiId === currentAiId) return;
+        currentAiId = aiId;
+        await persistSelectedAi(provider);
+        switchToAi(aiId);
+    }
+
+    function renderAiSidebar() {
+        tabsContainer.innerHTML = '';
+        contentContainer.querySelectorAll('.ai-iframe').forEach((iframe) => iframe.remove());
+        iframes.clear();
+        loadedIframes.clear();
+
+        const enabledProviders = aiProviders.filter((provider) => provider.enabled !== false);
+        if (!enabledProviders.length) {
+            currentAiId = null;
+            showFallback('当前没有启用中的 AI 服务', '请先在设置里启用至少一个 AI 站点。');
+            return;
+        }
+
+        enabledProviders.forEach((provider) => {
+            const tab = buildAiTab(provider);
+            const iframe = buildAiIframe(provider);
+            tabsContainer.appendChild(tab);
+            contentContainer.insertBefore(iframe, fallback);
+            iframes.set(provider.id, iframe);
+        });
+
+        currentAiId = findAiProviderById(enabledProviders, currentAiId)?.id || enabledProviders[0].id;
+        updateActiveTab();
+        switchToAi(currentAiId);
+    }
+
+    async function loadAiState() {
+        const preference = await loadAiPreferences();
+        aiProviders = preference.providers;
+        currentAiId = preference.selectedId;
+        try {
+            await syncDynamicAiRules(aiProviders);
+        } catch (error) {
+            console.error('Failed to restore AI dynamic rules:', error);
+        }
+        renderAiSidebar();
+    }
+
+    async function persistAiTabOrder() {
+        const orderedIds = [...tabsContainer.querySelectorAll('.ai-tab')].map((tab) => tab.dataset.ai);
+        const orderedProviders = [];
+        orderedIds.forEach((id) => {
+            const provider = findAiProviderById(aiProviders, id);
+            if (provider) orderedProviders.push(provider);
+        });
+        aiProviders.forEach((provider) => {
+            if (!orderedIds.includes(provider.id)) orderedProviders.push(provider);
+        });
+        aiProviders = orderedProviders;
+        await persistAiProviders(aiProviders);
+    }
 
     function initAiTabSort() {
         tabsContainer.addEventListener('dragstart', (e) => {
@@ -2602,7 +3246,7 @@ function initAiSidebar() {
             if (e.target.classList.contains('ai-tab')) {
                 e.target.classList.remove('dragging');
                 draggedTab = null;
-                saveAiOrder();
+                persistAiTabOrder();
             }
         });
 
@@ -2630,146 +3274,9 @@ function initAiSidebar() {
                 }
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
-
-        function saveAiOrder() {
-            const currentOrder = [...tabsContainer.querySelectorAll('.ai-tab')].map(tab => tab.dataset.ai);
-            chrome.storage.local.set({ [STORAGE_KEY_AI_ORDER]: currentOrder });
-        }
-
-        function loadAiOrder() {
-            chrome.storage.local.get([STORAGE_KEY_AI_ORDER], (result) => {
-                const order = result[STORAGE_KEY_AI_ORDER];
-                const existingTabs = new Map();
-                tabsContainer.querySelectorAll('.ai-tab').forEach(tab => {
-                    existingTabs.set(tab.dataset.ai, tab);
-                });
-
-                if (order) {
-                    // Re-append in order
-                    order.forEach(aiId => {
-                        if (existingTabs.has(aiId)) {
-                            tabsContainer.appendChild(existingTabs.get(aiId));
-                            existingTabs.delete(aiId); // Mark as handled
-                        }
-                    });
-                }
-
-                // Any remaining tabs (e.g., newly added after order was saved)
-                // should also be appended to the end
-                existingTabs.forEach(tab => {
-                    tabsContainer.appendChild(tab);
-                });
-            });
-        }
-
-        loadAiOrder();
     }
 
     initAiTabSort();
-
-
-    // Load saved AI preference
-    function syncAiState() {
-        updateActiveTab();
-        switchToAi(currentAi.id);
-    }
-
-    chrome.storage.local.get([STORAGE_KEY_AI], (result) => {
-        if (result[STORAGE_KEY_AI]) {
-            const saved = result[STORAGE_KEY_AI];
-            if (saved?.id && aiUrls[saved.id]) {
-                currentAi = saved;
-            }
-        }
-        syncAiState();
-    });
-
-    function updateCurrentAiDisplay() {
-        // No-op: Functionality removed as icon is static, but kept to prevent ReferenceErrors from legacy calls
-    }
-
-    function updateActiveTab() {
-        // Re-query tabs as they might have been reordered in DOM
-        document.querySelectorAll('.ai-tab').forEach(tab => {
-            const isActive = tab.dataset.ai === currentAi.id;
-            tab.classList.toggle('active', isActive);
-            tab.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-        });
-    }
-
-    // Preload iframe for specific AI
-    function preloadIframe(aiId) {
-        const iframe = iframes[aiId];
-        if (iframe && !loadedIframes.has(aiId)) {
-            let url = aiUrls[aiId];
-
-            // Inject theme parameter for Google Search
-            if (aiId === 'google') {
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
-                    (document.documentElement.getAttribute('data-theme') === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                if (isDark) {
-                    url += '&theme=1'; // Basic dark theme hint for Google
-                }
-            }
-
-            iframe.src = url;
-            loadedIframes.add(aiId);
-            iframe.style.display = '';
-
-            if (!iframe.dataset.loadBound) {
-                iframe.addEventListener('load', () => {
-                    iframe.classList.add('loaded');
-                });
-                iframe.dataset.loadBound = 'true';
-            }
-        }
-    }
-
-    function unloadIframe(aiId) {
-        const iframe = iframes[aiId];
-        if (!iframe || !loadedIframes.has(aiId)) return;
-        iframe.classList.remove('active');
-        iframe.classList.remove('loaded');
-        iframe.style.display = '';
-        iframe.src = 'about:blank';
-        loadedIframes.delete(aiId);
-    }
-
-    // Switch between AI iframes
-    function switchToAi(aiId) {
-        Object.entries(iframes).forEach(([id, iframe]) => {
-            if (!iframe) return;
-            // Always clear stale active state, even if iframe was never loaded
-            iframe.classList.remove('active');
-            if (id !== aiId) unloadIframe(id);
-        });
-
-        const targetIframe = iframes[aiId];
-        if (targetIframe) {
-            targetIframe.classList.add('active');
-            if (fallback) fallback.classList.add('hidden');
-            targetIframe.style.display = '';
-            if (!loadedIframes.has(aiId)) {
-                preloadIframe(aiId);
-            }
-        }
-    }
-
-    function selectAi(tab) {
-        const newId = tab.dataset.ai;
-        if (newId === currentAi.id) return;
-
-        currentAi = {
-            id: newId,
-            url: tab.dataset.url,
-            icon: tab.dataset.icon,
-            name: tab.dataset.name
-        };
-
-        chrome.storage.local.set({ [STORAGE_KEY_AI]: currentAi });
-        updateActiveTab();
-        switchToAi(newId);
-    }
 
     function openSidebar() {
         document.body.classList.add('ai-sidebar-open');
@@ -2780,7 +3287,11 @@ function initAiSidebar() {
             sidebarOverlay.classList.add('active');
         });
 
-        switchToAi(currentAi.id);
+        if (!currentAiId) {
+            renderAiSidebar();
+        } else {
+            switchToAi(currentAiId);
+        }
     }
 
     function closeSidebar() {
@@ -2791,55 +3302,41 @@ function initAiSidebar() {
                 document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
-                unloadIframe(currentAi.id);
+                if (currentAiId) unloadIframe(currentAiId);
             }
         }, 400);
     }
 
     function openPopup() {
-        window.open(currentAi.url, 'AI_Window', 'width=800,height=900,left=100,top=100,resizable=yes,scrollbars=yes');
+        const provider = getCurrentAi();
+        if (!provider) return;
+        window.open(provider.url, 'AI_Window', 'width=800,height=900,left=100,top=100,resizable=yes,scrollbars=yes');
     }
 
-    function showFallback() {
-        const activeFrame = document.querySelector('.ai-iframe.active');
-        if (activeFrame) activeFrame.style.display = 'none';
-        if (fallback) fallback.classList.remove('hidden');
-    }
-
-    // AI tabs click
-    aiTabs.forEach(tab => {
-        tab.addEventListener('click', () => selectAi(tab));
+    tabsContainer.addEventListener('click', (event) => {
+        const tab = event.target.closest('.ai-tab');
+        if (!tab) return;
+        selectAiById(tab.dataset.ai);
     });
 
-    // Close button
     if (closeBtn) {
         closeBtn.addEventListener('click', closeSidebar);
     }
 
-    // Sidebar overlay click
     if (sidebarOverlay) {
         sidebarOverlay.addEventListener('click', closeSidebar);
     }
 
-    // Open in popup buttons
     if (openNewWindowBtn) openNewWindowBtn.addEventListener('click', openPopup);
     if (openFallbackBtn) openFallbackBtn.addEventListener('click', openPopup);
 
-    // Iframe error events for all iframes
-    Object.values(iframes).forEach(iframe => {
-        if (iframe) {
-            iframe.addEventListener('error', () => {
-                showFallback();
-            });
-        }
-    });
-
-    // ESC key to close
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && sidebar.classList.contains('active')) {
             closeSidebar();
         }
     });
+
+    loadAiState();
 
     return {
         toggle() {
@@ -2848,6 +3345,9 @@ function initAiSidebar() {
             } else {
                 openSidebar();
             }
+        },
+        refresh() {
+            return loadAiState();
         }
     };
 }
