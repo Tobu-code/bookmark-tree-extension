@@ -23,7 +23,7 @@
     "*://*.chat.qwen.ai/*",
     "*://*.doubao.com/*",
     "*://*.kimi.moonshot.cn/*",
-    "*://deepseek.com/*"
+    "*://*.deepseek.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

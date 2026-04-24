@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 17:53:52
+- **Type**: Fix
+- **Content**: 修复 DeepSeek 的默认对话网址，从 `https://deepseek.com/chat` 更新为官方推荐的 `https://chat.deepseek.com/`，并同步更新权限与网络请求规则。
+- **Impact**: `script.js`, `newtab.html`, `manifest.json`, `rules.json`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 17:51:14 +0800
 - **Type**: Refactor (AI Settings Drag Sort & Toast Feedback)
 - **Content**: 为设置弹窗中的 AI 配置区补充更顺滑的交互反馈：新增卡片拖拽句柄与拖拽排序高亮，保留上移/下移按钮作为兜底；同时引入底部轻提示 toast，替代新增 AI、启停、设默认、排序、权限拒绝等场景下会打断操作流的 `alert` 提示。

@@ -65,7 +65,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
     {
         id: 'deepseek',
         name: 'DeepSeek',
-        url: 'https://deepseek.com/chat',
+        url: 'https://chat.deepseek.com/',
         enabled: true,
         builtIn: true,
         icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#395BFF"></circle><path d="M8 8.2h5.1a3.7 3.7 0 0 1 0 7.4H8z" fill="white"></path><path d="M12.2 12h4.1" stroke="white" stroke-width="1.8" stroke-linecap="round"></path></svg>'
