@@ -1,6 +1,18 @@
 # Change Log
 
 ## [2026-04-24]
+- **Time**: 2026-04-24 23:26:10 +0800
+- **Type**: Fix (AI Toggle Alignment & DeepSeek Sidebar Fallback)
+- **Content**: 修正 AI 服务卡片中“已启用/已停用”开关的图标与文字未落在同一中心线的问题；同时为 DeepSeek 增加侧边栏专属回退策略，不再尝试内嵌其会拒绝 iframe 的聊天页，而是直接展示引导说明并允许一键在新窗口打开。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 23:19:00 +0800
+- **Type**: Refactor (AI Settings Console Layout)
+- **Content**: 将设置面板中的 AI 配置区重排为“居中控制台”版式：新增顶部摘要区显示服务总数与启用数，AI 卡片重构为身份信息 / 站点地址 / 控制操作三段式，底部新增区独立成工具面板，整体改为更稳定的单栏版心与暗色玻璃秩序布局，缓解原先横向拥挤、重心偏移和信息层级混乱的问题。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
 - **Time**: 2026-04-24 18:22:42 +0800
 - **Type**: Refactor (Settings Modal Width Rebalance)
 - **Content**: 继续放宽设置弹窗宽度策略，桌面端升级为更适合 AI 服务管理区的宽版弹窗，并为平板与小屏补充分级宽度与内边距规则，缓解服务卡片与输入表单横向空间不足、整体观感过窄的问题。

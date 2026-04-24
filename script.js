@@ -68,6 +68,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.deepseek.com/',
         enabled: true,
         builtIn: true,
+        sidebarMode: 'external',
         icon: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#395BFF"></circle><path d="M8 8.2h5.1a3.7 3.7 0 0 1 0 7.4H8z" fill="white"></path><path d="M12.2 12h4.1" stroke="white" stroke-width="1.8" stroke-linecap="round"></path></svg>'
     }
 ]);
@@ -156,17 +157,20 @@ function createCustomAiId(name, url) {
 }
 
 function serializeAiProvider(provider) {
-    const payload = {
-        id: provider.id,
-        name: provider.name,
-        url: provider.url,
-        enabled: provider.enabled !== false,
-        builtIn: !!provider.builtIn
-    };
-    if (!provider.builtIn) {
-        payload.icon = provider.icon || '';
-    }
-    return payload;
+        const payload = {
+            id: provider.id,
+            name: provider.name,
+            url: provider.url,
+            enabled: provider.enabled !== false,
+            builtIn: !!provider.builtIn
+        };
+        if (provider.sidebarMode) {
+            payload.sidebarMode = provider.sidebarMode;
+        }
+        if (!provider.builtIn) {
+            payload.icon = provider.icon || '';
+        }
+        return payload;
 }
 
 function sanitizeCustomAiProvider(rawProvider) {
@@ -201,6 +205,7 @@ function normalizeAiProviders(rawProviders, legacyOrder) {
             if (BUILTIN_AI_PROVIDER_MAP.has(item?.id)) {
                 const builtin = cloneAiProvider(BUILTIN_AI_PROVIDER_MAP.get(item.id));
                 builtin.enabled = item.enabled !== false;
+                if (item.sidebarMode) builtin.sidebarMode = item.sidebarMode;
                 pushProvider(builtin);
                 return;
             }
@@ -2520,6 +2525,8 @@ function initSettingsUI(settings) {
     const aiProviderUrlInput = document.getElementById('ai-provider-url');
     const aiProviderAddBtn = document.getElementById('ai-provider-add');
     const settingsToast = document.getElementById('settings-toast');
+    const aiProviderCount = document.getElementById('ai-provider-count');
+    const aiProviderEnabledCount = document.getElementById('ai-provider-enabled-count');
     let aiSettingsState = normalizeAiProviders(settings[STORAGE_KEY_AI_CONFIG], settings[STORAGE_KEY_AI_ORDER]);
     let aiSelectedId = settings[STORAGE_KEY_AI]?.id || getFirstEnabledAiProvider(aiSettingsState)?.id || null;
     let aiDraggedProviderId = null;
@@ -2573,6 +2580,8 @@ function initSettingsUI(settings) {
     function renderAiProviderList() {
         if (!aiProviderList) return;
         ensureSelectedAi();
+        if (aiProviderCount) aiProviderCount.textContent = String(aiSettingsState.length);
+        if (aiProviderEnabledCount) aiProviderEnabledCount.textContent = String(getEnabledAiCount());
 
         if (!aiSettingsState.length) {
             aiProviderList.innerHTML = '<div class="ai-provider-empty">暂无可用 AI 服务</div>';
@@ -2584,21 +2593,25 @@ function initSettingsUI(settings) {
             const isSelected = provider.id === aiSelectedId;
             return `
                 <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}" draggable="true">
-                    <div class="ai-provider-meta">
+                    <div class="ai-provider-identity">
                         <button type="button" class="ai-provider-drag-handle" data-drag-handle aria-label="拖拽排序" title="拖拽排序">
                             <span></span><span></span><span></span>
                         </button>
                         <span class="ai-provider-icon">${provider.icon || ''}</span>
-                        <div class="ai-provider-copy">
+                        <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
                                 <span class="ai-provider-badge">${provider.builtIn ? '预置' : '自定义'}</span>
                                 ${isSelected ? '<span class="ai-provider-default-tag">默认</span>' : ''}
                             </div>
-                            <div class="ai-provider-url">${escapeHtml(provider.url)}</div>
+                            <div class="ai-provider-caption">${provider.builtIn ? '官方预置服务' : '用户自定义服务'}</div>
                         </div>
                     </div>
-                    <div class="ai-provider-actions">
+                    <div class="ai-provider-endpoint">
+                        <span class="ai-provider-endpoint-label">站点地址</span>
+                        <div class="ai-provider-url" title="${escapeHtml(provider.url)}">${escapeHtml(provider.url)}</div>
+                    </div>
+                    <div class="ai-provider-controls">
                         <div class="ai-provider-actions-main">
                             <label class="ai-provider-switch">
                                 <input type="checkbox" data-action="toggle" ${disabled ? '' : 'checked'}>
@@ -3245,6 +3258,11 @@ function initAiSidebar() {
         const targetIframe = iframes.get(aiId);
         if (!targetIframe) {
             showFallback('当前没有可用的 AI 服务', '请在设置中启用至少一个 AI 站点。');
+            return;
+        }
+
+        if (targetProvider.sidebarMode === 'external') {
+            showFallback(`${targetProvider.name} 暂不支持侧边栏内嵌`, '该站点会拒绝 iframe 嵌入，请使用右上角按钮在新窗口打开。');
             return;
         }
 

@@ -234,29 +234,47 @@
                 </div>
             </div>
 
-            <div class="setting-item">
+            <div class="setting-item setting-item-ai">
                 <label>AI 侧边栏</label>
-                <div class="settings-stack settings-stack-md">
+                <div class="ai-settings-shell">
                     <div class="ai-settings-intro">
-                        <div class="ai-settings-title-row">
-                            <span class="ai-settings-title">AI 服务管理</span>
-                            <span class="ai-settings-caption">支持预置与自定义站点</span>
+                        <div class="ai-settings-heading">
+                            <div class="ai-settings-title-row">
+                                <span class="ai-settings-title">AI 服务管理</span>
+                                <span class="ai-settings-caption">深色控制台布局下的统一入口与默认项管理</span>
+                            </div>
+                            <div class="settings-helper-copy ai-settings-copy">
+                                可配置启用项、默认项与排序；自定义 AI 站点首次启用时会申请站点权限。
+                            </div>
                         </div>
-                    </div>
-                    <div class="settings-helper-copy">
-                        可配置启用项、默认项与排序；自定义 AI 站点首次启用时会申请站点权限。
+                        <div class="ai-settings-summary" aria-label="AI 配置摘要">
+                            <div class="ai-settings-summary-item">
+                                <span class="ai-settings-summary-value" id="ai-provider-count">0</span>
+                                <span class="ai-settings-summary-label">服务总数</span>
+                            </div>
+                            <div class="ai-settings-summary-item">
+                                <span class="ai-settings-summary-value" id="ai-provider-enabled-count">0</span>
+                                <span class="ai-settings-summary-label">启用中</span>
+                            </div>
+                        </div>
                     </div>
                     <div id="ai-provider-list" class="ai-provider-list" aria-live="polite"></div>
-                    <div class="ai-provider-form">
-                        <div class="ai-provider-form-field">
-                            <span class="ai-provider-form-label">名称</span>
-                            <input type="text" id="ai-provider-name" placeholder="AI 名称，如 DeepSeek" maxlength="24" autocomplete="off">
+                    <div class="ai-provider-composer">
+                        <div class="ai-provider-composer-header">
+                            <span class="ai-provider-composer-title">添加自定义 AI 站点</span>
+                            <span class="ai-provider-composer-caption">设置面板外的内容保持不变，这里只负责入口管理</span>
                         </div>
-                        <div class="ai-provider-form-field">
-                            <span class="ai-provider-form-label">网址</span>
-                            <input type="url" id="ai-provider-url" placeholder="https://chat.deepseek.com/" autocomplete="off">
+                        <div class="ai-provider-form">
+                            <div class="ai-provider-form-field">
+                                <span class="ai-provider-form-label">名称</span>
+                                <input type="text" id="ai-provider-name" placeholder="AI 名称，如 DeepSeek" maxlength="24" autocomplete="off">
+                            </div>
+                            <div class="ai-provider-form-field">
+                                <span class="ai-provider-form-label">网址</span>
+                                <input type="url" id="ai-provider-url" placeholder="https://chat.deepseek.com/" autocomplete="off">
+                            </div>
+                            <button id="ai-provider-add" type="button" class="confirm-btn confirm-btn-primary">添加 AI</button>
                         </div>
-                        <button id="ai-provider-add" type="button" class="confirm-btn confirm-btn-primary">添加 AI</button>
                     </div>
                     <div class="settings-helper-copy settings-helper-copy-sm">
                         侧边栏只负责展示网站本身，不做页面适配；若嵌入失败，会自动回退为弹窗打开。
