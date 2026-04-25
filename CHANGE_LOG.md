@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-25]
+- **Time**: 2026-04-25 10:59:36 +0800
+- **Type**: Fix (AI Settings Layout & Alignment)
+- **Content**: 修复设置页 AI 服务管理区域版式混乱问题：头部 intro 区改为垂直居中对齐（`align-items: center`）；provider-item 三列 grid 右侧控制列由 `auto` 改为固定 `264px`，消除各卡片按钮宽度不一致；移除 controls 上无效的 `flex: 0 0 264px`（父级为 grid 布局），改为 `align-items: stretch` + `width: 100%` 填满 grid 单元格；endpoint 间距由 8px 收紧至 4px；按钮组 gap 由 10px 收紧至 8px，整体对齐与视觉节奏更统一。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
 - **Time**: 2026-04-25 10:45:57 +0800
 - **Type**: Refactor (AI Action Controls Alignment)
 - **Content**: 将 AI 服务卡片右侧操作区收敛为统一按钮系统：把“已启用/已停用”文案调整为“启用/停用”，同步统一启用开关、设为默认、上移、下移的宽度、高度、字重与网格对齐规则，避免同组控件在视觉上出现基线漂移和重心不一致的问题。
