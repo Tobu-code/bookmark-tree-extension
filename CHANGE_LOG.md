@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-25]
+- **Time**: 2026-04-25 16:05:15 +0800
+- **Type**: Refactor (Remove DeepSeek & Native Favicon Icons)
+- **Content**: 移除 DeepSeek 预置 AI 服务（其服务端禁止 iframe 嵌入，无法在侧边栏打开）；将剩余 5 个预置 AI 的图标从手绘 SVG 改为通过 Google Favicon 服务加载的网站原生 favicon（32px），并补充 `img` 元素在图标容器与 tab 中的尺寸/圆角适配。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
 - **Time**: 2026-04-25 15:44:51 +0800
 - **Type**: Fix (AI Switch Centering — Specificity Root Cause)
 - **Content**: 修复"启用"开关文字始终无法居中的根因：`.setting-item label`（优先级 0,1,1）覆盖了 `.ai-provider-switch`（优先级 0,1,0）的 `display: flex` → `block`、`font-size: 12px` → `14px`，并注入了 `margin-bottom: 10px`，导致 flex 居中完全失效。修复方式：选择器提升为 `label.ai-provider-switch`（0,1,1 + 后定义赢级联），并显式补充 `margin: 0`。

@@ -2479,6 +2479,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex: 0 0 auto;
 }
 
+.ai-provider-icon img,
+.ai-tab-icon img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    object-fit: contain;
+}
+
 .ai-provider-title-row {
     display: flex;
     align-items: center;
