@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-25]
+- **Time**: 2026-04-25 15:44:51 +0800
+- **Type**: Fix (AI Switch Centering — Specificity Root Cause)
+- **Content**: 修复"启用"开关文字始终无法居中的根因：`.setting-item label`（优先级 0,1,1）覆盖了 `.ai-provider-switch`（优先级 0,1,0）的 `display: flex` → `block`、`font-size: 12px` → `14px`，并注入了 `margin-bottom: 10px`，导致 flex 居中完全失效。修复方式：选择器提升为 `label.ai-provider-switch`（0,1,1 + 后定义赢级联），并显式补充 `margin: 0`。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
 - **Time**: 2026-04-25 11:26:40 +0800
 - **Type**: Fix (AI Card Drag Handle Removal & Switch Style Unification)
 - **Content**: 移除 AI 服务卡片左侧拖拽句柄元素（保留上移/下移按钮排序）；将"启用"开关从深色胶囊改为与"设为默认"按钮一致的浅色边框风格（dark: 半透明白 / light: 暖白底 + 陶土文字），修复 `inline-flex` → `flex` 确保文字水平垂直居中，补充浅色主题下 switch-indicator 可见性。

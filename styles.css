@@ -2555,12 +2555,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     gap: 8px;
 }
 
-.ai-provider-switch {
+label.ai-provider-switch {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
+    margin: 0;
     font-size: 12px;
     color: rgba(255, 248, 242, 0.86);
     width: 100%;
