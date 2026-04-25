@@ -2592,11 +2592,8 @@ function initSettingsUI(settings) {
             const disabled = provider.enabled === false;
             const isSelected = provider.id === aiSelectedId;
             return `
-                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}" draggable="true">
+                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
                     <div class="ai-provider-identity">
-                        <button type="button" class="ai-provider-drag-handle" data-drag-handle aria-label="拖拽排序" title="拖拽排序">
-                            <span></span><span></span><span></span>
-                        </button>
                         <span class="ai-provider-icon">${provider.icon || ''}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">

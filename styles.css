@@ -2160,11 +2160,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 20px 38px rgba(32, 26, 22, 0.1);
 }
 
-:root:not([data-theme="dark"]) .ai-provider-drag-handle {
-    background: rgba(48, 42, 39, 0.8);
-    border-color: rgba(48, 42, 39, 0.12);
-    color: rgba(255, 255, 255, 0.56);
-}
+
 
 :root:not([data-theme="dark"]) .ai-provider-icon {
     background: rgba(217, 123, 87, 0.08);
@@ -2197,13 +2193,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .ai-provider-switch {
-    color: #2a211d;
-    background: rgba(53, 58, 68, 0.9);
-    border-color: rgba(53, 58, 68, 0.08);
+    background: rgba(255, 248, 243, 0.88);
+    color: #6f4632;
+    border-color: rgba(174, 86, 48, 0.14);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-switch-label {
-    color: rgba(255, 248, 242, 0.96);
+    color: inherit;
+}
+
+:root:not([data-theme="dark"]) .ai-provider-switch-indicator {
+    background: rgba(0, 0, 0, 0.08);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-action-btn {
@@ -2464,42 +2464,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     min-width: 0;
 }
 
-.ai-provider-drag-handle {
-    width: 34px;
-    height: 44px;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    background: rgba(13, 17, 25, 0.68);
-    color: rgba(255, 255, 255, 0.42);
-    cursor: grab;
-    flex: 0 0 auto;
-    transition: border-color var(--motion-fast) var(--ease-standard),
-        background-color var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard);
-}
 
-.ai-provider-drag-handle span {
-    width: 10px;
-    height: 2px;
-    border-radius: 999px;
-    background: currentColor;
-    opacity: 0.8;
-}
-
-.ai-provider-drag-handle:hover {
-    color: var(--primary-color);
-    border-color: rgba(217, 123, 87, 0.24);
-    background: rgba(217, 123, 87, 0.1);
-}
-
-.ai-provider-drag-handle:active {
-    cursor: grabbing;
-}
 
 .ai-provider-icon {
     width: 48px;
@@ -2592,23 +2557,27 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-switch {
     position: relative;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 248, 242, 0.86);
     width: 100%;
     height: 42px;
-    padding: 0 14px 0 12px;
+    padding: 0 14px;
     border-radius: 999px;
-    background: rgba(14, 19, 28, 0.76);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;
     box-sizing: border-box;
+    transition: background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .ai-provider-switch input {

@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-25]
+- **Time**: 2026-04-25 11:26:40 +0800
+- **Type**: Fix (AI Card Drag Handle Removal & Switch Style Unification)
+- **Content**: 移除 AI 服务卡片左侧拖拽句柄元素（保留上移/下移按钮排序）；将"启用"开关从深色胶囊改为与"设为默认"按钮一致的浅色边框风格（dark: 半透明白 / light: 暖白底 + 陶土文字），修复 `inline-flex` → `flex` 确保文字水平垂直居中，补充浅色主题下 switch-indicator 可见性。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
 - **Time**: 2026-04-25 10:59:36 +0800
 - **Type**: Fix (AI Settings Layout & Alignment)
 - **Content**: 修复设置页 AI 服务管理区域版式混乱问题：头部 intro 区改为垂直居中对齐（`align-items: center`）；provider-item 三列 grid 右侧控制列由 `auto` 改为固定 `264px`，消除各卡片按钮宽度不一致；移除 controls 上无效的 `flex: 0 0 264px`（父级为 grid 布局），改为 `align-items: stretch` + `width: 100%` 填满 grid 单元格；endpoint 间距由 8px 收紧至 4px；按钮组 gap 由 10px 收紧至 8px，整体对齐与视觉节奏更统一。
