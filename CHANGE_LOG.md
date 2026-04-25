@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-25]
+- **Time**: 2026-04-25 16:08:30 +0800
+- **Type**: Refactor (Remove Delete Button & Auto Favicon for Custom AI)
+- **Content**: 移除自定义 AI 服务卡片的"删除"按钮；为未设置图标的自定义 AI 自动从 URL 提取域名并通过 Google Favicon 服务加载原生图标。
+- **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-04-25]
 - **Time**: 2026-04-25 16:05:15 +0800
 - **Type**: Refactor (Remove DeepSeek & Native Favicon Icons)
 - **Content**: 移除 DeepSeek 预置 AI 服务（其服务端禁止 iframe 嵌入，无法在侧边栏打开）；将剩余 5 个预置 AI 的图标从手绘 SVG 改为通过 Google Favicon 服务加载的网站原生 favicon（32px），并补充 `img` 元素在图标容器与 tab 中的尺寸/圆角适配。

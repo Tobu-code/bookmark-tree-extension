@@ -2585,7 +2585,7 @@ function initSettingsUI(settings) {
             return `
                 <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
                     <div class="ai-provider-identity">
-                        <span class="ai-provider-icon">${provider.icon || ''}</span>
+                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=32" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
@@ -2615,7 +2615,6 @@ function initSettingsUI(settings) {
                         <div class="ai-provider-actions-secondary">
                             <button type="button" class="ai-provider-action-btn" data-action="move-up" ${index === 0 ? 'disabled' : ''}>上移</button>
                             <button type="button" class="ai-provider-action-btn" data-action="move-down" ${index === aiSettingsState.length - 1 ? 'disabled' : ''}>下移</button>
-                            ${provider.builtIn ? '' : '<button type="button" class="ai-provider-action-btn ai-provider-action-btn-danger" data-action="remove">删除</button>'}
                         </div>
                     </div>
                 </div>
