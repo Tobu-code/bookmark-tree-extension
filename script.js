@@ -2620,7 +2620,7 @@ function initSettingsUI(settings) {
                                         <path d="M3.5 8.2 6.6 11 12.5 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <span class="ai-provider-switch-label">${disabled ? '已停用' : '已启用'}</span>
+                                <span class="ai-provider-switch-label">${disabled ? '停用' : '启用'}</span>
                             </label>
                             <button type="button" class="ai-provider-action-btn ai-provider-action-btn-primary" data-action="default" ${isSelected ? 'disabled' : ''}>设为默认</button>
                         </div>

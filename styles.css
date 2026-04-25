@@ -2578,17 +2578,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
-    flex: 0 0 auto;
+    gap: 12px;
+    width: 264px;
+    flex: 0 0 264px;
 }
 
 .ai-provider-actions-main,
 .ai-provider-actions-secondary {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 8px;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
 }
 
 .ai-provider-switch {
@@ -2596,11 +2596,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.72);
-    height: 40px;
-    padding: 0 15px 0 13px;
+    width: 100%;
+    height: 42px;
+    padding: 0 14px 0 12px;
     border-radius: 999px;
     background: rgba(14, 19, 28, 0.76);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -2620,8 +2621,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .ai-provider-switch-indicator {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     border-radius: 5px;
     display: inline-flex;
     align-items: center;
@@ -2637,6 +2638,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-switch-indicator svg {
     display: block;
+    width: 11px;
+    height: 11px;
 }
 
 .ai-provider-switch input:checked+.ai-provider-switch-indicator {
@@ -2652,6 +2655,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: inline-flex;
     align-items: center;
     line-height: 1;
+    letter-spacing: 0.01em;
 }
 
 .ai-provider-switch:hover .ai-provider-switch-indicator {
@@ -2667,18 +2671,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: rgba(255, 255, 255, 0.035);
     color: rgba(255, 248, 242, 0.86);
     border-radius: 999px;
-    height: 40px;
-    min-width: 88px;
+    width: 100%;
+    height: 42px;
+    min-width: 0;
     padding: 0 14px;
     font: inherit;
     font-size: 12px;
-    font-weight: 560;
+    font-weight: 600;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     line-height: 1;
+    white-space: nowrap;
+    text-align: center;
     transition: background-color var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
         color var(--motion-fast) var(--ease-standard),
@@ -3595,12 +3602,13 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
     .ai-provider-controls {
         width: 100%;
-        align-items: flex-start;
+        align-items: stretch;
+        flex: 1 1 auto;
     }
 
     .ai-provider-actions-main,
     .ai-provider-actions-secondary {
-        justify-content: flex-start;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .ai-provider-form {
