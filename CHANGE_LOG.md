@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-04-25]
+- **Time**: 2026-04-25 10:07:56 +0800
+- **Type**: Fix (AI Panel Light Theme Contrast & Action Alignment)
+- **Content**: 修复自动/浅色主题下 AI 服务管理区显色异常的问题：为头部摘要、服务卡片、说明文案、标签、URL 与新增区补充浅色主题专属对比度方案；同时统一“已启用”和“设为默认”胶囊控件的高度、内边距、盒模型与居中对齐方式，解决相邻操作按钮不在同一水平线的问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-04-24]
 - **Time**: 2026-04-24 23:37:47 +0800
 - **Type**: Fix (AI Switch Visual Centering)
