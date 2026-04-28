@@ -1,5 +1,101 @@
 # Change Log
 
+## [2026-04-25]
+- **Time**: 2026-04-25 16:08:30 +0800
+- **Type**: Refactor (Remove Delete Button & Auto Favicon for Custom AI)
+- **Content**: 移除自定义 AI 服务卡片的"删除"按钮；为未设置图标的自定义 AI 自动从 URL 提取域名并通过 Google Favicon 服务加载原生图标。
+- **Impact**: `script.js`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 16:05:15 +0800
+- **Type**: Refactor (Remove DeepSeek & Native Favicon Icons)
+- **Content**: 移除 DeepSeek 预置 AI 服务（其服务端禁止 iframe 嵌入，无法在侧边栏打开）；将剩余 5 个预置 AI 的图标从手绘 SVG 改为通过 Google Favicon 服务加载的网站原生 favicon（32px），并补充 `img` 元素在图标容器与 tab 中的尺寸/圆角适配。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 15:44:51 +0800
+- **Type**: Fix (AI Switch Centering — Specificity Root Cause)
+- **Content**: 修复"启用"开关文字始终无法居中的根因：`.setting-item label`（优先级 0,1,1）覆盖了 `.ai-provider-switch`（优先级 0,1,0）的 `display: flex` → `block`、`font-size: 12px` → `14px`，并注入了 `margin-bottom: 10px`，导致 flex 居中完全失效。修复方式：选择器提升为 `label.ai-provider-switch`（0,1,1 + 后定义赢级联），并显式补充 `margin: 0`。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 11:26:40 +0800
+- **Type**: Fix (AI Card Drag Handle Removal & Switch Style Unification)
+- **Content**: 移除 AI 服务卡片左侧拖拽句柄元素（保留上移/下移按钮排序）；将"启用"开关从深色胶囊改为与"设为默认"按钮一致的浅色边框风格（dark: 半透明白 / light: 暖白底 + 陶土文字），修复 `inline-flex` → `flex` 确保文字水平垂直居中，补充浅色主题下 switch-indicator 可见性。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 10:59:36 +0800
+- **Type**: Fix (AI Settings Layout & Alignment)
+- **Content**: 修复设置页 AI 服务管理区域版式混乱问题：头部 intro 区改为垂直居中对齐（`align-items: center`）；provider-item 三列 grid 右侧控制列由 `auto` 改为固定 `264px`，消除各卡片按钮宽度不一致；移除 controls 上无效的 `flex: 0 0 264px`（父级为 grid 布局），改为 `align-items: stretch` + `width: 100%` 填满 grid 单元格；endpoint 间距由 8px 收紧至 4px；按钮组 gap 由 10px 收紧至 8px，整体对齐与视觉节奏更统一。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 10:45:57 +0800
+- **Type**: Refactor (AI Action Controls Alignment)
+- **Content**: 将 AI 服务卡片右侧操作区收敛为统一按钮系统：把“已启用/已停用”文案调整为“启用/停用”，同步统一启用开关、设为默认、上移、下移的宽度、高度、字重与网格对齐规则，避免同组控件在视觉上出现基线漂移和重心不一致的问题。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-25]
+- **Time**: 2026-04-25 10:07:56 +0800
+- **Type**: Fix (AI Panel Light Theme Contrast & Action Alignment)
+- **Content**: 修复自动/浅色主题下 AI 服务管理区显色异常的问题：为头部摘要、服务卡片、说明文案、标签、URL 与新增区补充浅色主题专属对比度方案；同时统一“已启用”和“设为默认”胶囊控件的高度、内边距、盒模型与居中对齐方式，解决相邻操作按钮不在同一水平线的问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 23:37:47 +0800
+- **Type**: Fix (AI Switch Visual Centering)
+- **Content**: 将 AI 服务卡片中的启用开关改为“真实 input + 自定义视觉标记”的实现方式，移除浏览器原生 checkbox 的基线干扰，确保勾选图标与“已启用/已停用”文案在胶囊按钮中真正居中对齐。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 23:26:10 +0800
+- **Type**: Fix (AI Toggle Alignment & DeepSeek Sidebar Fallback)
+- **Content**: 修正 AI 服务卡片中“已启用/已停用”开关的图标与文字未落在同一中心线的问题；同时为 DeepSeek 增加侧边栏专属回退策略，不再尝试内嵌其会拒绝 iframe 的聊天页，而是直接展示引导说明并允许一键在新窗口打开。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 23:19:00 +0800
+- **Type**: Refactor (AI Settings Console Layout)
+- **Content**: 将设置面板中的 AI 配置区重排为“居中控制台”版式：新增顶部摘要区显示服务总数与启用数，AI 卡片重构为身份信息 / 站点地址 / 控制操作三段式，底部新增区独立成工具面板，整体改为更稳定的单栏版心与暗色玻璃秩序布局，缓解原先横向拥挤、重心偏移和信息层级混乱的问题。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 18:22:42 +0800
+- **Type**: Refactor (Settings Modal Width Rebalance)
+- **Content**: 继续放宽设置弹窗宽度策略，桌面端升级为更适合 AI 服务管理区的宽版弹窗，并为平板与小屏补充分级宽度与内边距规则，缓解服务卡片与输入表单横向空间不足、整体观感过窄的问题。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 17:57:33
+- **Type**: Refactor
+- **Content**: 优化设置弹窗 UI：将弹窗宽度从 420px 增加至 560px；同时优化 AI 服务列表的网址显示，采用单行截断方案防止长链接破坏布局。
+- **Impact**: `styles.css`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 17:53:52
+- **Type**: Fix
+- **Content**: 修复 DeepSeek 的默认对话网址，从 `https://deepseek.com/chat` 更新为官方推荐的 `https://chat.deepseek.com/`，并同步更新权限与网络请求规则。
+- **Impact**: `script.js`, `newtab.html`, `manifest.json`, `rules.json`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 17:51:14 +0800
+- **Type**: Refactor (AI Settings Drag Sort & Toast Feedback)
+- **Content**: 为设置弹窗中的 AI 配置区补充更顺滑的交互反馈：新增卡片拖拽句柄与拖拽排序高亮，保留上移/下移按钮作为兜底；同时引入底部轻提示 toast，替代新增 AI、启停、设默认、排序、权限拒绝等场景下会打断操作流的 `alert` 提示。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 17:38:54 +0800
+- **Type**: Refactor (AI Settings Panel Polish)
+- **Content**: 对设置弹窗中的 AI 配置区做一轮精修：补充“AI 服务管理”信息头，优化自定义 AI 表单层级与字段标题；同时重构 AI 服务卡片的主次操作区、标签徽标、启用开关与按钮形态，统一圆角、间距和 hover 阴影，小屏下也保持更稳定的纵向排版与按钮对齐。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-24]
+- **Time**: 2026-04-24 17:07:28 +0800
+- **Type**: Feature (Configurable AI Sidebar)
+- **Content**: 将 AI 侧边栏从硬编码入口改为配置驱动：新增 DeepSeek 预置项，设置弹窗支持启用/停用、默认项、排序和自定义 AI 网站新增；同步接入运行时站点权限与动态 DNR 规则，使后续新增 AI 站点无需继续改源码，若目标站点无法嵌入则自动回退为弹窗打开。
+- **Impact**: `manifest.json`、`newtab.html`、`rules.json`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
 ## [2026-03-26]
 - **Time**: 2026-03-26 17:21:06 +0800
 - **Type**: Refactor (Flat Directory Width Fine-tune)
