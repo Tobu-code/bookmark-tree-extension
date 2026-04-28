@@ -436,3 +436,9 @@
 - **Type**: Feature (AI Sidebar) / Refactor (Dark Theme Tokens)
 - **Content**: 新增 AI 侧栏 Kimi 入口（标签与 iframe 映射）；同步优化深色主题主色与次级文字对比度、发光色值，并提升书签标题在深色背景下可读性；调整 AI 侧栏宽度上限以提升大屏使用空间。
 - **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-28]
+- **Time**: 2026-04-28 15:13:33 +0800
+- **Type**: Chore (Merge)
+- **Content**: 将分支 `feature/ai-sidebar-configurable` 合并至 `main`，同步 AI 侧栏可配置化、交互与样式相关改动，并准备主干发布。
+- **Impact**: `manifest.json`、`newtab.html`、`rules.json`、`script.js`、`styles.css`、`_metadata/generated_indexed_rulesets/_ruleset1`、`CHANGE_LOG.md`
