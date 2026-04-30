@@ -1,6 +1,11 @@
 # Change Log
 
 ## [2026-04-30]
+- **Time**: 2026-04-30 17:46:00 +0800
+- **Type**: Design (Clock Layout Refinement)
+- **Content**: 空间利用率优化：将原本纵向排列的日期和格言移至大号时钟右侧并排展示。引入 `ambient-time-info-group` 容器实现细线分隔的横向排版，显著降低了顶部的垂直空间占用，使视觉锚点更加紧致、专业。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+## [2026-04-30]
 - **Time**: 2026-04-30 17:42:00 +0800
 - **Type**: Design (Clock UI Upgrade)
 - **Content**: 视觉重心升级：将顶部时间显示重构为“大号数字时钟”（72px），采用更现代的字体间距与投影效果，使其成为页面的核心视觉锚点，显著提升 4K 屏幕下的精致感与品牌辨识度。

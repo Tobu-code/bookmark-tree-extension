@@ -327,20 +327,20 @@ body.loaded #background-layer {
 }
 
 .ambient-time {
-    width: 60%;
-    max-width: 800px;
+    width: auto;
+    max-width: 900px;
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     pointer-events: none;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 16px;
     letter-spacing: 0.2px;
 }
 
@@ -350,25 +350,38 @@ body.loaded #background-layer {
     letter-spacing: -3px;
     color: var(--text-color);
     opacity: 0.95;
-    line-height: 1.0;
+    line-height: 0.8;
     font-family: 'Inter', 'Outfit', sans-serif;
-    margin-bottom: 6px;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.03));
 }
 
+.ambient-time-info-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding-bottom: 8px; /* Align with baseline of large digits */
+    border-left: 1px solid rgba(0,0,0,0.06);
+    padding-left: 16px;
+}
+
+:root[data-theme="dark"] .ambient-time-info-group {
+    border-left-color: rgba(255,255,255,0.1);
+}
+
 .ambient-time-date {
-    font-size: var(--font-size-caption);
+    font-size: 13px;
     color: var(--text-subtle);
     opacity: 0.8;
     letter-spacing: 0.3px;
+    font-weight: 500;
 }
 
 .ambient-time-greeting {
     font-size: 13px;
     color: var(--primary-color);
-    opacity: 0.7;
+    opacity: 0.85;
     font-weight: 500;
-    margin-top: 2px;
     letter-spacing: 0.1px;
 }
 
