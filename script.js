@@ -880,11 +880,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         });
 
         folder.children.forEach(child => {
-            if (child.children) {
-                // Render subfolder as a simple tile
-                const folderCard = createSimpleTile(child);
-                listContainer.appendChild(folderCard);
-            } else {
+            if (!child.children) {
                 // Render bookmark
                 const bmkItem = renderFlatBookmarkItem(child);
                 if (child.url) {
