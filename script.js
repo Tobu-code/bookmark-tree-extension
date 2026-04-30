@@ -300,7 +300,7 @@ function buildDynamicAiRule(ruleId, provider) {
 
 async function syncDynamicAiRules(providers) {
     const dynamicProviders = providers
-        .filter((provider) => !provider.builtIn && provider.enabled !== false)
+        .filter((provider) => provider.enabled !== false)
         .slice(0, AI_DYNAMIC_RULE_END - AI_DYNAMIC_RULE_START + 1);
 
     const existingRules = await getDynamicRules();
