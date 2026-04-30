@@ -974,53 +974,54 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .tree-folder-item {
     display: flex;
     align-items: center;
-    padding: 6px 8px 6px 4px;
-    border-radius: 6px;
+    padding: 8px 10px 8px 6px;
+    border-radius: 12px;
     cursor: pointer;
     color: var(--text-color);
-    transition: background-color var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard);
-    margin-bottom: 2px;
+    transition: all var(--motion-fast) var(--ease-standard);
+    margin-bottom: 4px;
     font-size: 13px;
     font-weight: 500;
     user-select: none;
+    border: 1px solid transparent;
 }
 
 .tree-folder-item:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateX(2px);
 }
 
 :root[data-theme="dark"] .tree-folder-item:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .tree-folder-item.active {
-    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     color: var(--primary-color);
     font-weight: 600;
     position: relative;
+    transform: translateX(4px);
 }
 
-/* Active indicator bar — thin bar on the left */
+/* Active indicator bar — sharp accent line */
 .tree-folder-item.active::before {
     content: '';
     position: absolute;
-    left: 2px;
-    top: 15%;
-    bottom: 15%;
-    width: 3px;
-    border-radius: 3px;
-    background: linear-gradient(180deg, transparent, var(--primary-color) 30%, var(--primary-color) 70%, transparent);
-    animation: activeBarPulse 2.4s ease-in-out infinite;
-}
-
-@keyframes activeBarPulse {
-    0%, 100% { opacity: 0.65; }
-    50% { opacity: 1; }
+    left: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 18px;
+    border-radius: 4px;
+    background: var(--primary-color);
 }
 
 :root[data-theme="dark"] .tree-folder-item.active {
-    background: rgba(217, 119, 87, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .tree-folder-toggle {
@@ -1059,9 +1060,18 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     justify-content: center;
     width: 20px;
     height: 20px;
-    margin-right: 6px;
-    color: inherit;
+    margin-right: 8px;
+    color: var(--text-subtle);
+    transition: color var(--motion-fast) var(--ease-standard);
     flex-shrink: 0;
+}
+
+.tree-folder-item:hover .tree-folder-icon {
+    color: var(--text-color);
+}
+
+.tree-folder-item.active .tree-folder-icon {
+    color: var(--primary-color);
 }
 
 .tree-folder-title {
