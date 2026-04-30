@@ -1625,7 +1625,7 @@ function handleDrop(e) {
     }
     this.classList.remove('drag-over');
 
-    if (dragSrcEl !== this) {
+    if (dragSrcEl && dragSrcEl !== this) {
         // Swap DOM elements
         const parent = this.parentNode;
         const allCards = Array.from(parent.children);
@@ -2990,7 +2990,7 @@ function handleItemDrop(e) {
     const type = e.dataTransfer.getData('type');
     if (type !== 'bookmark-item') return false;
 
-    if (dragSrcEl !== this) {
+    if (dragSrcEl && dragSrcEl !== this) {
         const srcId = dragSrcEl.dataset.id;
 
         // Case 1: Dropping a bookmark onto a folder → move INTO the folder
