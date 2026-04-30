@@ -21,6 +21,8 @@ const LEGACY_FREQUENCY_STORAGE_KEYS = [
 ];
 const AI_DYNAMIC_RULE_START = 1000;
 const AI_DYNAMIC_RULE_END = 1499;
+// HiDPI-aware favicon size: request 2× or 3× resolution for crisp rendering on Retina/4K screens
+const FAVICON_SIZE = Math.min(128, 32 * Math.ceil(window.devicePixelRatio || 1));
 const BUILTIN_AI_PROVIDERS = Object.freeze([
     {
         id: 'google',
@@ -28,7 +30,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.google.com/search?udm=50&aep=11',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" width="24" height="24" alt="Google" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Google" draggable="false">`
     },
     {
         id: 'chatgpt',
@@ -36,7 +38,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chatgpt.com/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=32" width="24" height="24" alt="ChatGPT" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="ChatGPT" draggable="false">`
     },
     {
         id: 'qwen',
@@ -44,7 +46,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.qwen.ai/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=chat.qwen.ai&sz=32" width="24" height="24" alt="通义千问" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=chat.qwen.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="通义千问" draggable="false">`
     },
     {
         id: 'doubao',
@@ -52,7 +54,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.doubao.com/chat/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=doubao.com&sz=32" width="24" height="24" alt="豆包" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=doubao.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="豆包" draggable="false">`
     },
     {
         id: 'kimi',
@@ -60,7 +62,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://kimi.moonshot.cn/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=kimi.moonshot.cn&sz=32" width="24" height="24" alt="Kimi" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=kimi.moonshot.cn&sz=${FAVICON_SIZE}" width="24" height="24" alt="Kimi" draggable="false">`
     }
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
@@ -1260,7 +1262,7 @@ function renderFlatBookmarkItem(node) {
     }
 
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 18);
+    const iconElement = createBookmarkIcon(iconData, 26);
     a.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -1970,7 +1972,7 @@ function initSearch() {
                 const url = new URL(bookmark.url);
                 const img = document.createElement('img');
                 // Use extension's favicon service
-                img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
+                img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=${FAVICON_SIZE}`;
                 img.addEventListener('error', function () {
                     const fallback = document.createElement('span');
                     fallback.className = 'suggestion-icon-fallback';
@@ -2180,7 +2182,7 @@ function getIconForBookmark(url) {
         try {
             return {
                 type: 'img',
-                src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
+                src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${FAVICON_SIZE}`
             };
         } catch {
             return { type: 'svg', value: BOOKMARK_ICON_SVG };
@@ -2585,7 +2587,7 @@ function initSettingsUI(settings) {
             return `
                 <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
                     <div class="ai-provider-identity">
-                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=32" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
+                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=${FAVICON_SIZE}" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
@@ -3460,6 +3462,36 @@ function initAmbientTime() {
     let idleTimer;
     const idleDelay = 3000; // 3 seconds
 
+    // Greeting quotes pool
+    const GREETINGS = [
+        '今天也要加油鸭 🦆',
+        '保持好奇心，探索未知',
+        '做喜欢的事，见想见的人',
+        '用心感受每一个当下',
+        '慢慢来，比较快',
+        '把每一天过成想要的样子',
+        '简单生活，认真做事',
+        '向阳而生，逆风翻盘',
+        '今日事，今日毕',
+        '保持热爱，奔赴山海'
+    ];
+
+    function getGreeting() {
+        const hour = new Date().getHours();
+        let prefix;
+        if (hour < 6) prefix = '夜深了';
+        else if (hour < 9) prefix = '早上好';
+        else if (hour < 12) prefix = '上午好';
+        else if (hour < 14) prefix = '中午好';
+        else if (hour < 18) prefix = '下午好';
+        else if (hour < 22) prefix = '晚上好';
+        else prefix = '夜深了';
+        // Pick a quote based on the day of year for daily variety
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+        const quote = GREETINGS[dayOfYear % GREETINGS.length];
+        return `${prefix}，${quote}`;
+    }
+
     function resetIdleTimer() {
         // When active, reduce presence
         timeContainer.classList.remove('visible');
@@ -3481,9 +3513,10 @@ function initAmbientTime() {
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
+        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        const weekday = weekdays[now.getDay()];
 
-        // Format: 2026 · 01 · 26 14:37
-        timeContainer.textContent = `${year} · ${month} · ${day}   ${hours}:${minutes}`;
+        timeContainer.innerHTML = `<span class="ambient-time-clock">${hours}:${minutes}</span><span class="ambient-time-date">${year}年${month}月${day}日 · 星期${weekday}</span><span class="ambient-time-greeting">${getGreeting()}</span>`;
 
         // Schedule next update at the start of the next minute
         const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();

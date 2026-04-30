@@ -9,13 +9,13 @@
     /* Deep Charcoal Black */
     --text-secondary: #6d675f;
     /* Medium Grey */
-    --bg-overlay: rgba(248, 246, 241, 0.82);
+    --bg-overlay: rgba(248, 246, 241, 0.88);
     /* Creamy/Beige Tint */
     --card-bg: #fffdf9;
     /* Pure White Cards */
     --card-hover: #f8f3eb;
     /* Subtle Beige Hover */
-    --border-color: rgba(110, 78, 53, 0.12);
+    --border-color: rgba(110, 78, 53, 0.18);
     --shadow-sm: 0 4px 12px rgba(42, 30, 20, 0.06);
     --shadow-md: 0 18px 44px rgba(40, 30, 20, 0.12);
     /* Specific Claude shadow */
@@ -24,7 +24,7 @@
 
     /* Added for Modal Readability */
     --glass-bg: rgba(255, 253, 250, 0.92);
-    --glass-border: rgba(110, 78, 53, 0.1);
+    --glass-border: rgba(110, 78, 53, 0.14);
     --flat-pane-header-height: 52px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 40px;
@@ -167,7 +167,7 @@ h3,
 .card-title,
 .folder-modal-title {
     font-family: inherit;
-    font-weight: 650;
+    font-weight: 700;
     letter-spacing: -0.01em;
 }
 
@@ -238,7 +238,7 @@ h3,
     height: clamp(680px, 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
     border-radius: 28px;
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), var(--bg-overlay);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.04) 100%), var(--bg-overlay);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow: var(--elev-shadow-2);
@@ -266,8 +266,15 @@ h3,
     pointer-events: none;
     border-radius: inherit;
     background:
-        linear-gradient(158deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 42%, transparent 72%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 30%);
+        linear-gradient(158deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 42%, transparent 72%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 30%),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 100px,
+            rgba(184, 98, 59, 0.015) 100px,
+            rgba(184, 98, 59, 0.015) 101px
+        );
 }
 
 .container::after {
@@ -283,7 +290,14 @@ h3,
 :root[data-theme="dark"] .container::before {
     background:
         linear-gradient(158deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 42%, transparent 72%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 28%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 28%),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 100px,
+            rgba(245, 166, 122, 0.012) 100px,
+            rgba(245, 166, 122, 0.012) 101px
+        );
 }
 
 :root[data-theme="dark"] .container::after {
@@ -315,19 +329,44 @@ body.loaded #background-layer {
 .ambient-time {
     width: 60%;
     max-width: 800px;
-    font-size: var(--font-size-caption);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     pointer-events: none;
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
     letter-spacing: 0.2px;
-    white-space: pre-wrap;
+}
+
+.ambient-time-clock {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.5px;
+    color: var(--text-color);
+    opacity: 0.72;
+    line-height: 1.1;
+}
+
+.ambient-time-date {
+    font-size: var(--font-size-caption);
+    color: var(--text-subtle);
+    opacity: 0.8;
+    letter-spacing: 0.3px;
+}
+
+.ambient-time-greeting {
+    font-size: 13px;
+    color: var(--primary-color);
+    opacity: 0.7;
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0.1px;
 }
 
 .ambient-time.visible {
@@ -364,9 +403,12 @@ body.loaded #background-layer {
     align-items: center;
     width: 58.5%;
     max-width: 800px;
-    border-radius: 15px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 252, 247, 0.92) 100%);
-    box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 252, 247, 0.94) 100%);
+    box-shadow:
+        var(--elev-shadow-1),
+        0 0 0 1px color-mix(in srgb, var(--primary-color) 8%, transparent),
+        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
     border: 1px solid var(--border-color);
     transition: transform var(--motion-medium) var(--ease-standard),
         box-shadow var(--motion-medium) var(--ease-standard),
@@ -379,13 +421,20 @@ body.loaded #background-layer {
 
 :root[data-theme="dark"] .search-wrapper {
     background: linear-gradient(180deg, rgba(34, 40, 50, 0.96) 0%, rgba(28, 33, 42, 0.94) 100%);
+    box-shadow:
+        var(--elev-shadow-1),
+        0 0 0 1px rgba(245, 166, 122, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .search-wrapper:focus-within {
     width: 58.5%;
     background: var(--card-bg);
     border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
-    box-shadow: var(--elev-shadow-2), var(--focus-ring);
+    box-shadow:
+        var(--elev-shadow-2),
+        0 0 0 3px color-mix(in srgb, var(--primary-color) 10%, transparent),
+        0 0 24px color-mix(in srgb, var(--primary-color) 6%, transparent);
     transform: translateY(-1px);
 }
 
@@ -934,7 +983,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow var(--motion-medium) var(--ease-standard),
         color var(--motion-medium) var(--ease-standard),
         opacity var(--motion-medium) var(--ease-standard);
-    background: rgba(255, 250, 245, 0.9);
+    background: rgba(255, 250, 245, 0.94);
     color: var(--text-color);
     border: 1px solid color-mix(in srgb, var(--border-color) 95%, transparent);
     box-shadow: 0 1px 3px rgba(44, 33, 22, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.45);
@@ -959,12 +1008,31 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .folder-tile.active {
-    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+    background: color-mix(in srgb, var(--primary-color) 12%, var(--card-bg));
     color: var(--primary-color);
-    font-weight: 620;
-    border-left: 2px solid var(--primary-color);
-    border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), var(--elev-shadow-1);
+    font-weight: 600;
+    border-color: color-mix(in srgb, var(--primary-color) 32%, var(--border-color));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 16%, transparent), var(--elev-shadow-1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Active indicator bar — replaces border-left */
+.folder-tile.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, transparent, var(--primary-color) 30%, var(--primary-color) 70%, transparent);
+    animation: activeBarPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes activeBarPulse {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; }
 }
 
 .folder-tile:not(:has(.hide-icon:hover, .pin-top-icon:hover)):active {
@@ -973,10 +1041,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .folder-tile.active {
-    background: rgba(217, 119, 87, 0.22);
+    background: rgba(217, 119, 87, 0.16);
     color: var(--primary-color);
-    border-color: rgba(217, 119, 87, 0.42);
-    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.22), 0 6px 20px rgba(0, 0, 0, 0.26);
+    border-color: rgba(217, 119, 87, 0.32);
+    box-shadow: inset 0 0 0 1px rgba(217, 119, 87, 0.16), 0 6px 20px rgba(0, 0, 0, 0.26);
 }
 
 .folder-tile-title {
@@ -985,7 +1053,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 13px;
-    font-weight: 520;
+    font-weight: 500;
     letter-spacing: 0;
     flex-grow: 1;
 }
@@ -1096,7 +1164,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     font-size: var(--font-size-title);
-    font-weight: 620;
+    font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     margin: 0 0 var(--flat-pane-header-gap) 0;
@@ -1147,7 +1215,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .pane-breadcrumb-current {
     color: var(--text-color);
-    font-weight: 640;
+    font-weight: 600;
     font-size: 13px;
 }
 
@@ -1161,11 +1229,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 
-/* Item 7: More translucent glass cards with highlight border */
+/* Item 7: Glass cards with accent strip */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.96);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 9px 10px;
     margin-bottom: 0;
     min-height: 0;
@@ -1182,6 +1250,27 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         opacity var(--motion-fast) var(--ease-standard);
     will-change: auto;
     transform: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Accent strip — terracotta top bar */
+.bookmarks-pane-grid .leaf-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 2.5px;
+    border-radius: 0 0 4px 4px;
+    background: linear-gradient(90deg, transparent, var(--primary-color) 20%, var(--primary-color) 80%, transparent);
+    opacity: 0.35;
+    transition: opacity var(--motion-fast) var(--ease-standard), height var(--motion-fast) var(--ease-standard);
+}
+
+.bookmarks-pane-grid .leaf-wrapper:hover::before {
+    opacity: 0.65;
+    height: 3px;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
@@ -1189,18 +1278,18 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Item 10: Hover glow with border highlight animation */
+/* Hover glow with border highlight */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--elev-shadow-2);
-    background: rgba(255, 255, 255, 0.96);
-    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color));
+    transform: translateY(-2px);
+    box-shadow: var(--elev-shadow-2), 0 0 0 1px color-mix(in srgb, var(--primary-color) 12%, transparent);
+    background: rgba(255, 255, 255, 0.98);
+    border-color: color-mix(in srgb, var(--primary-color) 40%, var(--border-color));
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
     background: rgba(42, 48, 60, 0.94);
-    border-color: rgba(225, 139, 100, 0.48);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
+    border-color: rgba(225, 139, 100, 0.40);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(225, 139, 100, 0.08);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
@@ -1231,19 +1320,27 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     transition: opacity 0.3s ease;
 }
 
-/* Center the icon inside the card */
+/* Center the icon inside the card — enhanced with background ring */
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
-    margin-right: 0 !important; /* Remove horizontal-layout margin */
-    margin-bottom: 4px;
+    margin-right: 0 !important;
+    margin-bottom: 6px;
+    padding: 6px;
+    background: color-mix(in srgb, var(--primary-color) 7%, transparent);
+    border-radius: 12px;
+}
+
+:root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon,
+:root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
+    background: rgba(245, 166, 122, 0.08);
 }
 
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 1px;
-    font-size: 13px;
-    font-weight: 540;
-    line-height: 1.28;
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.32;
     color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
     text-align: center;
     max-width: 100%;
@@ -1271,7 +1368,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     font-size: var(--font-size-title);
-    font-weight: 620;
+    font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     padding: 0 0 10px 4px;
@@ -1625,7 +1722,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .folder-modal-title {
-    font-weight: 650;
+    font-weight: 700;
     font-size: 24px;
     color: var(--text-color);
     flex: 1;
@@ -1662,7 +1759,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .card-title {
-    font-weight: 640;
+    font-weight: 600;
     font-size: var(--font-size-title);
     margin-left: 12px;
     flex: 1;
@@ -1837,7 +1934,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .sub-folder-header {
     font-size: 13px;
-    font-weight: 620;
+    font-weight: 600;
     padding: 4px 0;
     color: var(--text-color);
     opacity: 0.9;
@@ -1932,7 +2029,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    box-shadow: var(--elev-shadow-1);
+    box-shadow: var(--elev-shadow-1), 0 0 0 1px color-mix(in srgb, var(--primary-color) 5%, transparent);
     cursor: pointer;
     transition: transform var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
@@ -1950,6 +2047,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #layout-toggle-btn svg {
     width: 18px;
     height: 18px;
+    transition: transform var(--motion-medium) var(--ease-standard);
 }
 
 .icon-hidden {
@@ -1960,9 +2058,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: color-mix(in srgb, var(--card-hover) 88%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
-    box-shadow: var(--elev-shadow-2);
-    transform: translateY(-1px);
+    box-shadow: var(--elev-shadow-2), 0 0 12px color-mix(in srgb, var(--primary-color) 10%, transparent);
+    transform: translateY(-2px);
     opacity: 1;
+}
+
+#layout-toggle-btn:hover svg {
+    transform: scale(1.08);
 }
 
 #settings-btn {
@@ -1976,7 +2078,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    box-shadow: var(--elev-shadow-1);
+    box-shadow: var(--elev-shadow-1), 0 0 0 1px color-mix(in srgb, var(--primary-color) 5%, transparent);
     font-size: 16px;
     cursor: pointer;
     transition: transform var(--motion-medium) var(--ease-standard),
@@ -1995,15 +2097,20 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #settings-btn svg {
     width: 18px;
     height: 18px;
+    transition: transform 0.4s var(--ease-standard);
 }
 
 #settings-btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     background: color-mix(in srgb, var(--card-hover) 88%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
-    box-shadow: var(--elev-shadow-2);
+    box-shadow: var(--elev-shadow-2), 0 0 12px color-mix(in srgb, var(--primary-color) 10%, transparent);
     opacity: 1;
+}
+
+#settings-btn:hover svg {
+    transform: rotate(60deg);
 }
 
 /* Remove tooltip - cleaner look */
@@ -2498,7 +2605,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-name {
     font-size: 18px;
-    font-weight: 650;
+    font-weight: 700;
     color: rgba(255, 248, 242, 0.96);
 }
 
@@ -2717,7 +2824,7 @@ label.ai-provider-switch {
 
 .ai-provider-composer-title {
     font-size: 15px;
-    font-weight: 650;
+    font-weight: 700;
     color: rgba(255, 248, 242, 0.94);
 }
 
@@ -3777,7 +3884,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 .confirm-dialog-title {
     font-size: 19px;
-    font-weight: 680;
+    font-weight: 700;
     color: var(--text-color);
     margin-bottom: 8px;
 }
@@ -3903,7 +4010,7 @@ input[type="file"]:focus-visible {
 }
 
 .edit-dialog-title {
-    font-weight: 680;
+    font-weight: 700;
     font-size: 19px;
     color: var(--primary-color);
 }
@@ -3957,6 +4064,47 @@ input[type="file"]:focus-visible {
     justify-content: flex-end;
 }
 
+/* === HiDPI / Retina / 4K refinements === */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    :root {
+        /* Tighter, crisper shadows on HiDPI — large blur radii look diffuse at 2×+ */
+        --elev-shadow-1: 0 4px 10px rgba(28, 21, 14, 0.07);
+        --elev-shadow-2: 0 8px 20px rgba(28, 21, 14, 0.10);
+        --elev-shadow-3: 0 12px 28px rgba(28, 21, 14, 0.13);
+    }
+
+    :root[data-theme="dark"] {
+        --elev-shadow-1: 0 6px 14px rgba(0, 0, 0, 0.24);
+        --elev-shadow-2: 0 10px 24px rgba(0, 0, 0, 0.30);
+        --elev-shadow-3: 0 16px 32px rgba(0, 0, 0, 0.36);
+    }
+
+    /* Crisp favicon rendering — avoid sub-pixel blur on downscaled HiDPI favicons */
+    .bookmark-icon img,
+    .suggestion-icon img,
+    .ai-provider-icon img,
+    .ai-tab img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+
+    /* Slightly reduce backdrop blur — 18px CSS = 36px physical, too diffuse on 4K */
+    .container {
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Sharper inner border highlight */
+    .container::after {
+        opacity: 0.4;
+    }
+
+    /* Ensure bookmark icon fallback circles stay crisp */
+    .bookmark-icon-fallback {
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .container,
     #background-layer,
@@ -3977,7 +4125,10 @@ input[type="file"]:focus-visible {
     .folder-modal-content,
     .confirm-dialog-content,
     .edit-dialog-content,
-    .tree-state-skeleton span {
+    .tree-state-skeleton span,
+    .folder-tile.active::before,
+    #settings-btn svg,
+    #layout-toggle-btn svg {
         transition: none !important;
         animation: none !important;
     }
