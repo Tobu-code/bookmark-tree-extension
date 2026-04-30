@@ -21,6 +21,8 @@ const LEGACY_FREQUENCY_STORAGE_KEYS = [
 ];
 const AI_DYNAMIC_RULE_START = 1000;
 const AI_DYNAMIC_RULE_END = 1499;
+// HiDPI-aware favicon size: request 2× or 3× resolution for crisp rendering on Retina/4K screens
+const FAVICON_SIZE = Math.min(128, 32 * Math.ceil(window.devicePixelRatio || 1));
 const BUILTIN_AI_PROVIDERS = Object.freeze([
     {
         id: 'google',
@@ -28,7 +30,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.google.com/search?udm=50&aep=11',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" width="24" height="24" alt="Google" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Google" draggable="false">`
     },
     {
         id: 'chatgpt',
@@ -36,7 +38,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chatgpt.com/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=32" width="24" height="24" alt="ChatGPT" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="ChatGPT" draggable="false">`
     },
     {
         id: 'qwen',
@@ -44,7 +46,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.qwen.ai/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=chat.qwen.ai&sz=32" width="24" height="24" alt="通义千问" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=chat.qwen.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="通义千问" draggable="false">`
     },
     {
         id: 'doubao',
@@ -52,7 +54,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.doubao.com/chat/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=doubao.com&sz=32" width="24" height="24" alt="豆包" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=doubao.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="豆包" draggable="false">`
     },
     {
         id: 'kimi',
@@ -60,7 +62,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://kimi.moonshot.cn/',
         enabled: true,
         builtIn: true,
-        icon: '<img src="https://www.google.com/s2/favicons?domain=kimi.moonshot.cn&sz=32" width="24" height="24" alt="Kimi" draggable="false">'
+        icon: `<img src="https://www.google.com/s2/favicons?domain=kimi.moonshot.cn&sz=${FAVICON_SIZE}" width="24" height="24" alt="Kimi" draggable="false">`
     }
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
@@ -1970,7 +1972,7 @@ function initSearch() {
                 const url = new URL(bookmark.url);
                 const img = document.createElement('img');
                 // Use extension's favicon service
-                img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=32`;
+                img.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(bookmark.url)}&size=${FAVICON_SIZE}`;
                 img.addEventListener('error', function () {
                     const fallback = document.createElement('span');
                     fallback.className = 'suggestion-icon-fallback';
@@ -2180,7 +2182,7 @@ function getIconForBookmark(url) {
         try {
             return {
                 type: 'img',
-                src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32`
+                src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${FAVICON_SIZE}`
             };
         } catch {
             return { type: 'svg', value: BOOKMARK_ICON_SVG };
@@ -2585,7 +2587,7 @@ function initSettingsUI(settings) {
             return `
                 <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
                     <div class="ai-provider-identity">
-                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=32" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
+                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=${FAVICON_SIZE}" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>

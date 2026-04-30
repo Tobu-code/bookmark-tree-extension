@@ -9,13 +9,13 @@
     /* Deep Charcoal Black */
     --text-secondary: #6d675f;
     /* Medium Grey */
-    --bg-overlay: rgba(248, 246, 241, 0.82);
+    --bg-overlay: rgba(248, 246, 241, 0.88);
     /* Creamy/Beige Tint */
     --card-bg: #fffdf9;
     /* Pure White Cards */
     --card-hover: #f8f3eb;
     /* Subtle Beige Hover */
-    --border-color: rgba(110, 78, 53, 0.12);
+    --border-color: rgba(110, 78, 53, 0.18);
     --shadow-sm: 0 4px 12px rgba(42, 30, 20, 0.06);
     --shadow-md: 0 18px 44px rgba(40, 30, 20, 0.12);
     /* Specific Claude shadow */
@@ -24,7 +24,7 @@
 
     /* Added for Modal Readability */
     --glass-bg: rgba(255, 253, 250, 0.92);
-    --glass-border: rgba(110, 78, 53, 0.1);
+    --glass-border: rgba(110, 78, 53, 0.14);
     --flat-pane-header-height: 52px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 40px;
@@ -167,7 +167,7 @@ h3,
 .card-title,
 .folder-modal-title {
     font-family: inherit;
-    font-weight: 650;
+    font-weight: 700;
     letter-spacing: -0.01em;
 }
 
@@ -238,7 +238,7 @@ h3,
     height: clamp(680px, 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
     border-radius: 28px;
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), var(--bg-overlay);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.04) 100%), var(--bg-overlay);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow: var(--elev-shadow-2);
@@ -266,8 +266,8 @@ h3,
     pointer-events: none;
     border-radius: inherit;
     background:
-        linear-gradient(158deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 42%, transparent 72%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 30%);
+        linear-gradient(158deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 42%, transparent 72%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 30%);
 }
 
 .container::after {
@@ -934,7 +934,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow var(--motion-medium) var(--ease-standard),
         color var(--motion-medium) var(--ease-standard),
         opacity var(--motion-medium) var(--ease-standard);
-    background: rgba(255, 250, 245, 0.9);
+    background: rgba(255, 250, 245, 0.94);
     color: var(--text-color);
     border: 1px solid color-mix(in srgb, var(--border-color) 95%, transparent);
     box-shadow: 0 1px 3px rgba(44, 33, 22, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.45);
@@ -961,7 +961,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .folder-tile.active {
     background: color-mix(in srgb, var(--primary-color) 18%, transparent);
     color: var(--primary-color);
-    font-weight: 620;
+    font-weight: 600;
     border-left: 2px solid var(--primary-color);
     border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent), var(--elev-shadow-1);
@@ -985,7 +985,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 13px;
-    font-weight: 520;
+    font-weight: 500;
     letter-spacing: 0;
     flex-grow: 1;
 }
@@ -1096,7 +1096,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     font-size: var(--font-size-title);
-    font-weight: 620;
+    font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     margin: 0 0 var(--flat-pane-header-gap) 0;
@@ -1147,7 +1147,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .pane-breadcrumb-current {
     color: var(--text-color);
-    font-weight: 640;
+    font-weight: 600;
     font-size: 13px;
 }
 
@@ -1163,7 +1163,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 7: More translucent glass cards with highlight border */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.96);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
     border-radius: 14px;
     padding: 9px 10px;
@@ -1242,7 +1242,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 1px;
     font-size: 13px;
-    font-weight: 540;
+    font-weight: 500;
     line-height: 1.28;
     color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
     text-align: center;
@@ -1271,7 +1271,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     font-size: var(--font-size-title);
-    font-weight: 620;
+    font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
     padding: 0 0 10px 4px;
@@ -1625,7 +1625,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .folder-modal-title {
-    font-weight: 650;
+    font-weight: 700;
     font-size: 24px;
     color: var(--text-color);
     flex: 1;
@@ -1662,7 +1662,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .card-title {
-    font-weight: 640;
+    font-weight: 600;
     font-size: var(--font-size-title);
     margin-left: 12px;
     flex: 1;
@@ -1837,7 +1837,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .sub-folder-header {
     font-size: 13px;
-    font-weight: 620;
+    font-weight: 600;
     padding: 4px 0;
     color: var(--text-color);
     opacity: 0.9;
@@ -2498,7 +2498,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-name {
     font-size: 18px;
-    font-weight: 650;
+    font-weight: 700;
     color: rgba(255, 248, 242, 0.96);
 }
 
@@ -2717,7 +2717,7 @@ label.ai-provider-switch {
 
 .ai-provider-composer-title {
     font-size: 15px;
-    font-weight: 650;
+    font-weight: 700;
     color: rgba(255, 248, 242, 0.94);
 }
 
@@ -3777,7 +3777,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 .confirm-dialog-title {
     font-size: 19px;
-    font-weight: 680;
+    font-weight: 700;
     color: var(--text-color);
     margin-bottom: 8px;
 }
@@ -3903,7 +3903,7 @@ input[type="file"]:focus-visible {
 }
 
 .edit-dialog-title {
-    font-weight: 680;
+    font-weight: 700;
     font-size: 19px;
     color: var(--primary-color);
 }
@@ -3955,6 +3955,47 @@ input[type="file"]:focus-visible {
     display: flex;
     gap: 12px;
     justify-content: flex-end;
+}
+
+/* === HiDPI / Retina / 4K refinements === */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    :root {
+        /* Tighter, crisper shadows on HiDPI — large blur radii look diffuse at 2×+ */
+        --elev-shadow-1: 0 4px 10px rgba(28, 21, 14, 0.07);
+        --elev-shadow-2: 0 8px 20px rgba(28, 21, 14, 0.10);
+        --elev-shadow-3: 0 12px 28px rgba(28, 21, 14, 0.13);
+    }
+
+    :root[data-theme="dark"] {
+        --elev-shadow-1: 0 6px 14px rgba(0, 0, 0, 0.24);
+        --elev-shadow-2: 0 10px 24px rgba(0, 0, 0, 0.30);
+        --elev-shadow-3: 0 16px 32px rgba(0, 0, 0, 0.36);
+    }
+
+    /* Crisp favicon rendering — avoid sub-pixel blur on downscaled HiDPI favicons */
+    .bookmark-icon img,
+    .suggestion-icon img,
+    .ai-provider-icon img,
+    .ai-tab img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+
+    /* Slightly reduce backdrop blur — 18px CSS = 36px physical, too diffuse on 4K */
+    .container {
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Sharper inner border highlight */
+    .container::after {
+        opacity: 0.4;
+    }
+
+    /* Ensure bookmark icon fallback circles stay crisp */
+    .bookmark-icon-fallback {
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

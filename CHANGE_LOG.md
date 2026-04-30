@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-04-30]
+- **Time**: 2026-04-30 16:36:00 +0800
+- **Type**: Fix (4K / HiDPI Sharpness Enhancement)
+- **Content**: 修复 4K/Retina 屏幕下页面精致感不足的问题，共 5 项改进：1) Favicon 分辨率从硬编码 32px 改为 DPI 感知动态尺寸（`32 × devicePixelRatio`，最高 128px），消除图标在高分屏上的模糊拉伸；2) 提升边框对比度（border-color opacity 0.12→0.18），让卡片边界在高 DPI 下更清晰；3) 减少容器半透明叠加层级（bg-overlay 0.82→0.88，高光层强度降低），提升内容锐度；4) 新增 `@media (min-resolution: 192dpi)` 媒体查询，收紧阴影扩散半径、降低毛玻璃强度、启用 favicon `crisp-edges` 渲染；5) 全局 font-weight 标准化（520→500, 540→500, 620→600, 640→600, 650→700, 680→700），确保系统字体正确匹配粗细档位。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
 ## [2026-04-25]
 - **Time**: 2026-04-25 16:08:30 +0800
 - **Type**: Refactor (Remove Delete Button & Auto Favicon for Custom AI)
