@@ -879,8 +879,19 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             handleItemDragEnd.call(target, e);
         });
 
-        folder.children.forEach(child => {
-            if (!child.children) {
+        const bookmarks = folder.children.filter(child => !child.children);
+        
+        if (bookmarks.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'pane-empty-state';
+            emptyState.innerHTML = `
+                <div class="pane-empty-icon">${FOLDER_ICON_SVG}</div>
+                <div class="pane-empty-title">此目录下没有直接书签</div>
+                <div class="pane-empty-desc">请在左侧目录树中展开并点击子文件夹查看内容</div>
+            `;
+            bmkPaneScroll.appendChild(emptyState);
+        } else {
+            bookmarks.forEach(child => {
                 // Render bookmark
                 const bmkItem = renderFlatBookmarkItem(child);
                 if (child.url) {
@@ -902,10 +913,9 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                     }
                 }
                 listContainer.appendChild(bmkItem);
-            }
-        });
-        
-        bmkPaneScroll.appendChild(listContainer);
+            });
+            bmkPaneScroll.appendChild(listContainer);
+        }
     };
 
     const activateFolder = (folder, element) => {
