@@ -9,7 +9,7 @@ const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
-const STORAGE_KEY_FLAT_DIRECTORY_ORDER = 'flat_directory_order';
+const STORAGE_KEY_TREE_EXPANDED = 'tree_expanded_folders';
 const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
 const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
 const STORAGE_KEY_AI_CONFIG = 'bookmark_tree_ai_config_v2';
@@ -79,7 +79,7 @@ let LAYOUT_MODE = 'tree';
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
 let FLAT_DIR_EXPANDED = false;
-let FLAT_DIRECTORY_ORDER = [];
+let TREE_EXPANDED_FOLDERS = new Set(['1']);
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
 let BOOKMARK_SEARCH_INDEX = [];
@@ -495,34 +495,8 @@ function getFlatRootFolders(bookmarkTreeNodes) {
     return folders;
 }
 
-function applyFlatDirectoryOrder(folders) {
-    if (!Array.isArray(folders) || folders.length === 0) return [];
-    if (!Array.isArray(FLAT_DIRECTORY_ORDER) || FLAT_DIRECTORY_ORDER.length === 0) return [...folders];
-
-    const byId = new Map(folders.map(folder => [folder.id, folder]));
-    const ordered = [];
-
-    FLAT_DIRECTORY_ORDER.forEach((id) => {
-        if (byId.has(id)) ordered.push(byId.get(id));
-    });
-
-    folders.forEach((folder) => {
-        if (!FLAT_DIRECTORY_ORDER.includes(folder.id)) ordered.push(folder);
-    });
-
-    return ordered;
-}
-
-function getOrderedFlatFolderIds() {
-    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(BOOKMARK_TREE_CACHE));
-    return allFolders.map(folder => folder.id);
-}
-
-function saveFlatDirectoryOrder(ids, callback) {
-    FLAT_DIRECTORY_ORDER = Array.from(new Set(ids));
-    chrome.storage.local.set({ [STORAGE_KEY_FLAT_DIRECTORY_ORDER]: FLAT_DIRECTORY_ORDER }, () => {
-        if (callback) callback();
-    });
+function saveTreeExpandedState() {
+    chrome.storage.local.set({ [STORAGE_KEY_TREE_EXPANDED]: Array.from(TREE_EXPANDED_FOLDERS) });
 }
 
 function renderBookmarksWithLayoutTransition() {
@@ -567,7 +541,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_FLAT_DIRECTORY_ORDER,
+            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
         ]),
         getBookmarks()
@@ -608,10 +582,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         FLAT_DIR_EXPANDED = false;
     }
 
-    if (Array.isArray(settings[STORAGE_KEY_FLAT_DIRECTORY_ORDER])) {
-        FLAT_DIRECTORY_ORDER = settings[STORAGE_KEY_FLAT_DIRECTORY_ORDER];
-    } else {
-        FLAT_DIRECTORY_ORDER = [];
+    if (Array.isArray(settings[STORAGE_KEY_TREE_EXPANDED])) {
+        TREE_EXPANDED_FOLDERS = new Set(settings[STORAGE_KEY_TREE_EXPANDED]);
     }
 
     // 4. Init Settings UI (Bindings)
@@ -820,10 +792,15 @@ function renderTreeBookmarks(bookmarkTreeNodes, container) {
 }
 
 function renderFlatBookmarks(bookmarkTreeNodes, container) {
-    const FLAT_DIR_VISIBLE_LIMIT = 8;
-    const allFolders = applyFlatDirectoryOrder(getFlatRootFolders(bookmarkTreeNodes));
-    if (allFolders.length === 0) {
-        renderBookmarkState('empty', '当前没有可平铺的书签目录，可切回树状模式查看顶层书签。');
+    if (!bookmarkTreeNodes || !bookmarkTreeNodes[0]) {
+        renderBookmarkState('empty', '当前没有书签目录。');
+        return;
+    }
+
+    const rootNode = bookmarkTreeNodes[0];
+    const bookmarksBar = rootNode.children.find(node => node.id === '1') || rootNode.children[0];
+    if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
+        renderBookmarkState('empty', '书签栏还是空的，先收藏几个常用站点吧。');
         return;
     }
 
@@ -838,6 +815,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
     const dirScroll = document.createElement('div');
     dirScroll.className = 'directory-pane-scroll';
+    // Directory scroll container represents root for left pane reordering
+    dirScroll.dataset.parentId = bookmarksBar.id;
     dirPane.appendChild(dirScroll);
     
     const bmkPane = document.createElement('div');
@@ -846,14 +825,17 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     container.appendChild(dirPane);
     container.appendChild(bmkPane);
 
+    let currentActiveFolder = null;
+    let pendingRenderFrame = null;
+
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
         
         const header = document.createElement('div');
         header.className = 'bookmarks-pane-header';
-        const displayTitle = folder._fullPath || folder.title;
-        buildFolderBreadcrumb(header, displayTitle);
+        
+        buildFolderBreadcrumb(header, folder.title);
         bmkPane.appendChild(header);
 
         const bmkPaneScroll = document.createElement('div');
@@ -863,14 +845,13 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const listContainer = document.createElement('div');
         listContainer.className = 'bookmarks-pane-grid';
 
-        // Make the grid container a drop target for reordering bookmarks inside this folder
         listContainer.dataset.type = 'folder';
         listContainer.dataset.id = folder.id;
         listContainer.dataset.parentId = folder.id;
 
         const getFlatDragTarget = (e) => {
             const eventTarget = e.target instanceof Element ? e.target : null;
-            const item = eventTarget ? eventTarget.closest('.leaf-wrapper') : null;
+            const item = eventTarget ? eventTarget.closest('.leaf-wrapper, .bookmark-card') : null;
             return item && listContainer.contains(item) ? item : listContainer;
         };
 
@@ -898,19 +879,14 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             handleItemDragEnd.call(target, e);
         });
 
-        let childrenToRender = folder.children.filter(child => !child.children);
-        
-        // Append container synchronously to prevent race conditions during rapid re-renders
-        bmkPaneScroll.appendChild(listContainer);
-        renderBookmarkItems(childrenToRender, listContainer, folder);
-    };
-
-    // Helper to render bookmark items into the grid container
-    const renderBookmarkItems = (children, listContainer, folder) => {
-        children.forEach(child => {
+        folder.children.forEach(child => {
+            if (child.children) {
+                // Render subfolder as a simple tile
+                const folderCard = createSimpleTile(child);
+                listContainer.appendChild(folderCard);
+            } else {
+                // Render bookmark
                 const bmkItem = renderFlatBookmarkItem(child);
-
-                // Item 8: Add URL preview line below the title
                 if (child.url) {
                     const leafNode = bmkItem.querySelector('.leaf-node');
                     if (leafNode) {
@@ -918,7 +894,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                         urlPreview.className = 'bookmark-url-preview';
                         try {
                             let hostname = new URL(child.url).hostname.replace(/^www\./, '');
-                            // Simplify long subdomains: keep last 2 levels (e.g. 'laihua.cn')
                             const parts = hostname.split('.');
                             if (parts.length > 2 && hostname.length > 20) {
                                 hostname = parts.slice(-2).join('.');
@@ -930,148 +905,152 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                         leafNode.appendChild(urlPreview);
                     }
                 }
-
                 listContainer.appendChild(bmkItem);
+            }
         });
+        
+        bmkPaneScroll.appendChild(listContainer);
     };
 
-    // Hover-to-switch: immediate activation + frame-scheduled render for smoothness
-    let currentActiveFolder = null;
-    const allowHoverSwitch = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    let pendingRenderFrame = null;
-
-    const activateFolder = (folder, folderTile, animated = false) => {
+    const activateFolder = (folder, element) => {
         if (currentActiveFolder === folder) return;
-        dirPane.querySelectorAll('.folder-tile').forEach(t => t.classList.remove('active'));
-        folderTile.classList.add('active');
+        dirPane.querySelectorAll('.tree-folder-item').forEach(t => t.classList.remove('active'));
+        if (element) element.classList.add('active');
         currentActiveFolder = folder;
-
+        
         if (pendingRenderFrame) {
             cancelAnimationFrame(pendingRenderFrame);
             pendingRenderFrame = null;
         }
 
-        if (animated) {
-            bmkPane.style.opacity = '0.94';
-            bmkPane.style.transform = 'translateY(2px)';
-            pendingRenderFrame = requestAnimationFrame(() => {
-                renderBmkPane(folder);
-                requestAnimationFrame(() => {
-                    bmkPane.style.opacity = '1';
-                    bmkPane.style.transform = 'translateY(0)';
-                });
-                pendingRenderFrame = null;
+        bmkPane.style.opacity = '0.94';
+        bmkPane.style.transform = 'translateY(2px)';
+        pendingRenderFrame = requestAnimationFrame(() => {
+            renderBmkPane(folder);
+            requestAnimationFrame(() => {
+                bmkPane.style.opacity = '1';
+                bmkPane.style.transform = 'translateY(0)';
             });
-            return;
-        }
-
-        renderBmkPane(folder);
+            pendingRenderFrame = null;
+        });
     };
 
-    const visibleFolders = allFolders.filter((folder) => {
-        const isHidden = HIDDEN_FOLDERS.includes(folder.id);
-        return !(isHidden && !SHOW_HIDDEN_FOLDERS);
-    });
-    const shouldClampFolders = visibleFolders.length > FLAT_DIR_VISIBLE_LIMIT && !FLAT_DIR_EXPANDED;
-    const foldersToRender = shouldClampFolders
-        ? visibleFolders.slice(0, FLAT_DIR_VISIBLE_LIMIT)
-        : visibleFolders;
+    const renderFolderTree = (node, parentContainer, depth = 0) => {
+        if (!node.children) return;
 
-    foldersToRender.forEach((folder) => {
-        // Skip hidden folders unless SHOW_HIDDEN_FOLDERS is true
-        const isHidden = HIDDEN_FOLDERS.includes(folder.id);
+        const folderItem = document.createElement('div');
+        folderItem.className = 'tree-folder-item';
+        folderItem.style.paddingLeft = `${depth * 16 + 4}px`;
+        folderItem.dataset.id = node.id;
+        folderItem.dataset.type = 'folder';
+        folderItem.setAttribute('draggable', 'true');
 
-        const folderTile = document.createElement('div');
-        folderTile.className = 'folder-tile';
-        if (isHidden) folderTile.classList.add('is-hidden-folder');
+        const toggleBtn = document.createElement('div');
+        toggleBtn.className = 'tree-folder-toggle';
+        if (node.children.some(child => child.children)) {
+            toggleBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+            if (TREE_EXPANDED_FOLDERS.has(node.id)) {
+                toggleBtn.classList.add('expanded');
+            }
+        } else {
+            toggleBtn.style.visibility = 'hidden';
+            toggleBtn.innerHTML = `<svg width="12" height="12"></svg>`;
+        }
         
-        folderTile.dataset.id = folder.id;
-        folderTile.dataset.parentId = folder.parentId;
-        folderTile.dataset.type = 'folder';
-        folderTile.setAttribute('draggable', 'true');
+        const isHidden = HIDDEN_FOLDERS.includes(node.id);
+        if (isHidden && !SHOW_HIDDEN_FOLDERS) return;
+        if (isHidden) folderItem.classList.add('is-hidden-folder');
+
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'tree-folder-icon';
+        iconContainer.innerHTML = FOLDER_ICON_SVG;
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'tree-folder-title';
+        titleSpan.textContent = node.title;
         
         const eyeSvg = isHidden
             ? `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
             : `<svg class="hide-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
 
-        const pinTopBtn = `<button type="button" class="folder-action-btn pin-top-btn" title="置顶目录" aria-label="置顶目录"><svg class="pin-top-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V4"/><path d="m6 10 6-6 6 6"/><path d="M5 20h14"/></svg></button>`;
-        const hideBtnHtml = `<button type="button" class="folder-action-btn hide-btn" title="${isHidden ? '取消隐藏目录' : '隐藏目录'}" aria-label="${isHidden ? '取消隐藏目录' : '隐藏目录'}">${eyeSvg}</button>`;
-        folderTile.innerHTML = `${FOLDER_ICON_SVG} <span class="folder-tile-title">${folder.title}</span><span class="folder-tile-actions">${pinTopBtn}${hideBtnHtml}</span>`;
+        const actionsSpan = document.createElement('span');
+        actionsSpan.className = 'tree-folder-actions';
+        const hideBtnHtml = `<button type="button" class="folder-action-btn hide-btn" title="${isHidden ? '取消隐藏' : '隐藏目录'}">${eyeSvg}</button>`;
+        actionsSpan.innerHTML = hideBtnHtml;
+
+        folderItem.appendChild(toggleBtn);
+        folderItem.appendChild(iconContainer);
+        folderItem.appendChild(titleSpan);
+        folderItem.appendChild(actionsSpan);
         
-        const hideBtn = folderTile.querySelector('.hide-btn');
-        const pinBtn = folderTile.querySelector('.pin-top-btn');
+        const childrenContainer = document.createElement('div');
+        childrenContainer.className = 'tree-folder-children';
+        childrenContainer.dataset.parentId = node.id;
+        if (TREE_EXPANDED_FOLDERS.has(node.id)) {
+            childrenContainer.classList.add('expanded');
+        }
 
-        pinBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const currentOrderedIds = getOrderedFlatFolderIds();
-            const nextOrder = [folder.id, ...currentOrderedIds.filter(id => id !== folder.id)];
-            saveFlatDirectoryOrder(nextOrder, () => {
-                renderBookmarks(bookmarkTreeNodes);
-            });
-        });
+        folderItem.addEventListener('dragstart', handleItemDragStart);
+        folderItem.addEventListener('dragover', handleItemDragOver);
+        folderItem.addEventListener('dragleave', handleItemDragLeave);
+        folderItem.addEventListener('drop', handleItemDrop);
+        folderItem.addEventListener('dragend', handleItemDragEnd);
 
-        hideBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (isHidden) {
-                HIDDEN_FOLDERS = HIDDEN_FOLDERS.filter(id => id !== folder.id);
-            } else {
-                HIDDEN_FOLDERS.push(folder.id);
+        folderItem.addEventListener('click', (e) => {
+            if (e.target.closest('.tree-folder-toggle') && node.children.some(child => child.children)) {
+                e.stopPropagation();
+                if (childrenContainer.classList.contains('expanded')) {
+                    childrenContainer.classList.remove('expanded');
+                    toggleBtn.classList.remove('expanded');
+                    TREE_EXPANDED_FOLDERS.delete(node.id);
+                } else {
+                    childrenContainer.classList.add('expanded');
+                    toggleBtn.classList.add('expanded');
+                    TREE_EXPANDED_FOLDERS.add(node.id);
+                }
+                saveTreeExpandedState();
+                return;
             }
-            chrome.storage.local.set({ [STORAGE_KEY_HIDDEN_FOLDERS]: HIDDEN_FOLDERS }, () => {
-                renderBookmarks(bookmarkTreeNodes);
-            });
+            
+            if (e.target.closest('.hide-btn')) {
+                e.stopPropagation();
+                if (isHidden) {
+                    HIDDEN_FOLDERS = HIDDEN_FOLDERS.filter(id => id !== node.id);
+                } else {
+                    HIDDEN_FOLDERS.push(node.id);
+                }
+                chrome.storage.local.set({ [STORAGE_KEY_HIDDEN_FOLDERS]: HIDDEN_FOLDERS }, () => {
+                    renderBookmarks(bookmarkTreeNodes);
+                });
+                return;
+            }
+
+            activateFolder(node, folderItem);
         });
 
-        if (allowHoverSwitch) {
-            folderTile.addEventListener('mouseenter', () => {
-                activateFolder(folder, folderTile, true);
-            });
+        parentContainer.appendChild(folderItem);
+        parentContainer.appendChild(childrenContainer);
+
+        // Auto-activate the first rendered folder if nothing is active
+        if (!currentActiveFolder && (node.id === '1' || depth === 0)) {
+             folderItem.classList.add('active');
+             currentActiveFolder = node;
+             renderBmkPane(node);
         }
 
-        // Keep click as fallback (touch devices, accessibility)
-        folderTile.addEventListener('click', () => {
-            activateFolder(folder, folderTile, false);
+        node.children.forEach(child => {
+            if (child.children) {
+                renderFolderTree(child, childrenContainer, depth + 1);
+            }
         });
+    };
 
-        // Folder tile drag events for sorting folders
-        folderTile.addEventListener('dragstart', handleItemDragStart);
-        folderTile.addEventListener('dragover', handleItemDragOver);
-        folderTile.addEventListener('dragleave', handleItemDragLeave);
-        folderTile.addEventListener('drop', handleItemDrop);
-        folderTile.addEventListener('dragend', handleItemDragEnd);
-        
-        dirScroll.appendChild(folderTile);
+    bookmarksBar.children.forEach(child => {
+        if (child.children) {
+            renderFolderTree(child, dirScroll, 0);
+        }
     });
-
-    // Automatically select the first visible folder
-    const firstTile = dirPane.querySelector('.folder-tile');
-    if (firstTile) {
-        firstTile.classList.add('active');
-        const firstFolderId = firstTile.dataset.id;
-        const firstFolder = visibleFolders.find(f => f.id === firstFolderId);
-        if (firstFolder) {
-            currentActiveFolder = firstFolder;
-            renderBmkPane(firstFolder);
-        }
-    }
-
-    if (visibleFolders.length > FLAT_DIR_VISIBLE_LIMIT) {
-        const moreToggleBtn = document.createElement('div');
-        moreToggleBtn.className = 'directory-more-btn';
-        const remainingCount = Math.max(0, visibleFolders.length - FLAT_DIR_VISIBLE_LIMIT);
-        moreToggleBtn.textContent = FLAT_DIR_EXPANDED ? '收起目录' : `展开更多目录 (+${remainingCount})`;
-        moreToggleBtn.addEventListener('click', () => {
-            FLAT_DIR_EXPANDED = !FLAT_DIR_EXPANDED;
-            chrome.storage.local.set({ [STORAGE_KEY_FLAT_DIR_EXPANDED]: FLAT_DIR_EXPANDED }, () => {
-                renderBookmarks(bookmarkTreeNodes);
-            });
-        });
-        dirScroll.appendChild(moreToggleBtn);
-    }
-
-    // Add "Manage Hidden Folders" toggle at the bottom of the left pane
+    
     if (HIDDEN_FOLDERS.length > 0) {
         const toggleHiddenBtn = document.createElement('div');
         toggleHiddenBtn.className = 'toggle-hidden-btn';
@@ -1082,9 +1061,11 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             renderBookmarks(bookmarkTreeNodes);
         });
         
-        // Wrap the original dirPane content in a scrollable div and put this button at the bottom fixed
-        // or just append it as the last item in the grid, spanning both columns.
-        toggleHiddenBtn.style.gridColumn = '1 / -1';
+        toggleHiddenBtn.style.padding = '10px';
+        toggleHiddenBtn.style.cursor = 'pointer';
+        toggleHiddenBtn.style.textAlign = 'center';
+        toggleHiddenBtn.style.color = 'var(--text-subtle)';
+        toggleHiddenBtn.style.fontSize = '12px';
         dirScroll.appendChild(toggleHiddenBtn);
     }
 }
@@ -2955,7 +2936,7 @@ function applyContainerOpacity() {
 function handleItemDragStart(e) {
     if (this.getAttribute('draggable') !== 'true') return;
     const target = e.target instanceof Element ? e.target : null;
-    if (target && target.closest('.folder-tile-actions')) return;
+    if (target && (target.closest('.folder-tile-actions') || target.closest('.tree-folder-actions'))) return;
     e.stopPropagation(); // Prevent card drag start
     this.style.opacity = '0.4';
     dragSrcEl = this; // Reuse global
@@ -3022,40 +3003,6 @@ function handleItemDrop(e) {
                 }
             });
 
-            dragSrcEl.style.opacity = '1';
-            return false;
-        }
-
-        // Case 2: Reordering folders in flat left pane (index must ignore header/buttons)
-        if (dragSrcEl.dataset.type === 'folder' && this.dataset.type === 'folder' &&
-            dragSrcEl.classList.contains('folder-tile') && this.classList.contains('folder-tile')) {
-            const parent = this.parentNode;
-            const folderSiblings = Array.from(parent.querySelectorAll('.folder-tile'));
-            const srcIndex = folderSiblings.indexOf(dragSrcEl);
-            const targetIndex = folderSiblings.indexOf(this);
-            const moveAfterTarget = srcIndex < targetIndex;
-
-            if (moveAfterTarget) {
-                parent.insertBefore(dragSrcEl, this.nextSibling);
-            } else {
-                parent.insertBefore(dragSrcEl, this);
-            }
-
-            const targetId = this.dataset.id;
-            const allOrderedIds = getOrderedFlatFolderIds();
-            const sourceGlobalIndex = allOrderedIds.indexOf(srcId);
-            const targetGlobalIndex = allOrderedIds.indexOf(targetId);
-
-            if (sourceGlobalIndex !== -1 && targetGlobalIndex !== -1) {
-                allOrderedIds.splice(sourceGlobalIndex, 1);
-                const adjustedTargetIndex = allOrderedIds.indexOf(targetId);
-                const insertIndex = moveAfterTarget ? adjustedTargetIndex + 1 : adjustedTargetIndex;
-                allOrderedIds.splice(insertIndex, 0, srcId);
-            }
-
-            saveFlatDirectoryOrder(allOrderedIds, () => {
-                renderBookmarksFromCache();
-            });
             dragSrcEl.style.opacity = '1';
             return false;
         }
