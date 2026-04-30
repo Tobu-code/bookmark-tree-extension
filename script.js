@@ -3009,7 +3009,7 @@ function handleItemDrop(e) {
                 }
             });
 
-            dragSrcEl.style.opacity = '1';
+            if (dragSrcEl) dragSrcEl.style.opacity = '1';
             return false;
         }
 
@@ -3046,7 +3046,9 @@ function handleItemDrop(e) {
                 console.error('Move failed:', chrome.runtime.lastError.message);
             } else {
                 console.log('Moved bookmark item:', res);
-                dragSrcEl.dataset.parentId = destParentId;
+                if (dragSrcEl && dragSrcEl.dataset) {
+                    dragSrcEl.dataset.parentId = destParentId;
+                }
                 refreshBookmarkTreeCache();
             }
         });
