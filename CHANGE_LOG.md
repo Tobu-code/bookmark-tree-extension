@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-04-30]
+- **Time**: 2026-04-30 16:58:00 +0800
+- **Type**: Feature (Design Enhancement — 7 Visual Upgrades)
+- **Content**: 页面设计感全面提升，共 7 项改进：1) 时间显示升级为「时钟+日期+格言问候」三行结构，每日更换一句格言，时段自动切换问候语；2) 书签卡片顶部新增陶土橙色渐变条带（`::before`），hover 时条带增强，打破卡片千篇一律感；3) 平铺模式书签图标从 18px 升级至 26px 并新增圆角方形浅色背景环，增强图标存在感；4) 活跃目录项左侧指示条由 `border-left` 升级为渐变呼吸脉动条带（`activeBarPulse` 动画）；5) 搜索框升级为浮岛设计（圆角 20px、品牌色微光外环、focus 时扩散发光）；6) 主容器叠加极低不透明度 -45° 斜线纹理装饰，提升"被设计过"质感；7) 右下角浮动按钮增加品牌色微光环、hover 时设置齿轮 60° 旋转动画。所有改进已同步适配深色模式。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-04-30]
 - **Time**: 2026-04-30 16:36:00 +0800
 - **Type**: Fix (4K / HiDPI Sharpness Enhancement)
 - **Content**: 修复 4K/Retina 屏幕下页面精致感不足的问题，共 5 项改进：1) Favicon 分辨率从硬编码 32px 改为 DPI 感知动态尺寸（`32 × devicePixelRatio`，最高 128px），消除图标在高分屏上的模糊拉伸；2) 提升边框对比度（border-color opacity 0.12→0.18），让卡片边界在高 DPI 下更清晰；3) 减少容器半透明叠加层级（bg-overlay 0.82→0.88，高光层强度降低），提升内容锐度；4) 新增 `@media (min-resolution: 192dpi)` 媒体查询，收紧阴影扩散半径、降低毛玻璃强度、启用 favicon `crisp-edges` 渲染；5) 全局 font-weight 标准化（520→500, 540→500, 620→600, 640→600, 650→700, 680→700），确保系统字体正确匹配粗细档位。
