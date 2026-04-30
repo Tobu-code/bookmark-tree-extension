@@ -3469,7 +3469,13 @@ function initAmbientTime() {
         const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
         const weekday = weekdays[now.getDay()];
 
-        timeContainer.innerHTML = `<span class="ambient-time-clock">${hours}:${minutes}</span><span class="ambient-time-date">${year}年${month}月${day}日 · 星期${weekday}</span><span class="ambient-time-greeting">${getGreeting()}</span>`;
+        timeContainer.innerHTML = `
+            <span class="ambient-time-clock">${hours}:${minutes}</span>
+            <div class="ambient-time-info-group">
+                <span class="ambient-time-date">${year}年${month}月${day}日 · 星期${weekday}</span>
+                <span class="ambient-time-greeting">${getGreeting()}</span>
+            </div>
+        `;
 
         // Schedule next update at the start of the next minute
         const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
