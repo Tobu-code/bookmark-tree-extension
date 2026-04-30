@@ -1551,10 +1551,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */
 .top-level-container {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px 28px;
     justify-content: stretch;
-    padding: 18px 0 108px 0;
+    padding: 24px 0 120px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -1564,13 +1564,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     width: 100%;
-    height: 350px;
-    border-radius: 22px;
+    height: 380px;
+    border-radius: 28px;
     /* More rounded, Claude-style */
-    padding: 20px;
+    padding: 24px;
     box-sizing: border-box;
-    box-shadow: var(--elev-shadow-1), inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
-    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
     transition: transform var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
@@ -1588,7 +1588,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: color-mix(in srgb, var(--bg-overlay) 86%, white 14%);
+    background: #ffffff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.01);
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {

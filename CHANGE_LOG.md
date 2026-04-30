@@ -1,6 +1,11 @@
 # Change Log
 
 ## [2026-04-30]
+- **Time**: 2026-04-30 17:50:00 +0800
+- **Type**: Design (Flat Mode Polish)
+- **Content**: 平铺模式（Card Mode）呼吸感优化：1) 网格间距从 24px 增加至 32px，列宽改为自适应流式布局（min 300px），杜绝拥挤感；2) 增大卡片圆角（28px）与内边距（24px），并将物理边框替换为更柔和的弥散投影，显著提升页面的轻盈感与高端质感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+## [2026-04-30]
 - **Time**: 2026-04-30 17:46:00 +0800
 - **Type**: Design (Clock Layout Refinement)
 - **Content**: 空间利用率优化：将原本纵向排列的日期和格言移至大号时钟右侧并排展示。引入 `ambient-time-info-group` 容器实现细线分隔的横向排版，显著降低了顶部的垂直空间占用，使视觉锚点更加紧致、专业。
