@@ -495,3 +495,9 @@
 - **Type**: Feature (Flat Layout Content Rendering)
 - **Content**: 调整右侧目录内容渲染：当当前目录无直接书签时显示可点击子目录；进入目录后同步展示“直接书签 + 子目录”（直接书签优先），并统一子目录项图标与列表视觉样式，避免空白态割裂。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-06]
+- **Time**: 2026-05-06 15:36:43 +0800
+- **Type**: Refactor (Flat Layout Visual Cleanup)
+- **Content**: 移除右侧内容区“直接书签/子目录”分组提示文案，保留原有内容顺序与交互，仅做视觉减法以提升整体简洁度与一致性。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

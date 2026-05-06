@@ -889,12 +889,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         const bookmarks = folder.children.filter(child => !child.children);
         const subFolders = folder.children.filter(child => child.children);
-        const appendSectionTitle = (text) => {
-            const title = document.createElement('div');
-            title.className = 'bookmarks-pane-section-title';
-            title.textContent = text;
-            bmkPaneScroll.appendChild(title);
-        };
         const activateFolderByNode = (targetFolder) => {
             if (!targetFolder) return;
             TREE_EXPANDED_FOLDERS.add(folder.id);
@@ -904,7 +898,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         };
 
         if (bookmarks.length > 0) {
-            appendSectionTitle('直接书签');
             bookmarks.forEach(child => {
                 // Render bookmark
                 const bmkItem = renderFlatBookmarkItem(child);
@@ -932,7 +925,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         }
 
         if (subFolders.length > 0) {
-            appendSectionTitle('子目录');
             const subFolderList = document.createElement('div');
             subFolderList.className = 'bookmarks-pane-subfolder-list';
 

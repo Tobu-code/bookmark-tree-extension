@@ -4207,15 +4207,6 @@ input[type="file"]:focus-visible {
     line-height: 1.6;
 }
 
-.bookmarks-pane-section-title {
-    margin: 2px 0 14px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-}
-
 .bookmarks-pane-subfolder-list {
     display: flex;
     flex-direction: column;
