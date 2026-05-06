@@ -489,3 +489,9 @@
 - **Type**: Chore (Merge)
 - **Content**: 将分支 `feature/ai-sidebar-configurable` 合并至 `main`，同步 AI 侧栏可配置化、交互与样式相关改动，并准备主干发布。
 - **Impact**: `manifest.json`、`newtab.html`、`rules.json`、`script.js`、`styles.css`、`_metadata/generated_indexed_rulesets/_ruleset1`、`CHANGE_LOG.md`
+
+## [2026-05-06]
+- **Time**: 2026-05-06 15:32:20 +0800
+- **Type**: Feature (Flat Layout Content Rendering)
+- **Content**: 调整右侧目录内容渲染：当当前目录无直接书签时显示可点击子目录；进入目录后同步展示“直接书签 + 子目录”（直接书签优先），并统一子目录项图标与列表视觉样式，避免空白态割裂。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`

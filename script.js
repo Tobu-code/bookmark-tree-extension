@@ -888,17 +888,23 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         });
 
         const bookmarks = folder.children.filter(child => !child.children);
-        
-        if (bookmarks.length === 0) {
-            const emptyState = document.createElement('div');
-            emptyState.className = 'pane-empty-state';
-            emptyState.innerHTML = `
-                <div class="pane-empty-icon">${FOLDER_ICON_SVG}</div>
-                <div class="pane-empty-title">此目录下没有直接书签</div>
-                <div class="pane-empty-desc">请在左侧目录树中展开并点击子文件夹查看内容</div>
-            `;
-            bmkPaneScroll.appendChild(emptyState);
-        } else {
+        const subFolders = folder.children.filter(child => child.children);
+        const appendSectionTitle = (text) => {
+            const title = document.createElement('div');
+            title.className = 'bookmarks-pane-section-title';
+            title.textContent = text;
+            bmkPaneScroll.appendChild(title);
+        };
+        const activateFolderByNode = (targetFolder) => {
+            if (!targetFolder) return;
+            TREE_EXPANDED_FOLDERS.add(folder.id);
+            saveTreeExpandedState();
+            const leftFolderEl = dirPane.querySelector(`.tree-folder-item[data-id="${targetFolder.id}"]`);
+            activateFolder(targetFolder, leftFolderEl);
+        };
+
+        if (bookmarks.length > 0) {
+            appendSectionTitle('直接书签');
             bookmarks.forEach(child => {
                 // Render bookmark
                 const bmkItem = renderFlatBookmarkItem(child);
@@ -923,6 +929,39 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 listContainer.appendChild(bmkItem);
             });
             bmkPaneScroll.appendChild(listContainer);
+        }
+
+        if (subFolders.length > 0) {
+            appendSectionTitle('子目录');
+            const subFolderList = document.createElement('div');
+            subFolderList.className = 'bookmarks-pane-subfolder-list';
+
+            subFolders.forEach((subFolder) => {
+                const subFolderItem = document.createElement('button');
+                subFolderItem.type = 'button';
+                subFolderItem.className = 'bookmarks-pane-subfolder-item';
+                subFolderItem.dataset.id = subFolder.id;
+                subFolderItem.innerHTML = `
+                    <span class="bookmarks-pane-subfolder-icon">${FOLDER_ICON_SVG}</span>
+                    <span class="bookmarks-pane-subfolder-name">${subFolder.title || '未命名目录'}</span>
+                    <span class="bookmarks-pane-subfolder-meta">${subFolder.children.length}</span>
+                `;
+                subFolderItem.addEventListener('click', () => activateFolderByNode(subFolder));
+                subFolderList.appendChild(subFolderItem);
+            });
+
+            bmkPaneScroll.appendChild(subFolderList);
+        }
+
+        if (bookmarks.length === 0 && subFolders.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'pane-empty-state';
+            emptyState.innerHTML = `
+                <div class="pane-empty-icon">${FOLDER_ICON_SVG}</div>
+                <div class="pane-empty-title">此目录暂无内容</div>
+                <div class="pane-empty-desc">当前目录下没有直接书签和子目录</div>
+            `;
+            bmkPaneScroll.appendChild(emptyState);
         }
     };
 
