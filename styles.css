@@ -53,6 +53,10 @@
     --font-size-micro: 10px;
     --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 72%, var(--text-color) 28%);
+    --nav-item-hover: rgba(255, 253, 249, 0.58);
+    --nav-item-active: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(248, 235, 220, 0.78));
+    --nav-item-active-border: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
+    --nav-icon-surface: color-mix(in srgb, var(--primary-color) 9%, white 91%);
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -93,6 +97,10 @@
     --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
     --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
+    --nav-item-hover: rgba(255, 255, 255, 0.055);
+    --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
+    --nav-item-active-border: rgba(245, 166, 122, 0.28);
+    --nav-icon-surface: rgba(245, 166, 122, 0.11);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -915,12 +923,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 8px;
+    gap: 6px;
     min-height: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 14px;
+    padding: 2px 14px 8px 0;
     /* Avoid mask/transform compositing glitches while scrolling in Chrome */
     -webkit-mask-image: none;
     mask-image: none;
@@ -938,7 +946,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Optimization 3: Hover focus - dim others in directory pane */
 .directory-pane:hover .tree-folder-item:not(:hover) {
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .folder-tile {
@@ -990,54 +998,77 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .tree-folder-item {
     display: flex;
     align-items: center;
-    padding: 8px 10px 8px 6px;
-    border-radius: 12px;
+    min-height: 38px;
+    padding: 8px 12px 8px 8px;
+    border-radius: 14px;
     cursor: pointer;
-    color: var(--text-color);
-    transition: all var(--motion-fast) var(--ease-standard);
-    margin-bottom: 4px;
+    color: color-mix(in srgb, var(--text-color) 86%, var(--text-secondary) 14%);
+    transition: transform var(--motion-fast) var(--ease-standard),
+        background var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
+    margin-bottom: 2px;
     font-size: 13px;
     font-weight: 500;
     user-select: none;
     border: 1px solid transparent;
+    position: relative;
+    box-sizing: border-box;
 }
 
 .tree-folder-item:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateX(2px);
+    background: var(--nav-item-hover);
+    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    color: var(--text-color);
+    transform: translateX(3px);
 }
 
 :root[data-theme="dark"] .tree-folder-item:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--nav-item-hover);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .tree-folder-item.active {
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    background: var(--nav-item-active);
+    box-shadow: 0 8px 18px rgba(88, 55, 30, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    border: 1px solid var(--nav-item-active-border);
     color: var(--primary-color);
     font-weight: 600;
-    position: relative;
-    transform: translateX(4px);
+    transform: translateX(2px);
 }
 
-/* Active indicator bar — sharp accent line */
 .tree-folder-item.active::before {
     content: '';
     position: absolute;
-    left: -1px;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    opacity: 0.26;
+}
+
+.tree-folder-item.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
+    width: 2px;
     height: 18px;
-    border-radius: 4px;
-    background: var(--primary-color);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--primary-color) 78%, white);
+    opacity: 0.72;
 }
 
 :root[data-theme="dark"] .tree-folder-item.active {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: var(--nav-item-active);
+    border: 1px solid var(--nav-item-active-border);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .tree-folder-toggle {
@@ -1046,7 +1077,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     justify-content: center;
     width: 20px;
     height: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
     color: var(--text-subtle);
@@ -1054,12 +1085,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .tree-folder-toggle:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: color-mix(in srgb, var(--primary-color) 9%, transparent);
     color: var(--text-color);
 }
 
 :root[data-theme="dark"] .tree-folder-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .tree-folder-toggle svg {
@@ -1074,20 +1105,33 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    margin-right: 9px;
+    border-radius: 9px;
+    background: transparent;
     color: var(--text-subtle);
-    transition: color var(--motion-fast) var(--ease-standard);
+    transition: background var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
     flex-shrink: 0;
 }
 
+.tree-folder-icon .folder-svg-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.9;
+}
+
 .tree-folder-item:hover .tree-folder-icon {
-    color: var(--text-color);
+    background: var(--nav-icon-surface);
+    color: color-mix(in srgb, var(--primary-color) 72%, var(--text-color));
 }
 
 .tree-folder-item.active .tree-folder-icon {
+    background: var(--nav-icon-surface);
     color: var(--primary-color);
+    transform: translateY(-1px);
 }
 
 .tree-folder-title {
@@ -1095,6 +1139,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     text-overflow: ellipsis;
     flex-grow: 1;
+    letter-spacing: 0.02px;
 }
 
 .tree-folder-children {
@@ -1229,14 +1274,25 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
-.bookmarks-pane-header span {
+.bookmarks-pane-header > .pane-breadcrumb {
     margin-left: 10px;
 }
 
 .pane-breadcrumb-icon {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    background: var(--nav-icon-surface);
     color: var(--primary-color);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.pane-breadcrumb-icon .folder-svg-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .pane-breadcrumb {
@@ -1419,8 +1475,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
-    padding: 0 0 10px 4px;
-    padding-left: 4px;
+    padding: 0 4px 10px 4px;
     margin: 0 0 var(--flat-pane-header-gap) 0;
     border-left: none;
     background: transparent;
@@ -1430,12 +1485,23 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background-position: bottom;
 }
 
+.directory-pane-header .folder-svg-icon {
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 10px;
+    color: var(--primary-color);
+    background: var(--nav-icon-surface);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
 :root[data-theme="dark"] .directory-pane-header {
     background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
 .directory-pane-header span {
-    margin-left: 10px;
+    margin-left: 11px;
+    letter-spacing: -0.01em;
 }
 
 /* Item 8: URL preview line below the bookmark title */

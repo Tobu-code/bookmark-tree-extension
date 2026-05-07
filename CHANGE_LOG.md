@@ -501,3 +501,9 @@
 - **Type**: Refactor (Flat Layout Visual Cleanup)
 - **Content**: 移除右侧内容区“直接书签/子目录”分组提示文案，保留原有内容顺序与交互，仅做视觉减法以提升整体简洁度与一致性。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:22:02 +0800
+- **Type**: Refactor (Flat Layout Sidebar Visual Polish)
+- **Content**: 优化左侧书签目录与右侧卡片风格一致性：重塑目录项 hover/active 的胶囊高亮、弱化激进指示条、统一图标底板与标题视觉语言，并微调目录滚动区间距与层级权重，降低“系统文件树”观感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
