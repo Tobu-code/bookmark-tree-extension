@@ -519,3 +519,9 @@
 - **Type**: Fix (Flat Layout Card Spacing)
 - **Content**: 修正右侧书签卡片纵向间距过小导致的拥挤感：恢复网格上下间距节奏，仅保留卡片缩尺，不改变交互与信息结构。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 18:19:04 +0800
+- **Type**: Refactor (Ambient Time Spacing)
+- **Content**: 调整搜索框上方时间区排版，增大“时间”与“日期/语录”信息组之间的水平间距与内缩，改善顶部留白节奏与可读性。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

@@ -348,7 +348,7 @@ body.loaded #background-layer {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    gap: 16px;
+    gap: 24px;
     letter-spacing: 0.2px;
 }
 
@@ -370,7 +370,7 @@ body.loaded #background-layer {
     gap: 4px;
     padding-bottom: 8px; /* Align with baseline of large digits */
     border-left: 1px solid rgba(0,0,0,0.06);
-    padding-left: 16px;
+    padding-left: 20px;
 }
 
 :root[data-theme="dark"] .ambient-time-info-group {
