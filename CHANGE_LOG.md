@@ -507,3 +507,15 @@
 - **Type**: Refactor (Flat Layout Sidebar Visual Polish)
 - **Content**: 优化左侧书签目录与右侧卡片风格一致性：重塑目录项 hover/active 的胶囊高亮、弱化激进指示条、统一图标底板与标题视觉语言，并微调目录滚动区间距与层级权重，降低“系统文件树”观感。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:36:09 +0800
+- **Type**: Refactor (Flat Layout Card Scale Tuning)
+- **Content**: 按“小一档”方案收紧右侧书签卡片尺寸体系：下调网格最小列宽与行高，压缩卡片内边距、图标容器与文字尺寸，保持交互逻辑与信息层级不变，提升左右视觉平衡与信息密度。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:45:41 +0800
+- **Type**: Fix (Flat Layout Card Spacing)
+- **Content**: 修正右侧书签卡片纵向间距过小导致的拥挤感：恢复网格上下间距节奏，仅保留卡片缩尺，不改变交互与信息结构。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
