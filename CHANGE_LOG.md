@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-09]
+- **Time**: 2026-05-09 10:26:52 +0800
+- **Type**: Fix (Resolution Adaptive Layout)
+- **Content**: 修复切换屏幕分辨率后新标签页布局失衡问题：1) 搜索栏宽度由固定百分比改为 `clamp` 响应式宽度；2) 为 1440 宽度级别优化主容器边距、左右分栏与卡片网格密度；3) 增加低高度窗口（`max-height: 920px`）自适应规则，动态压缩顶部区域、树状卡片高度与间距，避免内容异常稀疏或拥挤。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-04-30]
 - **Time**: 2026-04-30 17:50:00 +0800
 - **Type**: Design (Flat Mode Polish)
