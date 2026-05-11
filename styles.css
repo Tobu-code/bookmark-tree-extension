@@ -669,20 +669,20 @@ body.search-active #ai-sidebar-btn {
 }
 
 .suggestion-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     margin-right: 12px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .suggestion-icon img {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
 }
 
 .suggestion-icon-fallback {
@@ -1440,9 +1440,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important;
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 8px;
     background: color-mix(in srgb, var(--primary-color) 7%, transparent);
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon,
@@ -1636,8 +1636,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 9: Fallback letter avatar for missing favicons */
 .bookmark-icon-fallback {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -2047,8 +2047,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -4369,13 +4369,14 @@ input[type="file"]:focus-visible {
         --elev-shadow-3: 0 16px 32px rgba(0, 0, 0, 0.36);
     }
 
-    /* Crisp favicon rendering — avoid sub-pixel blur on downscaled HiDPI favicons */
+    /* HiDPI favicon rendering — use smooth interpolation for upscaled low-res sources */
     .bookmark-icon img,
     .suggestion-icon img,
     .ai-provider-icon img,
     .ai-tab img {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
+        image-rendering: auto;
+        image-rendering: smooth;
+        image-rendering: high-quality;
     }
 
     /* Slightly reduce backdrop blur — 18px CSS = 36px physical, too diffuse on 4K */

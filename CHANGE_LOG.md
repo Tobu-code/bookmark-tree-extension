@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-11]
+- **Time**: 2026-05-11 09:56:33 +0800
+- **Type**: Fix (Favicon HiDPI Sharpness)
+- **Content**: 修复书签图标在 2K/4K 高分屏下模糊不精致的问题（方案 B+C）：1) 将所有书签图标的 CSS 显示尺寸从 18~26px 统一缩小至 16px，确保在 DPR=2 时物理像素（32px）不超过 favicon 源图分辨率；2) 平铺模式图标背景环 padding 从 5px 增至 8px、圆角从 10px 增至 12px，补偿缩小后的视觉面积；3) 搜索建议图标从 24px 缩至 18px；4) 移除 HiDPI 媒体查询中的 `crisp-edges` 渲染模式（会放大低分辨率图的锯齿），改为 `smooth` / `high-quality` 平滑插值；5) 字母回退头像同步缩至 16px。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-11]
 - **Time**: 2026-05-11 09:47:49 +0800
 - **Type**: Fix (Responsive Layout Overhaul)
 - **Content**: 全面修复多分辨率自适应问题：1) 新增 9 个响应式 CSS 变量 token（container-padding/radius/min-h、clock-size、search-min-w、card-height/padding、search-margin-top/bottom），将容器、搜索栏、时钟、卡片等核心组件的硬编码 px 值替换为可覆盖变量；2) 补充 5 个新媒体查询断点（1280px/1024px/640px 宽度 + 800px/680px 高度），填补原有断点间的适配间隙；3) 重构现有断点（1440px/920px/1800px/1320px/899px）为统一的 token 覆盖模式；4) 设置弹窗在 1024px/640px 下增加宽度和 padding 适配；5) 极短视口（<680px 高度）自动隐藏时钟区域。
