@@ -57,6 +57,17 @@
     --nav-item-active: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(248, 235, 220, 0.78));
     --nav-item-active-border: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
     --nav-icon-surface: color-mix(in srgb, var(--primary-color) 9%, white 91%);
+
+    /* Responsive layout tokens */
+    --container-padding: 28px;
+    --container-radius: 28px;
+    --container-min-h: 680px;
+    --clock-size: 72px;
+    --search-min-w: 560px;
+    --search-margin-top: 20px;
+    --search-margin-bottom: 26px;
+    --card-height: 380px;
+    --card-padding: 24px;
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -243,9 +254,9 @@ h3,
 /* Main Container - Dashboard Style */
 .container {
     width: 90%;
-    height: clamp(680px, 92vh, 1100px);
+    height: clamp(var(--container-min-h), 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
-    border-radius: 28px;
+    border-radius: var(--container-radius);
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.04) 100%), var(--bg-overlay);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -253,7 +264,7 @@ h3,
     border: 1px solid color-mix(in srgb, var(--border-color) 92%, white 8%);
     display: flex;
     flex-direction: column;
-    padding: 28px 28px;
+    padding: var(--container-padding);
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -325,8 +336,8 @@ body.loaded #background-layer {
 
 /* Search Bar */
 #search-container {
-    margin-top: 20px;
-    margin-bottom: 26px;
+    margin-top: var(--search-margin-top);
+    margin-bottom: var(--search-margin-bottom);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -353,7 +364,7 @@ body.loaded #background-layer {
 }
 
 .ambient-time-clock {
-    font-size: 72px;
+    font-size: var(--clock-size);
     font-weight: 300;
     letter-spacing: -3px;
     color: var(--text-color);
@@ -425,7 +436,7 @@ body.loaded #background-layer {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: clamp(560px, 58.5vw, 920px);
+    width: clamp(var(--search-min-w), 58.5vw, 920px);
     max-width: calc(100% - 24px);
     border-radius: 20px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 252, 247, 0.94) 100%);
@@ -1569,9 +1580,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (max-width: 1440px) {
+    :root {
+        --container-padding: 22px;
+    }
+
     .container {
         width: min(94%, 1600px);
-        padding: 22px 22px;
     }
 
     #bookmarks-tree.layout-flat {
@@ -1590,25 +1604,24 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (max-height: 920px) {
+    :root {
+        --container-padding: 18px;
+        --container-radius: 22px;
+        --search-margin-top: 10px;
+        --search-margin-bottom: 14px;
+        --clock-size: clamp(48px, 4.8vw, 62px);
+        --card-height: clamp(268px, 34vh, 330px);
+        --card-padding: 18px;
+    }
+
     .container {
         height: min(94vh, 920px);
         margin: max(10px, 1.6vh) auto;
-        padding: 18px 20px;
-        border-radius: 22px;
-    }
-
-    #search-container {
-        margin-top: 10px;
-        margin-bottom: 14px;
     }
 
     .ambient-time {
         margin-bottom: 10px;
         gap: 16px;
-    }
-
-    .ambient-time-clock {
-        font-size: clamp(48px, 4.8vw, 62px);
     }
 
     #bookmarks-tree.layout-tree {
@@ -1618,11 +1631,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     .top-level-container {
         gap: 20px 20px;
         padding-top: 12px;
-    }
-
-    .bookmark-card {
-        height: clamp(268px, 34vh, 330px);
-        padding: 18px;
     }
 }
 
@@ -1688,10 +1696,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     width: 100%;
-    height: 380px;
-    border-radius: 28px;
+    height: var(--card-height);
+    border-radius: var(--container-radius);
     /* More rounded, Claude-style */
-    padding: 24px;
+    padding: var(--card-padding);
     box-sizing: border-box;
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.03);
@@ -1721,32 +1729,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (max-width: 1800px) {
-    .top-level-container {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+    :root {
+        --card-height: 340px;
     }
 
-    .bookmark-card {
-        height: 340px;
+    .top-level-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 1320px) {
-    .top-level-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    :root {
+        --card-height: 332px;
     }
 
-    .bookmark-card {
-        height: 332px;
+    .top-level-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 899px) {
-    .top-level-container {
-        grid-template-columns: 1fr;
+    :root {
+        --card-height: 320px;
     }
 
-    .bookmark-card {
-        height: 320px;
+    .top-level-container {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -3913,6 +3921,127 @@ body.ai-sidebar-open #ai-sidebar-btn {
         --floating-actions-gap: 8px;
         --floating-actions-offset-right: 16px;
         --floating-actions-offset-bottom: 16px;
+    }
+}
+
+/* === Responsive Breakpoint: 1280px — Mid-range widescreen === */
+@media (max-width: 1280px) {
+    :root {
+        --container-padding: 22px;
+        --clock-size: clamp(52px, 5vw, 64px);
+        --card-height: clamp(300px, 36vh, 360px);
+    }
+
+    .container {
+        width: min(96%, 1400px);
+    }
+
+    .top-level-container {
+        gap: 24px 22px;
+    }
+}
+
+/* === Responsive Breakpoint: 1024px — Laptop screens === */
+@media (max-width: 1024px) {
+    :root {
+        --container-padding: 18px;
+        --container-radius: 22px;
+        --clock-size: clamp(44px, 4.5vw, 56px);
+        --search-min-w: 420px;
+        --card-height: clamp(280px, 34vh, 340px);
+        --card-padding: 18px;
+        --search-margin-top: 12px;
+        --search-margin-bottom: 16px;
+    }
+
+    .container {
+        width: min(97%, 1200px);
+    }
+
+    .ambient-time {
+        gap: 16px;
+    }
+
+    .ambient-time-info-group {
+        padding-left: 14px;
+    }
+
+    #settings-modal .modal-content {
+        width: min(96vw, 860px);
+        padding: 26px 22px 28px;
+    }
+}
+
+/* === Responsive Breakpoint: 640px — Small / narrow windows === */
+@media (max-width: 640px) {
+    :root {
+        --container-padding: 14px;
+        --container-radius: 18px;
+        --container-min-h: 480px;
+        --clock-size: clamp(36px, 8vw, 48px);
+        --search-min-w: 280px;
+        --card-height: clamp(260px, 40vh, 320px);
+        --card-padding: 14px;
+        --search-margin-top: 8px;
+        --search-margin-bottom: 12px;
+    }
+
+    .container {
+        width: 98%;
+        margin: 6px auto;
+    }
+
+    .ambient-time {
+        gap: 10px;
+    }
+
+    .ambient-time-info-group {
+        display: none;
+    }
+
+    .top-level-container {
+        gap: 16px;
+        padding-top: 8px;
+    }
+
+    #settings-modal .modal-content {
+        padding: 20px 16px 22px;
+        border-radius: 20px;
+    }
+}
+
+/* === Responsive Breakpoint: max-height 800px — Short viewports === */
+@media (max-height: 800px) {
+    :root {
+        --container-min-h: 560px;
+        --clock-size: clamp(40px, 4.2vw, 52px);
+        --card-height: clamp(240px, 32vh, 300px);
+        --search-margin-top: 8px;
+        --search-margin-bottom: 12px;
+    }
+
+    .ambient-time-info-group {
+        display: none;
+    }
+
+    .ambient-time {
+        margin-bottom: 8px;
+    }
+}
+
+/* === Responsive Breakpoint: max-height 680px — Very short viewports === */
+@media (max-height: 680px) {
+    :root {
+        --container-min-h: 440px;
+        --clock-size: clamp(32px, 3.6vw, 44px);
+        --card-height: clamp(200px, 28vh, 260px);
+        --card-padding: 14px;
+        --search-margin-top: 6px;
+        --search-margin-bottom: 8px;
+    }
+
+    .ambient-time {
+        display: none;
     }
 }
 

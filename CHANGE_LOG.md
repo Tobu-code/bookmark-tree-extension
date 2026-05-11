@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-11]
+- **Time**: 2026-05-11 09:47:49 +0800
+- **Type**: Fix (Responsive Layout Overhaul)
+- **Content**: 全面修复多分辨率自适应问题：1) 新增 9 个响应式 CSS 变量 token（container-padding/radius/min-h、clock-size、search-min-w、card-height/padding、search-margin-top/bottom），将容器、搜索栏、时钟、卡片等核心组件的硬编码 px 值替换为可覆盖变量；2) 补充 5 个新媒体查询断点（1280px/1024px/640px 宽度 + 800px/680px 高度），填补原有断点间的适配间隙；3) 重构现有断点（1440px/920px/1800px/1320px/899px）为统一的 token 覆盖模式；4) 设置弹窗在 1024px/640px 下增加宽度和 padding 适配；5) 极短视口（<680px 高度）自动隐藏时钟区域。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-05-09]
 - **Time**: 2026-05-09 10:26:52 +0800
 - **Type**: Fix (Resolution Adaptive Layout)
