@@ -1256,7 +1256,7 @@ function createSimpleTile(node) {
 
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 20);
+    const iconElement = createBookmarkIcon(iconData, 16);
     leaf.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -1288,7 +1288,7 @@ function renderFlatBookmarkItem(node) {
     }
 
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 26);
+    const iconElement = createBookmarkIcon(iconData, 16);
     a.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -1327,7 +1327,7 @@ function renderTreeItem(node) {
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 18);
+        const iconElement = createBookmarkIcon(iconData, 16);
         a.appendChild(iconElement);
 
         const labelSpan = document.createElement('span');
@@ -1598,7 +1598,7 @@ function editBookmark(node, wrapperEl) {
                 const oldIcon = linkEl.querySelector('.bookmark-icon');
                 if (oldIcon) {
                     const iconData = getIconForBookmark(changes.url);
-                    const newIcon = createBookmarkIcon(iconData, 18);
+                    const newIcon = createBookmarkIcon(iconData, 16);
                     oldIcon.replaceWith(newIcon);
                 }
             }
@@ -1777,7 +1777,7 @@ function renderTreeItemForModal(node) {
 
         // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 18);
+        const iconElement = createBookmarkIcon(iconData, 16);
         a.appendChild(iconElement);
 
         const labelSpan = document.createElement('span');

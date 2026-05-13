@@ -1,5 +1,23 @@
 # Change Log
 
+## [2026-05-11]
+- **Time**: 2026-05-11 09:56:33 +0800
+- **Type**: Fix (Favicon HiDPI Sharpness)
+- **Content**: 修复书签图标在 2K/4K 高分屏下模糊不精致的问题（方案 B+C）：1) 将所有书签图标的 CSS 显示尺寸从 18~26px 统一缩小至 16px，确保在 DPR=2 时物理像素（32px）不超过 favicon 源图分辨率；2) 平铺模式图标背景环 padding 从 5px 增至 8px、圆角从 10px 增至 12px，补偿缩小后的视觉面积；3) 搜索建议图标从 24px 缩至 18px；4) 移除 HiDPI 媒体查询中的 `crisp-edges` 渲染模式（会放大低分辨率图的锯齿），改为 `smooth` / `high-quality` 平滑插值；5) 字母回退头像同步缩至 16px。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-11]
+- **Time**: 2026-05-11 09:47:49 +0800
+- **Type**: Fix (Responsive Layout Overhaul)
+- **Content**: 全面修复多分辨率自适应问题：1) 新增 9 个响应式 CSS 变量 token（container-padding/radius/min-h、clock-size、search-min-w、card-height/padding、search-margin-top/bottom），将容器、搜索栏、时钟、卡片等核心组件的硬编码 px 值替换为可覆盖变量；2) 补充 5 个新媒体查询断点（1280px/1024px/640px 宽度 + 800px/680px 高度），填补原有断点间的适配间隙；3) 重构现有断点（1440px/920px/1800px/1320px/899px）为统一的 token 覆盖模式；4) 设置弹窗在 1024px/640px 下增加宽度和 padding 适配；5) 极短视口（<680px 高度）自动隐藏时钟区域。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-09]
+- **Time**: 2026-05-09 10:26:52 +0800
+- **Type**: Fix (Resolution Adaptive Layout)
+- **Content**: 修复切换屏幕分辨率后新标签页布局失衡问题：1) 搜索栏宽度由固定百分比改为 `clamp` 响应式宽度；2) 为 1440 宽度级别优化主容器边距、左右分栏与卡片网格密度；3) 增加低高度窗口（`max-height: 920px`）自适应规则，动态压缩顶部区域、树状卡片高度与间距，避免内容异常稀疏或拥挤。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-04-30]
 - **Time**: 2026-04-30 17:50:00 +0800
 - **Type**: Design (Flat Mode Polish)
@@ -501,3 +519,27 @@
 - **Type**: Refactor (Flat Layout Visual Cleanup)
 - **Content**: 移除右侧内容区“直接书签/子目录”分组提示文案，保留原有内容顺序与交互，仅做视觉减法以提升整体简洁度与一致性。
 - **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:22:02 +0800
+- **Type**: Refactor (Flat Layout Sidebar Visual Polish)
+- **Content**: 优化左侧书签目录与右侧卡片风格一致性：重塑目录项 hover/active 的胶囊高亮、弱化激进指示条、统一图标底板与标题视觉语言，并微调目录滚动区间距与层级权重，降低“系统文件树”观感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:36:09 +0800
+- **Type**: Refactor (Flat Layout Card Scale Tuning)
+- **Content**: 按“小一档”方案收紧右侧书签卡片尺寸体系：下调网格最小列宽与行高，压缩卡片内边距、图标容器与文字尺寸，保持交互逻辑与信息层级不变，提升左右视觉平衡与信息密度。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 17:45:41 +0800
+- **Type**: Fix (Flat Layout Card Spacing)
+- **Content**: 修正右侧书签卡片纵向间距过小导致的拥挤感：恢复网格上下间距节奏，仅保留卡片缩尺，不改变交互与信息结构。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-07]
+- **Time**: 2026-05-07 18:19:04 +0800
+- **Type**: Refactor (Ambient Time Spacing)
+- **Content**: 调整搜索框上方时间区排版，增大“时间”与“日期/语录”信息组之间的水平间距与内缩，改善顶部留白节奏与可读性。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

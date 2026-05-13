@@ -53,6 +53,21 @@
     --font-size-micro: 10px;
     --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 72%, var(--text-color) 28%);
+    --nav-item-hover: rgba(255, 253, 249, 0.58);
+    --nav-item-active: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(248, 235, 220, 0.78));
+    --nav-item-active-border: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
+    --nav-icon-surface: color-mix(in srgb, var(--primary-color) 9%, white 91%);
+
+    /* Responsive layout tokens */
+    --container-padding: 28px;
+    --container-radius: 28px;
+    --container-min-h: 680px;
+    --clock-size: 72px;
+    --search-min-w: 560px;
+    --search-margin-top: 20px;
+    --search-margin-bottom: 26px;
+    --card-height: 380px;
+    --card-padding: 24px;
 }
 
 /* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
@@ -93,6 +108,10 @@
     --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
     --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
+    --nav-item-hover: rgba(255, 255, 255, 0.055);
+    --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
+    --nav-item-active-border: rgba(245, 166, 122, 0.28);
+    --nav-icon-surface: rgba(245, 166, 122, 0.11);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -235,9 +254,9 @@ h3,
 /* Main Container - Dashboard Style */
 .container {
     width: 90%;
-    height: clamp(680px, 92vh, 1100px);
+    height: clamp(var(--container-min-h), 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
-    border-radius: 28px;
+    border-radius: var(--container-radius);
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.04) 100%), var(--bg-overlay);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -245,7 +264,7 @@ h3,
     border: 1px solid color-mix(in srgb, var(--border-color) 92%, white 8%);
     display: flex;
     flex-direction: column;
-    padding: 28px 28px;
+    padding: var(--container-padding);
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -317,8 +336,8 @@ body.loaded #background-layer {
 
 /* Search Bar */
 #search-container {
-    margin-top: 20px;
-    margin-bottom: 26px;
+    margin-top: var(--search-margin-top);
+    margin-bottom: var(--search-margin-bottom);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -340,12 +359,12 @@ body.loaded #background-layer {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    gap: 16px;
+    gap: 24px;
     letter-spacing: 0.2px;
 }
 
 .ambient-time-clock {
-    font-size: 72px;
+    font-size: var(--clock-size);
     font-weight: 300;
     letter-spacing: -3px;
     color: var(--text-color);
@@ -362,7 +381,7 @@ body.loaded #background-layer {
     gap: 4px;
     padding-bottom: 8px; /* Align with baseline of large digits */
     border-left: 1px solid rgba(0,0,0,0.06);
-    padding-left: 16px;
+    padding-left: 20px;
 }
 
 :root[data-theme="dark"] .ambient-time-info-group {
@@ -417,8 +436,8 @@ body.loaded #background-layer {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: 58.5%;
-    max-width: 800px;
+    width: clamp(var(--search-min-w), 58.5vw, 920px);
+    max-width: calc(100% - 24px);
     border-radius: 20px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 252, 247, 0.94) 100%);
     box-shadow:
@@ -444,7 +463,7 @@ body.loaded #background-layer {
 }
 
 .search-wrapper:focus-within {
-    width: 58.5%;
+    width: clamp(560px, 58.5vw, 920px);
     background: var(--card-bg);
     border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
     box-shadow:
@@ -650,20 +669,20 @@ body.search-active #ai-sidebar-btn {
 }
 
 .suggestion-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     margin-right: 12px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .suggestion-icon img {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
 }
 
 .suggestion-icon-fallback {
@@ -915,12 +934,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 8px;
+    gap: 6px;
     min-height: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 14px;
+    padding: 2px 14px 8px 0;
     /* Avoid mask/transform compositing glitches while scrolling in Chrome */
     -webkit-mask-image: none;
     mask-image: none;
@@ -938,7 +957,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Optimization 3: Hover focus - dim others in directory pane */
 .directory-pane:hover .tree-folder-item:not(:hover) {
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .folder-tile {
@@ -990,54 +1009,77 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .tree-folder-item {
     display: flex;
     align-items: center;
-    padding: 8px 10px 8px 6px;
-    border-radius: 12px;
+    min-height: 38px;
+    padding: 8px 12px 8px 8px;
+    border-radius: 14px;
     cursor: pointer;
-    color: var(--text-color);
-    transition: all var(--motion-fast) var(--ease-standard);
-    margin-bottom: 4px;
+    color: color-mix(in srgb, var(--text-color) 86%, var(--text-secondary) 14%);
+    transition: transform var(--motion-fast) var(--ease-standard),
+        background var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
+    margin-bottom: 2px;
     font-size: 13px;
     font-weight: 500;
     user-select: none;
     border: 1px solid transparent;
+    position: relative;
+    box-sizing: border-box;
 }
 
 .tree-folder-item:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateX(2px);
+    background: var(--nav-item-hover);
+    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    color: var(--text-color);
+    transform: translateX(3px);
 }
 
 :root[data-theme="dark"] .tree-folder-item:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--nav-item-hover);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .tree-folder-item.active {
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    background: var(--nav-item-active);
+    box-shadow: 0 8px 18px rgba(88, 55, 30, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    border: 1px solid var(--nav-item-active-border);
     color: var(--primary-color);
     font-weight: 600;
-    position: relative;
-    transform: translateX(4px);
+    transform: translateX(2px);
 }
 
-/* Active indicator bar — sharp accent line */
 .tree-folder-item.active::before {
     content: '';
     position: absolute;
-    left: -1px;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    opacity: 0.26;
+}
+
+.tree-folder-item.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
+    width: 2px;
     height: 18px;
-    border-radius: 4px;
-    background: var(--primary-color);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--primary-color) 78%, white);
+    opacity: 0.72;
 }
 
 :root[data-theme="dark"] .tree-folder-item.active {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: var(--nav-item-active);
+    border: 1px solid var(--nav-item-active-border);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .tree-folder-toggle {
@@ -1046,7 +1088,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     justify-content: center;
     width: 20px;
     height: 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
     color: var(--text-subtle);
@@ -1054,12 +1096,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .tree-folder-toggle:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: color-mix(in srgb, var(--primary-color) 9%, transparent);
     color: var(--text-color);
 }
 
 :root[data-theme="dark"] .tree-folder-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .tree-folder-toggle svg {
@@ -1074,20 +1116,33 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    margin-right: 9px;
+    border-radius: 9px;
+    background: transparent;
     color: var(--text-subtle);
-    transition: color var(--motion-fast) var(--ease-standard);
+    transition: background var(--motion-fast) var(--ease-standard),
+        color var(--motion-fast) var(--ease-standard),
+        transform var(--motion-fast) var(--ease-standard);
     flex-shrink: 0;
 }
 
+.tree-folder-icon .folder-svg-icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.9;
+}
+
 .tree-folder-item:hover .tree-folder-icon {
-    color: var(--text-color);
+    background: var(--nav-icon-surface);
+    color: color-mix(in srgb, var(--primary-color) 72%, var(--text-color));
 }
 
 .tree-folder-item.active .tree-folder-icon {
+    background: var(--nav-icon-surface);
     color: var(--primary-color);
+    transform: translateY(-1px);
 }
 
 .tree-folder-title {
@@ -1095,6 +1150,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     text-overflow: ellipsis;
     flex-grow: 1;
+    letter-spacing: 0.02px;
 }
 
 .tree-folder-children {
@@ -1229,14 +1285,25 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
-.bookmarks-pane-header span {
+.bookmarks-pane-header > .pane-breadcrumb {
     margin-left: 10px;
 }
 
 .pane-breadcrumb-icon {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    background: var(--nav-icon-surface);
     color: var(--primary-color);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.pane-breadcrumb-icon .folder-svg-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .pane-breadcrumb {
@@ -1267,9 +1334,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    grid-auto-rows: minmax(86px, auto);
-    gap: 20px 24px;
+    grid-template-columns: repeat(auto-fill, minmax(202px, 1fr));
+    grid-auto-rows: minmax(80px, auto);
+    gap: 20px 20px;
     align-content: start;
     align-items: stretch;
     padding-right: 12px;
@@ -1281,8 +1348,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-wrapper {
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
-    border-radius: 16px;
-    padding: 9px 10px;
+    border-radius: 14px;
+    padding: 8px 9px;
     margin-bottom: 0;
     min-height: 0;
     height: 100%;
@@ -1351,7 +1418,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 8px 6px;
+    padding: 6px 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1372,8 +1439,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important;
-    margin-bottom: 6px;
-    padding: 6px;
+    margin-bottom: 5px;
+    padding: 8px;
     background: color-mix(in srgb, var(--primary-color) 7%, transparent);
     border-radius: 12px;
 }
@@ -1386,7 +1453,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 1px;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1.32;
     color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
@@ -1419,8 +1486,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
-    padding: 0 0 10px 4px;
-    padding-left: 4px;
+    padding: 0 4px 10px 4px;
     margin: 0 0 var(--flat-pane-header-gap) 0;
     border-left: none;
     background: transparent;
@@ -1430,18 +1496,29 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background-position: bottom;
 }
 
+.directory-pane-header .folder-svg-icon {
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 10px;
+    color: var(--primary-color);
+    background: var(--nav-icon-surface);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
 :root[data-theme="dark"] .directory-pane-header {
     background-image: linear-gradient(to right, transparent, rgba(217, 119, 87, 0.3) 10%, rgba(217, 119, 87, 0.3) 90%, transparent);
 }
 
 .directory-pane-header span {
-    margin-left: 10px;
+    margin-left: 11px;
+    letter-spacing: -0.01em;
 }
 
 /* Item 8: URL preview line below the bookmark title */
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     color: var(--text-muted);
     opacity: 0.98;
     margin-top: 3px;
@@ -1502,10 +1579,65 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     }
 }
 
+@media (max-width: 1440px) {
+    :root {
+        --container-padding: 22px;
+    }
+
+    .container {
+        width: min(94%, 1600px);
+    }
+
+    #bookmarks-tree.layout-flat {
+        gap: 18px;
+        --flat-side-gutter: clamp(12px, calc((100% - 1180px) / 2), 72px);
+    }
+
+    .directory-pane {
+        width: clamp(230px, 20vw, 270px);
+    }
+
+    .bookmarks-pane-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 16px;
+    }
+}
+
+@media (max-height: 920px) {
+    :root {
+        --container-padding: 18px;
+        --container-radius: 22px;
+        --search-margin-top: 10px;
+        --search-margin-bottom: 14px;
+        --clock-size: clamp(48px, 4.8vw, 62px);
+        --card-height: clamp(268px, 34vh, 330px);
+        --card-padding: 18px;
+    }
+
+    .container {
+        height: min(94vh, 920px);
+        margin: max(10px, 1.6vh) auto;
+    }
+
+    .ambient-time {
+        margin-bottom: 10px;
+        gap: 16px;
+    }
+
+    #bookmarks-tree.layout-tree {
+        padding-top: 16px;
+    }
+
+    .top-level-container {
+        gap: 20px 20px;
+        padding-top: 12px;
+    }
+}
+
 /* Item 9: Fallback letter avatar for missing favicons */
 .bookmark-icon-fallback {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -1564,10 +1696,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     width: 100%;
-    height: 380px;
-    border-radius: 28px;
+    height: var(--card-height);
+    border-radius: var(--container-radius);
     /* More rounded, Claude-style */
-    padding: 24px;
+    padding: var(--card-padding);
     box-sizing: border-box;
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.03);
@@ -1597,32 +1729,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (max-width: 1800px) {
-    .top-level-container {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+    :root {
+        --card-height: 340px;
     }
 
-    .bookmark-card {
-        height: 340px;
+    .top-level-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 1320px) {
-    .top-level-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    :root {
+        --card-height: 332px;
     }
 
-    .bookmark-card {
-        height: 332px;
+    .top-level-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 899px) {
-    .top-level-container {
-        grid-template-columns: 1fr;
+    :root {
+        --card-height: 320px;
     }
 
-    .bookmark-card {
-        height: 320px;
+    .top-level-container {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1915,8 +2047,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -3792,6 +3924,127 @@ body.ai-sidebar-open #ai-sidebar-btn {
     }
 }
 
+/* === Responsive Breakpoint: 1280px — Mid-range widescreen === */
+@media (max-width: 1280px) {
+    :root {
+        --container-padding: 22px;
+        --clock-size: clamp(52px, 5vw, 64px);
+        --card-height: clamp(300px, 36vh, 360px);
+    }
+
+    .container {
+        width: min(96%, 1400px);
+    }
+
+    .top-level-container {
+        gap: 24px 22px;
+    }
+}
+
+/* === Responsive Breakpoint: 1024px — Laptop screens === */
+@media (max-width: 1024px) {
+    :root {
+        --container-padding: 18px;
+        --container-radius: 22px;
+        --clock-size: clamp(44px, 4.5vw, 56px);
+        --search-min-w: 420px;
+        --card-height: clamp(280px, 34vh, 340px);
+        --card-padding: 18px;
+        --search-margin-top: 12px;
+        --search-margin-bottom: 16px;
+    }
+
+    .container {
+        width: min(97%, 1200px);
+    }
+
+    .ambient-time {
+        gap: 16px;
+    }
+
+    .ambient-time-info-group {
+        padding-left: 14px;
+    }
+
+    #settings-modal .modal-content {
+        width: min(96vw, 860px);
+        padding: 26px 22px 28px;
+    }
+}
+
+/* === Responsive Breakpoint: 640px — Small / narrow windows === */
+@media (max-width: 640px) {
+    :root {
+        --container-padding: 14px;
+        --container-radius: 18px;
+        --container-min-h: 480px;
+        --clock-size: clamp(36px, 8vw, 48px);
+        --search-min-w: 280px;
+        --card-height: clamp(260px, 40vh, 320px);
+        --card-padding: 14px;
+        --search-margin-top: 8px;
+        --search-margin-bottom: 12px;
+    }
+
+    .container {
+        width: 98%;
+        margin: 6px auto;
+    }
+
+    .ambient-time {
+        gap: 10px;
+    }
+
+    .ambient-time-info-group {
+        display: none;
+    }
+
+    .top-level-container {
+        gap: 16px;
+        padding-top: 8px;
+    }
+
+    #settings-modal .modal-content {
+        padding: 20px 16px 22px;
+        border-radius: 20px;
+    }
+}
+
+/* === Responsive Breakpoint: max-height 800px — Short viewports === */
+@media (max-height: 800px) {
+    :root {
+        --container-min-h: 560px;
+        --clock-size: clamp(40px, 4.2vw, 52px);
+        --card-height: clamp(240px, 32vh, 300px);
+        --search-margin-top: 8px;
+        --search-margin-bottom: 12px;
+    }
+
+    .ambient-time-info-group {
+        display: none;
+    }
+
+    .ambient-time {
+        margin-bottom: 8px;
+    }
+}
+
+/* === Responsive Breakpoint: max-height 680px — Very short viewports === */
+@media (max-height: 680px) {
+    :root {
+        --container-min-h: 440px;
+        --clock-size: clamp(32px, 3.6vw, 44px);
+        --card-height: clamp(200px, 28vh, 260px);
+        --card-padding: 14px;
+        --search-margin-top: 6px;
+        --search-margin-bottom: 8px;
+    }
+
+    .ambient-time {
+        display: none;
+    }
+}
+
 /* ============================================
    Bookmark Actions (Move & Delete Buttons)
    ============================================ */
@@ -4116,13 +4369,14 @@ input[type="file"]:focus-visible {
         --elev-shadow-3: 0 16px 32px rgba(0, 0, 0, 0.36);
     }
 
-    /* Crisp favicon rendering — avoid sub-pixel blur on downscaled HiDPI favicons */
+    /* HiDPI favicon rendering — use smooth interpolation for upscaled low-res sources */
     .bookmark-icon img,
     .suggestion-icon img,
     .ai-provider-icon img,
     .ai-tab img {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
+        image-rendering: auto;
+        image-rendering: smooth;
+        image-rendering: high-quality;
     }
 
     /* Slightly reduce backdrop blur — 18px CSS = 36px physical, too diffuse on 4K */
