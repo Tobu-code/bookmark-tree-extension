@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-13]
+- **Time**: 2026-05-13 09:47:57 +0800
+- **Type**: Chore (Merge)
+- **Content**: 将分支 `sidebar-directory-polish` 合并至 `main`，同步纳入侧栏目录视觉优化、分辨率自适应与图标清晰度修复相关改动，并完成主干收敛。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
+
 ## [2026-05-11]
 - **Time**: 2026-05-11 09:56:33 +0800
 - **Type**: Fix (Favicon HiDPI Sharpness)
