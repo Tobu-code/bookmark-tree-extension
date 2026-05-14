@@ -4539,17 +4539,17 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0;
-    padding: 18vh 0 0 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    gap: 40px;
-    pointer-events: none; /* 不拦截点击，避免遮挡右下角按钮 */
+    justify-content: center; /* 垂直居中整组内容 */
+    gap: 28px;
+    pointer-events: none;
 }
 
 body.pure-mode #search-container > * {
-    pointer-events: auto; /* 子元素恢复点击 */
+    pointer-events: auto;
 }
 
 /* 问候语与时间组 */
@@ -4783,7 +4783,7 @@ body.pure-mode .search-bottom-row {
     font-size: 13px;
     color: var(--text-color);
     opacity: 0.3;
-    margin-top: 24px;
+    margin-top: 0; /* 由父容器 gap 控制间距 */
     font-weight: 400;
     letter-spacing: 0.5px;
 }
