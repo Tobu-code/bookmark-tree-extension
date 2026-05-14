@@ -4580,13 +4580,9 @@ body.pure-mode .ambient-time-greeting {
     letter-spacing: 1px;
 }
 
+/* 强制隐藏多余的旧版时间容器 */
 body.pure-mode .ambient-time {
-    max-width: 900px;
-    margin-bottom: 0;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
+    display: none !important;
 }
 
 body.pure-mode .ambient-time.visible {
@@ -4725,6 +4721,15 @@ body.pure-mode #ai-sidebar-btn:hover {
 
 body.pure-mode .search-bottom-row {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.pure-engine-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
 }
 
 .pure-engine-label {

@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 19:12:00 +0800
-- **Type**: Fix (Structural Integrity & JS Error)
-- **Content**: 紧急修复由重构导致的 `newtab.html` 结构损坏问题。1) 完整补全了 JavaScript 依赖的所有 DOM 元素（如设置面板控件、背景上传组件、AI 管理表单等）；2) 修正了元素 ID 与脚本引用不一致的情况，彻底消除了页面加载时的 `addEventListener` 报错；3) 同时确保了新版集成化纯净模式 UI 的完整呈现。
-- **Impact**: `newtab.html`、`script.js`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 19:14:00 +0800
+- **Type**: Style (Pure Mode Refinement)
+- **Content**: 精细化纯净模式布局优化：1) **去重**：彻底隐藏旧版问候语容器，消除搜索框上方的重复元素；2) **对齐**：优化搜索行对齐逻辑，使其左侧起步更自然；3) **平铺**：实现搜索引擎按钮的完全平铺展开，确保标签与按钮在同一轴线上紧凑排列。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
