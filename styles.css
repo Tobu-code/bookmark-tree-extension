@@ -1318,8 +1318,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 7: Glass cards with accent strip */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
     border-radius: 14px;
     padding: 8px 9px;
     margin-bottom: 0;
