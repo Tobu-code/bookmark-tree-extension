@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 17:34:00 +0800
+- **Type**: Design (Typography Standardization)
+- **Content**: 统一全站字体规范，以“平铺模式”为基准。将全局正文字体大小（`--font-size-body`）从 `14px` 下调至 `12px`，并将字重统一设置为 `500`。同步更新了左侧导航栏（`tree-folder-item`）和目录模式下的书签标签，确保两种布局模式下的文字视觉重量完全一致，提升整体精致感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 17:28:00 +0800
 - **Type**: Design (Visual Consistency)
 - **Content**: 统一目录模式（Tree Mode）与平铺模式（Flat Mode）下的卡片透明度。在启用背景图后，将目录模式下的文件夹卡片背景从实色 `#ffffff` 调整为与平铺模式一致的半透明玻璃态（`rgba(255, 255, 255, 0.55)`），并重新启用了 `backdrop-filter` 模糊效果，确保视觉语言的全局统一。

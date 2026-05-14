@@ -48,7 +48,9 @@
 
     /* Typography tokens */
     --font-size-title: 17px;
-    --font-size-body: 14px;
+    --font-size-body: 12px;
+    --font-weight-medium: 500;
+    --font-weight-bold: 600;
     --font-size-caption: 12px;
     --font-size-micro: 10px;
     --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
@@ -1016,8 +1018,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow var(--motion-fast) var(--ease-standard),
         color var(--motion-fast) var(--ease-standard),
         opacity var(--motion-fast) var(--ease-standard);
-    font-size: 13px;
-    font-weight: 500;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
     user-select: none;
     border: 1px solid transparent;
     position: relative;
@@ -1414,8 +1416,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 1px;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
     line-height: 1.32;
     color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
     text-align: center;
@@ -2053,6 +2055,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmark-label {
     font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.4;
     letter-spacing: 0.06px;
     color: var(--text-color);
     white-space: nowrap;
@@ -4465,8 +4469,8 @@ input[type="file"]:focus-visible {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
     line-height: 1.35;
     color: var(--text-color);
     word-break: break-all;
