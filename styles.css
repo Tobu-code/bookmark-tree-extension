@@ -4674,8 +4674,12 @@ body.pure-mode .search-wrapper:focus-within {
     text-align: left;
 }
 
-/* 顶部输入行 */
+/* 顶部输入行 — 非纯净模式下透明，不影响原始布局 */
 .search-top-row {
+    display: contents;
+}
+
+body.pure-mode .search-top-row {
     display: flex;
     align-items: center;
     padding: 18px 24px 14px 24px;
