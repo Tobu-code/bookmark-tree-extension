@@ -4691,19 +4691,33 @@ body.pure-mode #ai-sidebar-btn {
     position: absolute;
     right: 24px;
     bottom: 16px;
-    opacity: 0.4;
+    opacity: 0.6;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 12px;
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #555;
+    transition: all 0.2s ease;
 }
 
-body.pure-mode #ai-sidebar-btn::before {
+body.pure-mode #ai-sidebar-btn:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.pure-mode #ai-sidebar-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    display: block;
+}
+
+body.pure-mode #ai-sidebar-btn::after {
     content: "Ask AI";
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
 }
 
