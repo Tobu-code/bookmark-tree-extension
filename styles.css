@@ -4619,14 +4619,13 @@ body.pure-mode .ambient-time-greeting::before {
 body.pure-mode .search-wrapper {
     width: 840px;
     max-width: calc(100vw - 48px);
-    min-height: 160px; /* 超大纵向卡片 */
-    padding: 24px 28px;
+    min-height: 160px; /* 恢复超大纵向卡片尺寸 */
+    padding: 24px 28px; /* 顶部起始对齐的精确内边距 */
     border-radius: 20px;
     display: flex;
-    flex-direction: column; /* 纵向布局 */
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 12px;
+    flex-direction: row;
+    align-items: flex-start; /* 顶部对齐 */
+    gap: 16px;
     background: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
@@ -4656,11 +4655,12 @@ body.pure-mode #search-input {
     order: 1;
     flex: 1;
     padding: 0;
-    min-height: 80px;
+    margin-top: 4px; /* 微调以对齐 Claude 的第一行高度 */
     font-size: 18px;
     font-weight: 400;
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.5;
+    height: auto; /* 移除固定高度，让内容从顶部自然起始 */
 }
 
 body.pure-mode #search-input::placeholder {
