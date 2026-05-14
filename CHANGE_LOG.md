@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 17:28:00 +0800
+- **Type**: Design (Visual Consistency)
+- **Content**: 统一目录模式（Tree Mode）与平铺模式（Flat Mode）下的卡片透明度。在启用背景图后，将目录模式下的文件夹卡片背景从实色 `#ffffff` 调整为与平铺模式一致的半透明玻璃态（`rgba(255, 255, 255, 0.55)`），并重新启用了 `backdrop-filter` 模糊效果，确保视觉语言的全局统一。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 17:24:00 +0800
 - **Type**: Fix (Layout Alignment Correction)
 - **Content**: 再次修正搜索栏对齐逻辑：根据用户图片标注，将搜索栏左边缘与右侧内容面板的标题（如“常用入口”）精确对齐。计算公式调整为 `var(--flat-side-gutter) + 284px (左侧栏宽度) + 24px (间距)`。此前因对“常用入口”指代理解偏差导致对齐到了左侧栏，现已修正。

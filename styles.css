@@ -1682,14 +1682,16 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Tree mode performance guard:
    avoid heavy backdrop compositing on many cards while scrolling */
 #bookmarks-tree.layout-tree .bookmark-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: #ffffff;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.55);
+    border-color: color-mix(in srgb, var(--border-color) 40%, transparent);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {
-    background: color-mix(in srgb, var(--bg-overlay) 92%, #1a1f28 8%);
+    background: rgba(37, 43, 54, 0.88);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 1800px) {
