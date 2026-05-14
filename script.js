@@ -3712,6 +3712,6 @@ function initGreeting() {
 function initPureShortcuts() {
     const footerHint = document.querySelector('.pure-footer-hint');
     if (footerHint) {
-        footerHint.textContent = '按 ↩ 搜索 · Tab 切换引擎';
+        footerHint.textContent = '按 Enter 搜索 · Tab 切换引擎';
     }
 }

@@ -4544,7 +4544,12 @@ body.pure-mode #search-container {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 40px; /* 增加与卡片的间距 */
+    gap: 40px;
+    pointer-events: none; /* 不拦截点击，避免遮挡右下角按钮 */
+}
+
+body.pure-mode #search-container > * {
+    pointer-events: auto; /* 子元素恢复点击 */
 }
 
 /* 问候语与时间组 */
