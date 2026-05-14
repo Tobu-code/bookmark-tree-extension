@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 17:24:00 +0800
+- **Type**: Fix (Layout Alignment Correction)
+- **Content**: 再次修正搜索栏对齐逻辑：根据用户图片标注，将搜索栏左边缘与右侧内容面板的标题（如“常用入口”）精确对齐。计算公式调整为 `var(--flat-side-gutter) + 284px (左侧栏宽度) + 24px (间距)`。此前因对“常用入口”指代理解偏差导致对齐到了左侧栏，现已修正。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 17:21:00 +0800
 - **Type**: Fix (Layout Alignment)
 - **Content**: 修复搜索栏与左侧“常用入口”目录没有精确左对齐的 Bug。由于此前 `--flat-side-gutter` CSS 变量作用域仅限于 `#bookmarks-tree`，导致顶部 `#search-container` 无法继承该留白变量，从而在 `flex-start` 时对齐到了视口的极左侧。现已将栅格系统变量提升至 `.container` 级别，使搜索栏与时间完美对齐至左侧目录面板（“常用入口”所在区域）的真实左边缘。

@@ -325,9 +325,9 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    padding-left: var(--flat-side-gutter);
+    padding-left: calc(var(--flat-side-gutter) + 284px + 24px);
     padding-right: var(--flat-side-gutter);
-    align-items: flex-start; /* Align search bar and clock with the left pane */
+    align-items: flex-start; /* Align search bar and clock with the right pane header */
 }
 
 .container:has(#bookmarks-tree.layout-tree) {
