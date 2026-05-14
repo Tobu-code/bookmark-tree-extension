@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 17:36:00 +0800
+- **Type**: Design (Search Typography)
+- **Content**: 优化搜索栏输入文本的视觉样式。将搜索框内的字体调整为**粗体（Bold）**与**斜体（Italic）**，并显著增大了字间距（`0.6px`），使其视觉风格与占位符（Placeholder）及整体精致美学更加契合。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 17:34:00 +0800
 - **Type**: Design (Typography Standardization)
 - **Content**: 统一全站字体规范，以“平铺模式”为基准。将全局正文字体大小（`--font-size-body`）从 `14px` 下调至 `12px`，并将字重统一设置为 `500`。同步更新了左侧导航栏（`tree-folder-item`）和目录模式下的书签标签，确保两种布局模式下的文字视觉重量完全一致，提升整体精致感。

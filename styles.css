@@ -412,7 +412,9 @@ body.loaded #background-layer {
     flex: 1;
     padding: 20px 12px; /* Increased vertical padding to make it taller */
     font-size: 16px;
-    letter-spacing: 0.1px;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.6px;
     border: none;
     background: transparent;
     outline: none;
