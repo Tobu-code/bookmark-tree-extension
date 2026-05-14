@@ -3660,15 +3660,20 @@ function initPureTime() {
     const timeDisplay = document.querySelector('.pure-time-display');
     if (!timeDisplay) return;
 
+    const WEEKDAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
     function updateTime() {
         const now = new Date();
+        const weekday = WEEKDAYS[now.getDay()];
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        timeDisplay.textContent = `${hours}:${minutes}`;
+        timeDisplay.textContent = `${weekday} · ${month}月${day}日 ${hours}:${minutes}`;
     }
 
     updateTime();
-    setInterval(updateTime, 60000); // Update every minute
+    setInterval(updateTime, 60000);
 }
 
 /**
@@ -3708,25 +3713,8 @@ function initGreeting() {
  * Initialize keyboard shortcuts and dynamic footer hint for Pure Mode
  */
 function initPureShortcuts() {
-    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
-    const input = document.getElementById('search-input');
     const footerHint = document.querySelector('.pure-footer-hint');
-
-    // Update footer hint with platform-specific text
     if (footerHint) {
-        const modKey = isMac ? '⌘' : 'Ctrl';
-        footerHint.textContent = `${modKey}+K 聚焦 · ↩ 搜索 · Tab 切换引擎`;
+        footerHint.textContent = '按 ↩ 搜索 · Tab 切换引擎';
     }
-
-    // Global keyboard shortcut: ⌘K (Mac) / Ctrl+K (Win) to focus search
-    document.addEventListener('keydown', (e) => {
-        const isModKey = isMac ? e.metaKey : e.ctrlKey;
-        if (isModKey && e.key === 'k') {
-            e.preventDefault();
-            if (input) {
-                input.focus();
-                input.select();
-            }
-        }
-    });
 }

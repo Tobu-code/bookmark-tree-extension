@@ -4682,7 +4682,7 @@ body.pure-mode .search-wrapper:focus-within {
 body.pure-mode .search-top-row {
     display: flex;
     align-items: center;
-    padding: 18px 24px 14px 24px;
+    padding: 24px 24px 20px 24px;
     gap: 14px;
 }
 
