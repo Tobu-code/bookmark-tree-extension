@@ -897,30 +897,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             activateFolder(targetFolder, leftFolderEl);
         };
 
-        // Render bookmarks into the grid
-        bookmarks.forEach(child => {
-            const bmkItem = renderFlatBookmarkItem(child);
-            if (child.url) {
-                const leafNode = bmkItem.querySelector('.leaf-node');
-                if (leafNode) {
-                    const urlPreview = document.createElement('span');
-                    urlPreview.className = 'bookmark-url-preview';
-                    try {
-                        let hostname = new URL(child.url).hostname.replace(/^www\./, '');
-                        const parts = hostname.split('.');
-                        if (parts.length > 2 && hostname.length > 20) {
-                            hostname = parts.slice(-2).join('.');
-                        }
-                        urlPreview.textContent = hostname;
-                    } catch (e) {
-                        urlPreview.textContent = child.url.substring(0, 30);
-                    }
-                    leafNode.appendChild(urlPreview);
-                }
-            }
-            listContainer.appendChild(bmkItem);
-        });
-
         // Render sub-folders as grid cards (same visual as bookmarks)
         subFolders.forEach((subFolder) => {
             const folderCard = document.createElement('div');
@@ -959,6 +935,30 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             });
 
             listContainer.appendChild(folderCard);
+        });
+
+        // Render bookmarks into the grid
+        bookmarks.forEach(child => {
+            const bmkItem = renderFlatBookmarkItem(child);
+            if (child.url) {
+                const leafNode = bmkItem.querySelector('.leaf-node');
+                if (leafNode) {
+                    const urlPreview = document.createElement('span');
+                    urlPreview.className = 'bookmark-url-preview';
+                    try {
+                        let hostname = new URL(child.url).hostname.replace(/^www\./, '');
+                        const parts = hostname.split('.');
+                        if (parts.length > 2 && hostname.length > 20) {
+                            hostname = parts.slice(-2).join('.');
+                        }
+                        urlPreview.textContent = hostname;
+                    } catch (e) {
+                        urlPreview.textContent = child.url.substring(0, 30);
+                    }
+                    leafNode.appendChild(urlPreview);
+                }
+            }
+            listContainer.appendChild(bmkItem);
         });
 
         if (bookmarks.length > 0 || subFolders.length > 0) {
