@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 18:50:00 +0800
-- **Type**: Refactor (Cursor Alignment & Size Fix)
-- **Content**: 完善纯净模式录入体验：1) 调整 `search-wrapper` 为 `flex-start` 对齐，结合精确的顶部内边距，使搜索光标从卡片左上角起始，完美复刻 Claude.ai 的录入感；2) 修正了上一步中意外缩小的卡片尺寸，恢复至 840x160px 的标准规格；3) 移除输入框固定高度，优化行高与间距，确保文字排布的自然与美观。
-- **Impact**: `styles.css`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 18:51:00 +0800
+- **Type**: Chore (Global Copy Update)
+- **Content**: 全局更新搜索框占位符文案为“寻找、发现，或者只是在此沉思...”。这一富有哲理的文案适用于所有布局模式，旨在提升界面的整体调性与人文质感。
+- **Impact**: `newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
