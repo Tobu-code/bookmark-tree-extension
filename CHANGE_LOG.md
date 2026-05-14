@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-14 23:24:00]
+- **Type**: Feature (Search Engine)
+- **Content**: 新增 Yandex 搜索引擎支持。在搜索栏引擎下拉列表（及纯净模式的引擎快捷切换列表）中添加了 Yandex 作为可选的默认搜索引擎。
+- **Impact**: `newtab.html`
+
+
 ## [2026-05-14 23:16:00]
 - **Type**: Style (Ambient Time Spacing)
 - **Content**: 修复非纯净模式下问候时钟与搜索框间距过小的问题。将 `@media (max-height: 920px)` 下 `.ambient-time` 的 `margin-bottom` 从 `10px` 放宽至 `28px`，恢复合理的视觉呼吸感。
