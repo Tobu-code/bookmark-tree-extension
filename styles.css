@@ -579,9 +579,9 @@ body.loaded #background-layer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.22);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-radius: 24px;
     z-index: 50;
     pointer-events: none;
@@ -605,20 +605,20 @@ body.search-active #search-container {
     position: relative;
 }
 
-/* Focus mode: dim secondary regions when searching */
+/* Focus mode: maintain brightness when searching */
 body.search-active #bookmarks-tree {
-    opacity: 0.62;
+    opacity: 0.95;
     transform: translateY(1px) scale(0.996);
 }
 
 body.search-active .ambient-time {
-    opacity: 0.2;
+    opacity: 0.95;
 }
 
 body.search-active #layout-toggle-btn,
 body.search-active #pure-mode-btn,
 body.search-active #settings-btn {
-    opacity: 0.36;
+    opacity: 0.95;
     transform: none;
 }
 
@@ -4684,12 +4684,10 @@ body.pure-mode #search-suggestions {
 }
 
 body.pure-mode.search-active .ambient-time {
-    opacity: 0.8; /* 搜索时不再大幅变暗 */
+    opacity: 0.9; 
 }
 
-body.pure-mode #search-overlay {
-    display: none !important; /* 彻底移除纯净模式下的背景蒙版 */
-}
+/* 移除纯净模式下多余的 overlay 覆盖，因为现在全局都是透明的 */
 
 body.pure-mode.search-active #pure-mode-btn {
     opacity: 0.52;
