@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 19:21:00 +0800
-- **Type**: Fix (Greeting Visibility)
-- **Content**: 解决问候语组件由于选择器冲突导致的显示问题：1) 将纯净模式问候语类名更换为唯一的 `.pure-greeting-text`；2) 同步更新 JS 与 CSS 选择器，确保文字精准注入可视容器，彻底解决问候语消失的 bug。
-- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 19:24:00 +0800
+- **Type**: Style (Search Alignment Fix)
+- **Content**: 实现搜索框全要素左对齐：1) 在纯净模式下隐藏旧版引擎选择器，消除左侧多余留白；2) 使用 `margin-left: auto` 将 AI 按钮固定在最右侧；3) 确保放大镜图标、输入文字及底部引擎行均从左侧自然起步。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800

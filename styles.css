@@ -4665,8 +4665,13 @@ body.pure-mode .search-wrapper {
 .search-top-row {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
-    gap: 12px;
+    padding: 12px 18px;
+    gap: 14px;
+}
+
+/* 隐藏纯净模式下的旧版引擎选择器（它会导致左侧留白） */
+body.pure-mode #engine-picker-container {
+    display: none !important;
 }
 
 .pure-search-icon {
@@ -4693,7 +4698,7 @@ body.pure-mode #search-input {
 }
 
 body.pure-mode #ai-sidebar-btn {
-    position: static;
+    margin-left: auto; /* 将 AI 按钮推到最右侧 */
     width: 32px;
     height: 32px;
     color: #D97757;
