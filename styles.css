@@ -197,7 +197,7 @@ h3,
     width: 100%;
     height: 100%;
     /* Default to Claude Beige */
-    background-color: #F5F5F0;
+    background-color: #F7F7F5;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -225,16 +225,16 @@ h3,
 
 #background-layer::before {
     background:
-        radial-gradient(circle at 18% 20%, rgba(255, 210, 168, 0.22), transparent 42%),
-        radial-gradient(circle at 82% 14%, rgba(171, 206, 255, 0.2), transparent 38%),
-        radial-gradient(circle at 74% 82%, rgba(255, 170, 152, 0.14), transparent 40%);
+        radial-gradient(circle at 18% 20%, rgba(255, 210, 168, 0.04), transparent 42%),
+        radial-gradient(circle at 82% 14%, rgba(171, 206, 255, 0.04), transparent 38%),
+        radial-gradient(circle at 74% 82%, rgba(255, 170, 152, 0.04), transparent 40%);
     mix-blend-mode: screen;
 }
 
 #background-layer::after {
     background: 
-        linear-gradient(180deg, rgba(80, 140, 255, 0.06) 0%, transparent 15%),
-        linear-gradient(180deg, rgba(20, 16, 12, 0.08) 0%, rgba(20, 16, 12, 0.22) 100%);
+        linear-gradient(180deg, rgba(80, 140, 255, 0.02) 0%, transparent 15%),
+        linear-gradient(180deg, rgba(20, 16, 12, 0.02) 0%, rgba(20, 16, 12, 0.06) 100%);
 }
 
 /* Dark Theme overrides for background - Deep Purple-Grey */
@@ -244,28 +244,28 @@ h3,
 
 :root[data-theme="dark"] #background-layer::before {
     background:
-        radial-gradient(circle at 20% 24%, rgba(225, 139, 100, 0.18), transparent 44%),
-        radial-gradient(circle at 84% 18%, rgba(110, 164, 255, 0.16), transparent 40%),
-        radial-gradient(circle at 70% 80%, rgba(171, 126, 255, 0.14), transparent 42%);
+        radial-gradient(circle at 20% 24%, rgba(225, 139, 100, 0.06), transparent 44%),
+        radial-gradient(circle at 84% 18%, rgba(110, 164, 255, 0.06), transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(171, 126, 255, 0.06), transparent 42%);
 }
 
 :root[data-theme="dark"] #background-layer::after {
     background: 
-        linear-gradient(180deg, rgba(110, 164, 255, 0.12) 0%, transparent 20%),
-        linear-gradient(180deg, rgba(8, 10, 14, 0.24) 0%, rgba(8, 10, 14, 0.45) 100%);
+        linear-gradient(180deg, rgba(110, 164, 255, 0.04) 0%, transparent 20%),
+        linear-gradient(180deg, rgba(8, 10, 14, 0.08) 0%, rgba(8, 10, 14, 0.18) 100%);
 }
 
-/* Main Container - Dashboard Style */
+/* Main Container - Flattened for r4.chat aesthetic */
 .container {
     width: 90%;
     height: clamp(var(--container-min-h), 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
     border-radius: var(--container-radius);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.04) 100%), var(--bg-overlay);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: var(--elev-shadow-2);
-    border: 1px solid color-mix(in srgb, var(--border-color) 92%, white 8%);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
     display: flex;
     flex-direction: column;
     padding: var(--container-padding);
@@ -283,49 +283,17 @@ h3,
 }
 
 .container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    background:
-        linear-gradient(158deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 42%, transparent 72%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 30%),
-        repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 100px,
-            rgba(184, 98, 59, 0.015) 100px,
-            rgba(184, 98, 59, 0.015) 101px
-        );
+    display: none;
 }
 
 .container::after {
-    content: '';
-    position: absolute;
-    inset: 1px;
-    pointer-events: none;
-    border-radius: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    opacity: 0.55;
+    display: none;
 }
 
-:root[data-theme="dark"] .container::before {
-    background:
-        linear-gradient(158deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 42%, transparent 72%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 28%),
-        repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 100px,
-            rgba(245, 166, 122, 0.012) 100px,
-            rgba(245, 166, 122, 0.012) 101px
-        );
-}
-
-:root[data-theme="dark"] .container::after {
-    border-color: rgba(255, 255, 255, 0.1);
-    opacity: 0.6;
+:root[data-theme="dark"] .container {
+    background: rgba(26, 26, 26, 0.55);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.06);
 }
 
 body.loaded .container {
@@ -397,7 +365,7 @@ body.loaded #background-layer {
     align-items: flex-start;
     gap: 4px;
     padding-bottom: 8px; /* Align with baseline of large digits */
-    border-left: 1px solid rgba(0,0,0,0.06);
+    border-left: 1px solid rgba(0,0,0,0.03);
     padding-left: 20px;
 }
 
@@ -1369,7 +1337,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Item 7: Glass cards with accent strip */
 .bookmarks-pane-grid .leaf-wrapper {
     background: rgba(255, 255, 255, 0.96);
-    border: 1px solid color-mix(in srgb, var(--border-color) 90%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
     border-radius: 14px;
     padding: 8px 9px;
     margin-bottom: 0;
@@ -1379,7 +1347,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    box-shadow: var(--elev-shadow-1), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     transition: transform var(--motion-fast) var(--ease-standard),
         background-color var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
@@ -1393,21 +1361,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Accent strip — terracotta top bar */
 .bookmarks-pane-grid .leaf-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 12%;
-    right: 12%;
-    height: 2.5px;
-    border-radius: 0 0 4px 4px;
-    background: linear-gradient(90deg, transparent, var(--primary-color) 20%, var(--primary-color) 80%, transparent);
-    opacity: 0.35;
-    transition: opacity var(--motion-fast) var(--ease-standard), height var(--motion-fast) var(--ease-standard);
-}
-
-.bookmarks-pane-grid .leaf-wrapper:hover::before {
-    opacity: 0.65;
-    height: 3px;
+    display: none;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
@@ -1417,16 +1371,16 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Hover glow with border highlight */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--elev-shadow-2), 0 0 0 1px color-mix(in srgb, var(--primary-color) 12%, transparent);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     background: rgba(255, 255, 255, 0.98);
-    border-color: color-mix(in srgb, var(--primary-color) 40%, var(--border-color));
+    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
     background: rgba(42, 48, 60, 0.94);
-    border-color: rgba(225, 139, 100, 0.40);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(225, 139, 100, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
@@ -1434,10 +1388,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     transition: transform var(--motion-fast) var(--ease-emphasized);
 }
 
-/* Optimization 3: Hover focus - dim others in bookmarks grid */
-.bookmarks-pane-grid:hover .leaf-wrapper:not(:hover) {
-    opacity: 0.96;
-}
+/* Removed: Hover focus dimming for r4.chat clean aesthetic */
 
 .bookmarks-pane-grid .leaf-node {
     padding: 6px 5px;
@@ -1743,7 +1694,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: #ffffff;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.01);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {
@@ -1786,11 +1737,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     background: var(--card-hover);
-    border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
     z-index: 10;
-    box-shadow: var(--elev-shadow-3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .bookmark-card:active {
