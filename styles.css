@@ -4541,7 +4541,7 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0;
-    padding: 24vh 0 0 0; /* 视觉重心上移 */
+    padding: 18vh 0 0 0; /* 再次上移重心 */
     display: flex;
     flex-direction: column;
     align-items: center;

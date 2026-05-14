@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 18:51:00 +0800
-- **Type**: Chore (Global Copy Update)
-- **Content**: 全局更新搜索框占位符文案为“寻找、发现，或者只是在此沉思...”。这一富有哲理的文案适用于所有布局模式，旨在提升界面的整体调性与人文质感。
-- **Impact**: `newtab.html`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 18:55:00 +0800
+- **Type**: Refactor (Visual Balance Optimization)
+- **Content**: 再次微调纯净模式视觉重心：将 `#search-container` 的顶部间距由 `24vh` 缩减至 `18vh`。这一调整使页面核心组件进一步上移，增强了整体的悬浮感与视觉轻盈度，更贴近高水准极简设计规范。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
