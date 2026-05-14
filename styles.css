@@ -4547,15 +4547,15 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0;
-    padding: min(10vh, 84px) clamp(18px, 4vw, 48px) min(12vh, 108px);
+    padding: min(15vh, 120px) clamp(24px, 5vw, 64px) min(12vh, 108px);
     align-items: center;
     justify-content: center;
 }
 
 body.pure-mode .ambient-time {
     max-width: 860px;
-    margin-bottom: 28px;
-    gap: 18px;
+    margin-bottom: 56px; /* 增加时钟与搜索框之间的间距 */
+    gap: 24px;
     align-items: center;
     justify-content: center;
 }
@@ -4688,11 +4688,15 @@ body.pure-mode #ai-sidebar-btn {
 }
 
 body.pure-mode #search-suggestions {
-    top: calc(100% + 16px);
+    top: calc(100% + 24px);
 }
 
 body.pure-mode.search-active .ambient-time {
-    opacity: 0.3;
+    opacity: 0.8; /* 搜索时不再大幅变暗 */
+}
+
+body.pure-mode #search-overlay {
+    display: none !important; /* 彻底移除纯净模式下的背景蒙版 */
 }
 
 body.pure-mode.search-active #pure-mode-btn {
