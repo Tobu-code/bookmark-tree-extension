@@ -1,9 +1,9 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 18:55:00 +0800
-- **Type**: Refactor (Visual Balance Optimization)
-- **Content**: 再次微调纯净模式视觉重心：将 `#search-container` 的顶部间距由 `24vh` 缩减至 `18vh`。这一调整使页面核心组件进一步上移，增强了整体的悬浮感与视觉轻盈度，更贴近高水准极简设计规范。
+- **Time**: 2026-05-14 18:57:00 +0800
+- **Type**: Style (Global Font Update)
+- **Content**: 全局移除搜索框内的斜体样式：无论是输入文字还是占位符，现在都统一使用常规字体（normal），提升了文字的阅读清晰度与界面稳重感，适用于所有布局模式。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]

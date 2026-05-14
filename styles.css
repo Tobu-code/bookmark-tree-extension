@@ -413,7 +413,6 @@ body.loaded #background-layer {
     padding: 20px 12px; /* Increased vertical padding to make it taller */
     font-size: 16px;
     font-weight: 600;
-    font-style: italic;
     letter-spacing: 0.6px;
     border: none;
     background: transparent;
@@ -423,7 +422,6 @@ body.loaded #background-layer {
 }
 
 #search-input::placeholder {
-    font-style: italic;
     font-size: 14px;
     opacity: 0.84;
     color: var(--text-subtle);
