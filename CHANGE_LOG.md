@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 16:28:00 +0800
+- **Type**: Design (Layout Alignment)
+- **Content**: 统一左右侧网格布局的垂直节奏：1) 左侧目录：移除单项的 `margin-bottom: 2px`，统一由父容器使用 `gap: 8px` 控制间距，单项高度维持 `38px`；2) 右侧书签网格：卡片间距由 `20px 20px` 调整为 `8px 16px`（垂直间距对齐左侧的 8px），卡片高度从 `80px` 调整为 `84px`（完美对齐左侧“2 个目录项 + 1 个间距”的总高度：38+38+8=84px），实现严格的横向基线对齐。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 16:23:00 +0800
 - **Type**: Design (Active State Subtraction)
 - **Content**: 修复左侧目录选中状态下视觉冗余问题：移除 `.tree-folder-item.active` 的 `::before`（底部高光横线）和 `::after`（左侧指示竖线）伪元素装饰，只保留选中时的背景色与文字颜色高亮，使选中状态更加干净纯粹。

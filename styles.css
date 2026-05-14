@@ -924,7 +924,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 6px;
+    gap: 8px;
     min-height: 0;
     height: 100%;
     overflow-y: auto;
@@ -1010,7 +1010,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         box-shadow var(--motion-fast) var(--ease-standard),
         color var(--motion-fast) var(--ease-standard),
         opacity var(--motion-fast) var(--ease-standard);
-    margin-bottom: 2px;
     font-size: 13px;
     font-weight: 500;
     user-select: none;
@@ -1308,8 +1307,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(202px, 1fr));
-    grid-auto-rows: minmax(80px, auto);
-    gap: 20px 20px;
+    grid-auto-rows: minmax(84px, auto);
+    gap: 8px 16px;
     align-content: start;
     align-items: stretch;
     padding-right: 12px;
