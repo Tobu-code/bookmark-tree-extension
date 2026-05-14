@@ -4541,12 +4541,12 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0;
-    padding: 22vh 0 0 0; /* 视觉重心上移至屏幕上方约 1/3 处 */
+    padding: 24vh 0 0 0; /* 视觉重心上移 */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* 改为顶部对齐以配合 padding */
-    gap: 32px;
+    justify-content: flex-start;
+    gap: 36px;
 }
 
 body.pure-mode .ambient-time {
@@ -4595,28 +4595,43 @@ body.pure-mode .ambient-time-date {
 }
 
 body.pure-mode .ambient-time-greeting {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif;
-    font-size: 36px; /* 锁定 Claude 风格字号 */
+    font-size: 40px;
     font-weight: 500;
     color: var(--text-color);
-    opacity: 0.95;
-    letter-spacing: -0.4px;
+    opacity: 1;
+    letter-spacing: -0.6px;
+}
+
+body.pure-mode .ambient-time-greeting::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 32px;
+    background-color: #D97757; /* Claude 特色橘色 */
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z'/%3E%3C/svg%3E") no-repeat center;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z'/%3E%3C/svg%3E") no-repeat center;
 }
 
 body.pure-mode .search-wrapper {
-    width: 540px; /* 宽度减少 1/3 (从 800px 调至 540px) */
+    width: 840px;
     max-width: calc(100vw - 48px);
-    min-height: 144px; /* 高度增加 2 倍 (从 72px 调至 144px) */
-    padding: 0 32px;
-    border-radius: 28px;
+    min-height: 160px; /* 超大纵向卡片 */
+    padding: 24px 28px;
+    border-radius: 20px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
+    flex-direction: column; /* 纵向布局 */
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
     background: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
     transition: all 0.3s ease;
+    position: relative;
 }
 
 :root[data-theme="dark"] body.pure-mode .search-wrapper {
@@ -4638,18 +4653,20 @@ body.pure-mode .search-wrapper:focus-within {
 }
 
 body.pure-mode #search-input {
+    order: 1;
     flex: 1;
     padding: 0;
-    height: 60px; /* 给输入框一个合理的固定高度，并在 wrapper 中居中 */
+    min-height: 80px;
     font-size: 18px;
     font-weight: 400;
     color: var(--text-color);
+    line-height: 1.6;
 }
 
 body.pure-mode #search-input::placeholder {
     font-size: 18px;
     font-weight: 400;
-    opacity: 0.35;
+    opacity: 0.3;
 }
 
 body.pure-mode #engine-picker-container {
@@ -4671,17 +4688,23 @@ body.pure-mode #search-engine-label {
 }
 
 body.pure-mode #ai-sidebar-btn {
-    position: static;
-    margin-left: 0;
-    opacity: 0.5;
+    position: absolute;
+    right: 24px;
+    bottom: 16px;
+    opacity: 0.4;
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s ease;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-body.pure-mode #ai-sidebar-btn:hover {
-    opacity: 0.9;
+body.pure-mode #ai-sidebar-btn::before {
+    content: "Ask AI";
+    font-size: 12px;
+    font-weight: 600;
 }
 
 body.pure-mode #search-suggestions {
@@ -4702,20 +4725,18 @@ body.pure-mode .pure-engine-list {
 /* 移除了 body.search-active .pure-engine-list { display: none; } 以实现常驻 */
 
 .pure-engine-btn {
-    padding: 6px 16px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 14px;
     background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    color: var(--text-color);
-    font-size: 12px; /* 调小标签字号 */
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: #666;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    letter-spacing: 0.2px;
+    gap: 10px;
 }
 
 .pure-engine-btn:hover {

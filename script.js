@@ -2165,7 +2165,19 @@ function initSearch() {
             btn.className = 'pure-engine-btn';
             btn.dataset.engine = opt.dataset.engine;
             btn.dataset.url = opt.dataset.url;
-            btn.textContent = opt.textContent.trim();
+            
+            // Add icon to the button
+            const iconImg = document.createElement('img');
+            iconImg.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(opt.dataset.url)}&size=32`;
+            iconImg.width = 16;
+            iconImg.height = 16;
+            iconImg.style.borderRadius = '4px';
+            btn.appendChild(iconImg);
+
+            const textSpan = document.createElement('span');
+            textSpan.textContent = opt.textContent.trim();
+            btn.appendChild(textSpan);
+            
             btn.addEventListener('click', () => {
                 currentEngine = btn.dataset.engine;
                 currentUrl = btn.dataset.url;

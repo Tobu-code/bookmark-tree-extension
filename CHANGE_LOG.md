@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 18:34:00 +0800
-- **Type**: Refactor (Pure Mode Proportions)
-- **Content**: 大幅调整纯净模式比例：1) 搜索框形态重塑：宽度减少 1/3（至 540px），高度增加 2 倍（至 144px），呈现出厚重的方正卡片感；2) 交互逻辑校准：将 AI 侧边栏按钮移至搜索框最右侧（后方），符合主流输入习惯；3) 对齐精修：确保问候语、搜索框内容、AI 按钮及下方的引擎标签在垂直轴线上严格居中对齐。
-- **Impact**: `styles.css`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 18:41:00 +0800
+- **Type**: Refactor (Final Claude UI Fidelity)
+- **Content**: 最终像素级复刻 Claude.ai 官网 UI：1) 问候语区域：新增橘色星标（#D97757），字体调整为 40px 衬线体，视觉观感与原版一致；2) 搜索卡片重构：回归 840x160px 超大纵向布局，圆角 20px，内部采用纵向 Flex 布局；3) 功能区优化：AI 按钮移至卡片右下角并更名为 "Ask AI"，模拟模型选择器样式；4) 标签系统升级：底部胶囊标签新增 Favicon 图标支持，间距与尺寸精确匹配 Claude 的 Quick Actions。
+- **Impact**: `script.js`、`styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
