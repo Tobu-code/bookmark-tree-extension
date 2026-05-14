@@ -4431,59 +4431,62 @@ input[type="file"]:focus-visible {
     line-height: 1.6;
 }
 
-.bookmarks-pane-subfolder-list {
+/* Sub-folders rendered as grid cards (unified with bookmark cards) */
+.bookmarks-pane-grid .leaf-wrapper--folder {
+    cursor: pointer;
+}
+
+.bookmarks-pane-grid .leaf-wrapper--folder .leaf-node--folder {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
-
-.bookmarks-pane-subfolder-item {
-    width: 100%;
-    border: 1px solid var(--border-color);
-    background: color-mix(in srgb, var(--card-bg) 88%, transparent);
-    border-radius: 12px;
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: border-color var(--motion-fast) var(--ease-standard), background var(--motion-fast) var(--ease-standard);
-}
-
-.bookmarks-pane-subfolder-item:hover {
-    border-color: color-mix(in srgb, var(--primary-color) 45%, var(--border-color));
-    background: color-mix(in srgb, var(--primary-color) 8%, var(--card-bg));
-}
-
-.bookmarks-pane-subfolder-icon {
-    display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 6px 5px;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    gap: 2px;
 }
 
-.bookmarks-pane-subfolder-icon .folder-svg-icon {
-    width: 18px;
-    height: 18px;
+.bookmarks-pane-grid .leaf-wrapper--folder .bookmark-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    color: var(--primary-color);
+    margin-bottom: 4px;
 }
 
-.bookmarks-pane-subfolder-name {
-    flex: 1;
-    min-width: 0;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: left;
-    white-space: nowrap;
+.bookmarks-pane-grid .leaf-wrapper--folder .bookmark-icon-wrap .folder-svg-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.bookmarks-pane-grid .leaf-wrapper--folder .bookmark-label {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text-color);
+    word-break: break-all;
 }
 
-.bookmarks-pane-subfolder-meta {
-    font-size: 12px;
-    color: var(--text-subtle);
+.bookmarks-pane-grid .leaf-wrapper--folder .bookmark-url-preview {
+    font-size: 10px;
+    color: var(--text-muted);
+    opacity: 0.8;
 }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+

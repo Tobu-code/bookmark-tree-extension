@@ -897,52 +897,72 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             activateFolder(targetFolder, leftFolderEl);
         };
 
-        if (bookmarks.length > 0) {
-            bookmarks.forEach(child => {
-                // Render bookmark
-                const bmkItem = renderFlatBookmarkItem(child);
-                if (child.url) {
-                    const leafNode = bmkItem.querySelector('.leaf-node');
-                    if (leafNode) {
-                        const urlPreview = document.createElement('span');
-                        urlPreview.className = 'bookmark-url-preview';
-                        try {
-                            let hostname = new URL(child.url).hostname.replace(/^www\./, '');
-                            const parts = hostname.split('.');
-                            if (parts.length > 2 && hostname.length > 20) {
-                                hostname = parts.slice(-2).join('.');
-                            }
-                            urlPreview.textContent = hostname;
-                        } catch (e) {
-                            urlPreview.textContent = child.url.substring(0, 30);
+        // Render bookmarks into the grid
+        bookmarks.forEach(child => {
+            const bmkItem = renderFlatBookmarkItem(child);
+            if (child.url) {
+                const leafNode = bmkItem.querySelector('.leaf-node');
+                if (leafNode) {
+                    const urlPreview = document.createElement('span');
+                    urlPreview.className = 'bookmark-url-preview';
+                    try {
+                        let hostname = new URL(child.url).hostname.replace(/^www\./, '');
+                        const parts = hostname.split('.');
+                        if (parts.length > 2 && hostname.length > 20) {
+                            hostname = parts.slice(-2).join('.');
                         }
-                        leafNode.appendChild(urlPreview);
+                        urlPreview.textContent = hostname;
+                    } catch (e) {
+                        urlPreview.textContent = child.url.substring(0, 30);
                     }
+                    leafNode.appendChild(urlPreview);
                 }
-                listContainer.appendChild(bmkItem);
+            }
+            listContainer.appendChild(bmkItem);
+        });
+
+        // Render sub-folders as grid cards (same visual as bookmarks)
+        subFolders.forEach((subFolder) => {
+            const folderCard = document.createElement('div');
+            folderCard.className = 'leaf-wrapper leaf-wrapper--folder';
+            folderCard.dataset.id = subFolder.id;
+            folderCard.setAttribute('role', 'button');
+            folderCard.setAttribute('tabindex', '0');
+
+            const folderInner = document.createElement('div');
+            folderInner.className = 'leaf-node leaf-node--folder';
+
+            const iconWrap = document.createElement('div');
+            iconWrap.className = 'bookmark-icon-wrap';
+            iconWrap.innerHTML = FOLDER_ICON_SVG;
+
+            const label = document.createElement('span');
+            label.className = 'bookmark-label';
+            label.textContent = subFolder.title || '未命名目录';
+            label.title = subFolder.title || '未命名目录';
+
+            const meta = document.createElement('span');
+            meta.className = 'bookmark-url-preview';
+            meta.textContent = `${subFolder.children.length} 项`;
+
+            folderInner.appendChild(iconWrap);
+            folderInner.appendChild(label);
+            folderInner.appendChild(meta);
+            folderCard.appendChild(folderInner);
+
+            folderCard.addEventListener('click', () => activateFolderByNode(subFolder));
+            folderCard.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    activateFolderByNode(subFolder);
+                }
             });
+
+            listContainer.appendChild(folderCard);
+        });
+
+        if (bookmarks.length > 0 || subFolders.length > 0) {
             bmkPaneScroll.appendChild(listContainer);
-        }
-
-        if (subFolders.length > 0) {
-            const subFolderList = document.createElement('div');
-            subFolderList.className = 'bookmarks-pane-subfolder-list';
-
-            subFolders.forEach((subFolder) => {
-                const subFolderItem = document.createElement('button');
-                subFolderItem.type = 'button';
-                subFolderItem.className = 'bookmarks-pane-subfolder-item';
-                subFolderItem.dataset.id = subFolder.id;
-                subFolderItem.innerHTML = `
-                    <span class="bookmarks-pane-subfolder-icon">${FOLDER_ICON_SVG}</span>
-                    <span class="bookmarks-pane-subfolder-name">${subFolder.title || '未命名目录'}</span>
-                    <span class="bookmarks-pane-subfolder-meta">${subFolder.children.length}</span>
-                `;
-                subFolderItem.addEventListener('click', () => activateFolderByNode(subFolder));
-                subFolderList.appendChild(subFolderItem);
-            });
-
-            bmkPaneScroll.appendChild(subFolderList);
         }
 
         if (bookmarks.length === 0 && subFolders.length === 0) {
