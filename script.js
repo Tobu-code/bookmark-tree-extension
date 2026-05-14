@@ -3573,29 +3573,26 @@ function initAmbientTime() {
 
     // Greeting quotes pool
     const GREETINGS = [
-        '今天也要加油鸭 🦆',
+        '慢慢来，比较快',
         '保持好奇心，探索未知',
         '做喜欢的事，见想见的人',
         '用心感受每一个当下',
-        '慢慢来，比较快',
-        '把每一天过成想要的样子',
         '简单生活，认真做事',
-        '向阳而生，逆风翻盘',
-        '今日事，今日毕',
-        '保持热爱，奔赴山海'
+        '把每一天过成想要的样子',
+        '保持热爱，奔赴山海',
+        '今日事，今日毕'
     ];
 
     function getGreeting() {
         const hour = new Date().getHours();
-        let prefix;
-        if (hour < 6) prefix = '夜深了';
+        let prefix = '你好';
+        if (hour < 5) prefix = '夜深了';
         else if (hour < 9) prefix = '早上好';
         else if (hour < 12) prefix = '上午好';
         else if (hour < 14) prefix = '中午好';
         else if (hour < 18) prefix = '下午好';
         else if (hour < 22) prefix = '晚上好';
         else prefix = '夜深了';
-        // Pick a quote based on the day of year for daily variety
         const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
         const quote = GREETINGS[dayOfYear % GREETINGS.length];
         return `${prefix}，${quote}`;
