@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 16:37:00 +0800
+- **Type**: Design (Interaction Consistency)
+- **Content**: 统一左右侧悬停交互动效：将右侧书签卡片网格的 hover 效果调整为与左侧目录完全一致。移除了原有的上浮效果（`translateY(-1px)`）和外发光阴影，改为平移效果（`translateX(3px)`）与内部微光阴影（`inset 0 1px 0 rgba(255, 255, 255, 0.36)`）。深色模式也做了相应的内部高光适配。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 16:34:00 +0800
 - **Type**: Design (Layout Density Optimization)
 - **Content**: 优化右侧书签网格的视觉密度：将垂直间距从过宽的 `46px` 回调至更符合视觉工程学的 `24px`。24px（3个 8px 基础网格单元）能为 84px 高度的卡片提供约 28% 的留白比例，这是 UI 设计中最舒适的格式塔（Gestalt）临近原则比例。既避免了 8px 时的拥挤感，也消除了 46px 时的断层感。水平间距保持 `20px`，卡片高度保持 `84px`。

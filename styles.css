@@ -1351,10 +1351,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Hover glow with border highlight */
+/* Hover glow with border highlight (Aligned with left tree folder hover) */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateX(3px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.36);
     background: rgba(255, 255, 255, 0.98);
     border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
 }
@@ -1362,7 +1362,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
     background: rgba(42, 48, 60, 0.94);
     border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
