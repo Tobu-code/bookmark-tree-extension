@@ -320,10 +320,18 @@ body.loaded #background-layer {
 }
 
 /* Dynamic Alignment for Flat Mode */
+.container:has(#bookmarks-tree.layout-flat) {
+    --flat-side-gutter: clamp(24px, calc((100% - 1320px) / 2), 156px);
+}
+
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    padding-left: calc(var(--flat-side-gutter) + 284px + 24px);
+    padding-left: var(--flat-side-gutter);
     padding-right: var(--flat-side-gutter);
-    align-items: flex-start; /* Align search bar and clock with the right pane */
+    align-items: flex-start; /* Align search bar and clock with the left pane */
+}
+
+.container:has(#bookmarks-tree.layout-tree) {
+    --tree-side-gutter: clamp(24px, calc((100% - 1360px) / 2), 164px);
 }
 
 .container:has(#bookmarks-tree.layout-tree) #search-container {
@@ -892,7 +900,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex-direction: row;
     gap: 24px;
     /* Keep flat-mode left/right baseline aligned with tree-mode content area */
-    --flat-side-gutter: clamp(24px, calc((100% - 1320px) / 2), 156px);
     padding: 24px var(--flat-side-gutter) 16px;
     align-items: flex-start; /* Align both panes to the same top line */
     height: 100%;
@@ -901,7 +908,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-tree {
-    --tree-side-gutter: clamp(24px, calc((100% - 1360px) / 2), 164px);
     padding: 30px var(--tree-side-gutter) calc(18px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
     scroll-padding-bottom: calc(var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom) + 16px);
 }
@@ -1543,9 +1549,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         width: min(94%, 1600px);
     }
 
+    .container:has(#bookmarks-tree.layout-flat) {
+        --flat-side-gutter: clamp(12px, calc((100% - 1180px) / 2), 72px);
+    }
+
     #bookmarks-tree.layout-flat {
         gap: 18px;
-        --flat-side-gutter: clamp(12px, calc((100% - 1180px) / 2), 72px);
     }
 
     .directory-pane {
