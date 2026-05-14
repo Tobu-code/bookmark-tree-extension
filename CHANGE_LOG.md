@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-14 23:16:00]
+- **Type**: Style (Ambient Time Spacing)
+- **Content**: 修复非纯净模式下问候时钟与搜索框间距过小的问题。将 `@media (max-height: 920px)` 下 `.ambient-time` 的 `margin-bottom` 从 `10px` 放宽至 `28px`，恢复合理的视觉呼吸感。
+- **Impact**: `styles.css`
+
+
 ## [2026-05-14 22:53:00]
 - **Type**: Fix (Pure Mode Centering)
 - **Content**: 彻底修复纯净模式下居中失效的问题。添加了 `!important` 提高纯净模式布局权重，避免受到平铺模式遗留的高权重规则强行左对齐的干扰；为底部提示语添加了文本居中；增加底部 10vh 内边距将整体视觉中心微调偏上，符合设计美学。
