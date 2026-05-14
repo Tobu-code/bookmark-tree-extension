@@ -616,6 +616,7 @@ body.search-active .ambient-time {
 }
 
 body.search-active #layout-toggle-btn,
+body.search-active #pure-mode-btn,
 body.search-active #settings-btn {
     opacity: 0.36;
     transform: none;
@@ -2159,9 +2160,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Settings Button - Bottom Right Corner */
 /* Layout toggle button — sits above the settings gear */
+#pure-mode-btn,
 #layout-toggle-btn {
     position: fixed;
-    bottom: calc(var(--floating-actions-safe-bottom) + var(--floating-actions-size) + var(--floating-actions-gap));
     right: var(--floating-actions-offset-right);
     width: var(--floating-actions-size);
     height: var(--floating-actions-size);
@@ -2185,6 +2186,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     opacity: 0.84;
 }
 
+#pure-mode-btn {
+    bottom: calc(var(--floating-actions-safe-bottom) + (var(--floating-actions-size) + var(--floating-actions-gap)) * 2);
+}
+
+#layout-toggle-btn {
+    bottom: calc(var(--floating-actions-safe-bottom) + var(--floating-actions-size) + var(--floating-actions-gap));
+}
+
+#pure-mode-btn svg,
 #layout-toggle-btn svg {
     width: 18px;
     height: 18px;
@@ -2195,6 +2205,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: none;
 }
 
+#pure-mode-btn:hover,
 #layout-toggle-btn:hover {
     background: color-mix(in srgb, var(--card-hover) 88%, transparent);
     border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
@@ -2204,8 +2215,22 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     opacity: 1;
 }
 
+#pure-mode-btn:hover svg,
 #layout-toggle-btn:hover svg {
     transform: scale(1.08);
+}
+
+#pure-mode-btn.is-active {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 20%, white), color-mix(in srgb, var(--primary-color) 10%, white));
+    border-color: color-mix(in srgb, var(--primary-color) 52%, var(--glass-border));
+    color: color-mix(in srgb, var(--primary-color) 92%, var(--text-color));
+    box-shadow: var(--elev-shadow-2), 0 0 18px color-mix(in srgb, var(--primary-color) 14%, transparent);
+    opacity: 1;
+}
+
+:root[data-theme="dark"] #pure-mode-btn.is-active {
+    background: linear-gradient(135deg, rgba(214, 151, 133, 0.22), rgba(214, 151, 133, 0.1));
+    border-color: rgba(214, 151, 133, 0.28);
 }
 
 #settings-btn {
@@ -3533,6 +3558,7 @@ body.ai-sidebar-open #bookmarks-tree {
 }
 
 body.ai-sidebar-open #layout-toggle-btn,
+body.ai-sidebar-open #pure-mode-btn,
 body.ai-sidebar-open #settings-btn,
 body.ai-sidebar-open #ai-sidebar-btn {
     opacity: 0;
@@ -4178,6 +4204,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
 .wheel-option:focus-visible,
 .suggestion-item:focus-visible,
 .close:focus-visible,
+#pure-mode-btn:focus-visible,
 #layout-toggle-btn:focus-visible,
 #settings-btn:focus-visible,
 #ai-sidebar-btn:focus-visible,
@@ -4374,6 +4401,7 @@ input[type="file"]:focus-visible {
     .leaf-node,
     .tree-state-skeleton span,
     .tree-folder-item.active::before,
+    #pure-mode-btn svg,
     #settings-btn svg,
     #layout-toggle-btn svg {
         transition: none !important;
@@ -4384,6 +4412,7 @@ input[type="file"]:focus-visible {
     .leaf-wrapper:hover .leaf-node,
     .bookmarks-pane-grid .leaf-wrapper:hover,
     .tree-folder-item:hover,
+    #pure-mode-btn:hover,
     #layout-toggle-btn:hover,
     #settings-btn:hover,
     #ai-sidebar-btn:hover {
@@ -4484,8 +4513,257 @@ input[type="file"]:focus-visible {
     opacity: 0.8;
 }
 
+/* Pure mode: warm white search canvas */
+body.pure-mode .container {
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.16);
+    border-color: color-mix(in srgb, var(--border-color) 28%, transparent);
+    box-shadow: none;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+:root[data-theme="dark"] body.pure-mode .container {
+    background: rgba(18, 18, 20, 0.18);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.pure-mode #bookmarks-tree,
+body.pure-mode #layout-toggle-btn,
+body.pure-mode #settings-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.pure-mode #bookmarks-tree {
+    display: none;
+}
+
+body.pure-mode #search-container {
+    flex: 1;
+    margin: 0;
+    padding: min(10vh, 84px) clamp(18px, 4vw, 48px) min(12vh, 108px);
+    align-items: center;
+    justify-content: center;
+}
+
+body.pure-mode .ambient-time {
+    max-width: 860px;
+    margin-bottom: 28px;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+}
+
+body.pure-mode .ambient-time.visible {
+    opacity: 0.78;
+}
+
+body.pure-mode .ambient-time.dimmed {
+    opacity: 0.48;
+}
+
+body.pure-mode .ambient-time-clock {
+    font-size: clamp(54px, 5.4vw, 82px);
+    font-weight: 300;
+    letter-spacing: -3.4px;
+    line-height: 0.88;
+    filter: none;
+}
+
+body.pure-mode .ambient-time-info-group {
+    display: flex;
+    gap: 6px;
+    padding-bottom: 0;
+    padding-left: 16px;
+    border-left-color: rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="dark"] body.pure-mode .ambient-time-info-group {
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+body.pure-mode .ambient-time-date {
+    font-size: 14px;
+    letter-spacing: 0.35px;
+}
+
+body.pure-mode .ambient-time-greeting {
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0.78;
+}
+
+body.pure-mode .search-wrapper {
+    width: min(820px, calc(100vw - 160px));
+    max-width: min(820px, calc(100vw - 160px));
+    min-height: 114px;
+    padding: 18px 18px 14px 22px;
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    row-gap: 12px;
+    column-gap: 12px;
+    background: rgba(255, 255, 255, 0.88);
+    border-color: color-mix(in srgb, var(--border-color) 38%, transparent);
+    box-shadow: 0 14px 36px rgba(27, 18, 12, 0.06);
+}
+
+:root[data-theme="dark"] body.pure-mode .search-wrapper {
+    background: rgba(37, 37, 40, 0.78);
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+body.pure-mode .search-wrapper:focus-within {
+    width: min(820px, calc(100vw - 160px));
+    background: rgba(255, 255, 255, 0.94);
+    border-color: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
+    box-shadow:
+        0 20px 44px rgba(27, 18, 12, 0.08),
+        0 0 0 2px color-mix(in srgb, var(--primary-color) 8%, transparent);
+    transform: translateY(-2px);
+}
+
+:root[data-theme="dark"] body.pure-mode .search-wrapper:focus-within {
+    background: rgba(42, 42, 46, 0.88);
+}
+
+body.pure-mode #search-input {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 0 2px;
+    font-size: clamp(24px, 2.4vw, 30px);
+    font-weight: 560;
+    font-style: normal;
+    letter-spacing: 0.1px;
+    line-height: 1.35;
+}
+
+body.pure-mode #search-input::placeholder {
+    font-size: clamp(19px, 1.9vw, 24px);
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.04px;
+    opacity: 0.58;
+}
+
+body.pure-mode #engine-picker-container {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+}
+
+body.pure-mode #search-engine-label {
+    margin-right: 0;
+    padding: 8px 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--primary-color) 7%, white 93%);
+    color: var(--text-subtle);
+}
+
+:root[data-theme="dark"] body.pure-mode #search-engine-label {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.pure-mode #ai-sidebar-btn {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+}
+
+body.pure-mode #search-suggestions {
+    top: calc(100% + 16px);
+}
+
+body.pure-mode.search-active .ambient-time {
+    opacity: 0.3;
+}
+
+body.pure-mode.search-active #pure-mode-btn {
+    opacity: 0.52;
+}
+
+@media (max-width: 1024px) {
+    body.pure-mode #search-container {
+        padding-bottom: min(10vh, 84px);
+    }
+
+    body.pure-mode .search-wrapper,
+    body.pure-mode .search-wrapper:focus-within {
+        width: min(720px, calc(100vw - 88px));
+        max-width: min(720px, calc(100vw - 88px));
+    }
+}
+
+@media (max-width: 640px) {
+    body.pure-mode .container {
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    body.pure-mode #search-container {
+        padding: 48px 10px max(18vh, 96px);
+    }
+
+    body.pure-mode .ambient-time {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+        text-align: center;
+    }
+
+    body.pure-mode .ambient-time-info-group {
+        display: flex;
+        align-items: center;
+        border-left: none;
+        padding-left: 0;
+    }
+
+    body.pure-mode .search-wrapper,
+    body.pure-mode .search-wrapper:focus-within {
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+        min-height: 102px;
+        padding: 16px 14px 12px 16px;
+        row-gap: 10px;
+        column-gap: 10px;
+    }
+
+    body.pure-mode #search-input {
+        font-size: 22px;
+    }
+
+    body.pure-mode #search-input::placeholder {
+        font-size: 18px;
+    }
+}
+
+@media (max-height: 800px) {
+    body.pure-mode .ambient-time {
+        margin-bottom: 20px;
+    }
+
+    body.pure-mode .ambient-time-info-group {
+        display: flex;
+    }
+}
+
+@media (max-height: 680px) {
+    body.pure-mode .ambient-time {
+        display: flex;
+    }
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
