@@ -4653,7 +4653,8 @@ body.pure-mode .pure-greeting-text::before {
 }
 
 /* 集成化搜索卡片 */
-body.pure-mode .search-wrapper {
+body.pure-mode .search-wrapper,
+body.pure-mode .search-wrapper:focus-within {
     width: 720px;
     max-width: calc(100vw - 48px);
     background: #FFFFFF;
@@ -4662,10 +4663,15 @@ body.pure-mode .search-wrapper {
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     padding: 0;
+    padding-left: 0;
+    padding-right: 0;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    transform: none;
+    text-align: left;
 }
 
 /* 顶部输入行 */
