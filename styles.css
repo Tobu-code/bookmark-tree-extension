@@ -4540,7 +4540,7 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 0 0 10vh 0 !important; /* 底部增加 padding 提升整体视觉中心 */
     display: flex;
     flex-direction: column;
     align-items: center !important;
