@@ -2319,6 +2319,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     max-width: 92vw;
     max-height: 90vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     position: relative;
 }
 
