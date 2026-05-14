@@ -542,7 +542,6 @@ function renderBookmarksWithLayoutTransition() {
 
     renderBookmarksFromCache();
 
-    if (LAYOUT_SWITCH_TIMER) clearTimeout(LAYOUT_SWITCH_TIMER);
     LAYOUT_SWITCH_TIMER = setTimeout(() => {
         body.classList.remove('layout-switching');
         LAYOUT_SWITCH_TIMER = null;
@@ -560,6 +559,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSearch();
     initAiSidebarLazy();
     initAmbientTime();
+    initPureTime();
 
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
@@ -2178,7 +2178,9 @@ function initSearch() {
             textSpan.textContent = opt.textContent.trim();
             btn.appendChild(textSpan);
             
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 currentEngine = btn.dataset.engine;
                 currentUrl = btn.dataset.url;
                 label.textContent = btn.textContent.trim();
@@ -2189,6 +2191,25 @@ function initSearch() {
             pureEngineList.appendChild(btn);
         });
     }
+
+    // Tab key to switch engine in Pure Mode
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab' && document.body.classList.contains('pure-mode')) {
+            e.preventDefault();
+            const engines = Array.from(document.querySelectorAll('.pure-engine-btn'));
+            const currentIndex = engines.findIndex(btn => btn.dataset.engine === currentEngine);
+            const nextIndex = (currentIndex + 1) % engines.length;
+            const nextBtn = engines[nextIndex];
+            
+            if (nextBtn) {
+                currentEngine = nextBtn.dataset.engine;
+                currentUrl = nextBtn.dataset.url;
+                label.textContent = nextBtn.textContent.trim();
+                updateActiveOption();
+                chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
+            }
+        }
+    });
 
     // Click option to select
     options.forEach(opt => {
@@ -3630,4 +3651,22 @@ function initAmbientTime() {
     idleTimer = setTimeout(() => {
         timeContainer.classList.add('visible');
     }, idleDelay);
+}
+
+/**
+ * Initialize time display for Pure Mode
+ */
+function initPureTime() {
+    const timeDisplay = document.querySelector('.pure-time-display');
+    if (!timeDisplay) return;
+
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeDisplay.textContent = `${hours}:${minutes}`;
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000); // Update every minute
 }

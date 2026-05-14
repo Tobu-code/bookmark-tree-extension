@@ -4539,12 +4539,45 @@ body.pure-mode #bookmarks-tree {
 body.pure-mode #search-container {
     flex: 1;
     margin: 0;
-    padding: 18vh 0 0 0; /* 再次上移重心 */
+    padding: 18vh 0 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 36px;
+    gap: 40px; /* 增加与卡片的间距 */
+}
+
+/* 问候语与时间组 */
+.pure-greeting-group {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+body.pure-mode .pure-greeting-group {
+    display: flex;
+}
+
+body.pure-mode .ambient-time-greeting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.9;
+    letter-spacing: -0.5px;
+}
+
+.pure-time-display {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    opacity: 0.35;
+    letter-spacing: 1px;
 }
 
 body.pure-mode .ambient-time {
@@ -4615,109 +4648,127 @@ body.pure-mode .ambient-time-greeting::before {
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z'/%3E%3C/svg%3E") no-repeat center;
 }
 
+/* 集成化搜索卡片 */
 body.pure-mode .search-wrapper {
     width: 840px;
     max-width: calc(100vw - 48px);
-    min-height: 160px; /* 恢复超大纵向卡片尺寸 */
-    padding: 24px 28px; /* 顶部起始对齐的精确内边距 */
-    border-radius: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start; /* 顶部对齐 */
-    gap: 16px;
     background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
     transition: all 0.3s ease;
     position: relative;
+    overflow: hidden;
 }
 
-:root[data-theme="dark"] body.pure-mode .search-wrapper {
-    background: #212121;
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+/* 顶部输入行 */
+.search-top-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
 }
 
-body.pure-mode .search-wrapper:focus-within {
-    border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 12px 60px rgba(0, 0, 0, 0.06);
-    transform: none;
+.pure-search-icon {
+    display: none;
+    color: var(--text-color);
+    opacity: 0.25;
 }
 
-:root[data-theme="dark"] body.pure-mode .search-wrapper:focus-within {
-    background: #212121;
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 16px 80px rgba(0, 0, 0, 0.45);
+body.pure-mode .pure-search-icon {
+    display: flex;
+    align-items: center;
 }
 
 body.pure-mode #search-input {
-    order: 1;
     flex: 1;
-    padding: 0;
-    margin-top: 4px; /* 微调以对齐 Claude 的第一行高度 */
+    border: none;
+    background: transparent;
     font-size: 18px;
     font-weight: 400;
     color: var(--text-color);
+    padding: 8px 0;
     line-height: 1.5;
-    height: auto; /* 移除固定高度，让内容从顶部自然起始 */
-}
-
-body.pure-mode #search-input::placeholder {
-    font-size: 18px;
-    font-weight: 400;
-    opacity: 0.3;
-}
-
-body.pure-mode #engine-picker-container {
-    display: none; /* 纯净模式下隐藏输入框内的引擎选择器 */
-}
-
-body.pure-mode #search-engine-label {
-    padding: 6px 12px;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.03);
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-:root[data-theme="dark"] body.pure-mode #search-engine-label {
-    background: rgba(255, 255, 255, 0.05);
+    outline: none;
 }
 
 body.pure-mode #ai-sidebar-btn {
-    position: absolute;
-    right: 20px;
-    bottom: 16px;
-    width: 36px;
-    height: 36px;
+    position: static;
+    width: 32px;
+    height: 32px;
+    color: #D97757;
+    opacity: 0.8;
+    background: transparent;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    color: #999;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s ease;
 }
 
 body.pure-mode #ai-sidebar-btn:hover {
-    color: #D97757; /* 悬浮时变为 Claude 橘色 */
-    background: rgba(217, 119, 87, 0.05);
     transform: scale(1.1);
 }
 
-body.pure-mode #ai-sidebar-btn svg {
-    display: block;
-    width: 20px;
-    height: 20px;
-    stroke: currentColor;
-    stroke-width: 1.8;
+/* 底部引擎行 */
+.search-bottom-row {
+    display: none;
+    align-items: center;
+    padding: 12px 20px 16px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    gap: 12px;
 }
 
-body.pure-mode #ai-sidebar-btn::before,
+body.pure-mode .search-bottom-row {
+    display: flex;
+}
+
+.pure-engine-label {
+    font-size: 13px;
+    color: var(--text-color);
+    opacity: 0.3;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* 提示语 */
+.pure-footer-hint {
+    display: none;
+    font-size: 13px;
+    color: var(--text-color);
+    opacity: 0.25;
+    margin-top: 20px;
+    font-weight: 400;
+}
+
+body.pure-mode .pure-footer-hint {
+    display: block;
+}
+
+/* 隐藏非纯净模式元素 */
+body.pure-mode #engine-picker-container {
+    display: none;
+}
+
+:root[data-theme="dark"] body.pure-mode .search-wrapper {
+    background: #2D2D2D;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .search-bottom-row {
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="dark"] .pure-engine-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #EEE;
+    border-color: transparent;
+}
+
 body.pure-mode #ai-sidebar-btn::after {
     display: none; /* 彻底移除所有文字伪元素 */
 }
@@ -4740,10 +4791,10 @@ body.pure-mode .pure-engine-list {
 /* 移除了 body.search-active .pure-engine-list { display: none; } 以实现常驻 */
 
 .pure-engine-btn {
-    padding: 8px 16px;
-    border-radius: 8px; /* 改为 8px 矩形圆角 */
-    background: #FFFFFF;
-    border: 1px solid #E5E5E5;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid transparent;
     color: #666;
     font-size: 13px;
     font-weight: 500;
@@ -4751,13 +4802,13 @@ body.pure-mode .pure-engine-list {
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    opacity: 0.6;
 }
 
 .pure-engine-btn:hover {
-    background: #F5F5F5;
-    border-color: rgba(0, 0, 0, 0.12);
-    transform: translateY(-1px);
+    opacity: 1;
+    color: #111;
 }
 
 .pure-engine-btn.active {

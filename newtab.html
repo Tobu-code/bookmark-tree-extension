@@ -15,43 +15,61 @@
         <div id="search-overlay" class="hidden"></div>
         <div id="search-container">
             <div id="ambient-time-container" class="ambient-time"></div>
+            
+            <div class="pure-greeting-group">
+                <div class="ambient-time-greeting"></div>
+                <div class="pure-time-display"></div>
+            </div>
+
             <div class="search-wrapper">
-                <div id="engine-picker-container">
-                    <button id="search-engine-label" type="button" aria-haspopup="listbox" aria-expanded="false">
-                        Google
-                    </button>
-                    <div id="engine-picker-overlay" class="hidden"></div>
-                    <div id="engine-wheel" class="hidden" role="listbox" aria-label="搜索引擎">
-                        <button type="button" class="wheel-option" role="option" data-engine="google"
-                            data-url="https://www.google.com/search?q=">
+                <div class="search-top-row">
+                    <div id="engine-picker-container">
+                        <button id="search-engine-label" type="button" aria-haspopup="listbox" aria-expanded="false">
                             Google
                         </button>
-                        <button type="button" class="wheel-option" role="option" data-engine="bing"
-                            data-url="https://www.bing.com/search?q=">
-                            Bing
-                        </button>
-                        <button type="button" class="wheel-option" role="option" data-engine="baidu"
-                            data-url="https://www.baidu.com/s?wd=">
-                            Baidu
-                        </button>
+                        <div id="engine-picker-overlay" class="hidden"></div>
+                        <div id="engine-wheel" class="hidden" role="listbox" aria-label="搜索引擎">
+                            <button type="button" class="wheel-option" role="option" data-engine="google"
+                                data-url="https://www.google.com/search?q=">
+                                Google
+                            </button>
+                            <button type="button" class="wheel-option" role="option" data-engine="bing"
+                                data-url="https://www.bing.com/search?q=">
+                                Bing
+                            </button>
+                            <button type="button" class="wheel-option" role="option" data-engine="baidu"
+                                data-url="https://www.baidu.com/s?wd=">
+                                Baidu
+                            </button>
+                        </div>
                     </div>
+
+                    <div class="pure-search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+
+                    <input type="text" id="search-input" placeholder="寻找、发现，或者只是在此沉思..." autocomplete="off"
+                        aria-label="搜索书签或搜索全网" aria-autocomplete="list" aria-controls="search-suggestions"
+                        aria-expanded="false">
+
+                    <button id="ai-sidebar-btn" title="打开 AI 面板" aria-label="打开 AI 面板">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai-sparkle-icon">
+                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                        </svg>
+                    </button>
                 </div>
-                <input type="text" id="search-input" placeholder="寻找、发现，或者只是在此沉思..." autocomplete="off"
-                    aria-label="搜索书签或搜索全网" aria-autocomplete="list" aria-controls="search-suggestions"
-                    aria-expanded="false">
-                <button id="ai-sidebar-btn" title="打开 AI 面板" aria-label="打开 AI 面板">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                        <path d="M5 3v4" />
-                        <path d="M7 5H3" />
-                    </svg>
-                </button>
-                <div id="search-suggestions" class="hidden" aria-live="polite" role="listbox" aria-label="搜索建议"></div>
+
+                <div class="search-bottom-row">
+                    <span class="pure-engine-label">搜索引擎</span>
+                    <div class="pure-engine-list"></div>
+                </div>
             </div>
-            <div id="pure-engine-list" class="pure-engine-list"></div>
+
+            <div class="pure-footer-hint">按 ↩ 搜索 · Tab 切换引擎</div>
+            
+            <div id="search-suggestions" class="hidden" aria-live="polite" role="listbox" aria-label="搜索建议"></div>
         </div>
+
         <div id="bookmarks-tree" class="tree-view" aria-live="polite">
             <div class="tree-state tree-state-loading" role="status" aria-live="polite">
                 <div class="tree-state-copy">
@@ -65,6 +83,7 @@
                 </div>
             </div>
         </div>
+
         <button id="pure-mode-btn" title="打开纯净模式" aria-label="打开纯净模式" aria-pressed="false">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -73,15 +92,14 @@
                 <path d="M15.7 17.7h5"></path>
             </svg>
         </button>
+
         <button id="layout-toggle-btn" title="切换布局模式" aria-label="切换布局模式">
-            <!-- Tree icon (shown when current mode is tree, click to switch to flat) -->
             <svg id="layout-icon-tree" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="14" y="14" width="7" height="7"></rect>
                 <rect x="3" y="14" width="7" height="7"></rect>
             </svg>
-            <!-- Flat icon (shown when current mode is flat, click to switch to tree) -->
             <svg id="layout-icon-flat" class="icon-hidden" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="8" y1="6" x2="21" y2="6"></line>
                 <line x1="8" y1="12" x2="21" y2="12"></line>
@@ -91,6 +109,7 @@
                 <line x1="3" y1="18" x2="3.01" y2="18"></line>
             </svg>
         </button>
+
         <button id="settings-btn" title="设置" aria-label="打开设置">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -100,259 +119,79 @@
                 </path>
             </svg>
         </button>
+
+        <div id="settings-panel" class="settings-panel hidden">
+            <div class="settings-header">
+                <h3>设置</h3>
+                <button id="close-settings" class="icon-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-section">
+                    <h4>主题与外观</h4>
+                    <div class="setting-item">
+                        <label>色彩主题</label>
+                        <select id="theme-select">
+                            <option value="light">浅色模式</option>
+                            <option value="dark">深色模式</option>
+                            <option value="system">跟随系统</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>背景样式</label>
+                        <select id="bg-select">
+                            <option value="bg-gradient-1">微光渐变</option>
+                            <option value="bg-gradient-2">深海之梦</option>
+                            <option value="bg-gradient-3">极地晨曦</option>
+                            <option value="bg-gradient-4">极简白</option>
+                            <option value="bg-gradient-5">石墨黑</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4>书签视图</h4>
+                    <div class="setting-item">
+                        <label>显示收藏夹栏</label>
+                        <input type="checkbox" id="show-bookmarks-bar" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label>自动折叠文件夹</label>
+                        <input type="checkbox" id="auto-collapse" checked>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4>AI 服务</h4>
+                    <div id="ai-services-list"></div>
+                </div>
+                <div class="settings-footer">
+                    <button id="export-bookmarks" class="secondary-btn">导出书签</button>
+                    <button id="reset-settings" class="secondary-btn">重置默认</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- AI Sidebar -->
     <div id="ai-sidebar" class="ai-sidebar hidden">
         <div class="ai-sidebar-header">
-            <div id="ai-tabs" class="ai-tabs" aria-label="AI 服务列表"></div>
-            <div class="ai-sidebar-actions">
-                <button id="ai-open-new-window" class="ai-action-btn" title="在新窗口打开">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                        <path
-                            d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
-                    </svg>
-                </button>
-                <button id="ai-sidebar-close" class="ai-action-btn" title="关闭">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                        <path
-                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div id="ai-sidebar-content" class="ai-sidebar-content">
-            <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
-                <div class="ai-placeholder-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.9"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="m12 3-1.7 5.18a1.8 1.8 0 0 1-1.14 1.14L4 11l5.16 1.68a1.8 1.8 0 0 1 1.14 1.14L12 19l1.7-5.18a1.8 1.8 0 0 1 1.14-1.14L20 11l-5.16-1.68a1.8 1.8 0 0 1-1.14-1.14Z" />
-                        <path d="M6 4v3" />
-                        <path d="M7.5 5.5h-3" />
-                    </svg>
-                </div>
-                <p>无法直接嵌入 AI 搜索</p>
-                <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
-                <button id="ai-open-ai" class="ai-open-btn">在弹窗中打开</button>
-            </div>
-        </div>
-    </div>
-    <div id="ai-sidebar-overlay" class="ai-sidebar-overlay hidden"></div>
-
-    <div id="settings-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="close-modal" class="close" type="button" aria-label="关闭设置"></button>
-            <h2>设置</h2>
-
-            <div class="setting-item">
-                <label>外观主题</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="theme" value="light"><span>浅色</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="theme" value="dark"><span>深色</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="theme" value="system"><span>自动</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>布局模式</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="layout-mode" value="tree" checked><span>树状</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="layout-mode" value="flat"><span>平铺</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>链接打开方式</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="link-target" value="self"><span>当前页</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="link-target" value="blank" checked><span>新标签页</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>图标风格</label>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="icon-style" value="native" checked><span>原生</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="icon-style" value="theme"><span>主题</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>书签管理</label>
-                <div class="settings-stack">
-                    <button id="export-bookmarks-btn" class="confirm-btn confirm-btn-primary settings-action-btn">
-                        一键导出所有书签
-                    </button>
-                    <div class="settings-helper-copy settings-helper-copy-centered">
-                        导出为标准的 HTML 文件，可导入到其他浏览器
-                    </div>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>背景设置</label>
-                <div class="file-upload-container">
-                    <input type="file" id="bg-image-upload" accept="image/*">
-                    <button id="clear-bg" title="恢复默认背景">恢复</button>
-                </div>
-                <div id="blur-controls" class="settings-stack settings-stack-md">
-                    <div class="settings-range-header">
-                        <label class="settings-inline-label" for="bg-blur">背景模糊程度</label>
-                        <span id="bg-blur-value" class="settings-range-value">关闭</span>
-                    </div>
-                    <input type="range" id="bg-blur" min="0" max="10" step="1" value="0">
-
-                    <div class="settings-range-header settings-range-header-spaced">
-                        <label class="settings-inline-label" for="container-blur">主容器透明度程度</label>
-                        <span id="container-blur-value" class="settings-range-value">0%</span>
-                    </div>
-                    <input type="range" id="container-blur" min="0" max="10" step="1" value="3">
-                    <div class="settings-helper-copy settings-helper-copy-sm">
-                        透明度与磨砂感联动调整
-                    </div>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <label>文件夹展开延迟</label>
-                <div class="settings-stack">
-                    <div class="settings-range-header">
-                        <span class="settings-inline-label">鼠标悬浮后延迟展开时间</span>
-                        <span id="hover-delay-value" class="settings-range-value">300ms</span>
-                    </div>
-                    <input type="range" id="hover-delay" min="0" max="1100" step="100" value="300">
-                </div>
-            </div>
-
-            <div class="setting-item setting-item-ai">
-                <label>AI 侧边栏</label>
-                <div class="ai-settings-shell">
-                    <div class="ai-settings-intro">
-                        <div class="ai-settings-heading">
-                            <div class="ai-settings-title-row">
-                                <span class="ai-settings-title">AI 服务管理</span>
-                                <span class="ai-settings-caption">深色控制台布局下的统一入口与默认项管理</span>
-                            </div>
-                            <div class="settings-helper-copy ai-settings-copy">
-                                可配置启用项、默认项与排序；自定义 AI 站点首次启用时会申请站点权限。
-                            </div>
-                        </div>
-                        <div class="ai-settings-summary" aria-label="AI 配置摘要">
-                            <div class="ai-settings-summary-item">
-                                <span class="ai-settings-summary-value" id="ai-provider-count">0</span>
-                                <span class="ai-settings-summary-label">服务总数</span>
-                            </div>
-                            <div class="ai-settings-summary-item">
-                                <span class="ai-settings-summary-value" id="ai-provider-enabled-count">0</span>
-                                <span class="ai-settings-summary-label">启用中</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="ai-provider-list" class="ai-provider-list" aria-live="polite"></div>
-                    <div class="ai-provider-composer">
-                        <div class="ai-provider-composer-header">
-                            <span class="ai-provider-composer-title">添加自定义 AI 站点</span>
-                            <span class="ai-provider-composer-caption">设置面板外的内容保持不变，这里只负责入口管理</span>
-                        </div>
-                        <div class="ai-provider-form">
-                            <div class="ai-provider-form-field">
-                                <span class="ai-provider-form-label">名称</span>
-                                <input type="text" id="ai-provider-name" placeholder="AI 名称，如 DeepSeek" maxlength="24" autocomplete="off">
-                            </div>
-                            <div class="ai-provider-form-field">
-                                <span class="ai-provider-form-label">网址</span>
-                                <input type="url" id="ai-provider-url" placeholder="https://chat.deepseek.com/" autocomplete="off">
-                            </div>
-                            <button id="ai-provider-add" type="button" class="confirm-btn confirm-btn-primary">添加 AI</button>
-                        </div>
-                    </div>
-                    <div class="settings-helper-copy settings-helper-copy-sm">
-                        侧边栏只负责展示网站本身，不做页面适配；若嵌入失败，会自动回退为弹窗打开。
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="settings-toast" class="settings-toast" aria-live="polite" aria-atomic="true"></div>
-
-    <!-- Folder Expand Modal -->
-    <div id="folder-modal" class="modal hidden">
-        <div class="folder-modal-content">
-            <div class="folder-modal-header">
-                <span class="folder-modal-icon"></span>
-                <span class="folder-modal-title"></span>
-                <button id="close-folder-modal" class="close" type="button" aria-label="关闭文件夹弹窗"></button>
-            </div>
-            <div class="folder-modal-body"></div>
-        </div>
-    </div>
-
-    <!-- Confirm Dialog (Delete) -->
-    <div id="confirm-dialog" class="modal hidden">
-        <div class="confirm-dialog-content">
-            <div class="confirm-dialog-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF5F56" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                    <line x1="9" y1="9" x2="15" y2="15"></line>
+            <div class="ai-sidebar-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 1 7.92 12.446a9 9 0 1 1-15.545-2.831A7.5 7.5 0 0 1 12 3Z"></path>
                 </svg>
+                <span>AI 助理</span>
             </div>
-            <div class="confirm-dialog-title">确认删除</div>
-            <div class="confirm-dialog-message" id="confirm-dialog-message">确定要删除这个书签吗？</div>
-            <div class="confirm-dialog-actions">
-                <button id="confirm-dialog-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
-                <button id="confirm-dialog-ok" class="confirm-btn confirm-btn-danger">删除</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Bookmark Dialog -->
-    <div id="edit-bookmark-dialog" class="modal hidden">
-        <div class="edit-dialog-content">
-            <div class="edit-dialog-header">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            <button id="close-ai-sidebar" class="icon-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
-                <span class="edit-dialog-title">编辑书签</span>
-            </div>
-            <div class="edit-dialog-body">
-                <div class="edit-field">
-                    <label for="edit-bookmark-title">名称</label>
-                    <input type="text" id="edit-bookmark-title" placeholder="书签名称" autocomplete="off">
-                </div>
-                <div class="edit-field">
-                    <label for="edit-bookmark-url">地址</label>
-                    <input type="text" id="edit-bookmark-url" placeholder="https://..." autocomplete="off">
-                </div>
-            </div>
-            <div class="edit-dialog-actions">
-                <button id="edit-bookmark-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
-                <button id="edit-bookmark-save" class="confirm-btn confirm-btn-primary">保存</button>
-            </div>
+            </button>
+        </div>
+        <div id="ai-sidebar-frame-container" class="ai-sidebar-content">
+            <iframe id="ai-sidebar-iframe" src="" frameborder="0"></iframe>
         </div>
     </div>
 
