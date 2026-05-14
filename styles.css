@@ -4596,21 +4596,17 @@ body.pure-mode .ambient-time-greeting {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    padding: 0 48px; /* 为图标留出平衡空间，确保文字绝对居中 */
+    gap: 16px;
     font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif;
     font-size: 40px;
     font-weight: 500;
     color: var(--text-color);
     opacity: 1;
     letter-spacing: -0.6px;
-    text-align: center;
 }
 
 body.pure-mode .ambient-time-greeting::before {
     content: "";
-    position: absolute;
-    left: 0; /* 绝对定位图标，不占据文字的水平空间 */
     display: block;
     width: 32px;
     height: 32px;
