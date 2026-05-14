@@ -1330,11 +1330,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     justify-content: center;
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: transform var(--motion-fast) var(--ease-standard),
-        background-color var(--motion-fast) var(--ease-standard),
-        border-color var(--motion-fast) var(--ease-standard),
-        box-shadow var(--motion-fast) var(--ease-standard),
-        opacity var(--motion-fast) var(--ease-standard);
+    transition: transform var(--motion-medium) var(--ease-standard),
+        background-color var(--motion-medium) var(--ease-standard),
+        border-color var(--motion-medium) var(--ease-standard),
+        box-shadow var(--motion-medium) var(--ease-standard),
+        opacity var(--motion-medium) var(--ease-standard);
     will-change: auto;
     transform: none;
     position: relative;
@@ -1353,16 +1353,16 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Hover glow with border highlight (Aligned with left tree folder hover) */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateX(3px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.36);
-    background: rgba(255, 255, 255, 0.98);
-    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    background-color: #ffffff;
+    border-color: color-mix(in srgb, var(--border-color) 80%, transparent);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background: rgba(42, 48, 60, 0.94);
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background-color: rgba(48, 54, 66, 0.96);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {

@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 16:41:00 +0800
+- **Type**: Design (Interaction Polish)
+- **Content**: 强化右侧书签卡片的悬停感知并提升顺滑度：1) 将悬停动画的 `transition` 时间变量从 `--motion-fast` (150ms) 放缓至 `--motion-medium` (240ms)，使平移（`translateX`）与阴影的变化更加丝滑柔和；2) 将卡片 Hover 时的背景色提取为纯白 `#ffffff`，并引入更强的内发光（`inset 0 1px 0 rgba(255, 255, 255, 0.8)`）和微妙的立体投影（`0 4px 12px`），从而在不改变基础透明度的情况下，大幅增强了“被光照亮”和“浮出水面”的物理感知。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 16:37:00 +0800
 - **Type**: Design (Interaction Consistency)
 - **Content**: 统一左右侧悬停交互动效：将右侧书签卡片网格的 hover 效果调整为与左侧目录完全一致。移除了原有的上浮效果（`translateY(-1px)`）和外发光阴影，改为平移效果（`translateX(3px)`）与内部微光阴影（`inset 0 1px 0 rgba(255, 255, 255, 0.36)`）。深色模式也做了相应的内部高光适配。
