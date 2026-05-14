@@ -2,16 +2,16 @@
 
 
 :root {
-    /* Claude Light Mode - Refined */
-    --primary-color: #b8623b;
-    /* Terracotta Orange */
+    /* r4.chat Light Mode */
+    --primary-color: #CD9A8B;
+    /* Soft Terracotta / Dusty Rose */
     --text-color: #1a1a18;
     /* Deep Charcoal Black */
     --text-secondary: #6d675f;
     /* Medium Grey */
-    --bg-overlay: rgba(248, 246, 241, 0.88);
-    /* Creamy/Beige Tint */
-    --card-bg: #fffdf9;
+    --bg-overlay: rgba(250, 249, 246, 0.85);
+    /* Warmer, softer off-white overlay */
+    --card-bg: #FFFFFF;
     /* Pure White Cards */
     --card-hover: #f8f3eb;
     /* Subtle Beige Hover */
@@ -70,19 +70,19 @@
     --card-padding: 24px;
 }
 
-/* Dark Theme overrides via data-attribute - Claude Dark Mode (Refined) */
+/* Dark Theme overrides via data-attribute - r4.chat Dark Mode */
 :root[data-theme="dark"] {
     /* Core Brand */
-    --primary-color: #f5a67a;
-    /* Brighter terracotta for better contrast */
+    --primary-color: #D69785;
+    /* Softer terracotta for dark mode */
     --text-color: #F2F0E9;
     /* Off-white for primary text */
     --text-secondary: #C5C2BD;
     /* Brighter grey for better readability */
 
-    --bg-overlay: rgba(21, 23, 29, 0.74);
-    /* Deep slate main background */
-    --card-bg: #1f232b;
+    --bg-overlay: rgba(26, 26, 26, 0.85);
+    /* Deep soft gray main background */
+    --card-bg: #2C2C2C;
     /* Slate card background */
     --card-hover: #2a303a;
     /* Hover state */
@@ -130,11 +130,11 @@
 /* System Dark Theme (only if no data-theme is set) */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #f5a67a;
+        --primary-color: #D69785;
         --text-color: #F2F0E9;
         --text-secondary: #C5C2BD;
-        --bg-overlay: rgba(21, 23, 29, 0.74);
-        --card-bg: #1f232b;
+        --bg-overlay: rgba(26, 26, 26, 0.85);
+        --card-bg: #2C2C2C;
         --card-hover: #2a303a;
         --border-color: rgba(255, 255, 255, 0.12);
         --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
@@ -232,7 +232,9 @@ h3,
 }
 
 #background-layer::after {
-    background: linear-gradient(180deg, rgba(20, 16, 12, 0.08) 0%, rgba(20, 16, 12, 0.22) 100%);
+    background: 
+        linear-gradient(180deg, rgba(80, 140, 255, 0.06) 0%, transparent 15%),
+        linear-gradient(180deg, rgba(20, 16, 12, 0.08) 0%, rgba(20, 16, 12, 0.22) 100%);
 }
 
 /* Dark Theme overrides for background - Deep Purple-Grey */
@@ -248,7 +250,9 @@ h3,
 }
 
 :root[data-theme="dark"] #background-layer::after {
-    background: linear-gradient(180deg, rgba(8, 10, 14, 0.24) 0%, rgba(8, 10, 14, 0.45) 100%);
+    background: 
+        linear-gradient(180deg, rgba(110, 164, 255, 0.12) 0%, transparent 20%),
+        linear-gradient(180deg, rgba(8, 10, 14, 0.24) 0%, rgba(8, 10, 14, 0.45) 100%);
 }
 
 /* Main Container - Dashboard Style */
@@ -397,11 +401,11 @@ body.loaded #background-layer {
 }
 
 .ambient-time-greeting {
-    font-size: 13px;
-    color: var(--primary-color);
-    opacity: 0.85;
-    font-weight: 500;
-    letter-spacing: 0.1px;
+    font-size: 16px;
+    color: var(--text-color);
+    opacity: 0.95;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
 .ambient-time.visible {
@@ -438,7 +442,7 @@ body.loaded #background-layer {
     align-items: center;
     width: clamp(var(--search-min-w), 58.5vw, 920px);
     max-width: calc(100% - 24px);
-    border-radius: 20px;
+    border-radius: 32px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 252, 247, 0.94) 100%);
     box-shadow:
         var(--elev-shadow-1),
@@ -450,7 +454,8 @@ body.loaded #background-layer {
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
         color var(--motion-medium) var(--ease-standard);
-    padding-left: 16px;
+    padding-left: 20px;
+    padding-right: 8px;
     position: relative;
 }
 
@@ -2238,8 +2243,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #settings-btn {
     position: fixed;
-    bottom: var(--floating-actions-safe-bottom);
-    right: var(--floating-actions-offset-right);
+    top: 24px;
+    right: 24px;
     width: var(--floating-actions-size);
     height: var(--floating-actions-size);
     border-radius: 12px;
@@ -3455,29 +3460,27 @@ input[type="file"] {
 
 /* AI Sidebar Toggle Button */
 #ai-sidebar-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--primary-color) 7%, transparent);
-    border: 1px solid color-mix(in srgb, var(--primary-color) 14%, var(--border-color));
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: none;
     cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 10px rgba(205, 154, 139, 0.2);
     transition: transform var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard),
         background-color var(--motion-fast) var(--ease-standard),
-        border-color var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
         opacity var(--motion-fast) var(--ease-standard);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary-color);
+    color: #FFF;
     margin-left: 8px;
-    margin-right: 10px;
+    margin-right: 2px;
     flex-shrink: 0;
     position: relative;
-    opacity: 0.88;
+    opacity: 1;
 }
 
 #ai-sidebar-btn::before {
@@ -3489,11 +3492,10 @@ input[type="file"] {
 }
 
 #ai-sidebar-btn:hover {
-    background: color-mix(in srgb, var(--primary-color) 11%, transparent);
-    color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 85%, black);
+    color: #FFF;
     transform: translateY(-1px);
-    box-shadow: var(--elev-shadow-1);
-    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+    box-shadow: 0 6px 14px rgba(205, 154, 139, 0.35);
     opacity: 1;
 }
 
