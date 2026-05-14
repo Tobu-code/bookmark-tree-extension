@@ -4621,7 +4621,7 @@ body.pure-mode .ambient-time-date {
     display: none; /* 复刻版隐藏日期，追求极致干净 */
 }
 
-body.pure-mode .ambient-time-greeting {
+body.pure-mode .pure-greeting-text {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4632,10 +4632,11 @@ body.pure-mode .ambient-time-greeting {
     color: var(--text-color);
     opacity: 1;
     letter-spacing: -0.6px;
+    min-height: 1.2em; /* 预留高度防止抖动 */
 }
 
 /* 彻底移除问候语前的星星图标 */
-body.pure-mode .ambient-time-greeting::before {
+body.pure-mode .pure-greeting-text::before {
     display: none !important;
 }
 

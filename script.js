@@ -3674,7 +3674,7 @@ function initPureTime() {
  * Initialize greeting text based on time of day
  */
 function initGreeting() {
-    const greeting = document.querySelector('.ambient-time-greeting');
+    const greeting = document.querySelector('.pure-greeting-text');
     if (!greeting) return;
 
     const hour = new Date().getHours();

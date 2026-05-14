@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 19:18:00 +0800
-- **Type**: Style (Greeting Simplification)
-- **Content**: 极致精简问候语组件：1) 彻底移除问候语前的星星图标；2) 隐藏问候语下方的动态时间数字；3) 确保仅保留“晚上好，慢慢来，比较快”这一纯净的文本行。
-- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 19:21:00 +0800
+- **Type**: Fix (Greeting Visibility)
+- **Content**: 解决问候语组件由于选择器冲突导致的显示问题：1) 将纯净模式问候语类名更换为唯一的 `.pure-greeting-text`；2) 同步更新 JS 与 CSS 选择器，确保文字精准注入可视容器，彻底解决问候语消失的 bug。
+- **Impact**: `newtab.html`、`script.js`、`styles.css`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
