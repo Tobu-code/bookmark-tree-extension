@@ -4625,37 +4625,44 @@ body.pure-mode .pure-greeting-text {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif;
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 500;
     color: var(--text-color);
     opacity: 1;
-    letter-spacing: -0.6px;
-    min-height: 1.2em; /* 预留高度防止抖动 */
+    letter-spacing: -0.5px;
+    min-height: 1.2em;
 }
 
-/* 彻底移除问候语前的星星图标 */
+/* 问候语前的小菱形图标 */
 body.pure-mode .pure-greeting-text::before {
-    display: none !important;
+    content: '✦';
+    font-size: 20px;
+    color: #D97757;
+    flex-shrink: 0;
 }
 
-/* 彻底隐藏问候语下方的时间数字 */
+/* 时间显示 */
 .pure-time-display {
-    display: none !important;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    opacity: 0.35;
+    letter-spacing: 1px;
 }
 
 /* 集成化搜索卡片 */
 body.pure-mode .search-wrapper {
-    width: 840px;
+    width: 720px;
     max-width: calc(100vw - 48px);
     background: #FFFFFF;
-    border-radius: 24px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
-    padding: 8px;
+    padding: 0;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -4665,11 +4672,11 @@ body.pure-mode .search-wrapper {
 .search-top-row {
     display: flex;
     align-items: center;
-    padding: 12px 18px;
+    padding: 18px 24px 14px 24px;
     gap: 14px;
 }
 
-/* 隐藏纯净模式下的旧版引擎选择器（它会导致左侧留白） */
+/* 隐藏纯净模式下的旧版引擎选择器 */
 body.pure-mode #engine-picker-container {
     display: none !important;
 }
@@ -4677,7 +4684,8 @@ body.pure-mode #engine-picker-container {
 .pure-search-icon {
     display: none;
     color: var(--text-color);
-    opacity: 0.25;
+    opacity: 0.3;
+    flex-shrink: 0;
 }
 
 body.pure-mode .pure-search-icon {
@@ -4689,30 +4697,38 @@ body.pure-mode #search-input {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 400;
     color: var(--text-color);
-    padding: 8px 0;
+    padding: 4px 0;
     line-height: 1.5;
     outline: none;
 }
 
+body.pure-mode #search-input::placeholder {
+    color: var(--text-color);
+    opacity: 0.35;
+    font-style: normal;
+}
+
 body.pure-mode #ai-sidebar-btn {
-    margin-left: auto; /* 将 AI 按钮推到最右侧 */
+    margin-left: auto;
     width: 32px;
     height: 32px;
     color: #D97757;
-    opacity: 0.8;
+    opacity: 0.7;
     background: transparent;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
 }
 
 body.pure-mode #ai-sidebar-btn:hover {
+    opacity: 1;
     transform: scale(1.1);
 }
 
@@ -4720,9 +4736,9 @@ body.pure-mode #ai-sidebar-btn:hover {
 .search-bottom-row {
     display: none;
     align-items: center;
-    padding: 12px 20px 16px 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.03);
-    gap: 12px;
+    padding: 12px 24px 16px 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    gap: 16px;
 }
 
 body.pure-mode .search-bottom-row {
@@ -4733,15 +4749,15 @@ body.pure-mode .search-bottom-row {
 
 .pure-engine-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-wrap: nowrap;
+    gap: 8px;
     align-items: center;
 }
 
 .pure-engine-label {
     font-size: 13px;
     color: var(--text-color);
-    opacity: 0.3;
+    opacity: 0.35;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -4751,9 +4767,10 @@ body.pure-mode .search-bottom-row {
     display: none;
     font-size: 13px;
     color: var(--text-color);
-    opacity: 0.25;
-    margin-top: 20px;
+    opacity: 0.3;
+    margin-top: 24px;
     font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 body.pure-mode .pure-footer-hint {
@@ -4766,87 +4783,50 @@ body.pure-mode #engine-picker-container {
 }
 
 :root[data-theme="dark"] body.pure-mode .search-wrapper {
-    background: #2D2D2D;
-    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(45, 45, 45, 0.95);
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 
 :root[data-theme="dark"] .search-bottom-row {
-    border-top-color: rgba(255, 255, 255, 0.05);
+    border-top-color: rgba(255, 255, 255, 0.06);
 }
-
-:root[data-theme="dark"] .pure-engine-btn.active {
-    background: rgba(255, 255, 255, 0.1);
-    color: #EEE;
-    border-color: transparent;
-}
-
-body.pure-mode #ai-sidebar-btn::after {
-    display: none; /* 彻底移除所有文字伪元素 */
-}
-
-body.pure-mode #search-suggestions {
-    top: calc(100% + 24px);
-}
-
-.pure-engine-list {
-    display: none;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 32px; /* 增大列表与搜索框的间距 */
-}
-
-body.pure-mode .pure-engine-list {
-    display: flex;
-}
-/* 移除了 body.search-active .pure-engine-list { display: none; } 以实现常驻 */
 
 .pure-engine-btn {
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 5px 14px;
+    border-radius: 20px;
     background: transparent;
-    border: 1px solid transparent;
-    color: #666;
-    font-size: 13px;
+    border: 1.5px solid transparent;
+    color: var(--text-color);
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
-    opacity: 0.6;
+    opacity: 0.45;
+    white-space: nowrap;
 }
 
 .pure-engine-btn:hover {
-    opacity: 1;
-    color: #111;
+    opacity: 0.8;
 }
 
 .pure-engine-btn.active {
-    background: #F3F3F3; /* 选中状态改为浅灰色背景 */
-    color: #111;
-    border-color: #D1D1D1;
-    box-shadow: none;
+    background: transparent;
+    color: var(--text-color);
+    border-color: rgba(0, 0, 0, 0.25);
+    opacity: 1;
 }
 
 .pure-engine-btn img {
-    opacity: 0.7; /* 图标去色感 */
-    filter: grayscale(0.2);
-}
-
-:root[data-theme="dark"] .pure-engine-btn {
-    background: #2D2D2D;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
-}
-
-:root[data-theme="dark"] .pure-engine-btn:hover {
-    background: #383838;
+    display: none; /* 参考图中引擎按钮没有图标 */
 }
 
 :root[data-theme="dark"] .pure-engine-btn.active {
-    background: #404040;
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #EEE;
 }
 
 body.pure-mode.search-active .ambient-time {

@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 19:24:00 +0800
-- **Type**: Style (Search Alignment Fix)
-- **Content**: 实现搜索框全要素左对齐：1) 在纯净模式下隐藏旧版引擎选择器，消除左侧多余留白；2) 使用 `margin-left: auto` 将 AI 按钮固定在最右侧；3) 确保放大镜图标、输入文字及底部引擎行均从左侧自然起步。
-- **Impact**: `styles.css`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 19:31:00 +0800
+- **Type**: Feature (UI Replica + Keyboard Shortcuts)
+- **Content**: 精准复刻参考图 UI 并实现跨平台快捷键：1) **问候语**：恢复小菱形 ✦ 图标（橘色）及下方动态时间显示；2) **搜索卡片**：宽度调整为 720px，圆角 16px，无内边距，输入与引擎行以 1px 分隔线分开；3) **引擎按钮**：改为药丸形（圆角 20px），active 态为透明背景+边框，隐藏图标仅保留文字；4) **快捷键绑定**：Mac 使用 ⌘K、Windows 使用 Ctrl+K 聚焦搜索框；5) **动态提示**：底部提示文案根据平台自动切换 ⌘/Ctrl 符号。
+- **Impact**: `styles.css`、`script.js`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800

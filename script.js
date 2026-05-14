@@ -561,6 +561,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initAmbientTime();
     initPureTime();
     initGreeting();
+    initPureShortcuts();
 
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
@@ -3677,15 +3678,55 @@ function initGreeting() {
     const greeting = document.querySelector('.pure-greeting-text');
     if (!greeting) return;
 
-    const hour = new Date().getHours();
-    let text = '你好';
-    if (hour < 5) text = '凌晨好';
-    else if (hour < 9) text = '早上好';
-    else if (hour < 12) text = '上午好';
-    else if (hour < 14) text = '中午好';
-    else if (hour < 18) text = '下午好';
-    else if (hour < 22) text = '晚上好';
-    else text = '夜深了';
+    const QUOTES = [
+        '慢慢来，比较快',
+        '保持好奇心，探索未知',
+        '做喜欢的事，见想见的人',
+        '用心感受每一个当下',
+        '简单生活，认真做事',
+        '把每一天过成想要的样子',
+        '保持热爱，奔赴山海',
+        '今日事，今日毕'
+    ];
 
-    greeting.textContent = text + '，慢慢来，比较快';
+    const hour = new Date().getHours();
+    let prefix = '你好';
+    if (hour < 5) prefix = '夜深了';
+    else if (hour < 9) prefix = '早上好';
+    else if (hour < 12) prefix = '上午好';
+    else if (hour < 14) prefix = '中午好';
+    else if (hour < 18) prefix = '下午好';
+    else if (hour < 22) prefix = '晚上好';
+    else prefix = '夜深了';
+
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+    const quote = QUOTES[dayOfYear % QUOTES.length];
+    greeting.textContent = `${prefix}，${quote}`;
+}
+
+/**
+ * Initialize keyboard shortcuts and dynamic footer hint for Pure Mode
+ */
+function initPureShortcuts() {
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
+    const input = document.getElementById('search-input');
+    const footerHint = document.querySelector('.pure-footer-hint');
+
+    // Update footer hint with platform-specific text
+    if (footerHint) {
+        const modKey = isMac ? '⌘' : 'Ctrl';
+        footerHint.textContent = `${modKey}+K 聚焦 · ↩ 搜索 · Tab 切换引擎`;
+    }
+
+    // Global keyboard shortcut: ⌘K (Mac) / Ctrl+K (Win) to focus search
+    document.addEventListener('keydown', (e) => {
+        const isModKey = isMac ? e.metaKey : e.ctrlKey;
+        if (isModKey && e.key === 'k') {
+            e.preventDefault();
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }
+    });
 }
