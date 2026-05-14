@@ -4604,11 +4604,11 @@ body.pure-mode .ambient-time-greeting {
 }
 
 body.pure-mode .search-wrapper {
-    width: 800px; /* 固定宽度 */
+    width: 540px; /* 宽度减少 1/3 (从 800px 调至 540px) */
     max-width: calc(100vw - 48px);
-    min-height: 72px; /* 略微下调高度，更显精致 */
-    padding: 0 24px;
-    border-radius: 24px;
+    min-height: 144px; /* 高度增加 2 倍 (从 72px 调至 144px) */
+    padding: 0 32px;
+    border-radius: 28px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -4638,11 +4638,10 @@ body.pure-mode .search-wrapper:focus-within {
 }
 
 body.pure-mode #search-input {
-    order: 1;
     flex: 1;
     padding: 0;
-    height: 100%;
-    font-size: 18px; /* 调整输入框字号 */
+    height: 60px; /* 给输入框一个合理的固定高度，并在 wrapper 中居中 */
+    font-size: 18px;
     font-weight: 400;
     color: var(--text-color);
 }
@@ -4678,6 +4677,11 @@ body.pure-mode #ai-sidebar-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: opacity 0.2s ease;
+}
+
+body.pure-mode #ai-sidebar-btn:hover {
+    opacity: 0.9;
 }
 
 body.pure-mode #search-suggestions {
