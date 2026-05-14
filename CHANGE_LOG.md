@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-14 22:53:00]
+- **Type**: Fix (Pure Mode Centering)
+- **Content**: 彻底修复纯净模式下居中失效的问题。添加了 `!important` 提高纯净模式布局权重，避免受到平铺模式遗留的高权重规则（如 `:has(#bookmarks-tree.layout-flat)`）强行左对齐的干扰；同时为底部提示语添加了文本居中。
+- **Impact**: `styles.css`
+
+
 ## [2026-05-14 22:02:00]
 - **Type**: Fix (AI Sidebar)
 - **Content**: 修复点击 AI 侧边栏报错的问题。由于 `newtab.html` 缺少 `ai-tabs` 等必要容器，导致 `script.js` 初始化时出现 null 引用错误。已恢复完整的 AI 侧边栏 HTML 结构。

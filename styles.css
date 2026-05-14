@@ -4539,12 +4539,12 @@ body.pure-mode #bookmarks-tree {
 
 body.pure-mode #search-container {
     flex: 1;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center; /* 垂直居中整组内容 */
+    align-items: center !important;
+    justify-content: center !important; /* 垂直居中整组内容 */
     gap: 28px;
     pointer-events: none;
 }
@@ -4791,6 +4791,8 @@ body.pure-mode .search-bottom-row {
 
 body.pure-mode .pure-footer-hint {
     display: block;
+    text-align: center;
+    width: 100%;
 }
 
 /* 隐藏非纯净模式元素 */
