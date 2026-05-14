@@ -2260,8 +2260,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #settings-btn {
     position: fixed;
-    top: 24px;
-    right: 24px;
+    bottom: var(--floating-actions-safe-bottom);
+    right: var(--floating-actions-offset-right);
     width: var(--floating-actions-size);
     height: var(--floating-actions-size);
     border-radius: 12px;
