@@ -560,6 +560,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initAiSidebarLazy();
     initAmbientTime();
     initPureTime();
+    initGreeting();
 
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
@@ -707,8 +708,6 @@ function preloadImage(url) {
         }
     });
 }
-
-
 
 const FOLDER_ICON_SVG = `<svg class="bookmark-svg-icon folder-svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
 const BOOKMARK_ICON_SVG = `<svg class="bookmark-svg-icon bookmark-file-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
@@ -3669,4 +3668,24 @@ function initPureTime() {
 
     updateTime();
     setInterval(updateTime, 60000); // Update every minute
+}
+
+/**
+ * Initialize greeting text based on time of day
+ */
+function initGreeting() {
+    const greeting = document.querySelector('.ambient-time-greeting');
+    if (!greeting) return;
+
+    const hour = new Date().getHours();
+    let text = '你好';
+    if (hour < 5) text = '凌晨好';
+    else if (hour < 9) text = '早上好';
+    else if (hour < 12) text = '上午好';
+    else if (hour < 14) text = '中午好';
+    else if (hour < 18) text = '下午好';
+    else if (hour < 22) text = '晚上好';
+    else text = '夜深了';
+
+    greeting.textContent = text + '，慢慢来，比较快';
 }
