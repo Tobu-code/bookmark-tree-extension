@@ -1931,6 +1931,7 @@ function initSearch() {
     const overlay = document.getElementById('engine-picker-overlay');
     const searchOverlay = document.getElementById('search-overlay');
     const suggestions = document.getElementById('search-suggestions');
+    const pureEngineList = document.getElementById('pure-engine-list');
     const options = document.querySelectorAll('.wheel-option');
     const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
 
@@ -1961,6 +1962,14 @@ function initSearch() {
             opt.classList.toggle('active', isActive);
             opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
+
+        // Update pure engine list buttons
+        if (pureEngineList) {
+            const pureButtons = pureEngineList.querySelectorAll('.pure-engine-btn');
+            pureButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.engine === currentEngine);
+            });
+        }
     }
 
     // Search mode - blur background
@@ -2146,6 +2155,28 @@ function initSearch() {
             hidePicker();
         }
     });
+
+    // Init pure engine list
+    if (pureEngineList) {
+        pureEngineList.innerHTML = '';
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pure-engine-btn';
+            btn.dataset.engine = opt.dataset.engine;
+            btn.dataset.url = opt.dataset.url;
+            btn.textContent = opt.textContent.trim();
+            btn.addEventListener('click', () => {
+                currentEngine = btn.dataset.engine;
+                currentUrl = btn.dataset.url;
+                label.textContent = btn.textContent.trim();
+                updateActiveOption();
+                chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
+                input.focus();
+            });
+            pureEngineList.appendChild(btn);
+        });
+    }
 
     // Click option to select
     options.forEach(opt => {

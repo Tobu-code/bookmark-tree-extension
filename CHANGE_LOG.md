@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 18:22:00 +0800
-- **Type**: Design (Global Search Mask Removal)
-- **Content**: 全局移除所有布局模式（标准、树状、平铺、纯净）下搜索框激活时的暗色蒙版与背景变灰效果。1) 将 `#search-overlay` 设为完全透明且取消模糊；2) 保持搜索激活时主容器、时钟及操作按钮的原始亮度（`opacity: 0.95`），确保搜索过程中的视觉一致性与明亮感。
-- **Impact**: `styles.css`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 18:25:00 +0800
+- **Type**: Feature (Pure Mode Engine Tags)
+- **Content**: 将纯净模式下的搜索引擎切换方式由“下拉轮盘”改为“水平标签列表”。1) 在搜索框下方新增铺开式标签组，复刻 Claude.ai 的快捷操作样式；2) 自动同步引擎选择状态，点击标签即可即时切换并聚焦搜索；3) 搜索激活时自动隐藏标签组，确保搜索建议列表拥有清晰的展示空间。
+- **Impact**: `script.js`、`styles.css`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
