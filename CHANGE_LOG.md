@@ -1,6 +1,12 @@
 # Change Log
 
 ## [2026-05-14]
+- **Time**: 2026-05-14 16:23:00 +0800
+- **Type**: Design (Active State Subtraction)
+- **Content**: 修复左侧目录选中状态下视觉冗余问题：移除 `.tree-folder-item.active` 的 `::before`（底部高光横线）和 `::after`（左侧指示竖线）伪元素装饰，只保留选中时的背景色与文字颜色高亮，使选中状态更加干净纯粹。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-05-14]
 - **Time**: 2026-05-14 16:19:00 +0800
 - **Type**: Refactor (Subfolder Grid Unification)
 - **Content**: 将平铺模式右侧内容区底部的“子目录全宽列表”融入书签卡片网格：1) JS 层将子目录从独立的 `bookmarks-pane-subfolder-list` 容器移入 `bookmarks-pane-grid`，与书签共享同一个网格布局；2) 子目录卡片复用 `.leaf-wrapper` 基础样式并增加 `--folder` 变体，通过文件夹图标底色和“N 项”角标与书签卡片区分；3) 移除原有的全宽子目录样式（`subfolder-list/item/icon/name/meta`），解决书签网格与目录列表视觉语言不统一的问题。
