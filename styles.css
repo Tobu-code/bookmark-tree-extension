@@ -347,6 +347,19 @@ body.loaded #background-layer {
     align-items: center;
     position: relative;
     z-index: 110;
+    transition: padding 0.4s var(--ease-standard);
+    box-sizing: border-box;
+}
+
+/* Dynamic Alignment for Flat Mode */
+.container:has(#bookmarks-tree.layout-flat) #search-container {
+    padding-left: calc(var(--flat-side-gutter) + 284px + 24px);
+    padding-right: var(--flat-side-gutter);
+}
+
+.container:has(#bookmarks-tree.layout-tree) #search-container {
+    padding-left: var(--tree-side-gutter);
+    padding-right: var(--tree-side-gutter);
 }
 
 .ambient-time {
@@ -443,39 +456,43 @@ body.loaded #background-layer {
     width: clamp(var(--search-min-w), 58.5vw, 920px);
     max-width: calc(100% - 24px);
     border-radius: 32px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 252, 247, 0.94) 100%);
-    box-shadow:
-        var(--elev-shadow-1),
-        0 0 0 1px color-mix(in srgb, var(--primary-color) 8%, transparent),
-        inset 0 1px 0 var(--highlight-top, rgba(255, 255, 255, 0.05));
-    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
     transition: transform var(--motion-medium) var(--ease-standard),
         box-shadow var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
         color var(--motion-medium) var(--ease-standard);
     padding-left: 20px;
-    padding-right: 8px;
+    padding-right: 12px;
     position: relative;
 }
 
+.container:has(#bookmarks-tree.layout-flat) .search-wrapper {
+    max-width: 800px;
+}
+
 :root[data-theme="dark"] .search-wrapper {
-    background: linear-gradient(180deg, rgba(34, 40, 50, 0.96) 0%, rgba(28, 33, 42, 0.94) 100%);
-    box-shadow:
-        var(--elev-shadow-1),
-        0 0 0 1px rgba(245, 166, 122, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background: var(--card-bg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .search-wrapper:focus-within {
     width: clamp(560px, 58.5vw, 920px);
     background: var(--card-bg);
-    border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
+    border-color: color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
     box-shadow:
-        var(--elev-shadow-2),
-        0 0 0 3px color-mix(in srgb, var(--primary-color) 10%, transparent),
-        0 0 24px color-mix(in srgb, var(--primary-color) 6%, transparent);
+        0 12px 40px rgba(0, 0, 0, 0.06),
+        0 0 0 2px color-mix(in srgb, var(--primary-color) 10%, transparent);
     transform: translateY(-1px);
+}
+
+:root[data-theme="dark"] .search-wrapper:focus-within {
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        0 0 0 2px color-mix(in srgb, var(--primary-color) 16%, transparent);
 }
 
 /* Engine Picker Container */
@@ -490,19 +507,19 @@ body.loaded #background-layer {
     -webkit-appearance: none;
     font-family: inherit;
     line-height: inherit;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
-    color: color-mix(in srgb, var(--text-color) 65%, var(--text-secondary));
+    color: var(--text-secondary);
     cursor: pointer;
-    background: transparent;
+    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
     border: none;
-    padding-right: 12px;
-    border-right: 1px solid color-mix(in srgb, var(--border-color) 72%, var(--text-color));
+    padding: 6px 12px;
+    border-radius: 12px;
     margin-right: 8px;
-    min-width: 60px;
+    min-width: 50px;
     text-align: center;
     user-select: none;
-    transition: color 0.2s, opacity 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 #search-engine-label:hover {
@@ -3460,9 +3477,9 @@ input[type="file"] {
 
 /* AI Sidebar Toggle Button */
 #ai-sidebar-btn {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
     border-radius: 50%;
     background: var(--primary-color);
     border: none;
