@@ -323,6 +323,7 @@ body.loaded #background-layer {
 .container:has(#bookmarks-tree.layout-flat) #search-container {
     padding-left: calc(var(--flat-side-gutter) + 284px + 24px);
     padding-right: var(--flat-side-gutter);
+    align-items: flex-start; /* Align search bar and clock with the right pane */
 }
 
 .container:has(#bookmarks-tree.layout-tree) #search-container {
@@ -336,7 +337,7 @@ body.loaded #background-layer {
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     color: var(--text-subtle);
-    margin-bottom: 20px;
+    margin-bottom: 40px; /* Increased gap between clock and search bar */
     opacity: 0;
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
@@ -399,11 +400,9 @@ body.loaded #background-layer {
 
 #search-input {
     flex: 1;
-    padding: 16px 12px;
-    /* Reduced vertical padding */
+    padding: 20px 12px; /* Increased vertical padding to make it taller */
     font-size: 16px;
     letter-spacing: 0.1px;
-    /* Slightly smaller text */
     border: none;
     background: transparent;
     outline: none;
@@ -412,7 +411,8 @@ body.loaded #background-layer {
 }
 
 #search-input::placeholder {
-    font-style: normal;
+    font-style: italic;
+    font-size: 14px;
     opacity: 0.84;
     color: var(--text-subtle);
 }
