@@ -119,32 +119,19 @@
             </svg>
         </button>
 
-        <!-- Full Settings Modal Restored -->
         <div id="settings-modal" class="modal hidden">
             <div class="modal-content">
-                <div class="settings-header">
-                    <div class="settings-title-row">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path
-                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                            </path>
-                        </svg>
-                        <span class="settings-title">设置</span>
-                    </div>
-                    <button id="close-modal" class="close" type="button" aria-label="关闭设置面板"></button>
-                </div>
-
+                <button id="close-modal" class="close" type="button" aria-label="关闭设置面板"></button>
+                <h2>设置</h2>
                 <div class="settings-body">
                     <div class="setting-item">
                         <label>链接打开方式</label>
-                        <div class="settings-options">
-                            <label class="radio-label">
+                        <div class="radio-group">
+                            <label class="radio-option">
                                 <input type="radio" name="link-target" value="blank">
                                 <span>新标签页</span>
                             </label>
-                            <label class="radio-label">
+                            <label class="radio-option">
                                 <input type="radio" name="link-target" value="self">
                                 <span>当前页</span>
                             </label>
@@ -153,16 +140,16 @@
 
                     <div class="setting-item">
                         <label>色彩主题</label>
-                        <div class="settings-options">
-                            <label class="radio-label">
+                        <div class="radio-group">
+                            <label class="radio-option">
                                 <input type="radio" name="theme" value="light">
                                 <span>浅色</span>
                             </label>
-                            <label class="radio-label">
+                            <label class="radio-option">
                                 <input type="radio" name="theme" value="dark">
                                 <span>深色</span>
                             </label>
-                            <label class="radio-label">
+                            <label class="radio-option">
                                 <input type="radio" name="theme" value="system">
                                 <span>跟随系统</span>
                             </label>
@@ -171,14 +158,18 @@
 
                     <div class="setting-item">
                         <label>默认布局模式</label>
-                        <div class="settings-options">
-                            <label class="radio-label">
+                        <div class="radio-group">
+                            <label class="radio-option">
                                 <input type="radio" name="layout-mode" value="tree">
                                 <span>树状</span>
                             </label>
-                            <label class="radio-label">
+                            <label class="radio-option">
                                 <input type="radio" name="layout-mode" value="flat">
                                 <span>平铺</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="layout-mode" value="pure">
+                                <span>纯净</span>
                             </label>
                         </div>
                     </div>
@@ -249,7 +240,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
