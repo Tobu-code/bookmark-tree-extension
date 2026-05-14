@@ -1,10 +1,10 @@
 # Change Log
 
 ## [2026-05-14]
-- **Time**: 2026-05-14 19:07:00 +0800
-- **Type**: Feature (Integrated UI Redesign)
-- **Content**: 按照最新 UI 稿全面重构纯净模式：1) **集成化搜索卡片**：将搜索引擎选择直接嵌入搜索框内部，形成双层结构（输入行+引擎行）；2) **细节增强**：新增搜索图标、动态时间显示（问候语下方）及底部操作快捷键提示；3) **交互优化**：支持 `Tab` 键快速循环切换引擎，并实时同步高亮；4) **视觉对标**：调整卡片圆角（24px）、内边距及阴影，实现与设计稿一致的高级质感。
-- **Impact**: `newtab.html`、`styles.css`、`script.js`、`CHANGE_LOG.md`
+- **Time**: 2026-05-14 19:12:00 +0800
+- **Type**: Fix (Structural Integrity & JS Error)
+- **Content**: 紧急修复由重构导致的 `newtab.html` 结构损坏问题。1) 完整补全了 JavaScript 依赖的所有 DOM 元素（如设置面板控件、背景上传组件、AI 管理表单等）；2) 修正了元素 ID 与脚本引用不一致的情况，彻底消除了页面加载时的 `addEventListener` 报错；3) 同时确保了新版集成化纯净模式 UI 的完整呈现。
+- **Impact**: `newtab.html`、`script.js`、`CHANGE_LOG.md`
 
 ## [2026-05-14]
 - **Time**: 2026-05-14 18:07:50 +0800
