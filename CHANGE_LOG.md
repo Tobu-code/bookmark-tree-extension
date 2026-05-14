@@ -1,5 +1,16 @@
 # Change Log
 
+## [2026-05-14 22:02:00]
+- **Type**: Fix (AI Sidebar)
+- **Content**: 修复点击 AI 侧边栏报错的问题。由于 `newtab.html` 缺少 `ai-tabs` 等必要容器，导致 `script.js` 初始化时出现 null 引用错误。已恢复完整的 AI 侧边栏 HTML 结构。
+- **Impact**: `newtab.html`
+
+## [2026-05-14 21:53:00]
+- **Type**: Fix (Settings UI)
+- **Content**: 彻底修复设置弹窗 UI 样式丢失及不可滚动的问题。1) 修正错误的类名映射（`settings-content` -> `modal-content` 等）；2) 消除重复的 HTML 标签并补全缺失的“纯净模式”选项；3) 恢复移动端惯性滚动支持。
+- **Impact**: `newtab.html`, `styles.css`
+
+
 ## [2026-05-14]
 - **Time**: 2026-05-14 21:22:00 +0800
 - **Type**: Style (Pure Mode Centering)
