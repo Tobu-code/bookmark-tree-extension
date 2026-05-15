@@ -2314,19 +2314,19 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     color: var(--modal-text);
-    padding: 32px;
-    width: min(760px, 92vw);
+    padding: 24px 28px;
+    width: min(720px, 92vw);
     max-width: 92vw;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     position: relative;
 }
 
 #settings-modal .modal-content {
-    width: min(820px, 94vw);
+    width: min(780px, 94vw);
     max-width: 94vw;
-    padding: 30px 34px 32px;
+    padding: 24px 30px 28px;
 }
 
 /* About Modal Adaptive Width */
@@ -2347,7 +2347,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .modal-content h2 {
-    color: #ae5630;
+    color: var(--text-color);
 }
 
 :root:not([data-theme="dark"]) .setting-item label {
@@ -2363,9 +2363,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .radio-option:has(input:checked) {
-    background: #fff;
-    color: #ae5630;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 :root:not([data-theme="dark"]) .radio-option:hover:not(:has(input:checked)) {
@@ -2410,7 +2410,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .ai-settings-summary-value {
-    color: #ae5630;
+    color: var(--primary-color);
 }
 
 :root:not([data-theme="dark"]) .ai-settings-summary-label {
@@ -2418,11 +2418,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .ai-provider-item {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 245, 241, 0.94) 100%);
-    border-color: rgba(174, 86, 48, 0.1);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.9),
-        0 18px 34px rgba(32, 26, 22, 0.08);
+    background: rgba(255, 255, 255, 0.45);
+    border-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-item:hover {
@@ -2465,9 +2463,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .ai-provider-switch {
-    background: rgba(255, 248, 243, 0.88);
-    color: #6f4632;
-    border-color: rgba(174, 86, 48, 0.14);
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-color);
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-switch-label {
@@ -2479,14 +2477,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root:not([data-theme="dark"]) .ai-provider-action-btn {
-    background: rgba(255, 248, 243, 0.88);
-    color: #6f4632;
-    border-color: rgba(174, 86, 48, 0.14);
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-color);
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-action-btn:hover:not(:disabled) {
-    color: #ae5630;
-    background: rgba(255, 241, 234, 0.96);
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.8);
 }
 
 :root:not([data-theme="dark"]) .ai-provider-action-btn-primary {
@@ -2515,30 +2513,72 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .modal-content h2 {
     margin-top: 0;
-    margin-bottom: 24px;
-    font-size: 22px;
+    margin-bottom: 20px;
+    font-size: 18px;
     font-weight: 700;
     text-align: center;
     color: var(--primary-color);
+    opacity: 0.9;
 }
 
 /* Setting Items */
 .setting-item {
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 .setting-item label {
     font-weight: 600;
     display: block;
-    margin-bottom: 10px;
-    font-size: 14px;
+    margin-bottom: 8px;
+    font-size: 13px;
     color: var(--text-color);
+    opacity: 0.85;
 }
 
 .settings-stack {
-    margin-top: 10px;
+    margin-top: 8px;
     display: grid;
+    gap: 8px;
+}
+
+.settings-row {
+    display: flex;
     gap: 10px;
+    align-items: center;
+}
+
+#settings-modal .confirm-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+    border-radius: 8px;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+}
+
+#settings-modal .confirm-btn-primary {
+    background: rgba(217, 123, 87, 0.12);
+    color: var(--primary-color);
+    border: 1px solid rgba(217, 123, 87, 0.2);
+    box-shadow: none;
+}
+
+#settings-modal .confirm-btn-primary:hover {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(217, 123, 87, 0.25);
+}
+
+#settings-modal .confirm-btn-cancel {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="dark"] #settings-modal .confirm-btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .settings-stack-md {
@@ -2608,10 +2648,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .ai-settings-intro {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 22px;
+    gap: 16px;
     align-items: center;
-    padding: 22px 24px;
-    border-radius: 26px;
+    padding: 16px 20px;
+    border-radius: 20px;
     background:
         radial-gradient(circle at top left, rgba(211, 131, 86, 0.18), transparent 38%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.018) 100%);
@@ -2632,7 +2672,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .ai-settings-title {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
     line-height: 1.15;
     color: rgba(255, 248, 242, 0.96);
@@ -2666,7 +2706,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-settings-summary-value {
     display: block;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1;
     color: rgba(255, 245, 238, 0.96);
@@ -2686,11 +2726,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-item {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) 264px;
-    gap: 16px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) 240px;
+    gap: 12px;
     align-items: center;
-    padding: 18px 20px;
-    border-radius: 24px;
+    padding: 14px 18px;
+    border-radius: 20px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.085) 0%, rgba(255, 255, 255, 0.03) 100%);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -2739,13 +2779,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 
 .ai-provider-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
-    border-radius: 16px;
+    border-radius: 12px;
     background: rgba(217, 123, 87, 0.08);
     border: 1px solid rgba(217, 123, 87, 0.12);
     flex: 0 0 auto;
@@ -2769,7 +2809,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .ai-provider-name {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     color: rgba(255, 248, 242, 0.96);
 }
@@ -2846,9 +2886,9 @@ label.ai-provider-switch {
     font-size: 12px;
     color: rgba(255, 248, 242, 0.86);
     width: 100%;
-    height: 42px;
-    padding: 0 14px;
-    border-radius: 999px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
     background: rgba(255, 255, 255, 0.035);
     border: 1px solid rgba(255, 255, 255, 0.07);
     font-weight: 600;
@@ -3243,7 +3283,7 @@ input[type=range]::-moz-range-thumb {
     text-align: center;
     margin: 0;
     height: 100%;
-    min-height: 40px;
+    min-height: 34px;
     line-height: 1;
 }
 
