@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-15 16:15:30]
+- **Type**: Fix (AI Sidebar Layout)
+- **Content**: 将 AI 侧边栏从视口级固定浮层改为主容器内部覆盖层。通过把 `#ai-sidebar` 移入 `.container`，并使用 `position: absolute; inset: 0; width: 100%; height: 100%;` 铺满容器，彻底消除主容器边缘露底问题；同时提升 AI 打开时的容器层级，避免遮罩覆盖侧栏。
+- **Impact**: `newtab.html`, `styles.css`
+
 ## [2026-05-15 16:07:32]
 - **Type**: Fix (AI Sidebar Layout)
 - **Content**: 修复 AI 侧边栏未铺满主容器的问题。移除侧栏宽屏下的 `max-width` 限制，修正重复 `.ai-sidebar.active` 规则导致的位移覆盖，并在响应式断点中同步侧栏与主容器的宽度、顶部位置和高度，确保打开后完整覆盖主容器。
