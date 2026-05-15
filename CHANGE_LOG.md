@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-15 17:05:06]
+- **Type**: Fix (AI Sidebar DOM)
+- **Content**: 修复 AI 侧边栏被错误嵌套在隐藏的设置弹窗内导致无法显示的问题。补齐 `#settings-modal` 的关闭标签，使 `#ai-sidebar` 成为 `.container` 的直接子级，避免被父级 `.hidden { display: none !important; }` 影响。
+- **Impact**: `newtab.html`
+
 ## [2026-05-15 16:24:24]
 - **Type**: Fix (AI Sidebar Visibility)
 - **Content**: 修复 AI 侧边栏移入主容器后只显示蒙版、不显示面板的问题。新增 `body.ai-sidebar-open .ai-sidebar` 显示兜底规则，使页面进入 AI 打开状态时侧栏必定回到可视位置，并将主容器层级提升到遮罩之上。
