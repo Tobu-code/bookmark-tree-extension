@@ -4675,7 +4675,7 @@ body.pure-mode .search-wrapper:focus-within {
     padding-right: 0;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* 允许搜索建议框溢出显示 */
     transform: none;
     text-align: left;
 }
@@ -4761,6 +4761,7 @@ body.pure-mode .search-bottom-row {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    border-radius: 0 0 16px 16px;
 }
 
 .pure-engine-list {
