@@ -2729,8 +2729,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .ai-provider-item {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) 240px;
-    gap: 12px;
+    grid-template-columns: 24px minmax(0, 1.2fr) minmax(0, 0.8fr) auto;
+    gap: 14px;
     align-items: center;
     padding: 14px 18px;
     border-radius: 20px;
@@ -2764,8 +2764,33 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .ai-provider-item.is-drag-over {
-    border-color: rgba(217, 123, 87, 0.34);
-    box-shadow: 0 0 0 4px rgba(217, 123, 87, 0.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 8%, transparent);
+    background: color-mix(in srgb, var(--primary-color) 4%, transparent);
+}
+
+.ai-provider-drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-subtle);
+    opacity: 0.4;
+    cursor: grab;
+    transition: opacity var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+    padding: 10px 0;
+}
+
+.ai-provider-item:hover .ai-provider-drag-handle {
+    opacity: 0.8;
+}
+
+.ai-provider-drag-handle:active {
+    cursor: grabbing;
+}
+
+.ai-provider-drag-handle svg {
+    width: 16px;
+    height: 16px;
 }
 
 .ai-provider-identity {
@@ -2960,29 +2985,38 @@ label.ai-provider-switch {
 }
 
 .ai-provider-action-btn {
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    background: rgba(255, 255, 255, 0.035);
-    color: rgba(255, 248, 242, 0.86);
-    border-radius: 999px;
     width: 100%;
-    height: 42px;
-    min-width: 0;
-    padding: 0 14px;
-    font: inherit;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: rgba(255, 248, 242, 0.86);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    display: inline-flex;
+    transition: all var(--motion-fast) var(--ease-standard);
+    display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
     box-sizing: border-box;
-    line-height: 1;
     white-space: nowrap;
-    text-align: center;
-    transition: background-color var(--motion-fast) var(--ease-standard),
-        border-color var(--motion-fast) var(--ease-standard),
-        color var(--motion-fast) var(--ease-standard),
-        box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.ai-provider-switch.is-default {
+    background: rgba(217, 123, 87, 0.04);
+    border-color: rgba(217, 123, 87, 0.1);
+    color: color-mix(in srgb, var(--primary-color) 85%, var(--text-color));
+}
+
+.ai-provider-switch.is-default .ai-provider-switch-indicator {
+    background: rgba(217, 123, 87, 0.08);
+}
+
+.ai-provider-switch.is-default input:checked + .ai-provider-switch-indicator {
+    background: var(--primary-color);
+    color: #FFF;
 }
 
 .ai-provider-action-btn:hover:not(:disabled) {

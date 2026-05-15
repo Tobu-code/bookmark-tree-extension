@@ -2736,14 +2736,23 @@ function initSettingsUI(settings) {
             const disabled = provider.enabled === false;
             const isSelected = provider.id === aiSelectedId;
             return `
-                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
+                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}" draggable="true">
+                    <div class="ai-provider-drag-handle" data-drag-handle title="拖动排序">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="9" cy="5" r="1"/>
+                            <circle cx="9" cy="12" r="1"/>
+                            <circle cx="9" cy="19" r="1"/>
+                            <circle cx="15" cy="5" r="1"/>
+                            <circle cx="15" cy="12" r="1"/>
+                            <circle cx="15" cy="19" r="1"/>
+                        </svg>
+                    </div>
                     <div class="ai-provider-identity">
                         <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=${FAVICON_SIZE}" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
                                 <span class="ai-provider-badge">${provider.builtIn ? '预置' : '自定义'}</span>
-                                ${isSelected ? '<span class="ai-provider-default-tag">默认</span>' : ''}
                             </div>
                             <div class="ai-provider-caption">${provider.builtIn ? '官方预置服务' : '用户自定义服务'}</div>
                         </div>
@@ -2763,11 +2772,15 @@ function initSettingsUI(settings) {
                                 </span>
                                 <span class="ai-provider-switch-label">${disabled ? '停用' : '启用'}</span>
                             </label>
-                            <button type="button" class="ai-provider-action-btn ai-provider-action-btn-primary" data-action="default" ${isSelected ? 'disabled' : ''}>设为默认</button>
-                        </div>
-                        <div class="ai-provider-actions-secondary">
-                            <button type="button" class="ai-provider-action-btn" data-action="move-up" ${index === 0 ? 'disabled' : ''}>上移</button>
-                            <button type="button" class="ai-provider-action-btn" data-action="move-down" ${index === aiSettingsState.length - 1 ? 'disabled' : ''}>下移</button>
+                            <label class="ai-provider-switch is-default">
+                                <input type="checkbox" data-action="default" ${isSelected ? 'checked disabled' : ''}>
+                                <span class="ai-provider-switch-indicator" aria-hidden="true">
+                                    <svg viewBox="0 0 16 16" width="12" height="12">
+                                        <path d="M3.5 8.2 6.6 11 12.5 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </span>
+                                <span class="ai-provider-switch-label">${isSelected ? '默认' : '设为默认'}</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -2798,7 +2811,27 @@ function initSettingsUI(settings) {
 
     if (aiProviderList) {
         aiProviderList.addEventListener('click', async (event) => {
-            const actionTarget = event.target.closest('[data-action]');
+            const removeBtn = event.target.closest('[data-action="remove"]');
+            if (!removeBtn) return;
+
+            const item = removeBtn.closest('[data-ai-id]');
+            if (!item) return;
+
+            const providerId = item.dataset.aiId;
+            const provider = findAiProviderById(aiSettingsState, providerId);
+            if (!provider || provider.builtIn) return;
+
+            const providerName = provider.name;
+            aiSettingsState = aiSettingsState.filter((entry) => entry.id !== providerId);
+            if (aiSelectedId === providerId) {
+                aiSelectedId = getFirstEnabledAiProvider(aiSettingsState)?.id || null;
+            }
+            await commitAiSettings();
+            showSettingsToast(`${providerName} 已从 AI 列表移除。`);
+        });
+
+        aiProviderList.addEventListener('change', async (event) => {
+            const actionTarget = event.target.closest('input[data-action]');
             if (!actionTarget) return;
 
             const item = actionTarget.closest('[data-ai-id]');
@@ -2809,111 +2842,92 @@ function initSettingsUI(settings) {
             if (!provider) return;
 
             const action = actionTarget.dataset.action;
-            if (action === 'default') {
-                aiSelectedId = provider.id;
-                await commitAiSettings();
-                showSettingsToast(`${provider.name} 已设为默认 AI。`, 'success');
-                return;
-            }
 
-            if (action === 'move-up') {
-                await moveAiProvider(providerId, -1);
-                return;
-            }
-
-            if (action === 'move-down') {
-                await moveAiProvider(providerId, 1);
-                return;
-            }
-
-            if (action === 'remove' && !provider.builtIn) {
-                const providerName = provider.name;
-                aiSettingsState = aiSettingsState.filter((entry) => entry.id !== providerId);
-                if (aiSelectedId === providerId) {
-                    aiSelectedId = getFirstEnabledAiProvider(aiSettingsState)?.id || null;
-                }
-                await commitAiSettings();
-                showSettingsToast(`${providerName} 已从 AI 列表移除。`);
-            }
-        });
-
-        aiProviderList.addEventListener('change', async (event) => {
-            const toggle = event.target.closest('input[data-action="toggle"]');
-            if (!toggle) return;
-
-            const item = toggle.closest('[data-ai-id]');
-            if (!item) return;
-
-            const provider = findAiProviderById(aiSettingsState, item.dataset.aiId);
-            if (!provider) return;
-
-            const enable = toggle.checked;
-            if (!enable && getEnabledAiCount() <= 1 && provider.enabled !== false) {
-                toggle.checked = true;
-                showSettingsToast('至少保留一个启用中的 AI 服务。', 'warning');
-                return;
-            }
-
-            if (enable && !provider.builtIn) {
-                const granted = await requestAiOriginPermission(provider.url);
-                if (!granted) {
-                    toggle.checked = false;
-                    showSettingsToast('未获得站点权限，已保留为停用状态。', 'warning');
+            if (action === 'toggle') {
+                const enable = actionTarget.checked;
+                // Business rule: at least one enabled
+                if (!enable && getEnabledAiCount() <= 1 && provider.enabled !== false) {
+                    actionTarget.checked = true;
+                    showSettingsToast('至少保留一个启用中的 AI 服务。', 'warning');
                     return;
                 }
+
+                if (enable && !provider.builtIn) {
+                    const granted = await requestAiOriginPermission(provider.url);
+                    if (!granted) {
+                        actionTarget.checked = false;
+                        showSettingsToast('未获得站点权限，已保留为停用状态。', 'warning');
+                        return;
+                    }
+                }
+
+                provider.enabled = enable;
+                if (!enable && aiSelectedId === providerId) {
+                    const next = getFirstEnabledAiProvider(aiSettingsState.filter(p => p.id !== providerId));
+                    aiSelectedId = next ? next.id : null;
+                }
+                await commitAiSettings();
+                showSettingsToast(`${provider.name} 已${enable ? '启用' : '停用'}。`);
+                return;
             }
 
-            provider.enabled = enable;
-            if (!enable && aiSelectedId === provider.id) {
-                aiSelectedId = getFirstEnabledAiProvider(aiSettingsState.filter((entry) => entry.id !== provider.id).concat([{ ...provider, enabled: false }]))?.id || null;
+            if (action === 'default') {
+                if (actionTarget.checked) {
+                    aiSelectedId = providerId;
+                    await commitAiSettings();
+                    showSettingsToast(`${provider.name} 已设为默认 AI。`, 'success');
+                }
             }
-            await commitAiSettings();
-            showSettingsToast(enable ? `${provider.name} 已启用。` : `${provider.name} 已停用。`);
         });
 
-        aiProviderList.addEventListener('dragstart', (event) => {
-            const item = event.target.closest('.ai-provider-item');
-            if (!item || !event.target.closest('[data-drag-handle]')) {
-                event.preventDefault();
+        // Drag & Drop
+        aiProviderList.addEventListener('dragstart', (e) => {
+            const item = e.target.closest('.ai-provider-item');
+            // Only allow drag if clicking the handle
+            if (!item || !e.target.closest('[data-drag-handle]')) {
+                e.preventDefault();
                 return;
             }
             aiDraggedProviderId = item.dataset.aiId;
             item.classList.add('is-dragging');
-            event.dataTransfer.effectAllowed = 'move';
-            event.dataTransfer.setData('text/plain', aiDraggedProviderId);
+            e.dataTransfer.setData('text/plain', aiDraggedProviderId);
+            e.dataTransfer.effectAllowed = 'move';
         });
 
-        aiProviderList.addEventListener('dragend', (event) => {
-            const item = event.target.closest('.ai-provider-item');
-            if (item) item.classList.remove('is-dragging');
-            aiDraggedProviderId = null;
-            aiProviderList.querySelectorAll('.is-drag-over').forEach((element) => element.classList.remove('is-drag-over'));
-        });
-
-        aiProviderList.addEventListener('dragover', (event) => {
+        aiProviderList.addEventListener('dragover', (e) => {
             if (!aiDraggedProviderId) return;
-            event.preventDefault();
-            const item = event.target.closest('.ai-provider-item');
-            if (!item || item.dataset.aiId === aiDraggedProviderId) return;
-            aiProviderList.querySelectorAll('.is-drag-over').forEach((element) => {
-                if (element !== item) element.classList.remove('is-drag-over');
+            e.preventDefault();
+            const item = e.target.closest('.ai-provider-item');
+            if (item && item.dataset.aiId !== aiDraggedProviderId) {
+                item.classList.add('is-drag-over');
+            }
+        });
+
+        aiProviderList.addEventListener('dragleave', (e) => {
+            const item = e.target.closest('.ai-provider-item');
+            if (item) item.classList.remove('is-drag-over');
+        });
+
+        aiProviderList.addEventListener('drop', async (e) => {
+            if (!aiDraggedProviderId) return;
+            e.preventDefault();
+            const item = e.target.closest('.ai-provider-item');
+            if (item) {
+                item.classList.remove('is-drag-over');
+                const targetId = item.dataset.aiId;
+                if (targetId !== aiDraggedProviderId) {
+                    await reorderAiProviders(aiDraggedProviderId, targetId);
+                }
+            }
+        });
+
+        aiProviderList.addEventListener('dragend', (e) => {
+            const items = aiProviderList.querySelectorAll('.ai-provider-item');
+            items.forEach(item => {
+                item.classList.remove('is-dragging');
+                item.classList.remove('is-drag-over');
             });
-            item.classList.add('is-drag-over');
-        });
-
-        aiProviderList.addEventListener('dragleave', (event) => {
-            const item = event.target.closest('.ai-provider-item');
-            if (!item) return;
-            item.classList.remove('is-drag-over');
-        });
-
-        aiProviderList.addEventListener('drop', async (event) => {
-            if (!aiDraggedProviderId) return;
-            event.preventDefault();
-            const item = event.target.closest('.ai-provider-item');
-            if (!item) return;
-            item.classList.remove('is-drag-over');
-            await reorderAiProviders(aiDraggedProviderId, item.dataset.aiId);
+            aiDraggedProviderId = null;
         });
     }
 
