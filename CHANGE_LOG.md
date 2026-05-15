@@ -1,14 +1,19 @@
 # Change Log
 
-## [2026-05-15 14:40:00]
-- **Type**: Fix (Stability / Null Check)
-- **Content**: 修复 AI 侧边栏、搜索功能及设置面板在 DOM 元素缺失时可能导致的 JavaScript 崩溃。通过在 `initAiSidebar`、`initSearch` 和 `initSettingsUI` 中增加防御性判空，提升了插件在不同布局下的健壮性。
-- **Impact**: `script.js`
+## [2026-05-15 15:12:00]
+- **Type**: UI/UX (Global Aesthetics)
+- **Content**: 全局滚动条美化与归一化。1) 极简设计：将全局滚动条宽度压缩至 6px，滑块采用大圆角胶囊形设计，视觉上更轻盈；2) 玻璃拟态：轨道完全透明，滑块采用低不透明度材质，完美融入整体玻璃材质；3) 清理冗余：删除了 stylesheet 中分散的各处局部滚动条定义，实现全应用视觉一致性，并兼顾了 Firefox 的兼容性。
+- **Impact**: `styles.css`
 
 ## [2026-05-15 15:05:00]
 - **Type**: Interaction/UI Fix
 - **Content**: 优化 AI 管理列表的交互细节。1) 修复拖拽排序：改用“手柄按下触发”逻辑（Handle-based dragging），解决了原生拖拽在复合组件上的触发失效问题，并增大了手柄点击热区；2) 视觉归一化：固定“启用”与“默认”开关的标签文字，不再随状态变动，仅通过开关颜色和位移表达状态，视觉上更显稳重。
 - **Impact**: `script.js`, `styles.css`
+
+## [2026-05-15 14:40:00]
+- **Type**: Fix (Stability / Null Check)
+- **Content**: 修复 AI 侧边栏、搜索功能及设置面板在 DOM 元素缺失时可能导致的 JavaScript 崩溃。通过在 `initAiSidebar`、`initSearch` 和 `initSettingsUI` 中增加防御性判空，提升了插件在不同布局下的健壮性。
+- **Impact**: `script.js`
 
 ## [2026-05-15 09:24:00]
 - **Type**: Fix/UI (Search Interaction)
