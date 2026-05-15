@@ -1,5 +1,11 @@
 # Change Log
 
+## [2026-05-15 09:24:00]
+- **Type**: Fix/UI (Search Interaction)
+- **Content**: 优化搜索交互体验。1) 移除了搜索引擎切换时的黑色蒙版和背景模糊效果，保持页面清晰；2) 将 Tab 键切换引擎功能扩展至全场景（平铺、树状、纯净模式均支持），提升操作效率。
+- **Impact**: `styles.css`, `script.js`
+
+
 ## [2026-05-14 23:24:00]
 - **Type**: Feature (Search Engine)
 - **Content**: 新增 Yandex 搜索引擎支持。在搜索栏引擎下拉列表（及纯净模式的引擎快捷切换列表）中添加了 Yandex 作为可选的默认搜索引擎。

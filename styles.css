@@ -511,8 +511,8 @@ body.loaded #background-layer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(4px);
+    background: transparent;
+    backdrop-filter: none;
     z-index: 999;
 }
 

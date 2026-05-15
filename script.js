@@ -2192,19 +2192,19 @@ function initSearch() {
         });
     }
 
-    // Tab key to switch engine in Pure Mode
+    // Tab key to switch engine (Universal)
     input.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab' && document.body.classList.contains('pure-mode')) {
+        if (e.key === 'Tab') {
             e.preventDefault();
-            const engines = Array.from(document.querySelectorAll('.pure-engine-btn'));
-            const currentIndex = engines.findIndex(btn => btn.dataset.engine === currentEngine);
-            const nextIndex = (currentIndex + 1) % engines.length;
-            const nextBtn = engines[nextIndex];
+            const engineOptions = Array.from(options);
+            const currentIndex = engineOptions.findIndex(opt => opt.dataset.engine === currentEngine);
+            const nextIndex = (currentIndex + 1) % engineOptions.length;
+            const nextOpt = engineOptions[nextIndex];
             
-            if (nextBtn) {
-                currentEngine = nextBtn.dataset.engine;
-                currentUrl = nextBtn.dataset.url;
-                label.textContent = nextBtn.textContent.trim();
+            if (nextOpt) {
+                currentEngine = nextOpt.dataset.engine;
+                currentUrl = nextOpt.dataset.url;
+                label.textContent = nextOpt.textContent.trim();
                 updateActiveOption();
                 chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
             }
