@@ -2774,23 +2774,27 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     color: var(--text-subtle);
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: grab;
-    transition: opacity var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
-    padding: 10px 0;
+    transition: all var(--motion-fast) var(--ease-standard);
+    width: 32px;
+    height: 48px;
+    margin-left: -10px;
 }
 
 .ai-provider-item:hover .ai-provider-drag-handle {
-    opacity: 0.8;
+    opacity: 0.7;
+    color: var(--primary-color);
 }
 
 .ai-provider-drag-handle:active {
     cursor: grabbing;
+    transform: scale(1.1);
 }
 
 .ai-provider-drag-handle svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 
 .ai-provider-identity {

@@ -2736,7 +2736,7 @@ function initSettingsUI(settings) {
             const disabled = provider.enabled === false;
             const isSelected = provider.id === aiSelectedId;
             return `
-                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}" draggable="true">
+                <div class="ai-provider-item${disabled ? ' is-disabled' : ''}" data-ai-id="${escapeHtml(provider.id)}">
                     <div class="ai-provider-drag-handle" data-drag-handle title="拖动排序">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <circle cx="9" cy="5" r="1"/>
@@ -2770,7 +2770,7 @@ function initSettingsUI(settings) {
                                         <path d="M3.5 8.2 6.6 11 12.5 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <span class="ai-provider-switch-label">${disabled ? '停用' : '启用'}</span>
+                                <span class="ai-provider-switch-label">启用</span>
                             </label>
                             <label class="ai-provider-switch is-default">
                                 <input type="checkbox" data-action="default" ${isSelected ? 'checked disabled' : ''}>
@@ -2779,7 +2779,7 @@ function initSettingsUI(settings) {
                                         <path d="M3.5 8.2 6.6 11 12.5 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
-                                <span class="ai-provider-switch-label">${isSelected ? '默认' : '设为默认'}</span>
+                                <span class="ai-provider-switch-label">默认</span>
                             </label>
                         </div>
                     </div>
@@ -2880,11 +2880,18 @@ function initSettingsUI(settings) {
             }
         });
 
-        // Drag & Drop
+        // Drag & Drop Handling
+        aiProviderList.addEventListener('mousedown', (e) => {
+            const handle = e.target.closest('[data-drag-handle]');
+            if (handle) {
+                const item = handle.closest('.ai-provider-item');
+                if (item) item.draggable = true;
+            }
+        });
+
         aiProviderList.addEventListener('dragstart', (e) => {
             const item = e.target.closest('.ai-provider-item');
-            // Only allow drag if clicking the handle
-            if (!item || !e.target.closest('[data-drag-handle]')) {
+            if (!item || !item.draggable) {
                 e.preventDefault();
                 return;
             }
@@ -2897,6 +2904,7 @@ function initSettingsUI(settings) {
         aiProviderList.addEventListener('dragover', (e) => {
             if (!aiDraggedProviderId) return;
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
             const item = e.target.closest('.ai-provider-item');
             if (item && item.dataset.aiId !== aiDraggedProviderId) {
                 item.classList.add('is-drag-over');
@@ -2926,6 +2934,7 @@ function initSettingsUI(settings) {
             items.forEach(item => {
                 item.classList.remove('is-dragging');
                 item.classList.remove('is-drag-over');
+                item.draggable = false;
             });
             aiDraggedProviderId = null;
         });
