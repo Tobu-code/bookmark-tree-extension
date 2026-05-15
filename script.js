@@ -1935,6 +1935,11 @@ function initSearch() {
     const options = document.querySelectorAll('.wheel-option');
     const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
 
+    if (!input || !label || !wheel || !overlay || !searchOverlay || !suggestions) {
+        console.warn('Search critical elements missing, initialization skipped.');
+        return;
+    }
+
     let currentEngine = 'google';
     let currentUrl = 'https://www.google.com/search?q=';
     let selectedIndex = -1;
@@ -2335,6 +2340,11 @@ function initSettingsUI(settings) {
     const modal = document.getElementById('settings-modal');
     const btn = document.getElementById('settings-btn');
     const close = document.getElementById('close-modal');
+
+    if (!modal || !btn || !close) {
+        console.warn('Settings modal elements missing, UI initialization skipped.');
+        return;
+    }
 
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
@@ -3247,6 +3257,15 @@ function initAiSidebar() {
     const fallback = document.getElementById('ai-iframe-fallback');
     const tabsContainer = document.getElementById('ai-tabs');
     const contentContainer = document.getElementById('ai-sidebar-content');
+
+    if (!sidebar || !tabsContainer || !contentContainer) {
+        console.warn('AI Sidebar critical elements missing, initialization skipped.');
+        return {
+            toggle: () => {},
+            refresh: () => Promise.resolve()
+        };
+    }
+
     const fallbackTitle = fallback ? fallback.querySelector('p') : null;
     const fallbackHint = fallback ? fallback.querySelector('.ai-placeholder-hint') : null;
     const iframes = new Map();
@@ -3439,6 +3458,7 @@ function initAiSidebar() {
     }
 
     function initAiTabSort() {
+        if (!tabsContainer) return;
         tabsContainer.addEventListener('dragstart', (e) => {
             if (e.target.classList.contains('ai-tab')) {
                 draggedTab = e.target;
@@ -3518,11 +3538,13 @@ function initAiSidebar() {
         window.open(provider.url, 'AI_Window', 'width=800,height=900,left=100,top=100,resizable=yes,scrollbars=yes');
     }
 
-    tabsContainer.addEventListener('click', (event) => {
-        const tab = event.target.closest('.ai-tab');
-        if (!tab) return;
-        selectAiById(tab.dataset.ai);
-    });
+    if (tabsContainer) {
+        tabsContainer.addEventListener('click', (event) => {
+            const tab = event.target.closest('.ai-tab');
+            if (!tab) return;
+            selectAiById(tab.dataset.ai);
+        });
+    }
 
     if (closeBtn) {
         closeBtn.addEventListener('click', closeSidebar);
