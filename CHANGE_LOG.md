@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-15 16:07:32]
+- **Type**: Fix (AI Sidebar Layout)
+- **Content**: 修复 AI 侧边栏未铺满主容器的问题。移除侧栏宽屏下的 `max-width` 限制，修正重复 `.ai-sidebar.active` 规则导致的位移覆盖，并在响应式断点中同步侧栏与主容器的宽度、顶部位置和高度，确保打开后完整覆盖主容器。
+- **Impact**: `styles.css`
+
 ## [2026-05-15 15:40:00]
 - **Type**: UI/UX Refactor & Robustness
 - **Content**: AI 侧边栏“容器化”重构。1) 几何对齐：将 AI 侧栏调整为与主容器 `.container` 完全一致的尺寸、位置、圆角和阴影，展开后完美覆盖主容器，视觉上实现“容器模式切换”效果；2) Grid 布局加固：将侧栏结构从 Flex 重构为 Grid（auto 1fr），从底层逻辑上杜绝了 Iframe 内容加载时顶部选项卡被挤出或覆盖的 Bug；3) 材质升级：强化了顶部选项栏的背景材质与层级，确保交互的稳定性。

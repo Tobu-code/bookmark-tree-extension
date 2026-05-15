@@ -1559,6 +1559,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         width: min(94%, 1600px);
     }
 
+    .ai-sidebar {
+        width: min(94%, 1600px);
+    }
+
     .container:has(#bookmarks-tree.layout-flat) {
         --flat-side-gutter: clamp(12px, calc((100% - 1180px) / 2), 72px);
     }
@@ -1591,6 +1595,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     .container {
         height: min(94vh, 920px);
         margin: max(10px, 1.6vh) auto;
+    }
+
+    .ai-sidebar {
+        top: max(10px, 1.6vh);
+        height: min(94vh, 920px);
     }
 
     .ambient-time {
@@ -3544,7 +3553,6 @@ input[type="file"] {
     top: max(16px, 2.8vh);
     left: 50%;
     width: 90%;
-    max-width: 1600px;
     height: clamp(var(--container-min-h), 92vh, 1100px);
     margin: 0;
     /* Glass effect: semi-transparent with blur */
@@ -3596,7 +3604,7 @@ input[type="file"] {
 }
 
 .ai-sidebar.active {
-    transform: translateX(0);
+    transform: translate(-50%, 0);
 }
 
 /* Focus mode: when AI panel is open, reduce background competition */
@@ -3982,6 +3990,10 @@ body.ai-sidebar-open #ai-sidebar-btn {
         width: min(96%, 1400px);
     }
 
+    .ai-sidebar {
+        width: min(96%, 1400px);
+    }
+
     .top-level-container {
         gap: 24px 22px;
     }
@@ -4001,6 +4013,10 @@ body.ai-sidebar-open #ai-sidebar-btn {
     }
 
     .container {
+        width: min(97%, 1200px);
+    }
+
+    .ai-sidebar {
         width: min(97%, 1200px);
     }
 
@@ -4035,6 +4051,11 @@ body.ai-sidebar-open #ai-sidebar-btn {
     .container {
         width: 98%;
         margin: 6px auto;
+    }
+
+    .ai-sidebar {
+        top: 6px;
+        width: 98%;
     }
 
     .ambient-time {
