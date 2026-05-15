@@ -341,7 +341,7 @@ body.loaded .container {
 }
 
 body.ai-sidebar-open .container {
-    z-index: 1001;
+    z-index: 1002;
 }
 
 body.loaded #background-layer {
@@ -3568,6 +3568,7 @@ input[type="file"] {
     opacity: 0;
 }
 
+body.ai-sidebar-open .ai-sidebar,
 .ai-sidebar.active {
     transform: translateX(0);
     opacity: 1;

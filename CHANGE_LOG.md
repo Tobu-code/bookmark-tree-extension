@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-15 16:24:24]
+- **Type**: Fix (AI Sidebar Visibility)
+- **Content**: 修复 AI 侧边栏移入主容器后只显示蒙版、不显示面板的问题。新增 `body.ai-sidebar-open .ai-sidebar` 显示兜底规则，使页面进入 AI 打开状态时侧栏必定回到可视位置，并将主容器层级提升到遮罩之上。
+- **Impact**: `styles.css`
+
 ## [2026-05-15 16:15:30]
 - **Type**: Fix (AI Sidebar Layout)
 - **Content**: 将 AI 侧边栏从视口级固定浮层改为主容器内部覆盖层。通过把 `#ai-sidebar` 移入 `.container`，并使用 `position: absolute; inset: 0; width: 100%; height: 100%;` 铺满容器，彻底消除主容器边缘露底问题；同时提升 AI 打开时的容器层级，避免遮罩覆盖侧栏。
