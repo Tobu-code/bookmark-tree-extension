@@ -310,6 +310,29 @@
         </div>
     </div>
 
+    <div id="edit-bookmark-dialog" class="modal hidden">
+        <div class="edit-bookmark-content">
+            <div class="edit-bookmark-header">
+                <span class="edit-bookmark-title-label">编辑书签</span>
+                <button id="edit-bookmark-close" class="close" type="button" aria-label="关闭编辑书签"></button>
+            </div>
+            <div class="edit-bookmark-body">
+                <div class="edit-bookmark-field">
+                    <label class="edit-bookmark-label" for="edit-bookmark-title">标题</label>
+                    <input type="text" id="edit-bookmark-title" class="edit-bookmark-input" placeholder="书签标题" autocomplete="off">
+                </div>
+                <div class="edit-bookmark-field">
+                    <label class="edit-bookmark-label" for="edit-bookmark-url">网址</label>
+                    <input type="url" id="edit-bookmark-url" class="edit-bookmark-input" placeholder="https://..." autocomplete="off">
+                </div>
+            </div>
+            <div class="edit-bookmark-actions">
+                <button id="edit-bookmark-cancel" class="confirm-btn confirm-btn-cancel">取消</button>
+                <button id="edit-bookmark-save" class="confirm-btn confirm-btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
     <div id="ai-sidebar-overlay" class="ai-sidebar-overlay hidden"></div>
 
     <script src="script.js"></script>

@@ -1,5 +1,15 @@
 # Change Log
 
+## [2026-05-18 11:26:00]
+- **Type**: Fix + Refactor (High Priority Optimizations #1/#2/#9/#13/#14)
+- **Content**:
+  1. **Fix #13** — 修复 `editBookmark()` 引用的 `#edit-bookmark-dialog` 等 4 个 DOM 元素在 `newtab.html` 中完全缺失导致书签编辑功能静默失效的严重 Bug；在 HTML 中添加完整的编辑书签弹窗 DOM，并在 `styles.css` 中补充对应的玻璃态样式。
+  2. **Fix #14** — 同步重写 `editBookmark()` 函数，改用 `AbortController` 统一管理所有事件监听器，彻底替代原有 `cloneNode` hack；验证错误反馈改为 CSS class（`input-error`）代替内联 style。
+  3. **Fix #1** — 合并 `renderTreeItem` 与 `renderTreeItemForModal` 为统一工厂函数 `renderTreeNode(node, options)`，通过 `options.defaultExpanded` 区分普通树 / 文件夹弹窗两种行为，消除约 120 行重复代码；两个原函数保留为向后兼容 shim。
+  4. **Fix #2** — 提取子文件夹 hover-expand 逻辑为独立辅助函数 `bindSubFolderHoverExpand(wrapper, childrenContainer)`，消除原先两处完全相同的 hoverTimer 实现。
+  5. **Fix #9** — 将 `script.js`（3763 行）拆分为 `src/` 目录下 9 个职责清晰的模块文件（01~09 前缀数字确保加载顺序）；更新 `build.js`，构建时优先检测 `src/` 目录并自动按序拼接，否则回退到旧 `script.js`，无需改动现有开发/发布流程。
+- **Impact**: `newtab.html`, `styles.css`, `script.js`, `build.js`, `src/`（新增 9 个模块文件）
+
 ## [2026-05-15 17:05:06]
 - **Type**: Fix (AI Sidebar DOM)
 - **Content**: 修复 AI 侧边栏被错误嵌套在隐藏的设置弹窗内导致无法显示的问题。补齐 `#settings-modal` 的关闭标签，使 `#ai-sidebar` 成为 `.container` 的直接子级，避免被父级 `.hidden { display: none !important; }` 影响。

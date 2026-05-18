@@ -1356,30 +1356,49 @@ function renderFlatBookmarkItem(node) {
     return wrapper;
 }
 
-// Recursive helper for list items
-function renderTreeItem(node) {
+// --- Shared helper: bind sub-folder hover-expand behavior (Fix #2) ---
+function bindSubFolderHoverExpand(wrapper, childrenContainer) {
+    let hoverTimer = null;
+    wrapper.addEventListener('mouseenter', () => {
+        if (HOVER_DELAY === 1100) return; // "Closed" setting
+        const effectiveDelay = Math.min(HOVER_DELAY, 40);
+        hoverTimer = setTimeout(() => {
+            childrenContainer.classList.remove('hidden');
+        }, effectiveDelay);
+    });
+    wrapper.addEventListener('mouseleave', () => {
+        if (hoverTimer) {
+            clearTimeout(hoverTimer);
+            hoverTimer = null;
+        }
+    });
+}
+
+/**
+ * Unified tree node renderer (Fix #1 — replaces renderTreeItem + renderTreeItemForModal).
+ * @param {Object} node - Bookmark node from Chrome API.
+ * @param {{ defaultExpanded?: boolean }} [options]
+ *   defaultExpanded: true = sub-folders start open (used in folder modal)
+ */
+function renderTreeNode(node, options = {}) {
+    const defaultExpanded = Boolean(options.defaultExpanded);
+
     if (node.url) {
-        // Leaf
+        // --- Leaf (bookmark) ---
         const wrapper = document.createElement('div');
         wrapper.className = 'leaf-wrapper';
-
-        // Draggable props
         wrapper.setAttribute('draggable', 'true');
         wrapper.dataset.id = node.id;
-        wrapper.dataset.parentId = node.parentId; // Important for moving
+        wrapper.dataset.parentId = node.parentId;
         wrapper.dataset.type = 'bookmark';
 
         const a = document.createElement('a');
         a.className = 'leaf-node';
         a.href = node.url;
-        if (OPEN_IN_NEW_TAB) {
-            a.target = '_blank';
-        }
+        if (OPEN_IN_NEW_TAB) a.target = '_blank';
 
-        // Icon handling (CSP-compliant)
         const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 16);
-        a.appendChild(iconElement);
+        a.appendChild(createBookmarkIcon(iconData, 16));
 
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
@@ -1389,18 +1408,12 @@ function renderTreeItem(node) {
         a.appendChild(labelSpan);
 
         wrapper.appendChild(a);
-
-        // Action buttons (move & delete)
-        const actions = createBookmarkActions(node, wrapper);
-        wrapper.appendChild(actions);
-
+        wrapper.appendChild(createBookmarkActions(node, wrapper));
         return wrapper;
     } else {
-        // Sub-folder
+        // --- Sub-folder ---
         const wrapper = document.createElement('div');
         wrapper.className = 'sub-folder';
-
-        // Draggable props
         wrapper.setAttribute('draggable', 'true');
         wrapper.dataset.id = node.id;
         wrapper.dataset.parentId = node.parentId;
@@ -1408,66 +1421,42 @@ function renderTreeItem(node) {
 
         const header = document.createElement('div');
         header.className = 'sub-folder-header';
-
-        // Add folder icon if in theme mode, or just always add it for consistency?
-        // User asked to "replace all bookmark icons... directory and bookmarks"
-        // Let's use FOLDER_ICON_SVG
-        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
-
-        header.innerHTML = `${folderIcon} ${node.title}`;
+        header.innerHTML = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span> ${node.title}`;
+        // Default locked state: open for modal, closed for normal tree
+        header.dataset.isLocked = defaultExpanded ? 'true' : 'false';
 
         const childrenContainer = document.createElement('div');
-        childrenContainer.className = 'sub-folder-content hidden';
-        childrenContainer.dataset.parentId = node.id; // Mark container with parent ID for dropping into empty folders (future)
+        childrenContainer.className = 'sub-folder-content';
+        if (!defaultExpanded) childrenContainer.classList.add('hidden');
+        childrenContainer.dataset.parentId = node.id;
 
         if (node.children) {
             node.children.forEach(child => {
-                childrenContainer.appendChild(renderTreeItem(child));
+                childrenContainer.appendChild(renderTreeNode(child, options));
             });
         }
 
-        // Interactions
-        // State: 'isLocked' (persistent open) stored on wrapper or header dataset
-
+        // Click to toggle and lock
         header.addEventListener('click', (e) => {
             e.stopPropagation();
             const isHidden = childrenContainer.classList.contains('hidden');
-
             if (isHidden) {
-                // Open and Lock
                 childrenContainer.classList.remove('hidden');
                 header.dataset.isLocked = 'true';
             } else {
                 if (header.dataset.isLocked === 'true') {
-                    // Locked -> Unlock and Close
                     childrenContainer.classList.add('hidden');
                     header.dataset.isLocked = 'false';
                 } else {
-                    // Hover-Open (Not Locked) -> Lock it
                     header.dataset.isLocked = 'true';
-                    // Optional: Visual cue that it's locked?
                 }
             }
         });
 
-        // Auto-expand on hover with low-latency delay for smoother follow
-        let hoverTimer = null;
-        wrapper.addEventListener('mouseenter', () => {
-            if (HOVER_DELAY === 1100) return; // "Closed" setting
-            const effectiveDelay = Math.min(HOVER_DELAY, 40);
-            hoverTimer = setTimeout(() => {
-                childrenContainer.classList.remove('hidden');
-            }, effectiveDelay);
-        });
+        // Shared hover-expand logic (Fix #2)
+        bindSubFolderHoverExpand(wrapper, childrenContainer);
 
-        wrapper.addEventListener('mouseleave', () => {
-            if (hoverTimer) {
-                clearTimeout(hoverTimer);
-                hoverTimer = null;
-            }
-        });
-
-        // Store reference to collapse function for card-level collapse
+        // Expose collapse helper for parent card
         wrapper.collapseIfUnlocked = () => {
             if (header.dataset.isLocked !== 'true') {
                 childrenContainer.classList.add('hidden');
@@ -1478,6 +1467,11 @@ function renderTreeItem(node) {
         wrapper.appendChild(childrenContainer);
         return wrapper;
     }
+}
+
+// Backwards-compat shims so existing call-sites keep working
+function renderTreeItem(node) {
+    return renderTreeNode(node, { defaultExpanded: false });
 }
 
 // --- Bookmark Actions (Move & Delete) ---
@@ -1578,42 +1572,50 @@ function editBookmark(node, wrapperEl) {
     const urlInput = document.getElementById('edit-bookmark-url');
     const cancelBtn = document.getElementById('edit-bookmark-cancel');
     const saveBtn = document.getElementById('edit-bookmark-save');
+    const closeBtn = document.getElementById('edit-bookmark-close');
+
+    if (!dialog || !titleInput || !urlInput || !cancelBtn || !saveBtn) {
+        console.warn('Edit bookmark dialog elements missing.');
+        return;
+    }
 
     // Pre-fill with current values
     titleInput.value = node.title || '';
     urlInput.value = node.url || '';
+    titleInput.classList.remove('input-error');
+    urlInput.classList.remove('input-error');
 
     dialog.classList.remove('hidden');
 
     // Focus title input
-    setTimeout(() => titleInput.focus(), 100);
+    setTimeout(() => titleInput.focus(), 80);
 
-    // Clean up old listeners by replacing buttons
-    const newCancelBtn = cancelBtn.cloneNode(true);
-    const newSaveBtn = saveBtn.cloneNode(true);
-    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-    saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+    // Use AbortController to clean up all listeners at once (fixes #14)
+    const ac = new AbortController();
+    const { signal } = ac;
 
     const closeDialog = () => {
         dialog.classList.add('hidden');
+        ac.abort();
     };
 
-    newCancelBtn.addEventListener('click', closeDialog);
+    cancelBtn.addEventListener('click', closeDialog, { signal });
+    if (closeBtn) closeBtn.addEventListener('click', closeDialog, { signal });
 
-    newSaveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', () => {
         const newTitle = titleInput.value.trim();
         const newUrl = urlInput.value.trim();
 
         if (!newTitle) {
             titleInput.focus();
-            titleInput.style.borderColor = '#FF5F56';
-            setTimeout(() => titleInput.style.borderColor = '', 1500);
+            titleInput.classList.add('input-error');
+            setTimeout(() => titleInput.classList.remove('input-error'), 1500);
             return;
         }
         if (!newUrl) {
             urlInput.focus();
-            urlInput.style.borderColor = '#FF5F56';
-            setTimeout(() => urlInput.style.borderColor = '', 1500);
+            urlInput.classList.add('input-error');
+            setTimeout(() => urlInput.classList.remove('input-error'), 1500);
             return;
         }
 
@@ -1631,21 +1633,17 @@ function editBookmark(node, wrapperEl) {
                 console.error('Edit failed:', chrome.runtime.lastError.message);
                 return;
             }
-            console.log('Updated bookmark:', updated);
-            refreshBookmarkTreeCache();
-
-            // Update node object
+            // Update node object in-place
             if (changes.title) node.title = changes.title;
             if (changes.url) node.url = changes.url;
 
-            // Update DOM
+            // Update DOM without full re-render
             const labelEl = wrapperEl.querySelector('.bookmark-label');
             if (labelEl && changes.title) labelEl.textContent = changes.title;
 
             const linkEl = wrapperEl.querySelector('.leaf-node');
             if (linkEl && changes.url) {
                 linkEl.href = changes.url;
-                // Update favicon
                 const oldIcon = linkEl.querySelector('.bookmark-icon');
                 if (oldIcon) {
                     const iconData = getIconForBookmark(changes.url);
@@ -1654,33 +1652,32 @@ function editBookmark(node, wrapperEl) {
                 }
             }
 
+            refreshBookmarkTreeCache();
             closeDialog();
         });
-    });
+    }, { signal });
 
     // Enter key to save
     const enterHandler = (e) => {
         if (e.key === 'Enter' && !dialog.classList.contains('hidden')) {
             e.preventDefault();
-            newSaveBtn.click();
+            saveBtn.click();
         }
     };
-    titleInput.addEventListener('keydown', enterHandler);
-    urlInput.addEventListener('keydown', enterHandler);
+    titleInput.addEventListener('keydown', enterHandler, { signal });
+    urlInput.addEventListener('keydown', enterHandler, { signal });
 
     // Click overlay to cancel
     dialog.addEventListener('click', (e) => {
         if (e.target === dialog) closeDialog();
-    }, { once: true });
+    }, { signal });
 
     // ESC to cancel
-    const escHandler = (e) => {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !dialog.classList.contains('hidden')) {
             closeDialog();
-            document.removeEventListener('keydown', escHandler);
         }
-    };
-    document.addEventListener('keydown', escHandler);
+    }, { signal });
 }
 
 // --- Drag & Drop Logic ---
@@ -1806,120 +1803,9 @@ function showFolderModal(folderNode) {
     document.addEventListener('keydown', escHandler);
 }
 
-// Render tree item for modal (same logic but with auto-collapse on modal leave)
+// renderTreeItemForModal now delegates to the unified factory with defaultExpanded=true
 function renderTreeItemForModal(node) {
-    if (node.url) {
-        // Leaf
-        const wrapper = document.createElement('div');
-        wrapper.className = 'leaf-wrapper';
-
-        // Draggable props
-        wrapper.setAttribute('draggable', 'true');
-        wrapper.dataset.id = node.id;
-        wrapper.dataset.parentId = node.parentId;
-        wrapper.dataset.type = 'bookmark';
-
-        const a = document.createElement('a');
-        a.className = 'leaf-node';
-        a.href = node.url;
-        if (OPEN_IN_NEW_TAB) {
-            a.target = '_blank';
-        }
-
-        // Icon handling (CSP-compliant)
-        const iconData = getIconForBookmark(node.url);
-        const iconElement = createBookmarkIcon(iconData, 16);
-        a.appendChild(iconElement);
-
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'bookmark-label';
-        labelSpan.textContent = node.title;
-        labelSpan.title = node.title || '';
-        a.title = node.title || '';
-        a.appendChild(labelSpan);
-
-        wrapper.appendChild(a);
-
-        // Action buttons (move & delete)
-        const actions = createBookmarkActions(node, wrapper);
-        wrapper.appendChild(actions);
-
-        return wrapper;
-    } else {
-        // Sub-folder
-        const wrapper = document.createElement('div');
-        wrapper.className = 'sub-folder';
-
-        // Draggable props
-        wrapper.setAttribute('draggable', 'true');
-        wrapper.dataset.id = node.id;
-        wrapper.dataset.parentId = node.parentId;
-        wrapper.dataset.type = 'folder';
-
-        const header = document.createElement('div');
-        header.className = 'sub-folder-header';
-
-        const folderIcon = `<span class="folder-icon-inline">${FOLDER_ICON_SVG}</span>`;
-
-        header.innerHTML = `${folderIcon} ${node.title}`;
-        header.dataset.isLocked = 'true'; // Default open
-
-        const childrenContainer = document.createElement('div');
-        childrenContainer.className = 'sub-folder-content'; // Default expanded (removed hidden)
-        childrenContainer.dataset.parentId = node.id;
-
-        if (node.children) {
-            node.children.forEach(child => {
-                childrenContainer.appendChild(renderTreeItemForModal(child));
-            });
-        }
-
-        // Click to toggle and lock
-        header.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isHidden = childrenContainer.classList.contains('hidden');
-
-            if (isHidden) {
-                childrenContainer.classList.remove('hidden');
-                header.dataset.isLocked = 'true';
-            } else {
-                if (header.dataset.isLocked === 'true') {
-                    childrenContainer.classList.add('hidden');
-                    header.dataset.isLocked = 'false';
-                } else {
-                    header.dataset.isLocked = 'true';
-                }
-            }
-        });
-
-        // Auto-expand on hover with low-latency delay for smoother follow
-        let hoverTimer = null;
-        wrapper.addEventListener('mouseenter', () => {
-            if (HOVER_DELAY === 1100) return; // "Closed" setting
-            const effectiveDelay = Math.min(HOVER_DELAY, 40);
-            hoverTimer = setTimeout(() => {
-                childrenContainer.classList.remove('hidden');
-            }, effectiveDelay);
-        });
-
-        wrapper.addEventListener('mouseleave', () => {
-            if (hoverTimer) {
-                clearTimeout(hoverTimer);
-                hoverTimer = null;
-            }
-        });
-
-        // Collapse function for parent to call
-        wrapper.collapseIfUnlocked = () => {
-            if (header.dataset.isLocked !== 'true') {
-                childrenContainer.classList.add('hidden');
-            }
-        };
-
-        wrapper.appendChild(header);
-        wrapper.appendChild(childrenContainer);
-        return wrapper;
-    }
+    return renderTreeNode(node, { defaultExpanded: true });
 }
 
 // --- Search Logic ---

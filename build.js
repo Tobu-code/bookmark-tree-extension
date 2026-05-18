@@ -57,31 +57,49 @@ async function build() {
         }
     }
 
-    // 4. Obfuscate script.js
-    const scriptPath = path.join(rootDir, 'script.js');
-    if (fs.existsSync(scriptPath)) {
-        const scriptContent = await fs.readFile(scriptPath, 'utf8');
-        // 轻量混淆：保留基础保护，避免高强度变形带来的体积和运行时开销。
-        const obfuscationResult = JavaScriptObfuscator.obfuscate(scriptContent, {
-            compact: true,
-            controlFlowFlattening: false,
-            deadCodeInjection: false,
-            debugProtection: false,
-            disableConsoleOutput: true,
-            identifierNamesGenerator: 'hexadecimal',
-            log: false,
-            numbersToExpressions: false,
-            renameGlobals: false,
-            selfDefending: false,
-            simplify: true,
-            splitStrings: false,
-            stringArray: false,
-            unicodeEscapeSequence: false
-        });
-
-        await fs.writeFile(path.join(distDir, 'script.js'), obfuscationResult.getObfuscatedCode());
-        console.log('Obfuscated script.js');
+    // 4. Bundle or obfuscate script.js
+    // If src/ directory exists, concatenate module files in order; otherwise fall back to script.js
+    const srcDir = path.join(rootDir, 'src');
+    let scriptContent;
+    if (fs.existsSync(srcDir)) {
+        const srcFiles = fs.readdirSync(srcDir)
+            .filter(f => f.endsWith('.js'))
+            .sort(); // numeric prefix ensures correct order
+        const parts = await Promise.all(
+            srcFiles.map(f => fs.readFile(path.join(srcDir, f), 'utf8'))
+        );
+        scriptContent = parts.join('\n');
+        console.log(`Bundled ${srcFiles.length} modules from src/: ${srcFiles.join(', ')}`);
+    } else {
+        const scriptPath = path.join(rootDir, 'script.js');
+        if (!fs.existsSync(scriptPath)) {
+            console.error('Neither src/ directory nor script.js found!');
+            process.exit(1);
+        }
+        scriptContent = await fs.readFile(scriptPath, 'utf8');
+        console.log('Using script.js directly (no src/ directory found).');
     }
+
+    // Lightweight obfuscation — keeps basic protection without heavy transform overhead
+    const obfuscationResult = JavaScriptObfuscator.obfuscate(scriptContent, {
+        compact: true,
+        controlFlowFlattening: false,
+        deadCodeInjection: false,
+        debugProtection: false,
+        disableConsoleOutput: true,
+        identifierNamesGenerator: 'hexadecimal',
+        log: false,
+        numbersToExpressions: false,
+        renameGlobals: false,
+        selfDefending: false,
+        simplify: true,
+        splitStrings: false,
+        stringArray: false,
+        unicodeEscapeSequence: false
+    });
+
+    await fs.writeFile(path.join(distDir, 'script.js'), obfuscationResult.getObfuscatedCode());
+    console.log('Obfuscated script.js');
 
     // 5. Minify newtab.html
     const htmlPath = path.join(rootDir, 'newtab.html');

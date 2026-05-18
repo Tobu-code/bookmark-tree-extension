@@ -4184,6 +4184,90 @@ body.ai-sidebar-open #ai-sidebar-btn {
 }
 
 /* ============================================
+   Edit Bookmark Dialog
+   ============================================ */
+
+.edit-bookmark-content {
+    border-radius: 20px;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.26);
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg, rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    color: var(--modal-text);
+    padding: 28px 32px 24px;
+    width: 400px;
+    max-width: 92vw;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+:root:not([data-theme="dark"]) .edit-bookmark-content {
+    background: rgba(255, 255, 255, 0.97);
+}
+
+.edit-bookmark-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.edit-bookmark-title-label {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.edit-bookmark-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.edit-bookmark-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.edit-bookmark-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-subtle);
+    letter-spacing: 0.2px;
+}
+
+.edit-bookmark-input {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: color-mix(in srgb, var(--card-bg) 60%, transparent);
+    color: var(--text-color);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.edit-bookmark-input:focus {
+    border-color: color-mix(in srgb, var(--primary-color) 60%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 12%, transparent);
+}
+
+.edit-bookmark-input.input-error {
+    border-color: #e05c5c;
+    box-shadow: 0 0 0 3px rgba(224, 92, 92, 0.15);
+}
+
+.edit-bookmark-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* ============================================
    Confirm Dialog (Delete Confirmation)
    ============================================ */
 
