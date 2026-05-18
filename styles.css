@@ -5105,41 +5105,27 @@ body.pure-mode.search-active #pure-mode-btn {
 }
 
 /* ============================================
-   Pure Mode Memo (inline card, no popup)
+   Pure Mode Memo (transparent, floats on bg)
    ============================================ */
 
-/* Root wrapper — inline in document flow below search */
+/* Root wrapper — no card, pure transparent */
 #pure-memo {
     display: none;
     flex-direction: column;
     width: 720px;
     max-width: calc(100vw - 48px);
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(0, 0, 0, 0.07);
-    border-radius: 16px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    overflow: hidden;
-    transition: box-shadow 0.2s ease;
+    background: transparent;
+    overflow: visible;
 }
 
 body.pure-mode #pure-memo {
     display: flex;
 }
 
-/* Subtle shadow when there are items */
-#pure-memo.memo-has-items {
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
-}
-
-:root[data-theme="dark"] #pure-memo {
-    background: rgba(30, 30, 38, 0.92);
-    border-color: rgba(255, 255, 255, 0.08);
-}
-
-:root[data-theme="dark"] #pure-memo.memo-has-items {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.32);
-}
+/* No shadow states needed for transparent version */
+#pure-memo.memo-has-items {}
+:root[data-theme="dark"] #pure-memo {}
+:root[data-theme="dark"] #pure-memo.memo-has-items {}
 
 /* ── Item list ─────────────────────────────────── */
 .pure-memo-list {
@@ -5171,13 +5157,13 @@ body.pure-mode #pure-memo {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 18px;
+    padding: 5px 0;
     transition: background 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
     cursor: default;
 }
 
 .pure-memo-item:hover {
-    background: rgba(0, 0, 0, 0.025);
+    background: transparent;
 }
 
 :root[data-theme="dark"] .pure-memo-item:hover {
@@ -5210,18 +5196,19 @@ body.pure-mode #pure-memo {
     flex: 1;
     font-size: 13.5px;
     font-weight: 400;
-    color: var(--text-color);
+    color: rgba(255, 255, 255, 0.82);
     line-height: 1.45;
     word-break: break-word;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .pure-memo-item-time {
     font-size: 11px;
-    color: var(--text-color);
-    opacity: 0.28;
+    color: rgba(255, 255, 255, 0.38);
     white-space: nowrap;
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .pure-memo-item-del {
@@ -5234,21 +5221,21 @@ body.pure-mode #pure-memo {
     border: none;
     background: transparent;
     cursor: pointer;
-    color: var(--text-color);
+    color: rgba(255, 255, 255, 0.6);
     opacity: 0;
-    transition: opacity 0.15s ease, background 0.15s ease;
+    transition: opacity 0.15s ease, color 0.15s ease;
     flex-shrink: 0;
     outline: none;
 }
 
 .pure-memo-item:hover .pure-memo-item-del {
-    opacity: 0.28;
+    opacity: 0.45;
 }
 
 .pure-memo-item-del:hover {
     opacity: 1 !important;
-    background: rgba(255, 95, 86, 0.1);
     color: #FF5F56;
+    background: transparent;
 }
 
 /* ── Load more ─────────────────────────────────── */
@@ -5317,13 +5304,12 @@ body.pure-mode #pure-memo {
     gap: 0;
 }
 
-/* The blinking cursor bar */
+/* The blinking cursor bar — white on transparent bg */
 .pure-memo-cursor-blink {
     display: inline-block;
     width: 1.5px;
     height: 14px;
-    background: var(--text-color);
-    opacity: 0.35;
+    background: rgba(255, 255, 255, 0.55);
     border-radius: 1px;
     flex-shrink: 0;
     animation: memoCursorBlink 1.1s step-end infinite;
@@ -5333,28 +5319,44 @@ body.pure-mode #pure-memo {
     display: none;
 }
 
+/* Hint text after cursor — hidden when focused or has content */
+.pure-memo-input-hint {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+    user-select: none;
+    margin-left: 5px;
+    white-space: nowrap;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+.pure-memo-input-hint.hidden {
+    display: none;
+}
+
 @keyframes memoCursorBlink {
-    0%, 100% { opacity: 0.35; }
+    0%, 100% { opacity: 1; }
     50%       { opacity: 0; }
 }
 
-/* The actual input — invisible, native cursor only shows when focused */
+/* The actual input — invisible, floats on background */
 .pure-memo-input {
     flex: 1;
     border: none;
     background: transparent;
     font-size: 13.5px;
     font-weight: 400;
-    color: var(--text-color);
+    color: rgba(255, 255, 255, 0.82);
     outline: none;
     padding: 0;
     margin-left: 1px;
     line-height: 1.5;
     font-family: inherit;
-    caret-color: var(--primary-color, #ae5630);
+    caret-color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Placeholder is a space — keeps :placeholder-shown working without showing text */
 .pure-memo-input::placeholder {
     opacity: 0;
 }
@@ -5365,27 +5367,26 @@ body.pure-mode #pure-memo {
     cursor: pointer;
     font-size: 11.5px;
     font-weight: 500;
-    color: var(--text-color);
-    opacity: 0.28;
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
     padding: 3px 6px;
     border-radius: 5px;
-    transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+    transition: opacity 0.15s ease, color 0.15s ease;
     outline: none;
     white-space: nowrap;
     flex-shrink: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .pure-memo-clear-btn:hover {
-    opacity: 1;
-    color: #FF5F56;
-    background: rgba(255, 95, 86, 0.08);
+    color: #FF9090;
 }
 
 /* ── Checkbox (replaces dot) ───────────────────────── */
 .pure-memo-item-check {
     width: 15px;
     height: 15px;
-    border: 1.5px solid rgba(0, 0, 0, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
     border-radius: 3px;
     background: transparent;
     cursor: pointer;
@@ -5399,13 +5400,13 @@ body.pure-mode #pure-memo {
 }
 
 .pure-memo-item-check:hover {
-    border-color: var(--primary-color, #ae5630);
-    background: color-mix(in srgb, var(--primary-color, #ae5630) 8%, transparent);
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .pure-memo-item-check.is-checking {
-    background: var(--primary-color, #ae5630);
-    border-color: var(--primary-color, #ae5630);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Checkmark SVG inside */
@@ -5420,18 +5421,10 @@ body.pure-mode #pure-memo {
     opacity: 1;
 }
 
-:root[data-theme="dark"] .pure-memo-item-check {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-:root[data-theme="dark"] .pure-memo-item-check:hover {
-    border-color: var(--primary-color, #ae5630);
-}
-
 /* Strikethrough when completing */
 .pure-memo-item.is-completing .pure-memo-item-text {
     text-decoration: line-through;
-    opacity: 0.35;
+    opacity: 0.3;
     transition: opacity 0.2s ease;
 }
 

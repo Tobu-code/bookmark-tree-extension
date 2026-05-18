@@ -3914,17 +3914,24 @@ function initPureMemo() {
         return `${d.getMonth() + 1}月${d.getDate()}日`;
     }
 
-    // ── Cursor blink control ──────────────────────────────────
+    // ── Cursor blink + hint control ───────────────────────────
+    const inputHint = document.getElementById('pure-memo-input-hint');
+
+    function setGhostVisible(visible) {
+        if (cursorBlink) cursorBlink.classList.toggle('hidden', !visible);
+        if (inputHint)   inputHint.classList.toggle('hidden', !visible);
+    }
+
     if (cursorBlink) {
-        // Hide custom cursor when input is focused (native cursor takes over)
-        input.addEventListener('focus', () => cursorBlink.classList.add('hidden'));
-        // Show custom cursor only when input is empty and blurred
+        // Hide ghost when focused (native cursor takes over)
+        input.addEventListener('focus', () => setGhostVisible(false));
+        // Show ghost when blurred and empty
         input.addEventListener('blur', () => {
-            if (!input.value.trim()) cursorBlink.classList.remove('hidden');
+            if (!input.value.trim()) setGhostVisible(true);
         });
-        // Also hide when user has typed text
+        // Hide hint/cursor when typing, restore if cleared
         input.addEventListener('input', () => {
-            cursorBlink.classList.toggle('hidden', input.value.length > 0);
+            setGhostVisible(input.value.length === 0);
         });
     }
 
