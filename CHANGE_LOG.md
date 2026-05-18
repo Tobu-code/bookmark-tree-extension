@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-18 16:40:00]
+- **Type**: Design (Icon Redesign)
+- **Content**: 重新设计插件图标为高质感"书签树层级"风格。采用深海蓝渐变背景（#111827 → #1e2a4a），中心图形为三层书签层级结构（1-2-3 书签标志连线呈树形），以电光蓝青渐变（#38BDF8 → #818CF8）加霓虹发光效果渲染。整体视觉语言符合现代高端工具类扩展（Arc/Raycast 同款风格），替换旧版普通绿色卡通树图标。
+- **Impact**: `icons/icon16.png`、`icons/icon48.png`、`icons/icon128.png`、`icon.png`
+
 ## [2026-05-18 11:34:00]
 - **Type**: Refactor (Low Priority Optimizations #8/#12/#15/#17)
 - **Content**:
