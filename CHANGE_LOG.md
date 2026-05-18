@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-18 17:10:00]
+- **Type**: Refactor (Pure Mode Memo layout)
+- **Content**: 将备忘录从「弹出浮层」改为「内联卡片」布局。备忘列表和输入框直接展示在搜索框正下方，不再遮挡搜索框；添加一条备忘后输入框自动清空并保持 focus，光标就绪以供连续输入；有待办时卡片展示分割线+列表+输入行，无待办时仅显示输入行（外观与搜索框平级的轻量卡片）。
+- **Impact**: `newtab.html`（重构 `#pure-memo` 区块）、`script.js`（删除 openPanel/closePanel/updateTrigger/searchFocus 等浮层逻辑，简化为纯内联渲染）、`styles.css`（删除所有浮层弹出样式，替换为内联卡片样式）
+
 ## [2026-05-18 16:53:00]
 - **Type**: Feature (Pure Mode Memo)
 - **Content**: 在纯净模式下新增轻量备忘录功能。设计决策：1) 有待办时自动展开并按视口高度自适应显示条数（calcMemoInitialCount：可用高度/40px，区间 [3,8]）；无待办时折叠为淡显"记点什么..."入口；2) 条目无数量限制，采用分页渲染（MEMO_CHUNK_SIZE=15），避免大量数据一次性挂载 DOM；3) 清空操作复用已有 `showConfirmDialog`；4) 搜索框 focus 时自动收起面板；持久化使用 `chrome.storage.local`，key: `pure_memo_items`，数据结构 `{id, text, createdAt}`，新条目置顶。

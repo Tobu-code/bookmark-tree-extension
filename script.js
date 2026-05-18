@@ -3759,76 +3759,32 @@ function calcMemoInitialCount() {
 }
 
 /**
- * Initialize Pure Mode lightweight memo feature.
+ * Initialize Pure Mode lightweight memo feature (inline, no popup).
  */
 function initPureMemo() {
     const memoRoot     = document.getElementById('pure-memo');
-    const trigger      = document.getElementById('pure-memo-trigger');
-    const panel        = document.getElementById('pure-memo-panel');
     const list         = document.getElementById('pure-memo-list');
-    const countBadge   = document.getElementById('pure-memo-count-badge');
     const input        = document.getElementById('pure-memo-input');
     const submitBtn    = document.getElementById('pure-memo-submit-btn');
     const loadMoreWrap = document.getElementById('pure-memo-load-more-wrap');
     const loadMoreBtn  = document.getElementById('pure-memo-load-more-btn');
     const clearBtn     = document.getElementById('pure-memo-clear-btn');
-    const searchInput  = document.getElementById('search-input');
 
-    if (!memoRoot || !trigger || !panel) return;
+    if (!memoRoot || !list || !input) return;
 
-    let _items = [];           // full list, newest first
-    let _renderedCount = 0;    // how many DOM nodes currently rendered
-    let _isOpen = false;
+    let _items = [];        // full list, newest first
+    let _renderedCount = 0; // how many DOM nodes currently rendered
 
-    // ── Storage ─────────────────────────────────────────────
+    // ── Storage ──────────────────────────────────────────────
     async function loadItems() {
         const res = await storageGet([STORAGE_KEY_MEMO]);
         _items = Array.isArray(res[STORAGE_KEY_MEMO]) ? res[STORAGE_KEY_MEMO] : [];
-        updateTrigger();
-        // Auto-expand if items exist
-        if (_items.length > 0) {
-            _renderedCount = calcMemoInitialCount();
-            openPanel(false); // open without stealing focus
-        }
+        _renderedCount = calcMemoInitialCount();
+        renderList();
     }
 
     async function saveItems() {
         await storageSet({ [STORAGE_KEY_MEMO]: _items });
-    }
-
-    // ── Panel open / close ───────────────────────────────────
-    function openPanel(focusInput = true) {
-        if (_isOpen) return;
-        _isOpen = true;
-        panel.classList.add('is-open');
-        trigger.classList.add('panel-visible');
-        renderList();
-        if (focusInput) {
-            // Small delay so CSS transition doesn't fight focus
-            setTimeout(() => input && input.focus(), 180);
-        }
-    }
-
-    function closePanel() {
-        if (!_isOpen) return;
-        _isOpen = false;
-        panel.classList.remove('is-open');
-        trigger.classList.remove('panel-visible');
-    }
-
-    // ── Trigger state ────────────────────────────────────────
-    function updateTrigger() {
-        const n = _items.length;
-        if (n === 0) {
-            // No items → hide trigger entirely until user explicitly opens
-            memoRoot.classList.remove('has-items');
-            countBadge.textContent = '';
-            countBadge.classList.remove('visible');
-        } else {
-            memoRoot.classList.add('has-items');
-            countBadge.textContent = n;
-            countBadge.classList.add('visible');
-        }
     }
 
     // ── Render ───────────────────────────────────────────────
@@ -3841,11 +3797,13 @@ function initPureMemo() {
         list.appendChild(frag);
 
         // "Load more" button
-        const hasMore = _items.length > _renderedCount;
-        loadMoreWrap.classList.toggle('hidden', !hasMore);
+        loadMoreWrap.classList.toggle('hidden', _items.length <= _renderedCount);
 
-        // "Clear" button visibility
+        // "Clear" button — hide when empty
         clearBtn.style.visibility = _items.length === 0 ? 'hidden' : '';
+
+        // Card border only when there are items
+        memoRoot.classList.toggle('memo-has-items', _items.length > 0);
     }
 
     function buildItemEl(item) {
@@ -3855,7 +3813,6 @@ function initPureMemo() {
         el.dataset.id = item.id;
 
         const timeStr = formatMemoTime(item.createdAt);
-
         el.innerHTML = `
             <span class="pure-memo-item-dot" aria-hidden="true"></span>
             <span class="pure-memo-item-text">${escapeHtml(item.text)}</span>
@@ -3871,11 +3828,11 @@ function initPureMemo() {
             el.classList.add('is-removing');
             setTimeout(async () => {
                 _items = _items.filter(i => i.id !== item.id);
-                if (_renderedCount > _items.length) _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
+                if (_renderedCount > _items.length) {
+                    _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
+                }
                 await saveItems();
-                updateTrigger();
                 renderList();
-                if (_items.length === 0) closePanel();
             }, 150);
         });
 
@@ -3887,18 +3844,23 @@ function initPureMemo() {
         const text = input.value.trim();
         if (!text) return;
 
-        const newItem = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text, createdAt: Date.now() };
+        const newItem = {
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+            text,
+            createdAt: Date.now()
+        };
         _items.unshift(newItem);
 
-        // Ensure the new item is in the visible window
         if (_renderedCount < 1) _renderedCount = calcMemoInitialCount();
 
+        // Clear input and keep focus for continuous entry
         input.value = '';
+        input.focus();
+
         await saveItems();
-        updateTrigger();
         renderList();
 
-        // Entrance animation on the first item
+        // Entrance animation on the newest item
         const firstEl = list.firstElementChild;
         if (firstEl) {
             firstEl.classList.add('is-entering');
@@ -3906,7 +3868,7 @@ function initPureMemo() {
         }
     }
 
-    // ── Helpers ──────────────────────────────────────────────
+    // ── Time formatting ───────────────────────────────────────
     function formatMemoTime(ts) {
         const diff = Date.now() - ts;
         if (diff < 60000) return '刚刚';
@@ -3922,54 +3884,27 @@ function initPureMemo() {
         return `${d.getMonth() + 1}月${d.getDate()}日`;
     }
 
-    // ── Event Listeners ──────────────────────────────────────
-
-    // Trigger click → open panel with focus
-    trigger.addEventListener('click', () => {
-        if (_isOpen) closePanel();
-        else {
-            _renderedCount = calcMemoInitialCount();
-            openPanel(true);
-        }
-    });
-
-    // Click outside → close
-    document.addEventListener('click', (e) => {
-        if (_isOpen && !memoRoot.contains(e.target)) closePanel();
-    }, true);
-
-    // Search input focus → collapse memo
-    if (searchInput) {
-        searchInput.addEventListener('focus', () => { if (_isOpen) closePanel(); });
-    }
-
-    // Submit
+    // ── Event Listeners ───────────────────────────────────────
     submitBtn.addEventListener('click', addItem);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); addItem(); }
-        if (e.key === 'Escape') { e.preventDefault(); closePanel(); }
     });
 
-    // Load more (pagination)
     loadMoreBtn.addEventListener('click', () => {
         _renderedCount += MEMO_CHUNK_SIZE;
         renderList();
     });
 
-    // Clear all → reuse existing confirm dialog
     clearBtn.addEventListener('click', () => {
         if (_items.length === 0) return;
         showConfirmDialog('确定清空所有备忘？此操作无法撤销。', async () => {
             _items = [];
             _renderedCount = 0;
             await saveItems();
-            updateTrigger();
             renderList();
-            closePanel();
         });
     });
 
-    // Init
     loadItems();
 }
 
