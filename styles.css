@@ -5103,3 +5103,396 @@ body.pure-mode.search-active #pure-mode-btn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ============================================
+   Pure Mode Memo
+   ============================================ */
+
+/* Root wrapper — only meaningful inside pure mode */
+#pure-memo {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 720px;
+    max-width: calc(100vw - 48px);
+    position: relative;
+}
+
+body.pure-mode #pure-memo {
+    display: flex;
+}
+
+/* ── Trigger (collapsed state) ─────────────────── */
+.pure-memo-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+    opacity: 0.28;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    outline: none;
+    user-select: none;
+}
+
+.pure-memo-trigger:hover {
+    opacity: 0.7;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .pure-memo-trigger:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* When panel is open, trigger fades slightly */
+.pure-memo-trigger.panel-visible {
+    opacity: 0.5;
+}
+
+/* Hide trigger entirely when there are no items and panel is closed */
+#pure-memo:not(.has-items) .pure-memo-trigger:not(.panel-visible) {
+    opacity: 0.18;
+}
+
+/* Count badge */
+.pure-memo-count-badge {
+    display: none;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--primary-color, #ae5630);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+}
+
+.pure-memo-count-badge.visible {
+    display: inline-block;
+}
+
+/* ── Panel (expanded state) ────────────────────── */
+.pure-memo-panel {
+    position: absolute;
+    bottom: calc(100% + 10px);  /* float above trigger */
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+
+    /* Collapsed by default */
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.pure-memo-panel.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+:root[data-theme="dark"] .pure-memo-panel {
+    background: rgba(32, 32, 38, 0.94);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.36), 0 2px 10px rgba(0, 0, 0, 0.24);
+}
+
+/* ── Panel header ──────────────────────────────── */
+.pure-memo-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px 10px 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="dark"] .pure-memo-panel-header {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.pure-memo-panel-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.45;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.pure-memo-clear-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-subtle, rgba(0,0,0,0.4));
+    padding: 3px 8px;
+    border-radius: 6px;
+    transition: color 0.15s ease, background 0.15s ease;
+    outline: none;
+}
+
+.pure-memo-clear-btn:hover {
+    color: #FF5F56;
+    background: rgba(255, 95, 86, 0.08);
+}
+
+/* ── Item list ─────────────────────────────────── */
+.pure-memo-list {
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px 0;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.12) transparent;
+}
+
+.pure-memo-list::-webkit-scrollbar {
+    width: 4px;
+}
+.pure-memo-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+.pure-memo-list::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+    border-radius: 2px;
+}
+
+:root[data-theme="dark"] .pure-memo-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ── Single item ───────────────────────────────── */
+.pure-memo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    transition: background 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+    cursor: default;
+}
+
+.pure-memo-item:hover {
+    background: rgba(0, 0, 0, 0.025);
+}
+
+:root[data-theme="dark"] .pure-memo-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Entrance animation */
+.pure-memo-item.is-entering {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+/* (class removed by rAF — triggers re-render to default state) */
+
+/* Delete animation */
+.pure-memo-item.is-removing {
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.pure-memo-item-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--primary-color, #ae5630);
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.pure-memo-item-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 450;
+    color: var(--text-color);
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.pure-memo-item-time {
+    font-size: 11px;
+    color: var(--text-color);
+    opacity: 0.3;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.pure-memo-item-del {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--text-color);
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s ease;
+    flex-shrink: 0;
+    outline: none;
+}
+
+.pure-memo-item:hover .pure-memo-item-del {
+    opacity: 0.3;
+}
+
+.pure-memo-item-del:hover {
+    opacity: 1 !important;
+    background: rgba(255, 95, 86, 0.1);
+    color: #FF5F56;
+}
+
+/* ── Load more ─────────────────────────────────── */
+.pure-memo-load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 6px 18px 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="dark"] .pure-memo-load-more-wrap {
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+.pure-memo-load-more-btn {
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    color: var(--text-color);
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 20px;
+    cursor: pointer;
+    transition: opacity 0.15s ease, border-color 0.15s ease;
+    outline: none;
+}
+
+.pure-memo-load-more-btn:hover {
+    opacity: 0.9;
+    border-color: rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="dark"] .pure-memo-load-more-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+:root[data-theme="dark"] .pure-memo-load-more-btn:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Input row ─────────────────────────────────── */
+.pure-memo-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px 14px 18px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme="dark"] .pure-memo-input-row {
+    border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.pure-memo-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-color);
+    outline: none;
+    padding: 4px 0;
+    line-height: 1.5;
+    font-family: inherit;
+}
+
+.pure-memo-input::placeholder {
+    color: var(--text-color);
+    opacity: 0.3;
+}
+
+.pure-memo-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    flex-shrink: 0;
+    outline: none;
+    opacity: 0.5;
+}
+
+.pure-memo-submit-btn:hover {
+    background: var(--primary-color, #ae5630);
+    color: white;
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+:root[data-theme="dark"] .pure-memo-submit-btn {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Focus visible ─────────────────────────────── */
+.pure-memo-trigger:focus-visible,
+.pure-memo-clear-btn:focus-visible,
+.pure-memo-item-del:focus-visible,
+.pure-memo-load-more-btn:focus-visible,
+.pure-memo-submit-btn:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+}
+
+/* ── Reduced motion ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .pure-memo-panel,
+    .pure-memo-item {
+        transition: none !important;
+    }
+}
+
+/* ── Mobile ────────────────────────────────────── */
+@media (max-width: 640px) {
+    #pure-memo {
+        width: calc(100vw - 20px);
+        max-width: calc(100vw - 20px);
+    }
+
+    .pure-memo-panel {
+        border-radius: 14px;
+    }
+
+    .pure-memo-list {
+        max-height: 200px;
+    }
+}

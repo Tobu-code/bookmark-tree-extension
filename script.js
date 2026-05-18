@@ -659,6 +659,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     initPureTime();
     initGreeting();
     initPureShortcuts();
+    initPureMemo();
+
 
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
@@ -3738,3 +3740,236 @@ function initPureShortcuts() {
         footerHint.textContent = '按 Enter 搜索 · Tab 切换引擎';
     }
 }
+
+// ========================================
+// Pure Mode Memo
+// ========================================
+
+const STORAGE_KEY_MEMO = 'pure_memo_items';
+const MEMO_CHUNK_SIZE = 15;
+
+/**
+ * Calculate how many memo items to display based on available vertical space.
+ * Pure mode center block ≈ 420px (greeting + search + margins).
+ * Each item ≈ 40px. Max cap at 8 to avoid crowding.
+ */
+function calcMemoInitialCount() {
+    const availableH = Math.max(0, window.innerHeight - 480);
+    return Math.max(3, Math.min(8, Math.floor(availableH / 40)));
+}
+
+/**
+ * Initialize Pure Mode lightweight memo feature.
+ */
+function initPureMemo() {
+    const memoRoot     = document.getElementById('pure-memo');
+    const trigger      = document.getElementById('pure-memo-trigger');
+    const panel        = document.getElementById('pure-memo-panel');
+    const list         = document.getElementById('pure-memo-list');
+    const countBadge   = document.getElementById('pure-memo-count-badge');
+    const input        = document.getElementById('pure-memo-input');
+    const submitBtn    = document.getElementById('pure-memo-submit-btn');
+    const loadMoreWrap = document.getElementById('pure-memo-load-more-wrap');
+    const loadMoreBtn  = document.getElementById('pure-memo-load-more-btn');
+    const clearBtn     = document.getElementById('pure-memo-clear-btn');
+    const searchInput  = document.getElementById('search-input');
+
+    if (!memoRoot || !trigger || !panel) return;
+
+    let _items = [];           // full list, newest first
+    let _renderedCount = 0;    // how many DOM nodes currently rendered
+    let _isOpen = false;
+
+    // ── Storage ─────────────────────────────────────────────
+    async function loadItems() {
+        const res = await storageGet([STORAGE_KEY_MEMO]);
+        _items = Array.isArray(res[STORAGE_KEY_MEMO]) ? res[STORAGE_KEY_MEMO] : [];
+        updateTrigger();
+        // Auto-expand if items exist
+        if (_items.length > 0) {
+            _renderedCount = calcMemoInitialCount();
+            openPanel(false); // open without stealing focus
+        }
+    }
+
+    async function saveItems() {
+        await storageSet({ [STORAGE_KEY_MEMO]: _items });
+    }
+
+    // ── Panel open / close ───────────────────────────────────
+    function openPanel(focusInput = true) {
+        if (_isOpen) return;
+        _isOpen = true;
+        panel.classList.add('is-open');
+        trigger.classList.add('panel-visible');
+        renderList();
+        if (focusInput) {
+            // Small delay so CSS transition doesn't fight focus
+            setTimeout(() => input && input.focus(), 180);
+        }
+    }
+
+    function closePanel() {
+        if (!_isOpen) return;
+        _isOpen = false;
+        panel.classList.remove('is-open');
+        trigger.classList.remove('panel-visible');
+    }
+
+    // ── Trigger state ────────────────────────────────────────
+    function updateTrigger() {
+        const n = _items.length;
+        if (n === 0) {
+            // No items → hide trigger entirely until user explicitly opens
+            memoRoot.classList.remove('has-items');
+            countBadge.textContent = '';
+            countBadge.classList.remove('visible');
+        } else {
+            memoRoot.classList.add('has-items');
+            countBadge.textContent = n;
+            countBadge.classList.add('visible');
+        }
+    }
+
+    // ── Render ───────────────────────────────────────────────
+    function renderList() {
+        list.innerHTML = '';
+
+        const slice = _items.slice(0, _renderedCount);
+        const frag = document.createDocumentFragment();
+        slice.forEach(item => frag.appendChild(buildItemEl(item)));
+        list.appendChild(frag);
+
+        // "Load more" button
+        const hasMore = _items.length > _renderedCount;
+        loadMoreWrap.classList.toggle('hidden', !hasMore);
+
+        // "Clear" button visibility
+        clearBtn.style.visibility = _items.length === 0 ? 'hidden' : '';
+    }
+
+    function buildItemEl(item) {
+        const el = document.createElement('div');
+        el.className = 'pure-memo-item';
+        el.setAttribute('role', 'listitem');
+        el.dataset.id = item.id;
+
+        const timeStr = formatMemoTime(item.createdAt);
+
+        el.innerHTML = `
+            <span class="pure-memo-item-dot" aria-hidden="true"></span>
+            <span class="pure-memo-item-text">${escapeHtml(item.text)}</span>
+            <span class="pure-memo-item-time">${timeStr}</span>
+            <button class="pure-memo-item-del" type="button" aria-label="删除此备忘">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>`;
+
+        el.querySelector('.pure-memo-item-del').addEventListener('click', (e) => {
+            e.stopPropagation();
+            el.classList.add('is-removing');
+            setTimeout(async () => {
+                _items = _items.filter(i => i.id !== item.id);
+                if (_renderedCount > _items.length) _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
+                await saveItems();
+                updateTrigger();
+                renderList();
+                if (_items.length === 0) closePanel();
+            }, 150);
+        });
+
+        return el;
+    }
+
+    // ── Add item ─────────────────────────────────────────────
+    async function addItem() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        const newItem = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text, createdAt: Date.now() };
+        _items.unshift(newItem);
+
+        // Ensure the new item is in the visible window
+        if (_renderedCount < 1) _renderedCount = calcMemoInitialCount();
+
+        input.value = '';
+        await saveItems();
+        updateTrigger();
+        renderList();
+
+        // Entrance animation on the first item
+        const firstEl = list.firstElementChild;
+        if (firstEl) {
+            firstEl.classList.add('is-entering');
+            requestAnimationFrame(() => firstEl.classList.remove('is-entering'));
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────
+    function formatMemoTime(ts) {
+        const diff = Date.now() - ts;
+        if (diff < 60000) return '刚刚';
+        if (diff < 3600000) return `${Math.floor(diff / 60000)} 分钟前`;
+        const d = new Date(ts);
+        const today = new Date();
+        if (d.toDateString() === today.toDateString()) {
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        }
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        if (d.toDateString() === yesterday.toDateString()) return '昨天';
+        return `${d.getMonth() + 1}月${d.getDate()}日`;
+    }
+
+    // ── Event Listeners ──────────────────────────────────────
+
+    // Trigger click → open panel with focus
+    trigger.addEventListener('click', () => {
+        if (_isOpen) closePanel();
+        else {
+            _renderedCount = calcMemoInitialCount();
+            openPanel(true);
+        }
+    });
+
+    // Click outside → close
+    document.addEventListener('click', (e) => {
+        if (_isOpen && !memoRoot.contains(e.target)) closePanel();
+    }, true);
+
+    // Search input focus → collapse memo
+    if (searchInput) {
+        searchInput.addEventListener('focus', () => { if (_isOpen) closePanel(); });
+    }
+
+    // Submit
+    submitBtn.addEventListener('click', addItem);
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); addItem(); }
+        if (e.key === 'Escape') { e.preventDefault(); closePanel(); }
+    });
+
+    // Load more (pagination)
+    loadMoreBtn.addEventListener('click', () => {
+        _renderedCount += MEMO_CHUNK_SIZE;
+        renderList();
+    });
+
+    // Clear all → reuse existing confirm dialog
+    clearBtn.addEventListener('click', () => {
+        if (_items.length === 0) return;
+        showConfirmDialog('确定清空所有备忘？此操作无法撤销。', async () => {
+            _items = [];
+            _renderedCount = 0;
+            await saveItems();
+            updateTrigger();
+            renderList();
+            closePanel();
+        });
+    });
+
+    // Init
+    loadItems();
+}
+

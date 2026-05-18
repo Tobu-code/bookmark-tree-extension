@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-18 16:53:00]
+- **Type**: Feature (Pure Mode Memo)
+- **Content**: 在纯净模式下新增轻量备忘录功能。设计决策：1) 有待办时自动展开并按视口高度自适应显示条数（calcMemoInitialCount：可用高度/40px，区间 [3,8]）；无待办时折叠为淡显"记点什么..."入口；2) 条目无数量限制，采用分页渲染（MEMO_CHUNK_SIZE=15），避免大量数据一次性挂载 DOM；3) 清空操作复用已有 `showConfirmDialog`；4) 搜索框 focus 时自动收起面板；持久化使用 `chrome.storage.local`，key: `pure_memo_items`，数据结构 `{id, text, createdAt}`，新条目置顶。
+- **Impact**: `newtab.html`（新增 `#pure-memo` 区块）、`script.js`（新增 `initPureMemo`、`calcMemoInitialCount` 函数，`DOMContentLoaded` 中注册调用）、`styles.css`（新增约 280 行备忘录组件样式，含动画、深色模式、移动端适配）
+
 ## [2026-05-18 16:40:00]
 - **Type**: Design (Icon Redesign)
 - **Content**: 重新设计插件图标为高质感"书签树层级"风格。采用深海蓝渐变背景（#111827 → #1e2a4a），中心图形为三层书签层级结构（1-2-3 书签标志连线呈树形），以电光蓝青渐变（#38BDF8 → #818CF8）加霓虹发光效果渲染。整体视觉语言符合现代高端工具类扩展（Arc/Raycast 同款风格），替换旧版普通绿色卡通树图标。
