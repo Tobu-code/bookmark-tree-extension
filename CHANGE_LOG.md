@@ -1,5 +1,14 @@
 # Change Log
 
+## [2026-05-18 11:34:00]
+- **Type**: Refactor (Low Priority Optimizations #8/#12/#15/#17)
+- **Content**:
+  1. **Fix #8** — `renderBookmarksWithLayoutTransition` 从固定 220ms `setTimeout` 改为 `transitionend` 事件驱动移除 `layout-switching` class，动画时长与 CSS 完全同步，避免 CSS 改变后需手动同步 JS 延迟值的维护问题；保留 350ms fallback 防止 `transitionend` 不触发。
+  2. **Fix #12** — `preloadImage` 添加 5s 超时保护（`settled + clearTimeout` 模式），避免背景图加载失败/超慢时永久阻塞初始化流程；同时优化 `decode()` 调用为统一 `finish` 回调模式，消除原先 `.then(resolve).catch(()=>resolve())` 的重复代码。
+  3. **Fix #15** — 新增通用 `debounce(fn, delayMs)` 工具函数；替换 `initSearch` 中的手动 `clearTimeout/setTimeout` 防抖模式，统一搜索防抖为 120ms 并删除冗余的 `inputDebounceTimer` 变量。
+  4. **Fix #17** — 为 `createBookmarkActions` 中的编辑/删除按钮添加完整的 `aria-label`（包含书签名）、`role="group"` 操作区域语义、`type="button"` 防止表单提交误触、SVG 装饰元素添加 `aria-hidden="true"`，提升屏幕阅读器可访问性。
+- **Impact**: `script.js`
+
 ## [2026-05-18 11:31:00]
 - **Type**: Refactor (Medium Priority Optimizations #3/#4/#5/#6/#7/#10/#11/#16)
 - **Content**:

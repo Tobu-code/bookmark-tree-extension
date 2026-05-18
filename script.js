@@ -180,6 +180,15 @@ async function bgIdbRemove() {
     } catch { /* ignore */ }
 }
 
+// --- Utility: generic debounce (Fix #15) ---
+function debounce(fn, delayMs) {
+    let timer = null;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delayMs);
+    };
+}
+
 function applyPureModeState(enabled) {
     PURE_MODE_ENABLED = Boolean(enabled);
     document.body.classList.toggle('pure-mode', PURE_MODE_ENABLED);
@@ -612,15 +621,28 @@ function renderBookmarksWithLayoutTransition() {
 
     // Restart class for repeated rapid toggles.
     body.classList.remove('layout-switching');
-    void body.offsetWidth;
+    void body.offsetWidth; // force reflow to restart animation
     body.classList.add('layout-switching');
 
     renderBookmarksFromCache();
 
-    LAYOUT_SWITCH_TIMER = setTimeout(() => {
-        body.classList.remove('layout-switching');
-        LAYOUT_SWITCH_TIMER = null;
-    }, 220);
+    // Fix #8: use transitionend instead of fixed setTimeout for robustness
+    const removeClass = () => body.classList.remove('layout-switching');
+
+    let guard = null;
+    const onEnd = (e) => {
+        if (e && e.target !== body) return; // ignore child transitions
+        clearTimeout(guard);
+        body.removeEventListener('transitionend', onEnd);
+        removeClass();
+    };
+
+    body.addEventListener('transitionend', onEnd, { once: true });
+    // Fallback: ensure class is removed even if transitionend doesn't fire
+    guard = setTimeout(() => {
+        body.removeEventListener('transitionend', onEnd);
+        removeClass();
+    }, 350);
 }
 
 function cleanupLegacyFrequencyStorage() {
@@ -767,26 +789,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-function preloadImage(url) {
+// Fix #12: Preload with timeout protection — prevents blocking init on slow/broken images
+function preloadImage(url, timeoutMs = 5000) {
     return new Promise((resolve) => {
+        if (!url) { resolve(); return; }
+
+        let settled = false;
+        const finish = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(guard);
+            resolve();
+        };
+
+        // Timeout guard to unblock init if image hangs
+        const guard = setTimeout(finish, timeoutMs);
+
         const img = new Image();
         img.src = url;
 
-        // Use decode() if available to ensure image is ready for display
+        // Use decode() if available to ensure image is GPU-ready before display
         if ('decode' in img) {
-            img.decode()
-                .then(resolve)
-                .catch(() => {
-                    // Fallback if decode fails (e.g. invalid image data)
-                    resolve();
-                });
+            img.decode().then(finish).catch(finish);
         } else {
-            // Fallback for older browsers
             if (img.complete) {
-                resolve();
+                finish();
             } else {
-                img.onload = () => resolve();
-                img.onerror = () => resolve();
+                img.onload = finish;
+                img.onerror = finish;
             }
         }
     });
@@ -1550,12 +1580,16 @@ function renderTreeItem(node) {
 function createBookmarkActions(node, wrapperEl) {
     const actions = document.createElement('div');
     actions.className = 'bookmark-actions';
+    actions.setAttribute('role', 'group');
+    actions.setAttribute('aria-label', `${node.title || '书签'} 操作`);
 
-    // Edit button
+    // Edit button (Fix #17: aria-label with bookmark name)
     const editBtn = document.createElement('button');
     editBtn.className = 'bookmark-action-btn edit-btn';
     editBtn.title = '编辑书签';
-    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    editBtn.setAttribute('aria-label', `编辑 ${node.title || '书签'}`);
+    editBtn.type = 'button';
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
     editBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1563,11 +1597,13 @@ function createBookmarkActions(node, wrapperEl) {
     });
     actions.appendChild(editBtn);
 
-    // Delete button
+    // Delete button (Fix #17: aria-label with bookmark name)
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'bookmark-action-btn delete-btn';
     deleteBtn.title = '删除书签';
-    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    deleteBtn.setAttribute('aria-label', `删除 ${node.title || '书签'}`);
+    deleteBtn.type = 'button';
+    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     deleteBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1900,7 +1936,6 @@ function initSearch() {
     let currentUrl = 'https://www.google.com/search?q=';
     let selectedIndex = -1;
     let activeMatches = [];
-    let inputDebounceTimer = null;
 
     // Show/hide picker with overlay
     function showPicker() {
@@ -2263,12 +2298,10 @@ function initSearch() {
         }
     });
 
-    input.addEventListener('input', (e) => {
-        clearTimeout(inputDebounceTimer);
-        inputDebounceTimer = setTimeout(() => {
-            renderSuggestions(input.value);
-        }, 100);
-    });
+    // Use shared debounce utility (Fix #15)
+    input.addEventListener('input', debounce((e) => {
+        renderSuggestions(input.value);
+    }, 120));
 }
 
 // --- Settings Logic (Cleaned) ---
