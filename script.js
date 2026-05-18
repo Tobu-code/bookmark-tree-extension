@@ -76,26 +76,50 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
 
-// --- State and Constants ---
-let dragSrcEl = null;
-let OPEN_IN_NEW_TAB = true;
-let CURRENT_ICON_STYLE = 'default';
-let CURRENT_BG_IMAGE = null;
-let CURRENT_BG_BLUR = 0;
-let CURRENT_CONTAINER_BLUR = 0;
-let HOVER_DELAY = 100;
-let LAYOUT_MODE = 'tree';
-let PURE_MODE_ENABLED = false;
-let HIDDEN_FOLDERS = [];
-let SHOW_HIDDEN_FOLDERS = false;
-let FLAT_DIR_EXPANDED = false;
-let TREE_EXPANDED_FOLDERS = new Set(['1']);
-let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
-let BOOKMARK_TREE_CACHE = null;
-let BOOKMARK_SEARCH_INDEX = [];
-let BOOKMARK_SEARCH_BUCKETS = new Map();
-let AI_SIDEBAR_CONTROLLER = null;
-let LAYOUT_SWITCH_TIMER = null;
+// --- State (Fix #10: consolidated into AppState for clarity) ---
+const AppState = {
+    dragSrcEl: null,
+    openInNewTab: true,
+    iconStyle: 'default',
+    bgImage: null,
+    bgBlur: 0,
+    containerBlur: 0,
+    hoverDelay: 100,
+    layoutMode: 'tree',
+    pureModeEnabled: false,
+    hiddenFolders: [],
+    showHiddenFolders: false,
+    flatDirExpanded: false,
+    treeExpandedFolders: new Set(['1']),
+    dragHighlightedElements: new Set(),
+    bookmarkTreeCache: null,
+    bookmarkSearchIndex: [],
+    bookmarkSearchBuckets: new Map(),
+    aiSidebarController: null,
+    layoutSwitchTimer: null,
+};
+
+// Backwards-compat aliases — existing code continues to work without changes
+let dragSrcEl = AppState.dragSrcEl;
+let OPEN_IN_NEW_TAB = AppState.openInNewTab;
+let CURRENT_ICON_STYLE = AppState.iconStyle;
+let CURRENT_BG_IMAGE = AppState.bgImage;
+let CURRENT_BG_BLUR = AppState.bgBlur;
+let CURRENT_CONTAINER_BLUR = AppState.containerBlur;
+let HOVER_DELAY = AppState.hoverDelay;
+let LAYOUT_MODE = AppState.layoutMode;
+let PURE_MODE_ENABLED = AppState.pureModeEnabled;
+let HIDDEN_FOLDERS = AppState.hiddenFolders;
+let SHOW_HIDDEN_FOLDERS = AppState.showHiddenFolders;
+let FLAT_DIR_EXPANDED = AppState.flatDirExpanded;
+let TREE_EXPANDED_FOLDERS = AppState.treeExpandedFolders;
+let DRAG_HIGHLIGHTED_ELEMENTS = AppState.dragHighlightedElements;
+let BOOKMARK_TREE_CACHE = AppState.bookmarkTreeCache;
+let BOOKMARK_SEARCH_INDEX = AppState.bookmarkSearchIndex;
+let BOOKMARK_SEARCH_BUCKETS = AppState.bookmarkSearchBuckets;
+let AI_SIDEBAR_CONTROLLER = AppState.aiSidebarController;
+let LAYOUT_SWITCH_TIMER = AppState.layoutSwitchTimer;
+
 
 function storageGet(keys) {
     return new Promise((resolve) => chrome.storage.local.get(keys, resolve));
@@ -103,6 +127,57 @@ function storageGet(keys) {
 
 function storageSet(payload) {
     return new Promise((resolve) => chrome.storage.local.set(payload, resolve));
+}
+
+// --- IndexedDB helpers for background image (Fix #16: bypass 8MB chrome.storage limit) ---
+const BG_IDB_DB_NAME = 'bookmark_tree_bg';
+const BG_IDB_STORE = 'bg_store';
+const BG_IDB_KEY = 'bg_image';
+
+function openBgDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(BG_IDB_DB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+            e.target.result.createObjectStore(BG_IDB_STORE);
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+    });
+}
+
+async function bgIdbGet() {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readonly');
+            const req = tx.objectStore(BG_IDB_STORE).get(BG_IDB_KEY);
+            req.onsuccess = (e) => resolve(e.target.result ?? null);
+            req.onerror = () => resolve(null);
+        });
+    } catch { return null; }
+}
+
+async function bgIdbSet(dataUrl) {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readwrite');
+            tx.objectStore(BG_IDB_STORE).put(dataUrl, BG_IDB_KEY);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = (e) => reject(e.target.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function bgIdbRemove() {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readwrite');
+            tx.objectStore(BG_IDB_STORE).delete(BG_IDB_KEY);
+            tx.oncomplete = () => resolve();
+        });
+    } catch { /* ignore */ }
 }
 
 function applyPureModeState(enabled) {
@@ -585,7 +660,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
 
-    if (settings[STORAGE_KEY_BG_IMAGE]) CURRENT_BG_IMAGE = settings[STORAGE_KEY_BG_IMAGE];
+    // Fix #16: Load background image from IndexedDB (with legacy migration from chrome.storage.local)
+    let bgFromIdb = await bgIdbGet();
+    if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
+        // Migrate from legacy chrome.storage.local → IndexedDB
+        bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
+        bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
+    }
+    if (bgFromIdb) CURRENT_BG_IMAGE = bgFromIdb;
 
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
@@ -1157,11 +1239,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             renderBookmarks(bookmarkTreeNodes);
         });
         
-        toggleHiddenBtn.style.padding = '10px';
-        toggleHiddenBtn.style.cursor = 'pointer';
-        toggleHiddenBtn.style.textAlign = 'center';
-        toggleHiddenBtn.style.color = 'var(--text-subtle)';
-        toggleHiddenBtn.style.fontSize = '12px';
         dirScroll.appendChild(toggleHiddenBtn);
     }
 }
@@ -1239,7 +1316,8 @@ function createBookmarkIcon(iconData, size = 16) {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
-        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
+        img.width = size;
+        img.height = size;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
@@ -1248,7 +1326,6 @@ function createBookmarkIcon(iconData, size = 16) {
             try {
                 const hostname = new URL(url).hostname.replace('www.', '');
                 letter = hostname.charAt(0).toUpperCase();
-                // Generate a consistent color from the hostname
                 let hash = 0;
                 for (let i = 0; i < hostname.length; i++) {
                     hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
@@ -1260,20 +1337,17 @@ function createBookmarkIcon(iconData, size = 16) {
             avatar.className = 'bookmark-icon-fallback';
             avatar.style.backgroundColor = bgColor;
             avatar.textContent = letter;
-            avatar.style.marginRight = '8px';
             this.replaceWith(avatar);
         });
         return img;
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
-        span.className = 'bookmark-icon';
-        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.className = 'bookmark-icon bookmark-icon--svg';
         span.innerHTML = iconData.value;
         return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
-        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
         span.textContent = iconData.value;
         return span;
     }
@@ -1282,8 +1356,7 @@ function createBookmarkIcon(iconData, size = 16) {
 function createSimpleTile(node) {
     // For single bookmarks at the top level, we make a mini card
     const card = document.createElement('div');
-    card.className = 'bookmark-card';
-    card.style.height = 'auto'; // Auto height for single items
+    card.className = 'bookmark-card bookmark-card--auto';
     card.setAttribute('draggable', 'true');
     card.dataset.id = node.id;
 
@@ -1298,12 +1371,11 @@ function createSimpleTile(node) {
     wrapper.className = 'leaf-wrapper';
 
     const leaf = document.createElement('a');
-    leaf.className = 'leaf-node';
+    leaf.className = 'leaf-node leaf-node--no-padding';
     leaf.href = node.url;
     if (OPEN_IN_NEW_TAB) {
         leaf.target = '_blank';
     }
-    leaf.style.padding = '0';
 
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
@@ -1311,8 +1383,7 @@ function createSimpleTile(node) {
     leaf.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
-    labelSpan.className = 'bookmark-label';
-    labelSpan.style.fontWeight = 'bold';
+    labelSpan.className = 'bookmark-label bookmark-label--bold';
     labelSpan.textContent = node.title;
     labelSpan.title = node.title || '';
     leaf.title = node.title || '';
@@ -1555,13 +1626,12 @@ function deleteBookmark(node, wrapperEl) {
                 console.error('Delete failed:', chrome.runtime.lastError.message);
                 return;
             }
-            console.log('Deleted bookmark:', node.id);
-            refreshBookmarkTreeCache();
-            // Animate out
+            // Animate out first, then refresh cache — avoids double-render (Fix #7)
             wrapperEl.classList.add('bookmark-fade-out');
             wrapperEl.addEventListener('animationend', () => {
                 wrapperEl.remove();
-            });
+                refreshBookmarkTreeCache();
+            }, { once: true });
         });
     });
 }
@@ -2332,14 +2402,18 @@ function initSettingsUI(settings) {
         blurControls.style.opacity = hasImage ? '1' : '0.5';
     }
 
-    function saveBackgroundImage(dataUrl, onDone) {
+    // Fix #16: Save to IndexedDB instead of chrome.storage.local to bypass 8MB limit
+    async function saveBackgroundImage(dataUrl) {
         CURRENT_BG_IMAGE = dataUrl;
         updateBlurControlsState();
         applyBackground();
-        saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
-            const hasError = !!chrome.runtime.lastError;
-            if (onDone) onDone(!hasError);
-        });
+        try {
+            await bgIdbSet(dataUrl);
+            return true;
+        } catch (e) {
+            console.error('BG save failed:', e);
+            return false;
+        }
     }
 
     function compressImageDataUrl(sourceDataUrl, options = {}) {
@@ -2388,15 +2462,13 @@ function initSettingsUI(settings) {
             const normalizedMime = (file.type || '').toLowerCase() === 'image/jpg' ? 'image/jpeg' : (file.type || '').toLowerCase();
             const preferredMime = ['image/jpeg', 'image/webp'].includes(normalizedMime) ? normalizedMime : 'image/webp';
 
-            const trySave = (candidateDataUrl) => new Promise((resolve) => {
-                saveBackgroundImage(candidateDataUrl, resolve);
-            });
+            const trySave = async (candidateDataUrl) => saveBackgroundImage(candidateDataUrl);
 
             // Always try original first to maximize fidelity.
             const originalOk = await trySave(dataUrl);
             if (originalOk) return;
 
-            // Adaptive fallback: gradually reduce size only when needed by storage constraints.
+            // Adaptive fallback: gradually reduce size only when needed.
             const compressionPresets = [
                 { maxDim: 6144, quality: 0.98, mimeType: preferredMime },
                 { maxDim: 5120, quality: 0.96, mimeType: preferredMime },
@@ -2415,19 +2487,20 @@ function initSettingsUI(settings) {
                 }
             }
 
-            console.error('Failed to save image:', chrome.runtime.lastError);
-            alert('图片保存失败（存储限制导致）。可尝试更小图片或降低分辨率后重试。');
+            console.error('All image save attempts failed');
+            alert('图片保存失败。可尝试更小图片或降低分辨率后重试。');
         };
         reader.readAsDataURL(file);
     });
 
-    // Clear Background
-    clearBgBtn.addEventListener('click', () => {
+    // Clear Background (Fix #16: also clear from IndexedDB)
+    clearBgBtn.addEventListener('click', async () => {
         CURRENT_BG_IMAGE = null;
-        bgUpload.value = ''; // Reset input
+        bgUpload.value = '';
         updateBlurControlsState();
         applyBackground();
-        chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
+        await bgIdbRemove();
+        chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE); // clean up legacy
     });
 
     // Slider labels
@@ -3492,6 +3565,35 @@ function initAiSidebar() {
 // Ambient Time Display - Claude Style
 // ========================================
 
+// --- Shared time/greeting utilities (Fix #3: dedup GREETINGS/QUOTES) ---
+const DAILY_QUOTES = Object.freeze([
+    '慢慢来，比较快',
+    '保持好奇心，探索未知',
+    '做喜欢的事，见想见的人',
+    '用心感受每一个当下',
+    '简单生活，认真做事',
+    '把每一天过成想要的样子',
+    '保持热爱，奔赴山海',
+    '今日事，今日毕'
+]);
+
+function getTimePrefix(hour = new Date().getHours()) {
+    if (hour < 5) return '夜深了';
+    if (hour < 9) return '早上好';
+    if (hour < 12) return '上午好';
+    if (hour < 14) return '中午好';
+    if (hour < 18) return '下午好';
+    if (hour < 22) return '晚上好';
+    return '夜深了';
+}
+
+function getDailyGreeting() {
+    const dayOfYear = Math.floor(
+        (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+    );
+    return `${getTimePrefix()}，${DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length]}`;
+}
+
 /**
  * Initialize ambient time display and idle detection
  */
@@ -3500,49 +3602,24 @@ function initAmbientTime() {
     if (!timeContainer) return;
 
     let idleTimer;
-    const idleDelay = 3000; // 3 seconds
+    const idleDelay = 3000;
 
-    // Greeting quotes pool
-    const GREETINGS = [
-        '慢慢来，比较快',
-        '保持好奇心，探索未知',
-        '做喜欢的事，见想见的人',
-        '用心感受每一个当下',
-        '简单生活，认真做事',
-        '把每一天过成想要的样子',
-        '保持热爱，奔赴山海',
-        '今日事，今日毕'
-    ];
+    // Build static DOM once — only update textContent on tick (Fix #5)
+    const clockEl = document.createElement('span');
+    clockEl.className = 'ambient-time-clock';
+    const infoGroup = document.createElement('div');
+    infoGroup.className = 'ambient-time-info-group';
+    const dateEl = document.createElement('span');
+    dateEl.className = 'ambient-time-date';
+    const greetingEl = document.createElement('span');
+    greetingEl.className = 'ambient-time-greeting';
+    infoGroup.appendChild(dateEl);
+    infoGroup.appendChild(greetingEl);
+    timeContainer.appendChild(clockEl);
+    timeContainer.appendChild(infoGroup);
 
-    function getGreeting() {
-        const hour = new Date().getHours();
-        let prefix = '你好';
-        if (hour < 5) prefix = '夜深了';
-        else if (hour < 9) prefix = '早上好';
-        else if (hour < 12) prefix = '上午好';
-        else if (hour < 14) prefix = '中午好';
-        else if (hour < 18) prefix = '下午好';
-        else if (hour < 22) prefix = '晚上好';
-        else prefix = '夜深了';
-        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-        const quote = GREETINGS[dayOfYear % GREETINGS.length];
-        return `${prefix}，${quote}`;
-    }
+    const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
 
-    function resetIdleTimer() {
-        // When active, reduce presence
-        timeContainer.classList.remove('visible');
-        timeContainer.classList.add('dimmed');
-
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-            // When idle, show clearly (as restrained background hint)
-            timeContainer.classList.remove('dimmed');
-            timeContainer.classList.add('visible');
-        }, idleDelay);
-    }
-
-    // Update time every minute
     function updateAmbientTime() {
         const now = new Date();
         const year = now.getFullYear();
@@ -3550,39 +3627,42 @@ function initAmbientTime() {
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-        const weekday = weekdays[now.getDay()];
+        const weekday = WEEKDAYS_SHORT[now.getDay()];
 
-        timeContainer.innerHTML = `
-            <span class="ambient-time-clock">${hours}:${minutes}</span>
-            <div class="ambient-time-info-group">
-                <span class="ambient-time-date">${year}年${month}月${day}日 · 星期${weekday}</span>
-                <span class="ambient-time-greeting">${getGreeting()}</span>
-            </div>
-        `;
+        // textContent-only update: no DOM rebuild, no layout thrash (Fix #5)
+        clockEl.textContent = `${hours}:${minutes}`;
+        dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
+        greetingEl.textContent = getDailyGreeting();
 
-        // Schedule next update at the start of the next minute
+        // Precise next-minute scheduling (Fix #6 applied to ambient clock)
         const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
         setTimeout(updateAmbientTime, msUntilNextMinute);
     }
 
-    // Listen for interactions to handle visibility
+    function resetIdleTimer() {
+        timeContainer.classList.remove('visible');
+        timeContainer.classList.add('dimmed');
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            timeContainer.classList.remove('dimmed');
+            timeContainer.classList.add('visible');
+        }, idleDelay);
+    }
+
     window.addEventListener('mousemove', resetIdleTimer);
     window.addEventListener('keydown', resetIdleTimer);
     window.addEventListener('click', resetIdleTimer);
     window.addEventListener('scroll', resetIdleTimer);
 
-    // Initial update
     updateAmbientTime();
 
-    // Initial state setup after delay
     idleTimer = setTimeout(() => {
         timeContainer.classList.add('visible');
     }, idleDelay);
 }
 
 /**
- * Initialize time display for Pure Mode
+ * Initialize time display for Pure Mode (Fix #6: precise setTimeout scheduling)
  */
 function initPureTime() {
     const timeDisplay = document.querySelector('.pure-time-display');
@@ -3598,43 +3678,22 @@ function initPureTime() {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         timeDisplay.textContent = `${weekday} · ${month}月${day}日 ${hours}:${minutes}`;
+
+        // Precise scheduling: fire exactly at the next minute boundary
+        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+        setTimeout(updateTime, msUntilNextMinute);
     }
 
     updateTime();
-    setInterval(updateTime, 60000);
 }
 
 /**
- * Initialize greeting text based on time of day
+ * Initialize greeting text based on time of day (Fix #3: uses shared getDailyGreeting)
  */
 function initGreeting() {
     const greeting = document.querySelector('.pure-greeting-text');
     if (!greeting) return;
-
-    const QUOTES = [
-        '慢慢来，比较快',
-        '保持好奇心，探索未知',
-        '做喜欢的事，见想见的人',
-        '用心感受每一个当下',
-        '简单生活，认真做事',
-        '把每一天过成想要的样子',
-        '保持热爱，奔赴山海',
-        '今日事，今日毕'
-    ];
-
-    const hour = new Date().getHours();
-    let prefix = '你好';
-    if (hour < 5) prefix = '夜深了';
-    else if (hour < 9) prefix = '早上好';
-    else if (hour < 12) prefix = '上午好';
-    else if (hour < 14) prefix = '中午好';
-    else if (hour < 18) prefix = '下午好';
-    else if (hour < 22) prefix = '晚上好';
-    else prefix = '夜深了';
-
-    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-    const quote = QUOTES[dayOfYear % QUOTES.length];
-    greeting.textContent = `${prefix}，${quote}`;
+    greeting.textContent = getDailyGreeting();
 }
 
 /**

@@ -109,34 +109,57 @@
     scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
 }
 
-/* Dark Theme overrides via data-attribute - r4.chat Dark Mode */
+/* ============================================================
+   Dark Theme — shared token block (Fix #11: dedup vars)
+   Applies to: explicit [data-theme="dark"] AND system dark mode
+   when user hasn't forced light theme.
+   ============================================================ */
+:root[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary-color: #D69785;
+        --text-color: #F2F0E9;
+        --text-secondary: #C5C2BD;
+        --bg-overlay: rgba(26, 26, 26, 0.85);
+        --card-bg: #2C2C2C;
+        --card-hover: #2a303a;
+        --border-color: rgba(255, 255, 255, 0.12);
+        --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
+        --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
+        --modal-bg: #1f232b;
+        --modal-text: #F2F0E9;
+        --glow-color: rgba(245, 166, 122, 0.25);
+        --glow-soft: rgba(245, 166, 122, 0.1);
+        --glass-bg: rgba(31, 35, 43, 0.88);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --highlight-top: rgba(255, 255, 255, 0.04);
+        --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
+        --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
+        --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
+        --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
+        --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
+        --nav-item-hover: rgba(255, 255, 255, 0.055);
+        --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
+        --nav-item-active-border: rgba(245, 166, 122, 0.28);
+        --nav-icon-surface: rgba(245, 166, 122, 0.11);
+    }
+}
+
+/* Explicit dark override (data-attribute) — also covers vars not in @media block */
 :root[data-theme="dark"] {
-    /* Core Brand */
     --primary-color: #D69785;
-    /* Softer terracotta for dark mode */
     --text-color: #F2F0E9;
-    /* Off-white for primary text */
     --text-secondary: #C5C2BD;
-    /* Brighter grey for better readability */
-
     --bg-overlay: rgba(26, 26, 26, 0.85);
-    /* Deep soft gray main background */
     --card-bg: #2C2C2C;
-    /* Slate card background */
     --card-hover: #2a303a;
-    /* Hover state */
     --border-color: rgba(255, 255, 255, 0.12);
-    /* Warm-tinted borders */
-
-    /* Enhanced Shadows & Effects */
     --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
     --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-    /* New: Glow effect */
     --modal-bg: #1f232b;
     --modal-text: #F2F0E9;
-
-    /* New: Glass & Glow Variables */
     --glow-color: rgba(245, 166, 122, 0.25);
     --glow-soft: rgba(245, 166, 122, 0.1);
     --glass-bg: rgba(31, 35, 43, 0.88);
@@ -166,28 +189,8 @@
         0 0 20px var(--glow-soft, rgba(217, 119, 87, 0.15));
 }
 
-/* System Dark Theme (only if no data-theme is set) */
+/* System Dark Theme — additional non-variable rules */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --primary-color: #D69785;
-        --text-color: #F2F0E9;
-        --text-secondary: #C5C2BD;
-        --bg-overlay: rgba(26, 26, 26, 0.85);
-        --card-bg: #2C2C2C;
-        --card-hover: #2a303a;
-        --border-color: rgba(255, 255, 255, 0.12);
-        --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-        --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-        --modal-bg: #1f232b;
-        --modal-text: #F2F0E9;
-        --glow-color: rgba(245, 166, 122, 0.25);
-        --glow-soft: rgba(245, 166, 122, 0.1);
-        --glass-bg: rgba(31, 35, 43, 0.88);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --highlight-top: rgba(255, 255, 255, 0.04);
-    }
-
     /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
     :root:not([data-theme="light"]) #background-layer {
         background-color: #1A1523;
@@ -1626,6 +1629,39 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex-shrink: 0;
     vertical-align: middle;
     text-transform: uppercase;
+}
+
+/* Fix #4 — Utility classes to replace inline styles in JS */
+.toggle-hidden-btn {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text-subtle);
+    font-size: 12px;
+}
+
+.bookmark-card--auto {
+    height: auto;
+}
+
+.leaf-node--no-padding {
+    padding: 0;
+}
+
+.bookmark-label--bold {
+    font-weight: 700;
+}
+
+.bookmark-icon {
+    flex-shrink: 0;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.bookmark-icon--svg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Horizontal Top-Level Items (Cards) - Claude Style Enhanced */

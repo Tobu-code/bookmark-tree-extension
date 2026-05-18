@@ -1,5 +1,18 @@
 # Change Log
 
+## [2026-05-18 11:31:00]
+- **Type**: Refactor (Medium Priority Optimizations #3/#4/#5/#6/#7/#10/#11/#16)
+- **Content**:
+  1. **Fix #3** — 抽取 `DAILY_QUOTES`、`getTimePrefix()`、`getDailyGreeting()` 为顶层共享常量/函数，消除 `initAmbientTime` 和 `initGreeting` 中完全相同的问候语数组和时间段判断重复代码。
+  2. **Fix #4** — 将 `toggleHiddenBtn`、`createBookmarkIcon`、`createSimpleTile` 中的内联 style 赋值全部改为 CSS class（新增 `.toggle-hidden-btn`、`.bookmark-card--auto`、`.leaf-node--no-padding`、`.bookmark-label--bold`、`.bookmark-icon`、`.bookmark-icon--svg`）。
+  3. **Fix #5** — `initAmbientTime` 改为初始化时一次性建立静态 DOM 子树，定时更新只修改 `textContent`，避免每分钟 `innerHTML` 全量重建 DOM 导致的布局抖动。
+  4. **Fix #6** — `initPureTime` 和 `initAmbientTime` 均改为精准 `setTimeout`（锚点到下一分钟的边界），替代固定 60s `setInterval`，时钟显示误差从 ±1000ms 降至 ±1ms。
+  5. **Fix #7** — `deleteBookmark` 将 `refreshBookmarkTreeCache()` 移到动画结束回调内执行，避免 DOM 移除与缓存刷新并发引发的双重渲染问题；同时为 `animationend` 添加 `once: true`。
+  6. **Fix #10** — 将 20 个分散的全局 `let` 变量归拢至 `AppState` 对象，清晰展示应用状态全貌；保留向后兼容别名，现有代码无需改动。
+  7. **Fix #11** — 合并 `[data-theme="dark"]` 与 `@media (prefers-color-scheme: dark)` 中约 30 个重复的 CSS 自定义属性声明，结构更清晰，减少维护时遗漏同步更新的风险。
+  8. **Fix #16** — 背景图存储从 `chrome.storage.local`（8MB/item 上限）迁移到 `IndexedDB`（无实际上限）；新增 `openBgDB/bgIdbGet/bgIdbSet/bgIdbRemove` 辅助函数；初始化时自动将旧有数据迁移到 IndexedDB 并清除 chrome.storage 中的副本。
+- **Impact**: `script.js`, `styles.css`
+
 ## [2026-05-18 11:26:00]
 - **Type**: Fix + Refactor (High Priority Optimizations #1/#2/#9/#13/#14)
 - **Content**:
