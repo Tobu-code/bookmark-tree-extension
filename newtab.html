@@ -70,6 +70,25 @@
                 </div>
             </div>
 
+            <!-- Pure Mode Memo (inline below search) -->
+            <div id="pure-memo">
+                <div id="pure-memo-list" class="pure-memo-list" role="list" aria-label="备忘列表"></div>
+                <div id="pure-memo-load-more-wrap" class="pure-memo-load-more-wrap hidden">
+                    <button id="pure-memo-load-more-btn" type="button" class="pure-memo-load-more-btn">显示更多</button>
+                </div>
+                <div class="pure-memo-input-row">
+                    <!-- Ghost input: only a blinking cursor is visible -->
+                    <div class="pure-memo-ghost-wrap" id="pure-memo-ghost-wrap">
+                        <span class="pure-memo-cursor-blink" id="pure-memo-cursor-blink" aria-hidden="true"></span>
+                        <span class="pure-memo-input-hint" id="pure-memo-input-hint" aria-hidden="true">随手记一条...</span>
+                        <input type="text" id="pure-memo-input" class="pure-memo-input"
+                               maxlength="500" autocomplete="off" aria-label="输入备忘内容"
+                               placeholder=" ">
+                    </div>
+                    <button id="pure-memo-clear-btn" class="pure-memo-clear-btn" type="button" aria-label="清空所有备忘">清空</button>
+                </div>
+            </div>
+
             <div class="pure-footer-hint">按 ↩ 搜索 · Tab 切换引擎</div>
         </div>
 

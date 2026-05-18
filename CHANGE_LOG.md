@@ -1,5 +1,20 @@
 # Change Log
 
+## [2026-05-18 17:15:00]
+- **Type**: Refactor (Pure Mode Memo UX)
+- **Content**: 1) 输入区改为「幽灵光标」模式：移除所有可见输入框边框/背景，只保留 1.5px 跳动光标 (`step-end` 1.1s 动画)，focus 时原生光标接管，失焦且为空时自动恢复跳动光标；2) 待办条目前圆点改为可交互 checkbox：勾选时 checkbox 填充品牌色 + 打钩 SVG 出现 + 文字删除线，320ms 后条目淡出删除；保留右侧 ✕ 快速删除按钮。
+- **Impact**: `newtab.html`（重构 input row 为 ghost-wrap + cursor-blink span）、`script.js`（buildItemEl 改用 checkbox，新增 cursor blink 控制逻辑）、`styles.css`（新增 ghost input/cursor blink/checkbox/is-completing 样式，删除 submit-btn）
+
+## [2026-05-18 17:10:00]
+- **Type**: Refactor (Pure Mode Memo layout)
+- **Content**: 将备忘录从「弹出浮层」改为「内联卡片」布局。备忘列表和输入框直接展示在搜索框正下方，不再遮挡搜索框；添加一条备忘后输入框自动清空并保持 focus，光标就绪以供连续输入；有待办时卡片展示分割线+列表+输入行，无待办时仅显示输入行（外观与搜索框平级的轻量卡片）。
+- **Impact**: `newtab.html`（重构 `#pure-memo` 区块）、`script.js`（删除 openPanel/closePanel/updateTrigger/searchFocus 等浮层逻辑，简化为纯内联渲染）、`styles.css`（删除所有浮层弹出样式，替换为内联卡片样式）
+
+## [2026-05-18 16:53:00]
+- **Type**: Feature (Pure Mode Memo)
+- **Content**: 在纯净模式下新增轻量备忘录功能。设计决策：1) 有待办时自动展开并按视口高度自适应显示条数（calcMemoInitialCount：可用高度/40px，区间 [3,8]）；无待办时折叠为淡显"记点什么..."入口；2) 条目无数量限制，采用分页渲染（MEMO_CHUNK_SIZE=15），避免大量数据一次性挂载 DOM；3) 清空操作复用已有 `showConfirmDialog`；4) 搜索框 focus 时自动收起面板；持久化使用 `chrome.storage.local`，key: `pure_memo_items`，数据结构 `{id, text, createdAt}`，新条目置顶。
+- **Impact**: `newtab.html`（新增 `#pure-memo` 区块）、`script.js`（新增 `initPureMemo`、`calcMemoInitialCount` 函数，`DOMContentLoaded` 中注册调用）、`styles.css`（新增约 280 行备忘录组件样式，含动画、深色模式、移动端适配）
+
 ## [2026-05-18 16:40:00]
 - **Type**: Design (Icon Redesign)
 - **Content**: 重新设计插件图标为高质感"书签树层级"风格。采用深海蓝渐变背景（#111827 → #1e2a4a），中心图形为三层书签层级结构（1-2-3 书签标志连线呈树形），以电光蓝青渐变（#38BDF8 → #818CF8）加霓虹发光效果渲染。整体视觉语言符合现代高端工具类扩展（Arc/Raycast 同款风格），替换旧版普通绿色卡通树图标。
