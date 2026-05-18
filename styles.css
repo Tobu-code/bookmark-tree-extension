@@ -5307,6 +5307,38 @@ body.pure-mode #pure-memo {
     flex-shrink: 0;
 }
 
+/* ── Ghost input + blinking cursor ────────────────── */
+.pure-memo-ghost-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    cursor: text;
+    min-height: 24px;
+    gap: 0;
+}
+
+/* The blinking cursor bar */
+.pure-memo-cursor-blink {
+    display: inline-block;
+    width: 1.5px;
+    height: 14px;
+    background: var(--text-color);
+    opacity: 0.35;
+    border-radius: 1px;
+    flex-shrink: 0;
+    animation: memoCursorBlink 1.1s step-end infinite;
+}
+
+.pure-memo-cursor-blink.hidden {
+    display: none;
+}
+
+@keyframes memoCursorBlink {
+    0%, 100% { opacity: 0.35; }
+    50%       { opacity: 0; }
+}
+
+/* The actual input — invisible, native cursor only shows when focused */
 .pure-memo-input {
     flex: 1;
     border: none;
@@ -5316,13 +5348,15 @@ body.pure-mode #pure-memo {
     color: var(--text-color);
     outline: none;
     padding: 0;
+    margin-left: 1px;
     line-height: 1.5;
     font-family: inherit;
+    caret-color: var(--primary-color, #ae5630);
 }
 
+/* Placeholder is a space — keeps :placeholder-shown working without showing text */
 .pure-memo-input::placeholder {
-    color: var(--text-color);
-    opacity: 0.28;
+    opacity: 0;
 }
 
 .pure-memo-clear-btn {
@@ -5347,39 +5381,65 @@ body.pure-mode #pure-memo {
     background: rgba(255, 95, 86, 0.08);
 }
 
-.pure-memo-submit-btn {
+/* ── Checkbox (replaces dot) ───────────────────────── */
+.pure-memo-item-check {
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
-    border: none;
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--text-color);
-    opacity: 0.4;
-    cursor: pointer;
-    transition: background 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
-    flex-shrink: 0;
     outline: none;
+    padding: 0;
+    transition: border-color 0.18s ease, background 0.18s ease;
 }
 
-.pure-memo-submit-btn:hover {
+.pure-memo-item-check:hover {
+    border-color: var(--primary-color, #ae5630);
+    background: color-mix(in srgb, var(--primary-color, #ae5630) 8%, transparent);
+}
+
+.pure-memo-item-check.is-checking {
     background: var(--primary-color, #ae5630);
-    color: white;
-    opacity: 1;
-    transform: scale(1.06);
+    border-color: var(--primary-color, #ae5630);
 }
 
-:root[data-theme="dark"] .pure-memo-submit-btn {
-    background: rgba(255, 255, 255, 0.08);
+/* Checkmark SVG inside */
+.memo-check-svg {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    stroke: white;
+    flex-shrink: 0;
+}
+
+.pure-memo-item-check.is-checking .memo-check-svg {
+    opacity: 1;
+}
+
+:root[data-theme="dark"] .pure-memo-item-check {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="dark"] .pure-memo-item-check:hover {
+    border-color: var(--primary-color, #ae5630);
+}
+
+/* Strikethrough when completing */
+.pure-memo-item.is-completing .pure-memo-item-text {
+    text-decoration: line-through;
+    opacity: 0.35;
+    transition: opacity 0.2s ease;
 }
 
 /* ── Focus visible ─────────────────────────────── */
+.pure-memo-item-check:focus-visible,
 .pure-memo-item-del:focus-visible,
 .pure-memo-load-more-btn:focus-visible,
-.pure-memo-clear-btn:focus-visible,
-.pure-memo-submit-btn:focus-visible {
+.pure-memo-clear-btn:focus-visible {
     outline: var(--focus-outline);
     outline-offset: 2px;
     box-shadow: var(--focus-ring);

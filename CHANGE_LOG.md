@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-18 17:15:00]
+- **Type**: Refactor (Pure Mode Memo UX)
+- **Content**: 1) 输入区改为「幽灵光标」模式：移除所有可见输入框边框/背景，只保留 1.5px 跳动光标 (`step-end` 1.1s 动画)，focus 时原生光标接管，失焦且为空时自动恢复跳动光标；2) 待办条目前圆点改为可交互 checkbox：勾选时 checkbox 填充品牌色 + 打钩 SVG 出现 + 文字删除线，320ms 后条目淡出删除；保留右侧 ✕ 快速删除按钮。
+- **Impact**: `newtab.html`（重构 input row 为 ghost-wrap + cursor-blink span）、`script.js`（buildItemEl 改用 checkbox，新增 cursor blink 控制逻辑）、`styles.css`（新增 ghost input/cursor blink/checkbox/is-completing 样式，删除 submit-btn）
+
 ## [2026-05-18 17:10:00]
 - **Type**: Refactor (Pure Mode Memo layout)
 - **Content**: 将备忘录从「弹出浮层」改为「内联卡片」布局。备忘列表和输入框直接展示在搜索框正下方，不再遮挡搜索框；添加一条备忘后输入框自动清空并保持 focus，光标就绪以供连续输入；有待办时卡片展示分割线+列表+输入行，无待办时仅显示输入行（外观与搜索框平级的轻量卡片）。

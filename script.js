@@ -3759,13 +3759,15 @@ function calcMemoInitialCount() {
 }
 
 /**
+/**
  * Initialize Pure Mode lightweight memo feature (inline, no popup).
  */
 function initPureMemo() {
     const memoRoot     = document.getElementById('pure-memo');
     const list         = document.getElementById('pure-memo-list');
     const input        = document.getElementById('pure-memo-input');
-    const submitBtn    = document.getElementById('pure-memo-submit-btn');
+    const ghostWrap    = document.getElementById('pure-memo-ghost-wrap');
+    const cursorBlink  = document.getElementById('pure-memo-cursor-blink');
     const loadMoreWrap = document.getElementById('pure-memo-load-more-wrap');
     const loadMoreBtn  = document.getElementById('pure-memo-load-more-btn');
     const clearBtn     = document.getElementById('pure-memo-clear-btn');
@@ -3814,15 +3816,43 @@ function initPureMemo() {
 
         const timeStr = formatMemoTime(item.createdAt);
         el.innerHTML = `
-            <span class="pure-memo-item-dot" aria-hidden="true"></span>
+            <button class="pure-memo-item-check" type="button" aria-label="完成并删除此备忘">
+                <svg class="memo-check-svg" viewBox="0 0 10 8" width="10" height="8" fill="none"
+                     stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="1 4 3.5 6.5 9 1"/>
+                </svg>
+            </button>
             <span class="pure-memo-item-text">${escapeHtml(item.text)}</span>
             <span class="pure-memo-item-time">${timeStr}</span>
             <button class="pure-memo-item-del" type="button" aria-label="删除此备忘">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
                     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </button>`;
 
+        // Checkbox: check animation → delete
+        el.querySelector('.pure-memo-item-check').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const checkBtn = e.currentTarget;
+            // 1. show checkmark + strikethrough
+            checkBtn.classList.add('is-checking');
+            el.classList.add('is-completing');
+            // 2. fade out item
+            setTimeout(() => {
+                el.classList.add('is-removing');
+                // 3. remove from data
+                setTimeout(async () => {
+                    _items = _items.filter(i => i.id !== item.id);
+                    if (_renderedCount > _items.length) {
+                        _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
+                    }
+                    await saveItems();
+                    renderList();
+                }, 220);
+            }, 320);
+        });
+
+        // X button: immediate delete
         el.querySelector('.pure-memo-item-del').addEventListener('click', (e) => {
             e.stopPropagation();
             el.classList.add('is-removing');
@@ -3833,7 +3863,7 @@ function initPureMemo() {
                 }
                 await saveItems();
                 renderList();
-            }, 150);
+            }, 180);
         });
 
         return el;
@@ -3853,14 +3883,14 @@ function initPureMemo() {
 
         if (_renderedCount < 1) _renderedCount = calcMemoInitialCount();
 
-        // Clear input and keep focus for continuous entry
+        // Clear input, keep focus for continuous entry
         input.value = '';
         input.focus();
 
         await saveItems();
         renderList();
 
-        // Entrance animation on the newest item
+        // Entrance animation on newest item
         const firstEl = list.firstElementChild;
         if (firstEl) {
             firstEl.classList.add('is-entering');
@@ -3884,8 +3914,26 @@ function initPureMemo() {
         return `${d.getMonth() + 1}月${d.getDate()}日`;
     }
 
+    // ── Cursor blink control ──────────────────────────────────
+    if (cursorBlink) {
+        // Hide custom cursor when input is focused (native cursor takes over)
+        input.addEventListener('focus', () => cursorBlink.classList.add('hidden'));
+        // Show custom cursor only when input is empty and blurred
+        input.addEventListener('blur', () => {
+            if (!input.value.trim()) cursorBlink.classList.remove('hidden');
+        });
+        // Also hide when user has typed text
+        input.addEventListener('input', () => {
+            cursorBlink.classList.toggle('hidden', input.value.length > 0);
+        });
+    }
+
+    // Clicking ghost wrap area focuses the input
+    if (ghostWrap) {
+        ghostWrap.addEventListener('click', () => input.focus());
+    }
+
     // ── Event Listeners ───────────────────────────────────────
-    submitBtn.addEventListener('click', addItem);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); addItem(); }
     });
@@ -3907,4 +3955,3 @@ function initPureMemo() {
 
     loadItems();
 }
-
