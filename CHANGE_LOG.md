@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 16:45:00]
+- **Type**: Design (Skeuomorphic UI 拟物风格实验)
+- **Content**: 将整体 UI 从 Glassmorphism 透明磨砂风格改造为拟物质感设计：1) 设计 Token 全面替换（皮革棕/羊皮纸/古铜金配色体系）；2) 主容器改造为皮质笔记本外观（皮革渐变表面 + 虚线缝线 + 立体凸起光影）；3) 搜索栏改为凹陷内嵌金属镶边输入槽；4) 文件夹条目增加立体凸起高光标签页效果；5) 设置按钮改造为金属旋钮（径向高光 + 环形边框 + 按压凹陷反馈）；6) 暗色主题适配为黑色皮革 + 拉丝金属配色。纯 CSS 变更，无 JS/HTML 改动。
+- **Impact**: `styles.css`
+
 ## [2026-05-20 16:13:00]
 - **Type**: Fix (全站点裸域审计加固)
 - **Content**: 全面审计所有内置 AI 站点的权限与 DNR 规则覆盖：1) 在 `manifest.json` 中为 ChatGPT、通义千问、Kimi 补充裸域 `host_permissions`（`*://chatgpt.com/*`、`*://chat.qwen.ai/*`、`*://kimi.moonshot.cn/*`），消除 `*://*.domain/*` 模式不匹配裸域的权限盲区；2) 在 `rules.json` 中新增规则 ID 21（`*://kimi.moonshot.cn/*`），修复 Kimi 静态 DNR 规则完全无法命中裸域的缺陷，消除冷启动时序竞争导致的偶发加载失败风险。

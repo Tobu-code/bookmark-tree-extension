@@ -2,29 +2,40 @@
 
 
 :root {
-    /* r4.chat Light Mode */
-    --primary-color: #CD9A8B;
-    /* Soft Terracotta / Dusty Rose */
-    --text-color: #1a1a18;
-    /* Deep Charcoal Black */
-    --text-secondary: #6d675f;
-    /* Medium Grey */
-    --bg-overlay: rgba(250, 249, 246, 0.85);
-    /* Warmer, softer off-white overlay */
-    --card-bg: #FFFFFF;
-    /* Pure White Cards */
-    --card-hover: #f8f3eb;
-    /* Subtle Beige Hover */
-    --border-color: rgba(110, 78, 53, 0.18);
-    --shadow-sm: 0 4px 12px rgba(42, 30, 20, 0.06);
-    --shadow-md: 0 18px 44px rgba(40, 30, 20, 0.12);
-    /* Specific Claude shadow */
-    --modal-bg: #FFFFFF;
-    --modal-text: #1a1a18;
+    /* ======== Skeuomorphic Light Mode — Warm Leather & Paper ======== */
+    --primary-color: #8B6914;
+    /* Antique Brass / Lock Clasp Gold */
+    --text-color: #2C1E0F;
+    /* Dark Walnut */
+    --text-secondary: #7A6B57;
+    /* Weathered Bronze */
+    --bg-overlay: rgba(215, 195, 165, 0.92);
+    /* Parchment overlay */
+    --card-bg: #F5ECD7;
+    /* Aged Parchment */
+    --card-hover: #EDE3C8;
+    /* Pressed Parchment */
+    --border-color: rgba(92, 64, 32, 0.40);
+    --shadow-sm: 0 2px 4px rgba(60, 40, 15, 0.18), 0 1px 2px rgba(60, 40, 15, 0.12);
+    --shadow-md: 0 8px 24px rgba(50, 30, 10, 0.22), 0 4px 8px rgba(50, 30, 10, 0.14);
+    --modal-bg: #F0E6D0;
+    --modal-text: #2C1E0F;
 
-    /* Added for Modal Readability */
-    --glass-bg: rgba(255, 253, 250, 0.92);
-    --glass-border: rgba(110, 78, 53, 0.14);
+    /* Material surfaces */
+    --glass-bg: #EDE3CB;
+    --glass-border: rgba(92, 64, 32, 0.28);
+    --leather-surface: linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%);
+    --leather-dark: linear-gradient(175deg, #A8946C 0%, #9A8660 100%);
+    --paper-texture: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(92, 64, 32, 0.03) 28px,
+        rgba(92, 64, 32, 0.03) 29px
+    );
+    --metal-highlight: linear-gradient(180deg, rgba(255,248,230,0.7) 0%, rgba(255,248,230,0) 50%);
+    --stitch-color: rgba(92, 64, 32, 0.25);
+
     --flat-pane-header-height: 52px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 40px;
@@ -34,17 +45,17 @@
     --floating-actions-safe-bottom: calc(var(--floating-actions-offset-bottom) + env(safe-area-inset-bottom, 0px));
     --floating-actions-stack-height: calc(var(--floating-actions-size) * 2 + var(--floating-actions-gap));
 
-    /* Motion tokens (quality pass) */
-    --motion-fast: 150ms;
-    --motion-medium: 240ms;
-    --motion-slow: 360ms;
-    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
-    --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
-    --elev-shadow-1: 0 6px 16px rgba(28, 21, 14, 0.09);
-    --elev-shadow-2: 0 12px 28px rgba(28, 21, 14, 0.13);
-    --elev-shadow-3: 0 18px 40px rgba(28, 21, 14, 0.16);
-    --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
-    --focus-outline: 2px solid color-mix(in srgb, var(--primary-color) 82%, white);
+    /* Motion tokens — slightly more weighted for physical feel */
+    --motion-fast: 180ms;
+    --motion-medium: 280ms;
+    --motion-slow: 400ms;
+    --ease-standard: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --ease-emphasized: cubic-bezier(0.22, 0.68, 0, 1.1);
+    --elev-shadow-1: 0 3px 8px rgba(50, 30, 10, 0.16), 0 1px 3px rgba(50, 30, 10, 0.10);
+    --elev-shadow-2: 0 8px 20px rgba(50, 30, 10, 0.20), 0 3px 6px rgba(50, 30, 10, 0.12);
+    --elev-shadow-3: 0 14px 32px rgba(50, 30, 10, 0.24), 0 4px 10px rgba(50, 30, 10, 0.14);
+    --focus-ring: 0 0 0 3px rgba(139, 105, 20, 0.18);
+    --focus-outline: 2px solid rgba(139, 105, 20, 0.6);
 
     /* Typography tokens */
     --font-size-title: 17px;
@@ -53,16 +64,16 @@
     --font-weight-bold: 600;
     --font-size-caption: 12px;
     --font-size-micro: 10px;
-    --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
-    --text-subtle: color-mix(in srgb, var(--text-secondary) 72%, var(--text-color) 28%);
-    --nav-item-hover: rgba(255, 253, 249, 0.58);
-    --nav-item-active: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(248, 235, 220, 0.78));
-    --nav-item-active-border: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
-    --nav-icon-surface: color-mix(in srgb, var(--primary-color) 9%, white 91%);
+    --text-muted: color-mix(in srgb, var(--text-secondary) 80%, var(--text-color) 20%);
+    --text-subtle: color-mix(in srgb, var(--text-secondary) 65%, var(--text-color) 35%);
+    --nav-item-hover: rgba(196, 176, 136, 0.45);
+    --nav-item-active: linear-gradient(180deg, #E8DCC0 0%, #DDD0B2 100%);
+    --nav-item-active-border: rgba(139, 105, 20, 0.30);
+    --nav-icon-surface: rgba(139, 105, 20, 0.10);
 
     /* Responsive layout tokens */
     --container-padding: 28px;
-    --container-radius: 28px;
+    --container-radius: 16px;
     --container-min-h: 680px;
     --clock-size: 72px;
     --search-min-w: 560px;
@@ -148,32 +159,37 @@
 
 /* Explicit dark override (data-attribute) — also covers vars not in @media block */
 :root[data-theme="dark"] {
-    --primary-color: #D69785;
-    --text-color: #F2F0E9;
-    --text-secondary: #C5C2BD;
-    --bg-overlay: rgba(26, 26, 26, 0.85);
-    --card-bg: #2C2C2C;
-    --card-hover: #2a303a;
-    --border-color: rgba(255, 255, 255, 0.12);
-    --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-    --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-    --modal-bg: #1f232b;
-    --modal-text: #F2F0E9;
-    --glow-color: rgba(245, 166, 122, 0.25);
-    --glow-soft: rgba(245, 166, 122, 0.1);
-    --glass-bg: rgba(31, 35, 43, 0.88);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --highlight-top: rgba(255, 255, 255, 0.04);
-    --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
-    --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
-    --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
-    --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
-    --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
-    --nav-item-hover: rgba(255, 255, 255, 0.055);
-    --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
-    --nav-item-active-border: rgba(245, 166, 122, 0.28);
-    --nav-icon-surface: rgba(245, 166, 122, 0.11);
+    /* ======== Skeuomorphic Dark Mode — Black Leather & Brushed Metal ======== */
+    --primary-color: #C8A455;
+    --text-color: #E8E0D0;
+    --text-secondary: #A89B88;
+    --bg-overlay: rgba(32, 24, 16, 0.94);
+    --card-bg: #3A3028;
+    --card-hover: #443830;
+    --border-color: rgba(200, 164, 85, 0.22);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.30);
+    --shadow-glow: 0 0 24px rgba(200, 164, 85, 0.12);
+    --modal-bg: #2E2418;
+    --modal-text: #E8E0D0;
+    --glow-color: rgba(200, 164, 85, 0.20);
+    --glow-soft: rgba(200, 164, 85, 0.08);
+    --glass-bg: #352C22;
+    --glass-border: rgba(200, 164, 85, 0.16);
+    --highlight-top: rgba(255, 240, 200, 0.04);
+    --leather-surface: linear-gradient(175deg, #3A3028 0%, #322820 40%, #2A2018 100%);
+    --leather-dark: linear-gradient(175deg, #2A2018 0%, #221810 100%);
+    --stitch-color: rgba(200, 164, 85, 0.18);
+    --metal-highlight: linear-gradient(180deg, rgba(255,240,200,0.08) 0%, rgba(255,240,200,0) 50%);
+    --elev-shadow-1: 0 3px 10px rgba(0, 0, 0, 0.32), 0 1px 3px rgba(0, 0, 0, 0.22);
+    --elev-shadow-2: 0 8px 22px rgba(0, 0, 0, 0.38), 0 3px 6px rgba(0, 0, 0, 0.26);
+    --elev-shadow-3: 0 16px 36px rgba(0, 0, 0, 0.44), 0 5px 10px rgba(0, 0, 0, 0.30);
+    --text-muted: color-mix(in srgb, var(--text-secondary) 85%, var(--text-color) 15%);
+    --text-subtle: color-mix(in srgb, var(--text-secondary) 70%, var(--text-color) 30%);
+    --nav-item-hover: rgba(200, 164, 85, 0.10);
+    --nav-item-active: linear-gradient(180deg, #443830 0%, #3A3028 100%);
+    --nav-item-active-border: rgba(200, 164, 85, 0.30);
+    --nav-icon-surface: rgba(200, 164, 85, 0.12);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -304,17 +320,24 @@ body.has-custom-bg #background-layer::after {
     transition: opacity 0.3s ease;
 }
 
-/* Main Container - Flattened for r4.chat aesthetic */
+/* Main Container - Skeuomorphic Leather Notebook */
 .container {
     width: 90%;
     height: clamp(var(--container-min-h), 92vh, 1100px);
     margin: max(16px, 2.8vh) auto;
     border-radius: var(--container-radius);
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
+    background: var(--leather-surface, linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%));
+    box-shadow:
+        /* Outer physical drop shadow */
+        0 8px 32px rgba(50, 30, 10, 0.28),
+        0 2px 8px rgba(50, 30, 10, 0.18),
+        /* Inner top highlight (light catching the edge) */
+        inset 0 1px 0 rgba(255, 248, 230, 0.35),
+        /* Inner bottom shadow (thickness depth) */
+        inset 0 -2px 4px rgba(50, 30, 10, 0.10);
+    border: 2px solid var(--stitch-color);
+    outline: 1px solid rgba(255, 248, 230, 0.12);
+    outline-offset: -4px;
     display: flex;
     flex-direction: column;
     padding: var(--container-padding);
@@ -331,18 +354,39 @@ body.has-custom-bg #background-layer::after {
         box-shadow var(--motion-medium) var(--ease-standard);
 }
 
+/* Leather grain texture overlay */
 .container::before {
-    display: none;
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        var(--paper-texture),
+        radial-gradient(ellipse at 30% 20%, rgba(255,248,230,0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
 }
 
+/* Stitching inner border */
 .container::after {
-    display: none;
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: calc(var(--container-radius) - 4px);
+    border: 1.5px dashed var(--stitch-color);
+    pointer-events: none;
+    z-index: 0;
 }
 
 :root[data-theme="dark"] .container {
-    background: rgba(26, 26, 26, 0.55);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: var(--leather-surface);
+    box-shadow:
+        0 10px 36px rgba(0, 0, 0, 0.45),
+        0 2px 8px rgba(0, 0, 0, 0.30),
+        inset 0 1px 0 rgba(255, 240, 200, 0.06),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+    border-color: rgba(200, 164, 85, 0.18);
+    outline-color: rgba(255, 240, 200, 0.04);
 }
 
 body.loaded .container {
@@ -478,16 +522,21 @@ body.loaded #background-layer {
     color: var(--text-subtle);
 }
 
-/* Wrapper looks like the old input - Claude Style Enhanced */
+/* Wrapper - Skeuomorphic Sunken Metal-Rimmed Input */
 .search-wrapper {
     display: flex;
     align-items: center;
     width: clamp(var(--search-min-w), 58.5vw, 920px);
     max-width: calc(100% - 24px);
-    border-radius: 32px;
+    border-radius: 14px;
     background: var(--card-bg);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-    border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
+    box-shadow:
+        /* Sunken inset */
+        inset 0 2px 6px rgba(50, 30, 10, 0.18),
+        inset 0 1px 2px rgba(50, 30, 10, 0.10),
+        /* Outer rim highlight */
+        0 1px 0 rgba(255, 248, 230, 0.30);
+    border: 1.5px solid var(--border-color);
     transition: transform var(--motion-medium) var(--ease-standard),
         box-shadow var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
@@ -504,24 +553,29 @@ body.loaded #background-layer {
 
 :root[data-theme="dark"] .search-wrapper {
     background: var(--card-bg);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow:
+        inset 0 2px 8px rgba(0, 0, 0, 0.35),
+        inset 0 1px 2px rgba(0, 0, 0, 0.20),
+        0 1px 0 rgba(255, 240, 200, 0.05);
+    border: 1.5px solid rgba(200, 164, 85, 0.18);
 }
 
 .search-wrapper:focus-within {
     width: clamp(560px, 58.5vw, 920px);
     background: var(--card-bg);
-    border-color: color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
+    border-color: var(--primary-color);
     box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.06),
-        0 0 0 2px color-mix(in srgb, var(--primary-color) 10%, transparent);
-    transform: translateY(-1px);
+        inset 0 2px 6px rgba(50, 30, 10, 0.14),
+        0 0 0 2px rgba(139, 105, 20, 0.15),
+        0 1px 0 rgba(255, 248, 230, 0.25);
+    transform: scale(0.995);
 }
 
 :root[data-theme="dark"] .search-wrapper:focus-within {
     box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.25),
-        0 0 0 2px color-mix(in srgb, var(--primary-color) 16%, transparent);
+        inset 0 2px 8px rgba(0, 0, 0, 0.30),
+        0 0 0 2px rgba(200, 164, 85, 0.12),
+        0 1px 0 rgba(255, 240, 200, 0.04);
 }
 
 /* Engine Picker Container */
@@ -1033,7 +1087,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     min-height: 38px;
     padding: 8px 12px 8px 8px;
-    border-radius: 14px;
+    border-radius: 10px;
     cursor: pointer;
     color: color-mix(in srgb, var(--text-color) 86%, var(--text-secondary) 14%);
     transition: transform var(--motion-fast) var(--ease-standard),
@@ -1051,11 +1105,30 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .tree-folder-item:hover {
-    background: var(--nav-item-hover);
-    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    background: linear-gradient(180deg, rgba(255,248,230,0.45) 0%, rgba(220,200,160,0.30) 100%);
+    border-color: var(--border-color);
+    box-shadow:
+        0 2px 4px rgba(50, 30, 10, 0.12),
+        inset 0 1px 0 rgba(255, 248, 230, 0.50);
     color: var(--text-color);
-    transform: translateX(3px);
+    transform: translateX(2px);
+}
+
+:root[data-theme="dark"] .tree-folder-item:hover {
+    background: linear-gradient(180deg, rgba(255,240,200,0.06) 0%, rgba(200,164,85,0.04) 100%);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255, 240, 200, 0.04);
+}
+
+.tree-folder-item.active {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid transparent !important;
+    color: var(--primary-color);
+    font-weight: 600;
+    transform: translateX(2px);
+    z-index: 2;
 }
 
 :root[data-theme="dark"] .tree-folder-item:hover {
@@ -2244,12 +2317,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     right: var(--floating-actions-offset-right);
     width: var(--floating-actions-size);
     height: var(--floating-actions-size);
-    border-radius: 12px;
-    background: var(--glass-bg, rgba(255, 255, 255, 0.1));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-    box-shadow: var(--elev-shadow-1), 0 0 0 1px color-mix(in srgb, var(--primary-color) 5%, transparent);
+    border-radius: 50%;
+    /* Metal knob radial gradient — center bright, edge dark */
+    background:
+        radial-gradient(circle at 40% 35%, rgba(255,248,230,0.50) 0%, transparent 55%),
+        linear-gradient(145deg, #C8B48E 0%, #A8946C 50%, #8B7A56 100%);
+    border: 2px solid rgba(92, 64, 32, 0.35);
+    box-shadow:
+        0 3px 8px rgba(50, 30, 10, 0.22),
+        0 1px 2px rgba(50, 30, 10, 0.14),
+        inset 0 1px 0 rgba(255, 248, 230, 0.40),
+        inset 0 -1px 2px rgba(50, 30, 10, 0.15);
     font-size: 16px;
     cursor: pointer;
     transition: transform var(--motion-medium) var(--ease-standard),
@@ -2261,8 +2339,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary);
-    opacity: 0.84;
+    color: #4A3A20;
+    opacity: 0.92;
 }
 
 #settings-btn svg {
@@ -2272,12 +2350,25 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #settings-btn:hover {
-    transform: translateY(-2px);
-    background: color-mix(in srgb, var(--card-hover) 88%, transparent);
-    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
+    transform: translateY(-1px) scale(1.06);
+    background:
+        radial-gradient(circle at 40% 35%, rgba(255,248,230,0.60) 0%, transparent 55%),
+        linear-gradient(145deg, #D4C4A0 0%, #BDA87C 50%, #A8946C 100%);
+    border-color: var(--primary-color);
     color: var(--primary-color);
-    box-shadow: var(--elev-shadow-2), 0 0 12px color-mix(in srgb, var(--primary-color) 10%, transparent);
+    box-shadow:
+        0 6px 16px rgba(50, 30, 10, 0.28),
+        0 2px 4px rgba(50, 30, 10, 0.16),
+        inset 0 1px 0 rgba(255, 248, 230, 0.50),
+        0 0 12px rgba(139, 105, 20, 0.12);
     opacity: 1;
+}
+
+#settings-btn:active {
+    transform: translateY(1px) scale(0.96);
+    box-shadow:
+        0 1px 3px rgba(50, 30, 10, 0.18),
+        inset 0 2px 4px rgba(50, 30, 10, 0.20);
 }
 
 #settings-btn:hover svg {
