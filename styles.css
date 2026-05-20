@@ -297,6 +297,13 @@ h3,
         linear-gradient(180deg, rgba(8, 10, 14, 0.08) 0%, rgba(8, 10, 14, 0.18) 100%);
 }
 
+/* Custom Background overrides to remove system gradient lighting overlays */
+body.has-custom-bg #background-layer::before,
+body.has-custom-bg #background-layer::after {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 /* Main Container - Flattened for r4.chat aesthetic */
 .container {
     width: 90%;

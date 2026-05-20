@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 11:25:00]
+- **Type**: Fix (HD Background & Transparency overlays)
+- **Content**: 1) 解除存储限制（提清）：在 manifest.json 申请 unlimitedStorage 权限，允许 4K/超清壁纸无损原图写入 IndexedDB，避免触发降级压缩算法；2) 消除壁纸变色遮罩（去遮罩）：激活自定义背景时在 body 挂载 .has-custom-bg，在 styles.css 中将背景伪元素的 opacity 设为 0，100% 还原壁纸原本色彩；3) 容器彻底透明：优化 applyContainerOpacity 逻辑，若透明度滑块拉满至 10，则完全清除主容器的毛玻璃模糊、背景色、边框以及阴影，展现极度清爽的悬浮书签体验。
+- **Impact**: `manifest.json`, `styles.css`, `script.js`, `src/01-constants.js`, `src/06-settings.js`
+
 ## [2026-05-18 17:15:00]
 - **Type**: Refactor (Pure Mode Memo UX)
 - **Content**: 1) 输入区改为「幽灵光标」模式：移除所有可见输入框边框/背景，只保留 1.5px 跳动光标 (`step-end` 1.1s 动画)，focus 时原生光标接管，失焦且为空时自动恢复跳动光标；2) 待办条目前圆点改为可交互 checkbox：勾选时 checkbox 填充品牌色 + 打钩 SVG 出现 + 文字删除线，320ms 后条目淡出删除；保留右侧 ✕ 快速删除按钮。

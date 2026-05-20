@@ -105,6 +105,57 @@ function storageSet(payload) {
     return new Promise((resolve) => chrome.storage.local.set(payload, resolve));
 }
 
+// --- IndexedDB helpers for background image (Fix #16: bypass 8MB chrome.storage limit) ---
+const BG_IDB_DB_NAME = 'bookmark_tree_bg';
+const BG_IDB_STORE = 'bg_store';
+const BG_IDB_KEY = 'bg_image';
+
+function openBgDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(BG_IDB_DB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+            e.target.result.createObjectStore(BG_IDB_STORE);
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+    });
+}
+
+async function bgIdbGet() {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readonly');
+            const req = tx.objectStore(BG_IDB_STORE).get(BG_IDB_KEY);
+            req.onsuccess = (e) => resolve(e.target.result ?? null);
+            req.onerror = () => resolve(null);
+        });
+    } catch { return null; }
+}
+
+async function bgIdbSet(dataUrl) {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readwrite');
+            tx.objectStore(BG_IDB_STORE).put(dataUrl, BG_IDB_KEY);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = (e) => reject(e.target.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function bgIdbRemove() {
+    try {
+        const db = await openBgDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(BG_IDB_STORE, 'readwrite');
+            tx.objectStore(BG_IDB_STORE).delete(BG_IDB_KEY);
+            tx.oncomplete = () => resolve();
+        });
+    } catch { /* ignore */ }
+}
+
 function applyPureModeState(enabled) {
     PURE_MODE_ENABLED = Boolean(enabled);
     document.body.classList.toggle('pure-mode', PURE_MODE_ENABLED);
