@@ -581,22 +581,32 @@ function saveTreeExpandedState() {
 
 function renderBookmarksWithLayoutTransition() {
     const body = document.body;
-    if (!body) {
-        renderBookmarksFromCache();
-        return;
-    }
+    if (body.classList.contains('layout-switching')) return;
 
     // Restart class for repeated rapid toggles.
     body.classList.remove('layout-switching');
-    void body.offsetWidth;
+    void body.offsetWidth; // force reflow to restart animation
     body.classList.add('layout-switching');
 
     renderBookmarksFromCache();
 
-    LAYOUT_SWITCH_TIMER = setTimeout(() => {
-        body.classList.remove('layout-switching');
-        LAYOUT_SWITCH_TIMER = null;
-    }, 220);
+    // Fix #8: use transitionend instead of fixed setTimeout for robustness
+    const removeClass = () => body.classList.remove('layout-switching');
+
+    let guard = null;
+    const onEnd = (e) => {
+        if (e && e.target !== body) return; // ignore child transitions
+        clearTimeout(guard);
+        body.removeEventListener('transitionend', onEnd);
+        removeClass();
+    };
+
+    body.addEventListener('transitionend', onEnd, { once: true });
+    // Fallback: ensure class is removed even if transitionend doesn't fire
+    guard = setTimeout(() => {
+        body.removeEventListener('transitionend', onEnd);
+        removeClass();
+    }, 350);
 }
 
 function cleanupLegacyFrequencyStorage() {
@@ -605,11 +615,180 @@ function cleanupLegacyFrequencyStorage() {
 
 function debounce(fn, delayMs) {
     let timer = null;
-    return function (...args) {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => {
-            fn.apply(this, args);
-        }, delayMs);
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delayMs);
     };
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    cleanupLegacyFrequencyStorage();
+
+    // 1. UI Initialization (Sync)
+    initSearch();
+    initAiSidebarLazy();
+    initAmbientTime();
+    initPureTime();
+    initGreeting();
+    initPureShortcuts();
+    initPureMemo();
+
+
+    // 2. Data Loading (Async)
+    const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
+    const getBookmarks = () => new Promise(resolve => chrome.bookmarks.getTree(resolve));
+
+    const [settings, bookmarkTree] = await Promise.all([
+        getStorage([
+            STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
+            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
+            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
+            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED, STORAGE_KEY_PURE_MODE,
+            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
+        ]),
+        getBookmarks()
+    ]);
+    setBookmarkTreeCache(bookmarkTree);
+
+    // 3. Apply Settings Global State
+    if (settings[STORAGE_KEY_NEW_TAB] !== undefined) OPEN_IN_NEW_TAB = settings[STORAGE_KEY_NEW_TAB];
+    else OPEN_IN_NEW_TAB = true; // Default
+
+    if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
+
+    // Fix #16: Load background image from IndexedDB (with legacy migration from chrome.storage.local)
+    let bgFromIdb = await bgIdbGet();
+    if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
+        // Migrate from legacy chrome.storage.local → IndexedDB
+        bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
+        bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
+    }
+    if (bgFromIdb) CURRENT_BG_IMAGE = bgFromIdb;
+
+    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
+        const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
+        CURRENT_BG_BLUR = level * 5;
+    }
+
+    if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
+        const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
+        CURRENT_CONTAINER_BLUR = level;
+    }
+
+    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
+        HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
+    }
+
+    if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
+    else LAYOUT_MODE = 'tree';
+
+    PURE_MODE_ENABLED = !!settings[STORAGE_KEY_PURE_MODE];
+
+    if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
+    else HIDDEN_FOLDERS = [];
+
+    if (settings[STORAGE_KEY_FLAT_DIR_EXPANDED] !== undefined) {
+        FLAT_DIR_EXPANDED = !!settings[STORAGE_KEY_FLAT_DIR_EXPANDED];
+    } else {
+        FLAT_DIR_EXPANDED = false;
+    }
+
+    if (Array.isArray(settings[STORAGE_KEY_TREE_EXPANDED])) {
+        TREE_EXPANDED_FOLDERS = new Set(settings[STORAGE_KEY_TREE_EXPANDED]);
+    }
+
+    // 4. Init Settings UI (Bindings)
+    initSettingsUI(settings);
+
+    // 5. Apply Visuals
+    const theme = settings[STORAGE_KEY_THEME] || 'system';
+    applyTheme(theme);
+
+    // 6. Background Preload
+    if (CURRENT_BG_IMAGE) {
+        await preloadImage(CURRENT_BG_IMAGE);
+    }
+    applyBackground();
+    applyContainerOpacity();
+
+    // 7. Render Bookmarks
+    renderBookmarksFromCache();
+
+    // 7.5 Layout Toggle Button (outside settings for quick access)
+    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
+    const pureModeBtn = document.getElementById('pure-mode-btn');
+    const layoutIconTree = document.getElementById('layout-icon-tree');
+    const layoutIconFlat = document.getElementById('layout-icon-flat');
+    
+    function updateLayoutToggleIcon() {
+        if (LAYOUT_MODE === 'flat') {
+            layoutIconTree.classList.add('icon-hidden');
+            layoutIconFlat.classList.remove('icon-hidden');
+            layoutToggleBtn.title = '切换到树状模式';
+        } else {
+            layoutIconTree.classList.remove('icon-hidden');
+            layoutIconFlat.classList.add('icon-hidden');
+            layoutToggleBtn.title = '切换到平铺模式';
+        }
+    }
+    updateLayoutToggleIcon(); // Set initial icon state
+    
+    layoutToggleBtn.addEventListener('click', () => {
+        LAYOUT_MODE = LAYOUT_MODE === 'tree' ? 'flat' : 'tree';
+        chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: LAYOUT_MODE });
+        updateLayoutToggleIcon();
+        // Also sync the radio buttons inside settings modal
+        const layoutRadios = document.getElementsByName('layout-mode');
+        layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
+        // Re-render
+        renderBookmarksWithLayoutTransition();
+    });
+
+    if (pureModeBtn) {
+        pureModeBtn.addEventListener('click', async () => {
+            await togglePureMode();
+        });
+        applyPureModeState(PURE_MODE_ENABLED);
+    }
+
+    // 8. Reveal Page
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            document.body.classList.add('loaded');
+        });
+    });
+});
+
+// Fix #12: Preload with timeout protection — prevents blocking init on slow/broken images
+function preloadImage(url, timeoutMs = 5000) {
+    return new Promise((resolve) => {
+        if (!url) { resolve(); return; }
+
+        let settled = false;
+        const finish = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(guard);
+            resolve();
+        };
+
+        // Timeout guard to unblock init if image hangs
+        const guard = setTimeout(finish, timeoutMs);
+
+        const img = new Image();
+        img.src = url;
+
+        // Use decode() if available to ensure image is GPU-ready before display
+        if ('decode' in img) {
+            img.decode().then(finish).catch(finish);
+        } else {
+            if (img.complete) {
+                finish();
+            } else {
+                img.onload = finish;
+                img.onerror = finish;
+            }
+        }
+    });
 }
 

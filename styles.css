@@ -3596,10 +3596,10 @@ input[type="file"] {
     height: 100%;
     margin: 0;
     box-sizing: border-box;
-    /* Glass effect: semi-transparent with blur */
-    background: rgba(255, 253, 250, 0.95);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    /* Glass effect: high-transparency frosted glass with deeper blur */
+    background: rgba(255, 253, 250, 0.68);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border-radius: var(--container-radius);
     box-shadow: var(--shadow-md);
     z-index: 1001;
@@ -3621,11 +3621,11 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 :root[data-theme="dark"] .ai-sidebar {
-    background: rgba(18, 22, 28, 0.86);
+    background: rgba(18, 22, 28, 0.65);
     border-left-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Sidebar Header - Glassy */
+/* Sidebar Header - Seamlessly transparent over sidebar glass */
 .ai-sidebar-header {
     display: flex;
     align-items: center;
@@ -3633,15 +3633,14 @@ body.ai-sidebar-open .ai-sidebar,
     padding: 10px 18px;
     min-height: 52px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
+    background: transparent;
     border-bottom: 1px solid var(--border-color);
     position: relative;
     z-index: 20;
 }
 
 :root[data-theme="dark"] .ai-sidebar-header {
-    background: rgba(30, 35, 43, 0.9);
+    background: transparent;
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 

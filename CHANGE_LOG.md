@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 15:35:00]
+- **Type**: Fix & Design (Restore source sync & AI Sidebar glassmorphism)
+- **Content**: 1) 修复分模块同步丢失导致的白屏：将原本直接修改在 `script.js` 中的 890 多行核心初始化入口（如 `DOMContentLoaded` 监听器）和备忘录逻辑规范同步归位至 `src/01-constants.js` 和 `src/09-ui-widgets.js`，重新打包拼接彻底恢复页面加载和备忘录功能；2) AI 侧栏透明磨砂化：调低侧栏背景色透明度（浅色模式 0.68，深色模式 0.65），提高侧边栏背景毛玻璃模糊度至 `30px`，并将侧栏顶部 Tab 头部 `background` 设置为 `transparent`，实现一体化的苹果 VisionOS 级悬浮磨砂玻璃交互感。
+- **Impact**: `src/01-constants.js`, `src/09-ui-widgets.js`, `styles.css`, `script.js`
+
 ## [2026-05-20 14:47:00]
 - **Type**: Fix (Avoid ReferenceError on debounce)
 - **Content**: 将 `debounce` 通用防抖函数移至首个加载模块 `src/01-constants.js`，解决打包合并后 `src/08-ai-sidebar.js` 引用该函数时因加载时差导致的 `debounce is not defined` 报错。
