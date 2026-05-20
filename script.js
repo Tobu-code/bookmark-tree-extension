@@ -3037,6 +3037,9 @@ function applyTheme(theme) {
         root._themeMediaQuery = darkModeQuery;
         root._themeListener = handleSystemThemeChange;
         darkModeQuery.addEventListener('change', handleSystemThemeChange);
+    } else if (theme === 'skeuomorphic') {
+        cleanupSystemThemeListener();
+        root.setAttribute('data-theme', 'skeuomorphic');
     } else {
         cleanupSystemThemeListener();
         root.setAttribute('data-theme', theme);

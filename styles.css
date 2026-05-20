@@ -83,6 +83,45 @@
     --card-padding: 24px;
 }
 
+:root[data-theme="skeuomorphic"] {
+    color-scheme: light;
+    --primary-color: #8B6914;
+    --text-color: #2C1E0F;
+    --text-secondary: #7A6B57;
+    --bg-overlay: rgba(215, 195, 165, 0.92);
+    --card-bg: #F5ECD7;
+    --card-hover: #EDE3C8;
+    --border-color: rgba(92, 64, 32, 0.40);
+    --shadow-sm: 0 2px 4px rgba(60, 40, 15, 0.18), 0 1px 2px rgba(60, 40, 15, 0.12);
+    --shadow-md: 0 8px 24px rgba(50, 30, 10, 0.22), 0 4px 8px rgba(50, 30, 10, 0.14);
+    --modal-bg: #F0E6D0;
+    --modal-text: #2C1E0F;
+    --glass-bg: #EDE3CB;
+    --glass-border: rgba(92, 64, 32, 0.28);
+    --leather-surface: linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%);
+    --leather-dark: linear-gradient(175deg, #A8946C 0%, #9A8660 100%);
+    --paper-texture: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(92, 64, 32, 0.03) 28px,
+        rgba(92, 64, 32, 0.03) 29px
+    );
+    --metal-highlight: linear-gradient(180deg, rgba(255,248,230,0.7) 0%, rgba(255,248,230,0) 50%);
+    --stitch-color: rgba(92, 64, 32, 0.25);
+    --elev-shadow-1: 0 3px 8px rgba(50, 30, 10, 0.16), 0 1px 3px rgba(50, 30, 10, 0.10);
+    --elev-shadow-2: 0 8px 20px rgba(50, 30, 10, 0.20), 0 3px 6px rgba(50, 30, 10, 0.12);
+    --elev-shadow-3: 0 14px 32px rgba(50, 30, 10, 0.24), 0 4px 10px rgba(50, 30, 10, 0.14);
+    --focus-ring: 0 0 0 3px rgba(139, 105, 20, 0.18);
+    --focus-outline: 2px solid rgba(139, 105, 20, 0.6);
+    --text-muted: color-mix(in srgb, var(--text-secondary) 80%, var(--text-color) 20%);
+    --text-subtle: color-mix(in srgb, var(--text-secondary) 65%, var(--text-color) 35%);
+    --nav-item-hover: rgba(196, 176, 136, 0.45);
+    --nav-item-active: linear-gradient(180deg, #E8DCC0 0%, #DDD0B2 100%);
+    --nav-item-active-border: rgba(139, 105, 20, 0.30);
+    --nav-icon-surface: rgba(139, 105, 20, 0.10);
+}
+
 /* --- Global Scrollbar Styling (Webkit) --- */
 ::-webkit-scrollbar {
     width: 6px;
@@ -125,9 +164,8 @@
    Applies to: explicit [data-theme="dark"] AND system dark mode
    when user hasn't forced light theme.
    ============================================================ */
-:root[data-theme="dark"],
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) {
         --primary-color: #C8A455;
         --text-color: #E8E0D0;
         --text-secondary: #A89B88;
@@ -212,18 +250,18 @@
 /* System Dark Theme — additional non-variable rules */
 @media (prefers-color-scheme: dark) {
     /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
-    :root:not([data-theme="light"]) #background-layer {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #background-layer {
         background-color: #1E120A;
     }
 
     /* Fix: Ensure folder modal is dark in system dark mode */
-    :root:not([data-theme="light"]) .folder-modal-content {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) .folder-modal-content {
         background: var(--glass-bg);
         border-color: var(--glass-border);
     }
 
     /* Fix: Ensure settings button is visible in system dark mode */
-    :root:not([data-theme="light"]) #settings-btn {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-btn {
         background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
         border-color: rgba(217, 119, 87, 0.15);
     }
@@ -1842,7 +1880,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane {
         background:
             radial-gradient(ellipse at 38% 0%, rgba(255, 240, 200, 0.04) 0%, transparent 42%),
             linear-gradient(90deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.08) 62%, rgba(0, 0, 0, 0.14) 100%);
@@ -1851,7 +1889,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 1px 0 0 rgba(255, 240, 200, 0.04);
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane::after {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane::after {
         background:
             linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 55%, rgba(255, 240, 200, 0.04) 100%);
         box-shadow:
@@ -1859,7 +1897,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 1px 0 0 rgba(0, 0, 0, 0.20);
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane-header {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane-header {
         background-image: none;
         box-shadow:
             inset 0 -1px 0 rgba(200, 164, 85, 0.10),
@@ -1867,7 +1905,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item {
         background:
             linear-gradient(180deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.22) 100%);
         border-color: rgba(200, 164, 85, 0.06);
@@ -1876,8 +1914,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 0 1px 0 rgba(255, 240, 200, 0.03);
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover,
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item:hover,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
         background:
             linear-gradient(180deg, rgba(255, 240, 200, 0.07) 0%, rgba(68, 56, 48, 0.42) 100%) !important;
         border-color: rgba(200, 164, 85, 0.16) !important;
@@ -1981,32 +2019,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane {
         background:
             radial-gradient(ellipse at 42% 0%, rgba(255, 240, 200, 0.035) 0%, transparent 44%),
             linear-gradient(180deg, rgba(255, 240, 200, 0.025) 0%, rgba(0, 0, 0, 0.04) 100%);
         box-shadow: none;
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane-header {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane-header {
         box-shadow: none;
         background-image: none;
         border: 0;
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item {
         background: rgba(255, 240, 200, 0.025);
         border-color: transparent !important;
         box-shadow: none;
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
         background: rgba(255, 240, 200, 0.055) !important;
         border-color: transparent !important;
         box-shadow: none !important;
     }
 
-    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
         background: rgba(255, 240, 200, 0.075) !important;
         border-color: transparent !important;
         box-shadow: none !important;
@@ -4181,7 +4219,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) #settings-modal .modal-content {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content {
         background:
             radial-gradient(circle at 20% 0%, rgba(255, 222, 152, 0.08), transparent 34%),
             var(--paper-texture),
@@ -4194,28 +4232,28 @@ input[type=range]::-moz-range-thumb {
             inset 0 -14px 28px rgba(0, 0, 0, 0.16);
     }
 
-    :root:not([data-theme="light"]) #settings-modal .modal-content::before {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content::before {
         border-color: rgba(200, 164, 85, 0.14);
     }
 
-    :root:not([data-theme="light"]) #settings-modal .setting-item>label,
-    :root:not([data-theme="light"]) #settings-modal .modal-content h2,
-    :root:not([data-theme="light"]) #settings-modal .radio-option {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .setting-item>label,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content h2,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-option {
         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.56);
     }
 
-    :root:not([data-theme="light"]) #settings-modal .radio-group,
-    :root:not([data-theme="light"]) #settings-modal input[type=range]::-webkit-slider-runnable-track,
-    :root:not([data-theme="light"]) #settings-modal input[type=range]::-moz-range-track {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-group,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal input[type=range]::-webkit-slider-runnable-track,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal input[type=range]::-moz-range-track {
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.30), rgba(255, 240, 200, 0.04));
         border-color: rgba(200, 164, 85, 0.14);
         box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.34), 0 1px 0 rgba(255, 240, 200, 0.04);
     }
 
-    :root:not([data-theme="light"]) #settings-modal .radio-option:has(input:checked),
-    :root:not([data-theme="light"]) #settings-modal .confirm-btn,
-    :root:not([data-theme="light"]) #settings-modal .ai-provider-action-btn,
-    :root:not([data-theme="light"]) #settings-modal label.ai-provider-switch {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-option:has(input:checked),
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .confirm-btn,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-action-btn,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal label.ai-provider-switch {
         background:
             linear-gradient(180deg, rgba(68, 56, 48, 0.94) 0%, rgba(48, 38, 30, 0.94) 100%);
         border-color: rgba(200, 164, 85, 0.18);
@@ -4225,11 +4263,11 @@ input[type=range]::-moz-range-thumb {
             inset 0 -1px 0 rgba(0, 0, 0, 0.22);
     }
 
-    :root:not([data-theme="light"]) #settings-modal .ai-settings-intro,
-    :root:not([data-theme="light"]) #settings-modal .ai-provider-item,
-    :root:not([data-theme="light"]) #settings-modal .ai-provider-composer,
-    :root:not([data-theme="light"]) #settings-modal .ai-settings-summary-item,
-    :root:not([data-theme="light"]) #settings-modal .ai-provider-icon {
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-intro,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-item,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-composer,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-summary-item,
+    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-icon {
         background:
             radial-gradient(circle at top left, rgba(200, 164, 85, 0.08), transparent 36%),
             linear-gradient(180deg, rgba(58, 48, 40, 0.74) 0%, rgba(42, 32, 24, 0.68) 100%);
