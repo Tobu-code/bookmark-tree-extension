@@ -3646,13 +3646,23 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 /* Focus mode: when AI panel is open, reduce background competition */
+body.ai-sidebar-open #search-container,
+body.ai-sidebar-open #bookmarks-tree {
+    transition: opacity var(--motion-slow) var(--ease-emphasized),
+                transform var(--motion-slow) var(--ease-emphasized),
+                filter var(--motion-slow) var(--ease-emphasized) !important;
+}
+
 body.ai-sidebar-open #search-container {
-    opacity: 0.84;
+    opacity: 0.45;
+    transform: scale(0.98) translate3d(-16px, 0, 0);
+    filter: blur(3px);
 }
 
 body.ai-sidebar-open #bookmarks-tree {
-    opacity: 0.56;
-    transform: scale(0.995);
+    opacity: 0.45;
+    transform: scale(0.96) translate3d(-16px, 0, 0);
+    filter: blur(8px);
 }
 
 body.ai-sidebar-open #layout-toggle-btn,
@@ -3710,10 +3720,10 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 /* Active: Primary color accent */
 .ai-tab.active {
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+    background: transparent !important;
+    border: 1px solid transparent !important;
     color: var(--primary-color, #D97757);
-    box-shadow: var(--elev-shadow-1);
+    box-shadow: none !important;
     font-weight: 600;
 }
 
@@ -5552,4 +5562,134 @@ body.pure-mode #pure-memo {
     pointer-events: none;
     z-index: 10;
     animation: conic-glow-rotate 1.4s linear infinite;
+}
+
+/* AI Tabs Dynamic Sliding indicator */
+.ai-tabs-indicator {
+    position: absolute;
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                width 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                height 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.2s ease;
+    opacity: 0;
+    transform: scale3d(0.9, 0.9, 1);
+    transform-origin: center center;
+    box-sizing: border-box;
+}
+
+:root[data-theme="dark"] .ai-tabs-indicator {
+    background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+}
+
+/* AI Action Buttons Micro-interactions */
+#ai-sidebar-close svg {
+    transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+#ai-sidebar-close:hover svg {
+    transform: rotate(90deg) scale(1.1);
+}
+
+#ai-open-new-window svg {
+    transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+#ai-open-new-window:hover svg {
+    transform: translate3d(2px, -2px, 0) scale(1.06);
+}
+
+/* Aurora Loading & Shimmer Skeleton */
+.ai-sidebar-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 99;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.38s ease;
+    overflow: hidden;
+}
+
+:root[data-theme="dark"] .ai-sidebar-loading {
+    background: #171b22;
+}
+
+.ai-sidebar-loading:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Pulsing Aurora radial glow */
+.aurora-glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(217, 119, 87, 0.18) 0%, rgba(56, 189, 248, 0.12) 48%, transparent 70%);
+    filter: blur(28px);
+    animation: aurora-pulse 5.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes aurora-pulse {
+    0%, 100% {
+        transform: scale(1) translate3d(0, 0, 0);
+        opacity: 0.75;
+    }
+    50% {
+        transform: scale(1.22) translate3d(12px, -12px, 0);
+        opacity: 1;
+    }
+}
+
+/* Shimmer Lines */
+.shimmer-lines {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+.shimmer-line {
+    height: 10px;
+    width: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, 
+        rgba(0, 0, 0, 0.04) 25%, 
+        rgba(0, 0, 0, 0.09) 37%, 
+        rgba(0, 0, 0, 0.04) 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer-swipe 1.4s ease infinite;
+}
+
+:root[data-theme="dark"] .shimmer-line {
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.03) 25%, 
+        rgba(255, 255, 255, 0.08) 37%, 
+        rgba(255, 255, 255, 0.03) 63%
+    );
+    background-size: 400% 100%;
+}
+
+.shimmer-line.short {
+    width: 65%;
+}
+
+@keyframes shimmer-swipe {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }

@@ -76,50 +76,26 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
 
-// --- State (Fix #10: consolidated into AppState for clarity) ---
-const AppState = {
-    dragSrcEl: null,
-    openInNewTab: true,
-    iconStyle: 'default',
-    bgImage: null,
-    bgBlur: 0,
-    containerBlur: 0,
-    hoverDelay: 100,
-    layoutMode: 'tree',
-    pureModeEnabled: false,
-    hiddenFolders: [],
-    showHiddenFolders: false,
-    flatDirExpanded: false,
-    treeExpandedFolders: new Set(['1']),
-    dragHighlightedElements: new Set(),
-    bookmarkTreeCache: null,
-    bookmarkSearchIndex: [],
-    bookmarkSearchBuckets: new Map(),
-    aiSidebarController: null,
-    layoutSwitchTimer: null,
-};
-
-// Backwards-compat aliases — existing code continues to work without changes
-let dragSrcEl = AppState.dragSrcEl;
-let OPEN_IN_NEW_TAB = AppState.openInNewTab;
-let CURRENT_ICON_STYLE = AppState.iconStyle;
-let CURRENT_BG_IMAGE = AppState.bgImage;
-let CURRENT_BG_BLUR = AppState.bgBlur;
-let CURRENT_CONTAINER_BLUR = AppState.containerBlur;
-let HOVER_DELAY = AppState.hoverDelay;
-let LAYOUT_MODE = AppState.layoutMode;
-let PURE_MODE_ENABLED = AppState.pureModeEnabled;
-let HIDDEN_FOLDERS = AppState.hiddenFolders;
-let SHOW_HIDDEN_FOLDERS = AppState.showHiddenFolders;
-let FLAT_DIR_EXPANDED = AppState.flatDirExpanded;
-let TREE_EXPANDED_FOLDERS = AppState.treeExpandedFolders;
-let DRAG_HIGHLIGHTED_ELEMENTS = AppState.dragHighlightedElements;
-let BOOKMARK_TREE_CACHE = AppState.bookmarkTreeCache;
-let BOOKMARK_SEARCH_INDEX = AppState.bookmarkSearchIndex;
-let BOOKMARK_SEARCH_BUCKETS = AppState.bookmarkSearchBuckets;
-let AI_SIDEBAR_CONTROLLER = AppState.aiSidebarController;
-let LAYOUT_SWITCH_TIMER = AppState.layoutSwitchTimer;
-
+// --- State and Constants ---
+let dragSrcEl = null;
+let OPEN_IN_NEW_TAB = true;
+let CURRENT_ICON_STYLE = 'default';
+let CURRENT_BG_IMAGE = null;
+let CURRENT_BG_BLUR = 0;
+let CURRENT_CONTAINER_BLUR = 0;
+let HOVER_DELAY = 100;
+let LAYOUT_MODE = 'tree';
+let PURE_MODE_ENABLED = false;
+let HIDDEN_FOLDERS = [];
+let SHOW_HIDDEN_FOLDERS = false;
+let FLAT_DIR_EXPANDED = false;
+let TREE_EXPANDED_FOLDERS = new Set(['1']);
+let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
+let BOOKMARK_TREE_CACHE = null;
+let BOOKMARK_SEARCH_INDEX = [];
+let BOOKMARK_SEARCH_BUCKETS = new Map();
+let AI_SIDEBAR_CONTROLLER = null;
+let LAYOUT_SWITCH_TIMER = null;
 
 function storageGet(keys) {
     return new Promise((resolve) => chrome.storage.local.get(keys, resolve));
@@ -178,15 +154,6 @@ async function bgIdbRemove() {
             tx.oncomplete = () => resolve();
         });
     } catch { /* ignore */ }
-}
-
-// --- Utility: generic debounce (Fix #15) ---
-function debounce(fn, delayMs) {
-    let timer = null;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn(...args), delayMs);
-    };
 }
 
 function applyPureModeState(enabled) {
@@ -621,204 +588,42 @@ function renderBookmarksWithLayoutTransition() {
 
     // Restart class for repeated rapid toggles.
     body.classList.remove('layout-switching');
-    void body.offsetWidth; // force reflow to restart animation
+    void body.offsetWidth;
     body.classList.add('layout-switching');
 
     renderBookmarksFromCache();
 
-    // Fix #8: use transitionend instead of fixed setTimeout for robustness
-    const removeClass = () => body.classList.remove('layout-switching');
-
-    let guard = null;
-    const onEnd = (e) => {
-        if (e && e.target !== body) return; // ignore child transitions
-        clearTimeout(guard);
-        body.removeEventListener('transitionend', onEnd);
-        removeClass();
-    };
-
-    body.addEventListener('transitionend', onEnd, { once: true });
-    // Fallback: ensure class is removed even if transitionend doesn't fire
-    guard = setTimeout(() => {
-        body.removeEventListener('transitionend', onEnd);
-        removeClass();
-    }, 350);
+    LAYOUT_SWITCH_TIMER = setTimeout(() => {
+        body.classList.remove('layout-switching');
+        LAYOUT_SWITCH_TIMER = null;
+    }, 220);
 }
 
 function cleanupLegacyFrequencyStorage() {
     chrome.storage.local.remove(LEGACY_FREQUENCY_STORAGE_KEYS);
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    cleanupLegacyFrequencyStorage();
-
-    // 1. UI Initialization (Sync)
-    initSearch();
-    initAiSidebarLazy();
-    initAmbientTime();
-    initPureTime();
-    initGreeting();
-    initPureShortcuts();
-    initPureMemo();
-
-
-    // 2. Data Loading (Async)
-    const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
-    const getBookmarks = () => new Promise(resolve => chrome.bookmarks.getTree(resolve));
-
-    const [settings, bookmarkTree] = await Promise.all([
-        getStorage([
-            STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
-            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
-            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED, STORAGE_KEY_PURE_MODE,
-            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
-        ]),
-        getBookmarks()
-    ]);
-    setBookmarkTreeCache(bookmarkTree);
-
-    // 3. Apply Settings Global State
-    if (settings[STORAGE_KEY_NEW_TAB] !== undefined) OPEN_IN_NEW_TAB = settings[STORAGE_KEY_NEW_TAB];
-    else OPEN_IN_NEW_TAB = true; // Default
-
-    if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
-
-    // Fix #16: Load background image from IndexedDB (with legacy migration from chrome.storage.local)
-    let bgFromIdb = await bgIdbGet();
-    if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
-        // Migrate from legacy chrome.storage.local → IndexedDB
-        bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
-        bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
-    }
-    if (bgFromIdb) CURRENT_BG_IMAGE = bgFromIdb;
-
-    if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
-        const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
-        CURRENT_BG_BLUR = level * 5;
-    }
-
-    if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
-        const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
-        CURRENT_CONTAINER_BLUR = level;
-    }
-
-    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
-        HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
-    }
-
-    if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
-    else LAYOUT_MODE = 'tree';
-
-    PURE_MODE_ENABLED = !!settings[STORAGE_KEY_PURE_MODE];
-
-    if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
-    else HIDDEN_FOLDERS = [];
-
-    if (settings[STORAGE_KEY_FLAT_DIR_EXPANDED] !== undefined) {
-        FLAT_DIR_EXPANDED = !!settings[STORAGE_KEY_FLAT_DIR_EXPANDED];
-    } else {
-        FLAT_DIR_EXPANDED = false;
-    }
-
-    if (Array.isArray(settings[STORAGE_KEY_TREE_EXPANDED])) {
-        TREE_EXPANDED_FOLDERS = new Set(settings[STORAGE_KEY_TREE_EXPANDED]);
-    }
-
-    // 4. Init Settings UI (Bindings)
-    // We defer this call until we have the function definition, or we can hoist the logic.
-    // For now, we assume initSettingsUI will be defined later or we call the modified initSettings.
-    initSettingsUI(settings);
-
-    // 5. Apply Visuals
-    const theme = settings[STORAGE_KEY_THEME] || 'system';
-    applyTheme(theme);
-
-    // 6. Background Preload
-    if (CURRENT_BG_IMAGE) {
-        await preloadImage(CURRENT_BG_IMAGE);
-    }
-    applyBackground();
-    applyContainerOpacity();
-
-    // 7. Render Bookmarks
-    renderBookmarksFromCache();
-
-    // 7.5 Layout Toggle Button (outside settings for quick access)
-    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
-    const pureModeBtn = document.getElementById('pure-mode-btn');
-    const layoutIconTree = document.getElementById('layout-icon-tree');
-    const layoutIconFlat = document.getElementById('layout-icon-flat');
-    
-    function updateLayoutToggleIcon() {
-        if (LAYOUT_MODE === 'flat') {
-            layoutIconTree.classList.add('icon-hidden');
-            layoutIconFlat.classList.remove('icon-hidden');
-            layoutToggleBtn.title = '切换到树状模式';
-        } else {
-            layoutIconTree.classList.remove('icon-hidden');
-            layoutIconFlat.classList.add('icon-hidden');
-            layoutToggleBtn.title = '切换到平铺模式';
-        }
-    }
-    updateLayoutToggleIcon(); // Set initial icon state
-    
-    layoutToggleBtn.addEventListener('click', () => {
-        LAYOUT_MODE = LAYOUT_MODE === 'tree' ? 'flat' : 'tree';
-        chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: LAYOUT_MODE });
-        updateLayoutToggleIcon();
-        // Also sync the radio buttons inside settings modal
-        const layoutRadios = document.getElementsByName('layout-mode');
-        layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
-        // Re-render
-        renderBookmarksWithLayoutTransition();
-    });
-
-    if (pureModeBtn) {
-        pureModeBtn.addEventListener('click', async () => {
-            await togglePureMode();
-        });
-        applyPureModeState(PURE_MODE_ENABLED);
-    }
-
-    // 8. Reveal Page
-    // Use double requestAnimationFrame to ensure the browser has painted the background 
-    // and layout is stable before triggering the opacity transition.
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            document.body.classList.add('loaded');
-        });
-    });
-});
-
-// Fix #12: Preload with timeout protection — prevents blocking init on slow/broken images
-function preloadImage(url, timeoutMs = 5000) {
+// --- Icon Constants ---
+function preloadImage(url) {
     return new Promise((resolve) => {
-        if (!url) { resolve(); return; }
-
-        let settled = false;
-        const finish = () => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(guard);
-            resolve();
-        };
-
-        // Timeout guard to unblock init if image hangs
-        const guard = setTimeout(finish, timeoutMs);
-
         const img = new Image();
         img.src = url;
 
-        // Use decode() if available to ensure image is GPU-ready before display
+        // Use decode() if available to ensure image is ready for display
         if ('decode' in img) {
-            img.decode().then(finish).catch(finish);
+            img.decode()
+                .then(resolve)
+                .catch(() => {
+                    // Fallback if decode fails (e.g. invalid image data)
+                    resolve();
+                });
         } else {
+            // Fallback for older browsers
             if (img.complete) {
-                finish();
+                resolve();
             } else {
-                img.onload = finish;
-                img.onerror = finish;
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
             }
         }
     });
@@ -1274,10 +1079,16 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             renderBookmarks(bookmarkTreeNodes);
         });
         
+        toggleHiddenBtn.style.padding = '10px';
+        toggleHiddenBtn.style.cursor = 'pointer';
+        toggleHiddenBtn.style.textAlign = 'center';
+        toggleHiddenBtn.style.color = 'var(--text-subtle)';
+        toggleHiddenBtn.style.fontSize = '12px';
         dirScroll.appendChild(toggleHiddenBtn);
     }
 }
 
+// --- Bookmark Card / Item Helpers ---
 function createBookmarkCard(folderNode) {
     const card = document.createElement('div');
     card.className = 'bookmark-card';
@@ -1351,8 +1162,7 @@ function createBookmarkIcon(iconData, size = 16) {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
-        img.width = size;
-        img.height = size;
+        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
@@ -1361,6 +1171,7 @@ function createBookmarkIcon(iconData, size = 16) {
             try {
                 const hostname = new URL(url).hostname.replace('www.', '');
                 letter = hostname.charAt(0).toUpperCase();
+                // Generate a consistent color from the hostname
                 let hash = 0;
                 for (let i = 0; i < hostname.length; i++) {
                     hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
@@ -1372,17 +1183,20 @@ function createBookmarkIcon(iconData, size = 16) {
             avatar.className = 'bookmark-icon-fallback';
             avatar.style.backgroundColor = bgColor;
             avatar.textContent = letter;
+            avatar.style.marginRight = '8px';
             this.replaceWith(avatar);
         });
         return img;
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
-        span.className = 'bookmark-icon bookmark-icon--svg';
+        span.className = 'bookmark-icon';
+        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
         span.innerHTML = iconData.value;
         return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
+        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
         span.textContent = iconData.value;
         return span;
     }
@@ -1391,7 +1205,8 @@ function createBookmarkIcon(iconData, size = 16) {
 function createSimpleTile(node) {
     // For single bookmarks at the top level, we make a mini card
     const card = document.createElement('div');
-    card.className = 'bookmark-card bookmark-card--auto';
+    card.className = 'bookmark-card';
+    card.style.height = 'auto'; // Auto height for single items
     card.setAttribute('draggable', 'true');
     card.dataset.id = node.id;
 
@@ -1406,11 +1221,12 @@ function createSimpleTile(node) {
     wrapper.className = 'leaf-wrapper';
 
     const leaf = document.createElement('a');
-    leaf.className = 'leaf-node leaf-node--no-padding';
+    leaf.className = 'leaf-node';
     leaf.href = node.url;
     if (OPEN_IN_NEW_TAB) {
         leaf.target = '_blank';
     }
+    leaf.style.padding = '0';
 
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
@@ -1418,7 +1234,8 @@ function createSimpleTile(node) {
     leaf.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
-    labelSpan.className = 'bookmark-label bookmark-label--bold';
+    labelSpan.className = 'bookmark-label';
+    labelSpan.style.fontWeight = 'bold';
     labelSpan.textContent = node.title;
     labelSpan.title = node.title || '';
     leaf.title = node.title || '';
@@ -1585,16 +1402,12 @@ function renderTreeItem(node) {
 function createBookmarkActions(node, wrapperEl) {
     const actions = document.createElement('div');
     actions.className = 'bookmark-actions';
-    actions.setAttribute('role', 'group');
-    actions.setAttribute('aria-label', `${node.title || '书签'} 操作`);
 
-    // Edit button (Fix #17: aria-label with bookmark name)
+    // Edit button
     const editBtn = document.createElement('button');
     editBtn.className = 'bookmark-action-btn edit-btn';
     editBtn.title = '编辑书签';
-    editBtn.setAttribute('aria-label', `编辑 ${node.title || '书签'}`);
-    editBtn.type = 'button';
-    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
     editBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1602,13 +1415,11 @@ function createBookmarkActions(node, wrapperEl) {
     });
     actions.appendChild(editBtn);
 
-    // Delete button (Fix #17: aria-label with bookmark name)
+    // Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'bookmark-action-btn delete-btn';
     deleteBtn.title = '删除书签';
-    deleteBtn.setAttribute('aria-label', `删除 ${node.title || '书签'}`);
-    deleteBtn.type = 'button';
-    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     deleteBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1667,12 +1478,13 @@ function deleteBookmark(node, wrapperEl) {
                 console.error('Delete failed:', chrome.runtime.lastError.message);
                 return;
             }
-            // Animate out first, then refresh cache — avoids double-render (Fix #7)
+            console.log('Deleted bookmark:', node.id);
+            refreshBookmarkTreeCache();
+            // Animate out
             wrapperEl.classList.add('bookmark-fade-out');
             wrapperEl.addEventListener('animationend', () => {
                 wrapperEl.remove();
-                refreshBookmarkTreeCache();
-            }, { once: true });
+            });
         });
     });
 }
@@ -1791,6 +1603,7 @@ function editBookmark(node, wrapperEl) {
     }, { signal });
 }
 
+// --- Card-Level Drag & Drop ---
 // --- Drag & Drop Logic ---
 
 function handleDragStart(e) {
@@ -1861,6 +1674,7 @@ function handleDragEnd(e) {
     items.forEach(item => item.classList.remove('drag-over'));
 }
 
+// --- Folder Modal & Search ---
 // --- Folder Modal Logic ---
 
 function showFolderModal(folderNode) {
@@ -1941,6 +1755,7 @@ function initSearch() {
     let currentUrl = 'https://www.google.com/search?q=';
     let selectedIndex = -1;
     let activeMatches = [];
+    let inputDebounceTimer = null;
 
     // Show/hide picker with overlay
     function showPicker() {
@@ -2303,12 +2118,15 @@ function initSearch() {
         }
     });
 
-    // Use shared debounce utility (Fix #15)
-    input.addEventListener('input', debounce((e) => {
-        renderSuggestions(input.value);
-    }, 120));
+    input.addEventListener('input', (e) => {
+        clearTimeout(inputDebounceTimer);
+        inputDebounceTimer = setTimeout(() => {
+            renderSuggestions(input.value);
+        }, 100);
+    });
 }
 
+// --- Settings & Theme ---
 // --- Settings Logic (Cleaned) ---
 // Constants are defined at the top of the file
 
@@ -2506,7 +2324,7 @@ function initSettingsUI(settings) {
             const originalOk = await trySave(dataUrl);
             if (originalOk) return;
 
-            // Adaptive fallback: gradually reduce size only when needed.
+            // Adaptive fallback: gradually reduce size only when needed by storage constraints.
             const compressionPresets = [
                 { maxDim: 6144, quality: 0.98, mimeType: preferredMime },
                 { maxDim: 5120, quality: 0.96, mimeType: preferredMime },
@@ -2525,8 +2343,8 @@ function initSettingsUI(settings) {
                 }
             }
 
-            console.error('All image save attempts failed');
-            alert('图片保存失败。可尝试更小图片或降低分辨率后重试。');
+            console.error('Failed to save image:', chrome.runtime.lastError);
+            alert('图片保存失败（存储限制导致）。可尝试更小图片或降低分辨率后重试。');
         };
         reader.readAsDataURL(file);
     });
@@ -2534,7 +2352,7 @@ function initSettingsUI(settings) {
     // Clear Background (Fix #16: also clear from IndexedDB)
     clearBgBtn.addEventListener('click', async () => {
         CURRENT_BG_IMAGE = null;
-        bgUpload.value = '';
+        bgUpload.value = ''; // Reset input
         updateBlurControlsState();
         applyBackground();
         await bgIdbRemove();
@@ -3144,6 +2962,7 @@ function applyContainerOpacity() {
     container.style.boxShadow = '';
 }
 
+// --- Item-Level Drag & Drop ---
 // --- Bookmark Item Drag Handlers ---
 
 function handleItemDragStart(e) {
@@ -3277,6 +3096,7 @@ function handleItemDragEnd(e) {
     dragSrcEl = null;
 }
 
+// --- AI Sidebar ---
 // --- AI Sidebar Logic ---
 
 function initAiSidebarLazy() {
@@ -3380,6 +3200,45 @@ function initAiSidebar() {
         });
     }
 
+    function syncAiTabsIndicator() {
+        if (!sidebar || !sidebar.classList.contains('active')) return;
+        
+        const activeTab = tabsContainer.querySelector('.ai-tab.active');
+        let indicator = tabsContainer.querySelector('.ai-tabs-indicator');
+
+        if (!activeTab) {
+            if (indicator) {
+                indicator.style.opacity = '0';
+                indicator.style.transform = 'scale3d(0.9, 0.9, 1)';
+            }
+            return;
+        }
+
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'ai-tabs-indicator';
+            tabsContainer.insertBefore(indicator, tabsContainer.firstChild);
+            void indicator.offsetWidth;
+        }
+
+        let top = 0;
+        let left = 0;
+        let current = activeTab;
+        while (current && current !== tabsContainer) {
+            top += current.offsetTop;
+            left += current.offsetLeft;
+            current = current.offsetParent;
+        }
+
+        const width = activeTab.offsetWidth;
+        const height = activeTab.offsetHeight;
+
+        indicator.style.width = `${width}px`;
+        indicator.style.height = `${height}px`;
+        indicator.style.transform = `translate3d(${left}px, ${top}px, 0) scale3d(1, 1, 1)`;
+        indicator.style.opacity = '1';
+    }
+
     function preloadIframe(provider) {
         const iframe = iframes.get(provider.id);
         if (!iframe || loadedIframes.has(provider.id)) return;
@@ -3391,6 +3250,10 @@ function initAiSidebar() {
         if (!iframe.dataset.loadBound) {
             iframe.addEventListener('load', () => {
                 iframe.classList.add('loaded');
+                if (currentAiId === provider.id) {
+                    const loader = document.getElementById('ai-sidebar-loading');
+                    if (loader) loader.classList.add('hidden');
+                }
             });
             iframe.dataset.loadBound = 'true';
         }
@@ -3414,10 +3277,14 @@ function initAiSidebar() {
 
         currentAiId = aiId;
         updateActiveTab();
+        
+        requestAnimationFrame(() => {
+            syncAiTabsIndicator();
+        });
 
         iframes.forEach((iframe, id) => {
             iframe.classList.remove('active');
-            if (id !== aiId) unloadIframe(id);
+            iframe.style.display = 'none';
         });
 
         const targetIframe = iframes.get(aiId);
@@ -3428,12 +3295,23 @@ function initAiSidebar() {
 
         if (targetProvider.sidebarMode === 'external') {
             showFallback(`${targetProvider.name} 暂不支持侧边栏内嵌`, '该站点会拒绝 iframe 嵌入，请使用右上角按钮在新窗口打开。');
+            const loader = document.getElementById('ai-sidebar-loading');
+            if (loader) loader.classList.add('hidden');
             return;
         }
 
         hideFallback();
         targetIframe.classList.add('active');
         targetIframe.style.display = '';
+
+        const loader = document.getElementById('ai-sidebar-loading');
+        if (loader) {
+            if (targetIframe.classList.contains('loaded')) {
+                loader.classList.add('hidden');
+            } else {
+                loader.classList.remove('hidden');
+            }
+        }
 
         if (!loadedIframes.has(aiId)) {
             preloadIframe(targetProvider);
@@ -3553,6 +3431,7 @@ function initAiSidebar() {
             sidebar.classList.add('active');
             sidebarOverlay.classList.remove('hidden');
             sidebarOverlay.classList.add('active');
+            setTimeout(syncAiTabsIndicator, 150);
         });
 
         if (!currentAiId) {
@@ -3570,7 +3449,13 @@ function initAiSidebar() {
                 document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
-                if (currentAiId) unloadIframe(currentAiId);
+                
+                iframes.forEach((iframe, id) => {
+                    unloadIframe(id);
+                });
+                
+                const loader = document.getElementById('ai-sidebar-loading');
+                if (loader) loader.classList.add('hidden');
             }
         }, 400);
     }
@@ -3606,6 +3491,8 @@ function initAiSidebar() {
         }
     });
 
+    window.addEventListener('resize', debounce(syncAiTabsIndicator, 100));
+
     loadAiState();
 
     return {
@@ -3622,38 +3509,10 @@ function initAiSidebar() {
     };
 }
 
+// --- UI Widgets ---
 // ========================================
 // Ambient Time Display - Claude Style
 // ========================================
-
-// --- Shared time/greeting utilities (Fix #3: dedup GREETINGS/QUOTES) ---
-const DAILY_QUOTES = Object.freeze([
-    '慢慢来，比较快',
-    '保持好奇心，探索未知',
-    '做喜欢的事，见想见的人',
-    '用心感受每一个当下',
-    '简单生活，认真做事',
-    '把每一天过成想要的样子',
-    '保持热爱，奔赴山海',
-    '今日事，今日毕'
-]);
-
-function getTimePrefix(hour = new Date().getHours()) {
-    if (hour < 5) return '夜深了';
-    if (hour < 9) return '早上好';
-    if (hour < 12) return '上午好';
-    if (hour < 14) return '中午好';
-    if (hour < 18) return '下午好';
-    if (hour < 22) return '晚上好';
-    return '夜深了';
-}
-
-function getDailyGreeting() {
-    const dayOfYear = Math.floor(
-        (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-    );
-    return `${getTimePrefix()}，${DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length]}`;
-}
 
 /**
  * Initialize ambient time display and idle detection
@@ -3663,24 +3522,49 @@ function initAmbientTime() {
     if (!timeContainer) return;
 
     let idleTimer;
-    const idleDelay = 3000;
+    const idleDelay = 3000; // 3 seconds
 
-    // Build static DOM once — only update textContent on tick (Fix #5)
-    const clockEl = document.createElement('span');
-    clockEl.className = 'ambient-time-clock';
-    const infoGroup = document.createElement('div');
-    infoGroup.className = 'ambient-time-info-group';
-    const dateEl = document.createElement('span');
-    dateEl.className = 'ambient-time-date';
-    const greetingEl = document.createElement('span');
-    greetingEl.className = 'ambient-time-greeting';
-    infoGroup.appendChild(dateEl);
-    infoGroup.appendChild(greetingEl);
-    timeContainer.appendChild(clockEl);
-    timeContainer.appendChild(infoGroup);
+    // Greeting quotes pool
+    const GREETINGS = [
+        '慢慢来，比较快',
+        '保持好奇心，探索未知',
+        '做喜欢的事，见想见的人',
+        '用心感受每一个当下',
+        '简单生活，认真做事',
+        '把每一天过成想要的样子',
+        '保持热爱，奔赴山海',
+        '今日事，今日毕'
+    ];
 
-    const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
+    function getGreeting() {
+        const hour = new Date().getHours();
+        let prefix = '你好';
+        if (hour < 5) prefix = '夜深了';
+        else if (hour < 9) prefix = '早上好';
+        else if (hour < 12) prefix = '上午好';
+        else if (hour < 14) prefix = '中午好';
+        else if (hour < 18) prefix = '下午好';
+        else if (hour < 22) prefix = '晚上好';
+        else prefix = '夜深了';
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+        const quote = GREETINGS[dayOfYear % GREETINGS.length];
+        return `${prefix}，${quote}`;
+    }
 
+    function resetIdleTimer() {
+        // When active, reduce presence
+        timeContainer.classList.remove('visible');
+        timeContainer.classList.add('dimmed');
+
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            // When idle, show clearly (as restrained background hint)
+            timeContainer.classList.remove('dimmed');
+            timeContainer.classList.add('visible');
+        }, idleDelay);
+    }
+
+    // Update time every minute
     function updateAmbientTime() {
         const now = new Date();
         const year = now.getFullYear();
@@ -3688,42 +3572,39 @@ function initAmbientTime() {
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        const weekday = WEEKDAYS_SHORT[now.getDay()];
+        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        const weekday = weekdays[now.getDay()];
 
-        // textContent-only update: no DOM rebuild, no layout thrash (Fix #5)
-        clockEl.textContent = `${hours}:${minutes}`;
-        dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
-        greetingEl.textContent = getDailyGreeting();
+        timeContainer.innerHTML = `
+            <span class="ambient-time-clock">${hours}:${minutes}</span>
+            <div class="ambient-time-info-group">
+                <span class="ambient-time-date">${year}年${month}月${day}日 · 星期${weekday}</span>
+                <span class="ambient-time-greeting">${getGreeting()}</span>
+            </div>
+        `;
 
-        // Precise next-minute scheduling (Fix #6 applied to ambient clock)
+        // Schedule next update at the start of the next minute
         const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
         setTimeout(updateAmbientTime, msUntilNextMinute);
     }
 
-    function resetIdleTimer() {
-        timeContainer.classList.remove('visible');
-        timeContainer.classList.add('dimmed');
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-            timeContainer.classList.remove('dimmed');
-            timeContainer.classList.add('visible');
-        }, idleDelay);
-    }
-
+    // Listen for interactions to handle visibility
     window.addEventListener('mousemove', resetIdleTimer);
     window.addEventListener('keydown', resetIdleTimer);
     window.addEventListener('click', resetIdleTimer);
     window.addEventListener('scroll', resetIdleTimer);
 
+    // Initial update
     updateAmbientTime();
 
+    // Initial state setup after delay
     idleTimer = setTimeout(() => {
         timeContainer.classList.add('visible');
     }, idleDelay);
 }
 
 /**
- * Initialize time display for Pure Mode (Fix #6: precise setTimeout scheduling)
+ * Initialize time display for Pure Mode
  */
 function initPureTime() {
     const timeDisplay = document.querySelector('.pure-time-display');
@@ -3739,22 +3620,43 @@ function initPureTime() {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         timeDisplay.textContent = `${weekday} · ${month}月${day}日 ${hours}:${minutes}`;
-
-        // Precise scheduling: fire exactly at the next minute boundary
-        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-        setTimeout(updateTime, msUntilNextMinute);
     }
 
     updateTime();
+    setInterval(updateTime, 60000);
 }
 
 /**
- * Initialize greeting text based on time of day (Fix #3: uses shared getDailyGreeting)
+ * Initialize greeting text based on time of day
  */
 function initGreeting() {
     const greeting = document.querySelector('.pure-greeting-text');
     if (!greeting) return;
-    greeting.textContent = getDailyGreeting();
+
+    const QUOTES = [
+        '慢慢来，比较快',
+        '保持好奇心，探索未知',
+        '做喜欢的事，见想见的人',
+        '用心感受每一个当下',
+        '简单生活，认真做事',
+        '把每一天过成想要的样子',
+        '保持热爱，奔赴山海',
+        '今日事，今日毕'
+    ];
+
+    const hour = new Date().getHours();
+    let prefix = '你好';
+    if (hour < 5) prefix = '夜深了';
+    else if (hour < 9) prefix = '早上好';
+    else if (hour < 12) prefix = '上午好';
+    else if (hour < 14) prefix = '中午好';
+    else if (hour < 18) prefix = '下午好';
+    else if (hour < 22) prefix = '晚上好';
+    else prefix = '夜深了';
+
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+    const quote = QUOTES[dayOfYear % QUOTES.length];
+    greeting.textContent = `${prefix}，${quote}`;
 }
 
 /**
@@ -3765,228 +3667,6 @@ function initPureShortcuts() {
     if (footerHint) {
         footerHint.textContent = '按 Enter 搜索 · Tab 切换引擎';
     }
-}
-
-// ========================================
-// Pure Mode Memo
-// ========================================
-
-const STORAGE_KEY_MEMO = 'pure_memo_items';
-const MEMO_CHUNK_SIZE = 15;
-
-/**
- * Calculate how many memo items to display based on available vertical space.
- * Pure mode center block ≈ 420px (greeting + search + margins).
- * Each item ≈ 40px. Max cap at 8 to avoid crowding.
- */
-function calcMemoInitialCount() {
-    const availableH = Math.max(0, window.innerHeight - 480);
-    return Math.max(3, Math.min(8, Math.floor(availableH / 40)));
-}
-
-/**
-/**
- * Initialize Pure Mode lightweight memo feature (inline, no popup).
- */
-function initPureMemo() {
-    const memoRoot     = document.getElementById('pure-memo');
-    const list         = document.getElementById('pure-memo-list');
-    const input        = document.getElementById('pure-memo-input');
-    const ghostWrap    = document.getElementById('pure-memo-ghost-wrap');
-    const cursorBlink  = document.getElementById('pure-memo-cursor-blink');
-    const loadMoreWrap = document.getElementById('pure-memo-load-more-wrap');
-    const loadMoreBtn  = document.getElementById('pure-memo-load-more-btn');
-    const clearBtn     = document.getElementById('pure-memo-clear-btn');
-
-    if (!memoRoot || !list || !input) return;
-
-    let _items = [];        // full list, newest first
-    let _renderedCount = 0; // how many DOM nodes currently rendered
-
-    // ── Storage ──────────────────────────────────────────────
-    async function loadItems() {
-        const res = await storageGet([STORAGE_KEY_MEMO]);
-        _items = Array.isArray(res[STORAGE_KEY_MEMO]) ? res[STORAGE_KEY_MEMO] : [];
-        _renderedCount = calcMemoInitialCount();
-        renderList();
-    }
-
-    async function saveItems() {
-        await storageSet({ [STORAGE_KEY_MEMO]: _items });
-    }
-
-    // ── Render ───────────────────────────────────────────────
-    function renderList() {
-        list.innerHTML = '';
-
-        const slice = _items.slice(0, _renderedCount);
-        const frag = document.createDocumentFragment();
-        slice.forEach(item => frag.appendChild(buildItemEl(item)));
-        list.appendChild(frag);
-
-        // "Load more" button
-        loadMoreWrap.classList.toggle('hidden', _items.length <= _renderedCount);
-
-        // "Clear" button — hide when empty
-        clearBtn.style.visibility = _items.length === 0 ? 'hidden' : '';
-
-        // Card border only when there are items
-        memoRoot.classList.toggle('memo-has-items', _items.length > 0);
-    }
-
-    function buildItemEl(item) {
-        const el = document.createElement('div');
-        el.className = 'pure-memo-item';
-        el.setAttribute('role', 'listitem');
-        el.dataset.id = item.id;
-
-        const timeStr = formatMemoTime(item.createdAt);
-        el.innerHTML = `
-            <button class="pure-memo-item-check" type="button" aria-label="完成并删除此备忘">
-                <svg class="memo-check-svg" viewBox="0 0 10 8" width="10" height="8" fill="none"
-                     stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="1 4 3.5 6.5 9 1"/>
-                </svg>
-            </button>
-            <span class="pure-memo-item-text">${escapeHtml(item.text)}</span>
-            <span class="pure-memo-item-time">${timeStr}</span>
-            <button class="pure-memo-item-del" type="button" aria-label="删除此备忘">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>`;
-
-        // Checkbox: check animation → delete
-        el.querySelector('.pure-memo-item-check').addEventListener('click', (e) => {
-            e.stopPropagation();
-            const checkBtn = e.currentTarget;
-            // 1. show checkmark + strikethrough
-            checkBtn.classList.add('is-checking');
-            el.classList.add('is-completing');
-            // 2. fade out item
-            setTimeout(() => {
-                el.classList.add('is-removing');
-                // 3. remove from data
-                setTimeout(async () => {
-                    _items = _items.filter(i => i.id !== item.id);
-                    if (_renderedCount > _items.length) {
-                        _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
-                    }
-                    await saveItems();
-                    renderList();
-                }, 220);
-            }, 320);
-        });
-
-        // X button: immediate delete
-        el.querySelector('.pure-memo-item-del').addEventListener('click', (e) => {
-            e.stopPropagation();
-            el.classList.add('is-removing');
-            setTimeout(async () => {
-                _items = _items.filter(i => i.id !== item.id);
-                if (_renderedCount > _items.length) {
-                    _renderedCount = Math.max(calcMemoInitialCount(), _items.length);
-                }
-                await saveItems();
-                renderList();
-            }, 180);
-        });
-
-        return el;
-    }
-
-    // ── Add item ─────────────────────────────────────────────
-    async function addItem() {
-        const text = input.value.trim();
-        if (!text) return;
-
-        const newItem = {
-            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-            text,
-            createdAt: Date.now()
-        };
-        _items.unshift(newItem);
-
-        if (_renderedCount < 1) _renderedCount = calcMemoInitialCount();
-
-        // Clear input, keep focus for continuous entry
-        input.value = '';
-        input.focus();
-
-        await saveItems();
-        renderList();
-
-        // Entrance animation on newest item
-        const firstEl = list.firstElementChild;
-        if (firstEl) {
-            firstEl.classList.add('is-entering');
-            requestAnimationFrame(() => firstEl.classList.remove('is-entering'));
-        }
-    }
-
-    // ── Time formatting ───────────────────────────────────────
-    function formatMemoTime(ts) {
-        const diff = Date.now() - ts;
-        if (diff < 60000) return '刚刚';
-        if (diff < 3600000) return `${Math.floor(diff / 60000)} 分钟前`;
-        const d = new Date(ts);
-        const today = new Date();
-        if (d.toDateString() === today.toDateString()) {
-            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-        }
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        if (d.toDateString() === yesterday.toDateString()) return '昨天';
-        return `${d.getMonth() + 1}月${d.getDate()}日`;
-    }
-
-    // ── Cursor blink + hint control ───────────────────────────
-    const inputHint = document.getElementById('pure-memo-input-hint');
-
-    function setGhostVisible(visible) {
-        if (cursorBlink) cursorBlink.classList.toggle('hidden', !visible);
-        if (inputHint)   inputHint.classList.toggle('hidden', !visible);
-    }
-
-    if (cursorBlink) {
-        // Hide ghost when focused (native cursor takes over)
-        input.addEventListener('focus', () => setGhostVisible(false));
-        // Show ghost when blurred and empty
-        input.addEventListener('blur', () => {
-            if (!input.value.trim()) setGhostVisible(true);
-        });
-        // Hide hint/cursor when typing, restore if cleared
-        input.addEventListener('input', () => {
-            setGhostVisible(input.value.length === 0);
-        });
-    }
-
-    // Clicking ghost wrap area focuses the input
-    if (ghostWrap) {
-        ghostWrap.addEventListener('click', () => input.focus());
-    }
-
-    // ── Event Listeners ───────────────────────────────────────
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); addItem(); }
-    });
-
-    loadMoreBtn.addEventListener('click', () => {
-        _renderedCount += MEMO_CHUNK_SIZE;
-        renderList();
-    });
-
-    clearBtn.addEventListener('click', () => {
-        if (_items.length === 0) return;
-        showConfirmDialog('确定清空所有备忘？此操作无法撤销。', async () => {
-            _items = [];
-            _renderedCount = 0;
-            await saveItems();
-            renderList();
-        });
-    });
-
-    loadItems();
 }
 
 // --- Dynamic indicator and card hover flow animations ---

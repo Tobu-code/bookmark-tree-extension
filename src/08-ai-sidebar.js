@@ -102,6 +102,45 @@ function initAiSidebar() {
         });
     }
 
+    function syncAiTabsIndicator() {
+        if (!sidebar || !sidebar.classList.contains('active')) return;
+        
+        const activeTab = tabsContainer.querySelector('.ai-tab.active');
+        let indicator = tabsContainer.querySelector('.ai-tabs-indicator');
+
+        if (!activeTab) {
+            if (indicator) {
+                indicator.style.opacity = '0';
+                indicator.style.transform = 'scale3d(0.9, 0.9, 1)';
+            }
+            return;
+        }
+
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'ai-tabs-indicator';
+            tabsContainer.insertBefore(indicator, tabsContainer.firstChild);
+            void indicator.offsetWidth;
+        }
+
+        let top = 0;
+        let left = 0;
+        let current = activeTab;
+        while (current && current !== tabsContainer) {
+            top += current.offsetTop;
+            left += current.offsetLeft;
+            current = current.offsetParent;
+        }
+
+        const width = activeTab.offsetWidth;
+        const height = activeTab.offsetHeight;
+
+        indicator.style.width = `${width}px`;
+        indicator.style.height = `${height}px`;
+        indicator.style.transform = `translate3d(${left}px, ${top}px, 0) scale3d(1, 1, 1)`;
+        indicator.style.opacity = '1';
+    }
+
     function preloadIframe(provider) {
         const iframe = iframes.get(provider.id);
         if (!iframe || loadedIframes.has(provider.id)) return;
@@ -113,6 +152,10 @@ function initAiSidebar() {
         if (!iframe.dataset.loadBound) {
             iframe.addEventListener('load', () => {
                 iframe.classList.add('loaded');
+                if (currentAiId === provider.id) {
+                    const loader = document.getElementById('ai-sidebar-loading');
+                    if (loader) loader.classList.add('hidden');
+                }
             });
             iframe.dataset.loadBound = 'true';
         }
@@ -136,10 +179,14 @@ function initAiSidebar() {
 
         currentAiId = aiId;
         updateActiveTab();
+        
+        requestAnimationFrame(() => {
+            syncAiTabsIndicator();
+        });
 
         iframes.forEach((iframe, id) => {
             iframe.classList.remove('active');
-            if (id !== aiId) unloadIframe(id);
+            iframe.style.display = 'none';
         });
 
         const targetIframe = iframes.get(aiId);
@@ -150,12 +197,23 @@ function initAiSidebar() {
 
         if (targetProvider.sidebarMode === 'external') {
             showFallback(`${targetProvider.name} 暂不支持侧边栏内嵌`, '该站点会拒绝 iframe 嵌入，请使用右上角按钮在新窗口打开。');
+            const loader = document.getElementById('ai-sidebar-loading');
+            if (loader) loader.classList.add('hidden');
             return;
         }
 
         hideFallback();
         targetIframe.classList.add('active');
         targetIframe.style.display = '';
+
+        const loader = document.getElementById('ai-sidebar-loading');
+        if (loader) {
+            if (targetIframe.classList.contains('loaded')) {
+                loader.classList.add('hidden');
+            } else {
+                loader.classList.remove('hidden');
+            }
+        }
 
         if (!loadedIframes.has(aiId)) {
             preloadIframe(targetProvider);
@@ -275,6 +333,7 @@ function initAiSidebar() {
             sidebar.classList.add('active');
             sidebarOverlay.classList.remove('hidden');
             sidebarOverlay.classList.add('active');
+            setTimeout(syncAiTabsIndicator, 150);
         });
 
         if (!currentAiId) {
@@ -292,7 +351,13 @@ function initAiSidebar() {
                 document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
-                if (currentAiId) unloadIframe(currentAiId);
+                
+                iframes.forEach((iframe, id) => {
+                    unloadIframe(id);
+                });
+                
+                const loader = document.getElementById('ai-sidebar-loading');
+                if (loader) loader.classList.add('hidden');
             }
         }, 400);
     }
@@ -327,6 +392,8 @@ function initAiSidebar() {
             closeSidebar();
         }
     });
+
+    window.addEventListener('resize', debounce(syncAiTabsIndicator, 100));
 
     loadAiState();
 

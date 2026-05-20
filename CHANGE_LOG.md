@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 14:45:00]
+- **Type**: Design (AI Sidebar aesthetic & UX enhancements)
+- **Content**: 1) AI Tabs 高亮漂移：实现 `.ai-tabs-indicator` 滑块垫片，使 AI 侧栏的 Tabs 在切换和 resize 时支持平滑吸附过渡，统一全局动效语言；2) 3D 景深模糊视差：拉开侧栏时，为主页面（#bookmarks-tree 和 #search-container）加设 scale(0.96) 深度回退与 blur(8px) 模糊，塑造极致的前后台纵深分割；3) 控制按钮微动效：关闭按钮悬浮时 90° 旋转，新窗口打开按钮悬浮时 45° 斜向弹跳；4) Iframe 保活与内存安全：侧栏打开期间切换 AI 时仅通过 CSS 隐藏 iframe，避免销毁造成的冷启动会话丢失；仅在侧栏关闭时循环 unloadIframe 完整回收内存；5) 极光占位屏：引入 `#ai-sidebar-loading` 加载器和极光脉冲微光（.aurora-glow）与骨架闪烁线，彻底告别 iframe 载入期的空白闪烁。
+- **Impact**: `newtab.html`, `styles.css`, `src/08-ai-sidebar.js`, `script.js`
+
 ## [2026-05-20 14:28:40]
 - **Type**: Design (Fluid selection animations)
 - **Content**: 1) 引入侧栏主动式滑动轨垫片（`.sidebar-active-indicator`）：为左侧目录树在平铺模式和树状模式下添加绝对定位的高亮滑块，配合弹性 transition，在切换目录项时实现背景的丝滑漂移；2) 剥离静态背景色：移除原 `.tree-folder-item.active` 的硬编码背景和边框，将其完全移交给滑动指示器，使漂移过渡连贯无闪烁；3) 边缘光追流光效果：利用 `@property --glow-angle` 和 `@keyframes conic-glow-rotate` 在选中的书签卡片（`.leaf-wrapper.is-selected` / `.bookmark-card.is-selected`）四周生成 360° 发光旋转边框；4) 弹性点击反馈：结合 `spring-pop` 弹性微缩反弹动画，在卡片点击时提供丝滑回弹与流光闪烁反馈，并配有 1.4 秒自动销毁机制，确保极佳的日常交互性能。
