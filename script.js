@@ -42,6 +42,22 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         icon: `<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="ChatGPT" draggable="false">`
     },
     {
+        id: 'gemini',
+        name: 'Gemini',
+        url: 'https://gemini.google.com/',
+        enabled: true,
+        builtIn: true,
+        icon: `<img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Gemini" draggable="false">`
+    },
+    {
+        id: 'claude',
+        name: 'Claude',
+        url: 'https://claude.ai/',
+        enabled: true,
+        builtIn: true,
+        icon: `<img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="Claude" draggable="false">`
+    },
+    {
         id: 'qwen',
         name: '通义千问',
         url: 'https://chat.qwen.ai/',
@@ -76,50 +92,26 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));
 
-// --- State (Fix #10: consolidated into AppState for clarity) ---
-const AppState = {
-    dragSrcEl: null,
-    openInNewTab: true,
-    iconStyle: 'default',
-    bgImage: null,
-    bgBlur: 0,
-    containerBlur: 0,
-    hoverDelay: 100,
-    layoutMode: 'tree',
-    pureModeEnabled: false,
-    hiddenFolders: [],
-    showHiddenFolders: false,
-    flatDirExpanded: false,
-    treeExpandedFolders: new Set(['1']),
-    dragHighlightedElements: new Set(),
-    bookmarkTreeCache: null,
-    bookmarkSearchIndex: [],
-    bookmarkSearchBuckets: new Map(),
-    aiSidebarController: null,
-    layoutSwitchTimer: null,
-};
-
-// Backwards-compat aliases — existing code continues to work without changes
-let dragSrcEl = AppState.dragSrcEl;
-let OPEN_IN_NEW_TAB = AppState.openInNewTab;
-let CURRENT_ICON_STYLE = AppState.iconStyle;
-let CURRENT_BG_IMAGE = AppState.bgImage;
-let CURRENT_BG_BLUR = AppState.bgBlur;
-let CURRENT_CONTAINER_BLUR = AppState.containerBlur;
-let HOVER_DELAY = AppState.hoverDelay;
-let LAYOUT_MODE = AppState.layoutMode;
-let PURE_MODE_ENABLED = AppState.pureModeEnabled;
-let HIDDEN_FOLDERS = AppState.hiddenFolders;
-let SHOW_HIDDEN_FOLDERS = AppState.showHiddenFolders;
-let FLAT_DIR_EXPANDED = AppState.flatDirExpanded;
-let TREE_EXPANDED_FOLDERS = AppState.treeExpandedFolders;
-let DRAG_HIGHLIGHTED_ELEMENTS = AppState.dragHighlightedElements;
-let BOOKMARK_TREE_CACHE = AppState.bookmarkTreeCache;
-let BOOKMARK_SEARCH_INDEX = AppState.bookmarkSearchIndex;
-let BOOKMARK_SEARCH_BUCKETS = AppState.bookmarkSearchBuckets;
-let AI_SIDEBAR_CONTROLLER = AppState.aiSidebarController;
-let LAYOUT_SWITCH_TIMER = AppState.layoutSwitchTimer;
-
+// --- State and Constants ---
+let dragSrcEl = null;
+let OPEN_IN_NEW_TAB = true;
+let CURRENT_ICON_STYLE = 'default';
+let CURRENT_BG_IMAGE = null;
+let CURRENT_BG_BLUR = 0;
+let CURRENT_CONTAINER_BLUR = 0;
+let HOVER_DELAY = 100;
+let LAYOUT_MODE = 'tree';
+let PURE_MODE_ENABLED = false;
+let HIDDEN_FOLDERS = [];
+let SHOW_HIDDEN_FOLDERS = false;
+let FLAT_DIR_EXPANDED = false;
+let TREE_EXPANDED_FOLDERS = new Set(['1']);
+let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
+let BOOKMARK_TREE_CACHE = null;
+let BOOKMARK_SEARCH_INDEX = [];
+let BOOKMARK_SEARCH_BUCKETS = new Map();
+let AI_SIDEBAR_CONTROLLER = null;
+let LAYOUT_SWITCH_TIMER = null;
 
 function storageGet(keys) {
     return new Promise((resolve) => chrome.storage.local.get(keys, resolve));
@@ -178,15 +170,6 @@ async function bgIdbRemove() {
             tx.oncomplete = () => resolve();
         });
     } catch { /* ignore */ }
-}
-
-// --- Utility: generic debounce (Fix #15) ---
-function debounce(fn, delayMs) {
-    let timer = null;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn(...args), delayMs);
-    };
 }
 
 function applyPureModeState(enabled) {
@@ -614,10 +597,7 @@ function saveTreeExpandedState() {
 
 function renderBookmarksWithLayoutTransition() {
     const body = document.body;
-    if (!body) {
-        renderBookmarksFromCache();
-        return;
-    }
+    if (body.classList.contains('layout-switching')) return;
 
     // Restart class for repeated rapid toggles.
     body.classList.remove('layout-switching');
@@ -647,6 +627,14 @@ function renderBookmarksWithLayoutTransition() {
 
 function cleanupLegacyFrequencyStorage() {
     chrome.storage.local.remove(LEGACY_FREQUENCY_STORAGE_KEYS);
+}
+
+function debounce(fn, delayMs) {
+    let timer = null;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delayMs);
+    };
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -726,8 +714,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 4. Init Settings UI (Bindings)
-    // We defer this call until we have the function definition, or we can hoist the logic.
-    // For now, we assume initSettingsUI will be defined later or we call the modified initSettings.
     initSettingsUI(settings);
 
     // 5. Apply Visuals
@@ -782,8 +768,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 8. Reveal Page
-    // Use double requestAnimationFrame to ensure the browser has painted the background 
-    // and layout is stable before triggering the opacity transition.
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             document.body.classList.add('loaded');
@@ -819,6 +803,32 @@ function preloadImage(url, timeoutMs = 5000) {
             } else {
                 img.onload = finish;
                 img.onerror = finish;
+            }
+        }
+    });
+}
+
+// --- Icon Constants ---
+function preloadImage(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = url;
+
+        // Use decode() if available to ensure image is ready for display
+        if ('decode' in img) {
+            img.decode()
+                .then(resolve)
+                .catch(() => {
+                    // Fallback if decode fails (e.g. invalid image data)
+                    resolve();
+                });
+        } else {
+            // Fallback for older browsers
+            if (img.complete) {
+                resolve();
+            } else {
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
             }
         }
     });
@@ -866,6 +876,9 @@ function renderBookmarks(bookmarkTreeNodes) {
         container.classList.add('layout-tree');
         renderTreeBookmarks(bookmarkTreeNodes, container);
     }
+    
+    // Smooth transition indicator sync
+    setTimeout(syncSidebarActiveIndicator, 50);
 }
 
 function bindDelegatedItemDnD(container) {
@@ -1271,10 +1284,16 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             renderBookmarks(bookmarkTreeNodes);
         });
         
+        toggleHiddenBtn.style.padding = '10px';
+        toggleHiddenBtn.style.cursor = 'pointer';
+        toggleHiddenBtn.style.textAlign = 'center';
+        toggleHiddenBtn.style.color = 'var(--text-subtle)';
+        toggleHiddenBtn.style.fontSize = '12px';
         dirScroll.appendChild(toggleHiddenBtn);
     }
 }
 
+// --- Bookmark Card / Item Helpers ---
 function createBookmarkCard(folderNode) {
     const card = document.createElement('div');
     card.className = 'bookmark-card';
@@ -1348,8 +1367,7 @@ function createBookmarkIcon(iconData, size = 16) {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
-        img.width = size;
-        img.height = size;
+        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
@@ -1358,6 +1376,7 @@ function createBookmarkIcon(iconData, size = 16) {
             try {
                 const hostname = new URL(url).hostname.replace('www.', '');
                 letter = hostname.charAt(0).toUpperCase();
+                // Generate a consistent color from the hostname
                 let hash = 0;
                 for (let i = 0; i < hostname.length; i++) {
                     hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
@@ -1369,17 +1388,20 @@ function createBookmarkIcon(iconData, size = 16) {
             avatar.className = 'bookmark-icon-fallback';
             avatar.style.backgroundColor = bgColor;
             avatar.textContent = letter;
+            avatar.style.marginRight = '8px';
             this.replaceWith(avatar);
         });
         return img;
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
-        span.className = 'bookmark-icon bookmark-icon--svg';
+        span.className = 'bookmark-icon';
+        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
         span.innerHTML = iconData.value;
         return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
+        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
         span.textContent = iconData.value;
         return span;
     }
@@ -1388,7 +1410,8 @@ function createBookmarkIcon(iconData, size = 16) {
 function createSimpleTile(node) {
     // For single bookmarks at the top level, we make a mini card
     const card = document.createElement('div');
-    card.className = 'bookmark-card bookmark-card--auto';
+    card.className = 'bookmark-card';
+    card.style.height = 'auto'; // Auto height for single items
     card.setAttribute('draggable', 'true');
     card.dataset.id = node.id;
 
@@ -1403,11 +1426,12 @@ function createSimpleTile(node) {
     wrapper.className = 'leaf-wrapper';
 
     const leaf = document.createElement('a');
-    leaf.className = 'leaf-node leaf-node--no-padding';
+    leaf.className = 'leaf-node';
     leaf.href = node.url;
     if (OPEN_IN_NEW_TAB) {
         leaf.target = '_blank';
     }
+    leaf.style.padding = '0';
 
     // Icon handling (CSP-compliant)
     const iconData = getIconForBookmark(node.url);
@@ -1415,7 +1439,8 @@ function createSimpleTile(node) {
     leaf.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
-    labelSpan.className = 'bookmark-label bookmark-label--bold';
+    labelSpan.className = 'bookmark-label';
+    labelSpan.style.fontWeight = 'bold';
     labelSpan.textContent = node.title;
     labelSpan.title = node.title || '';
     leaf.title = node.title || '';
@@ -1582,16 +1607,12 @@ function renderTreeItem(node) {
 function createBookmarkActions(node, wrapperEl) {
     const actions = document.createElement('div');
     actions.className = 'bookmark-actions';
-    actions.setAttribute('role', 'group');
-    actions.setAttribute('aria-label', `${node.title || '书签'} 操作`);
 
-    // Edit button (Fix #17: aria-label with bookmark name)
+    // Edit button
     const editBtn = document.createElement('button');
     editBtn.className = 'bookmark-action-btn edit-btn';
     editBtn.title = '编辑书签';
-    editBtn.setAttribute('aria-label', `编辑 ${node.title || '书签'}`);
-    editBtn.type = 'button';
-    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
     editBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1599,13 +1620,11 @@ function createBookmarkActions(node, wrapperEl) {
     });
     actions.appendChild(editBtn);
 
-    // Delete button (Fix #17: aria-label with bookmark name)
+    // Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'bookmark-action-btn delete-btn';
     deleteBtn.title = '删除书签';
-    deleteBtn.setAttribute('aria-label', `删除 ${node.title || '书签'}`);
-    deleteBtn.type = 'button';
-    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     deleteBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1664,12 +1683,13 @@ function deleteBookmark(node, wrapperEl) {
                 console.error('Delete failed:', chrome.runtime.lastError.message);
                 return;
             }
-            // Animate out first, then refresh cache — avoids double-render (Fix #7)
+            console.log('Deleted bookmark:', node.id);
+            refreshBookmarkTreeCache();
+            // Animate out
             wrapperEl.classList.add('bookmark-fade-out');
             wrapperEl.addEventListener('animationend', () => {
                 wrapperEl.remove();
-                refreshBookmarkTreeCache();
-            }, { once: true });
+            });
         });
     });
 }
@@ -1788,6 +1808,7 @@ function editBookmark(node, wrapperEl) {
     }, { signal });
 }
 
+// --- Card-Level Drag & Drop ---
 // --- Drag & Drop Logic ---
 
 function handleDragStart(e) {
@@ -1858,6 +1879,7 @@ function handleDragEnd(e) {
     items.forEach(item => item.classList.remove('drag-over'));
 }
 
+// --- Folder Modal & Search ---
 // --- Folder Modal Logic ---
 
 function showFolderModal(folderNode) {
@@ -1938,6 +1960,7 @@ function initSearch() {
     let currentUrl = 'https://www.google.com/search?q=';
     let selectedIndex = -1;
     let activeMatches = [];
+    let inputDebounceTimer = null;
 
     // Show/hide picker with overlay
     function showPicker() {
@@ -2300,12 +2323,15 @@ function initSearch() {
         }
     });
 
-    // Use shared debounce utility (Fix #15)
-    input.addEventListener('input', debounce((e) => {
-        renderSuggestions(input.value);
-    }, 120));
+    input.addEventListener('input', (e) => {
+        clearTimeout(inputDebounceTimer);
+        inputDebounceTimer = setTimeout(() => {
+            renderSuggestions(input.value);
+        }, 100);
+    });
 }
 
+// --- Settings & Theme ---
 // --- Settings Logic (Cleaned) ---
 // Constants are defined at the top of the file
 
@@ -2503,7 +2529,7 @@ function initSettingsUI(settings) {
             const originalOk = await trySave(dataUrl);
             if (originalOk) return;
 
-            // Adaptive fallback: gradually reduce size only when needed.
+            // Adaptive fallback: gradually reduce size only when needed by storage constraints.
             const compressionPresets = [
                 { maxDim: 6144, quality: 0.98, mimeType: preferredMime },
                 { maxDim: 5120, quality: 0.96, mimeType: preferredMime },
@@ -2522,8 +2548,8 @@ function initSettingsUI(settings) {
                 }
             }
 
-            console.error('All image save attempts failed');
-            alert('图片保存失败。可尝试更小图片或降低分辨率后重试。');
+            console.error('Failed to save image:', chrome.runtime.lastError);
+            alert('图片保存失败（存储限制导致）。可尝试更小图片或降低分辨率后重试。');
         };
         reader.readAsDataURL(file);
     });
@@ -2531,7 +2557,7 @@ function initSettingsUI(settings) {
     // Clear Background (Fix #16: also clear from IndexedDB)
     clearBgBtn.addEventListener('click', async () => {
         CURRENT_BG_IMAGE = null;
-        bgUpload.value = '';
+        bgUpload.value = ''; // Reset input
         updateBlurControlsState();
         applyBackground();
         await bgIdbRemove();
@@ -3082,8 +3108,10 @@ function applyBackground() {
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
+        document.body.classList.add('has-custom-bg');
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
+        document.body.classList.remove('has-custom-bg');
     }
 
     if (CURRENT_BG_BLUR > 0) {
@@ -3107,17 +3135,39 @@ function applyContainerOpacity() {
 
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
     const transparency = level / 10;
+
+    // 当透明度级别为最大值 10 时，容器完全透明隐形，不留边框阴影和遮罩
+    if (level === 10) {
+        container.style.background = 'transparent';
+        container.style.backdropFilter = 'none';
+        container.style.webkitBackdropFilter = 'none';
+        container.style.borderColor = 'transparent';
+        container.style.boxShadow = 'none';
+        return;
+    }
+
     // Blend transparency and frosted blur together:
     // higher transparency -> lower blur, but keep a minimum for readability.
-    const overlayAlpha = Math.max(0.28, 0.82 - transparency * 0.52);
-    const blurPx = Math.max(2, Math.round(18 - transparency * 16));
+    const overlayAlpha = Math.max(0.05, 0.82 - transparency * 0.77);
+    const blurPx = Math.max(0, Math.round(18 - transparency * 18));
 
     container.style.background =
         `linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), color-mix(in srgb, var(--bg-overlay) ${Math.round(overlayAlpha * 100)}%, transparent)`;
-    container.style.backdropFilter = `blur(${blurPx}px)`;
-    container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
+    
+    if (blurPx > 0) {
+        container.style.backdropFilter = `blur(${blurPx}px)`;
+        container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
+    } else {
+        container.style.backdropFilter = 'none';
+        container.style.webkitBackdropFilter = 'none';
+    }
+
+    // 还原默认样式
+    container.style.borderColor = '';
+    container.style.boxShadow = '';
 }
 
+// --- Item-Level Drag & Drop ---
 // --- Bookmark Item Drag Handlers ---
 
 function handleItemDragStart(e) {
@@ -3251,6 +3301,7 @@ function handleItemDragEnd(e) {
     dragSrcEl = null;
 }
 
+// --- AI Sidebar ---
 // --- AI Sidebar Logic ---
 
 function initAiSidebarLazy() {
@@ -3354,6 +3405,43 @@ function initAiSidebar() {
         });
     }
 
+    function syncAiTabsIndicator() {
+        if (!sidebar || !sidebar.classList.contains('active')) return;
+        
+        const activeTab = tabsContainer.querySelector('.ai-tab.active');
+        let indicator = tabsContainer.querySelector('.ai-tabs-indicator');
+
+        if (!activeTab) {
+            if (indicator) {
+                indicator.style.opacity = '0';
+                indicator.style.transform = 'scale3d(0.9, 0.9, 1)';
+            }
+            return;
+        }
+
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'ai-tabs-indicator';
+            tabsContainer.insertBefore(indicator, tabsContainer.firstChild);
+            void indicator.offsetWidth;
+        }
+
+        // Use getBoundingClientRect for robust positioning, factoring in horizontal scrolling (scrollLeft)
+        const activeRect = activeTab.getBoundingClientRect();
+        const containerRect = tabsContainer.getBoundingClientRect();
+
+        const left = activeRect.left - containerRect.left + tabsContainer.scrollLeft;
+        const top = activeRect.top - containerRect.top;
+
+        const width = activeTab.offsetWidth;
+        const height = activeTab.offsetHeight;
+
+        indicator.style.width = `${width}px`;
+        indicator.style.height = `${height}px`;
+        indicator.style.transform = `translate3d(${left}px, ${top}px, 0) scale3d(1, 1, 1)`;
+        indicator.style.opacity = '1';
+    }
+
     function preloadIframe(provider) {
         const iframe = iframes.get(provider.id);
         if (!iframe || loadedIframes.has(provider.id)) return;
@@ -3365,6 +3453,10 @@ function initAiSidebar() {
         if (!iframe.dataset.loadBound) {
             iframe.addEventListener('load', () => {
                 iframe.classList.add('loaded');
+                if (currentAiId === provider.id) {
+                    const loader = document.getElementById('ai-sidebar-loading');
+                    if (loader) loader.classList.add('hidden');
+                }
             });
             iframe.dataset.loadBound = 'true';
         }
@@ -3388,10 +3480,14 @@ function initAiSidebar() {
 
         currentAiId = aiId;
         updateActiveTab();
+        
+        requestAnimationFrame(() => {
+            syncAiTabsIndicator();
+        });
 
         iframes.forEach((iframe, id) => {
             iframe.classList.remove('active');
-            if (id !== aiId) unloadIframe(id);
+            iframe.style.display = 'none';
         });
 
         const targetIframe = iframes.get(aiId);
@@ -3402,12 +3498,23 @@ function initAiSidebar() {
 
         if (targetProvider.sidebarMode === 'external') {
             showFallback(`${targetProvider.name} 暂不支持侧边栏内嵌`, '该站点会拒绝 iframe 嵌入，请使用右上角按钮在新窗口打开。');
+            const loader = document.getElementById('ai-sidebar-loading');
+            if (loader) loader.classList.add('hidden');
             return;
         }
 
         hideFallback();
         targetIframe.classList.add('active');
         targetIframe.style.display = '';
+
+        const loader = document.getElementById('ai-sidebar-loading');
+        if (loader) {
+            if (targetIframe.classList.contains('loaded')) {
+                loader.classList.add('hidden');
+            } else {
+                loader.classList.remove('hidden');
+            }
+        }
 
         if (!loadedIframes.has(aiId)) {
             preloadIframe(targetProvider);
@@ -3527,6 +3634,7 @@ function initAiSidebar() {
             sidebar.classList.add('active');
             sidebarOverlay.classList.remove('hidden');
             sidebarOverlay.classList.add('active');
+            setTimeout(syncAiTabsIndicator, 150);
         });
 
         if (!currentAiId) {
@@ -3544,7 +3652,13 @@ function initAiSidebar() {
                 document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
-                if (currentAiId) unloadIframe(currentAiId);
+                
+                iframes.forEach((iframe, id) => {
+                    unloadIframe(id);
+                });
+                
+                const loader = document.getElementById('ai-sidebar-loading');
+                if (loader) loader.classList.add('hidden');
             }
         }, 400);
     }
@@ -3580,6 +3694,8 @@ function initAiSidebar() {
         }
     });
 
+    window.addEventListener('resize', debounce(syncAiTabsIndicator, 100));
+
     loadAiState();
 
     return {
@@ -3595,10 +3711,6 @@ function initAiSidebar() {
         }
     };
 }
-
-// ========================================
-// Ambient Time Display - Claude Style
-// ========================================
 
 // --- Shared time/greeting utilities (Fix #3: dedup GREETINGS/QUOTES) ---
 const DAILY_QUOTES = Object.freeze([
@@ -3758,7 +3870,6 @@ function calcMemoInitialCount() {
     return Math.max(3, Math.min(8, Math.floor(availableH / 40)));
 }
 
-/**
 /**
  * Initialize Pure Mode lightweight memo feature (inline, no popup).
  */
@@ -3962,3 +4073,77 @@ function initPureMemo() {
 
     loadItems();
 }
+
+// --- Dynamic indicator and card hover flow animations ---
+function syncSidebarActiveIndicator() {
+    updateActiveIndicator('.directory-pane-scroll', '.tree-folder-item.active');
+    updateActiveIndicator('#bookmarks-tree', '.tree-folder-item.active');
+}
+
+function updateActiveIndicator(containerSelector, activeItemSelector) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    if (containerSelector === '#bookmarks-tree' && container.classList.contains('layout-flat')) {
+        const ind = container.querySelector('.sidebar-active-indicator');
+        if (ind) ind.remove();
+        return;
+    }
+
+    const activeItem = container.querySelector(activeItemSelector);
+    let indicator = container.querySelector('.sidebar-active-indicator');
+
+    if (!activeItem) {
+        if (indicator) {
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'scale3d(0.9, 0.9, 1)';
+        }
+        return;
+    }
+
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.className = 'sidebar-active-indicator';
+        container.insertBefore(indicator, container.firstChild);
+        void indicator.offsetWidth; // Force reflow
+    }
+
+    let top = 0;
+    let left = 0;
+    let current = activeItem;
+    while (current && current !== container) {
+        top += current.offsetTop;
+        left += current.offsetLeft;
+        current = current.offsetParent;
+    }
+
+    const width = activeItem.offsetWidth;
+    const height = activeItem.offsetHeight;
+
+    indicator.style.width = `${width}px`;
+    indicator.style.height = `${height}px`;
+    indicator.style.transform = `translate3d(${left}px, ${top}px, 0) scale3d(1, 1, 1)`;
+    indicator.style.opacity = '1';
+}
+
+// Bind resize and scroll window events to recalculate indicator positions
+window.addEventListener('resize', debounce(syncSidebarActiveIndicator, 80));
+
+// Bind clicks globally to handle fluid shimmers and directory indicator shifts
+document.addEventListener('click', (e) => {
+    // 1. Fluid shimmers for bookmarks
+    const cardEl = e.target.closest('.leaf-wrapper, .bookmark-card');
+    if (cardEl) {
+        cardEl.classList.remove('is-selected');
+        void cardEl.offsetWidth; // Force animation reset
+        cardEl.classList.add('is-selected');
+        setTimeout(() => {
+            cardEl.classList.remove('is-selected');
+        }, 1400);
+    }
+
+    // 2. Directory sliding indicators
+    if (e.target.closest('.tree-folder-item') || e.target.closest('.tree-folder-toggle')) {
+        setTimeout(syncSidebarActiveIndicator, 50);
+    }
+});

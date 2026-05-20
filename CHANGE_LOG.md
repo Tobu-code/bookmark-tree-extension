@@ -1,5 +1,55 @@
 # Change Log
 
+## [2026-05-20 16:13:00]
+- **Type**: Fix (全站点裸域审计加固)
+- **Content**: 全面审计所有内置 AI 站点的权限与 DNR 规则覆盖：1) 在 `manifest.json` 中为 ChatGPT、通义千问、Kimi 补充裸域 `host_permissions`（`*://chatgpt.com/*`、`*://chat.qwen.ai/*`、`*://kimi.moonshot.cn/*`），消除 `*://*.domain/*` 模式不匹配裸域的权限盲区；2) 在 `rules.json` 中新增规则 ID 21（`*://kimi.moonshot.cn/*`），修复 Kimi 静态 DNR 规则完全无法命中裸域的缺陷，消除冷启动时序竞争导致的偶发加载失败风险。
+- **Impact**: `manifest.json`, `rules.json`
+
+## [2026-05-20 15:58:00]
+- **Type**: Fix (Claude bare-domain DNR rule mismatch)
+- **Content**: 修复 Claude 无法在侧栏 iframe 中加载的问题：`*://*.claude.ai/*` 仅匹配子域名，但 Claude 使用裸域 `claude.ai`（无 www 前缀），导致 DNR 规则未命中、安全头未被移除。新增规则 ID 20 精确匹配 `*://claude.ai/*` 裸域，同时在 `manifest.json` 中补充 `*://claude.ai/*` 的 host_permissions 声明。
+- **Impact**: `manifest.json`, `rules.json`
+
+## [2026-05-20 15:54:00]
+- **Type**: Feature (Add Gemini & Claude to AI sidebar)
+- **Content**: 1) 在 `BUILTIN_AI_PROVIDERS` 默认站点列表中新增 Google Gemini 和 Anthropic Claude 选项，并配置其高清 Favicon 与入口 URL；2) 在 `manifest.json` 中配置了必要的 `host_permissions` 网络请求拦截域名；3) 在 `rules.json` 中新增 ID 19 规则以支持 `claude.ai` 解除 `X-Frame-Options` 和 `Content-Security-Policy` 嵌入限制，从而在侧栏 Iframe 中完美加载。
+- **Impact**: `src/01-constants.js`, `manifest.json`, `rules.json`, `script.js`
+
+## [2026-05-20 15:50:00]
+- **Type**: Optimization (AI sidebar iframe 100% original scale sharpness)
+- **Content**: 废弃 AI 侧栏 iframe 缩放策略（方案 A）：移除了硬编码的 `width: 111.11%; height: 111.11%` 和 `transform: scale(0.9)` 缩放效果，恢复 1:1 原生高清显示，彻底解决非整数缩放引发的文字发虚与右侧滚动条边缘截断问题。
+- **Impact**: `styles.css`, `script.js`
+
+## [2026-05-20 15:42:00]
+- **Type**: Fix (AI sidebar tabs high-precision indicator alignment)
+- **Content**: 解决 AI 侧栏打开后，高亮指示滑块定位不准向下位移的问题：1) 为 `.ai-tabs` 增加 `position: relative` 作为子元素 `.ai-tabs-indicator` 绝对定位的参考基准；2) 重构 `syncAiTabsIndicator()` 偏移量计算逻辑，使用现代高精度 `getBoundingClientRect()` 并融入 `.scrollLeft`，彻底避免 flex 布局与 offsetParent 实现差异导致的滑块跑偏脱节问题。
+- **Impact**: `src/08-ai-sidebar.js`, `styles.css`, `script.js`
+
+## [2026-05-20 15:35:00]
+- **Type**: Fix & Design (Restore source sync & AI Sidebar glassmorphism)
+- **Content**: 1) 修复分模块同步丢失导致的白屏：将原本直接修改在 `script.js` 中的 890 多行核心初始化入口（如 `DOMContentLoaded` 监听器）和备忘录逻辑规范同步归位至 `src/01-constants.js` 和 `src/09-ui-widgets.js`，重新打包拼接彻底恢复页面加载和备忘录功能；2) AI 侧栏透明磨砂化：调低侧栏背景色透明度（浅色模式 0.68，深色模式 0.65），提高侧边栏背景毛玻璃模糊度至 `30px`，并将侧栏顶部 Tab 头部 `background` 设置为 `transparent`，实现一体化的苹果 VisionOS 级悬浮磨砂玻璃交互感。
+- **Impact**: `src/01-constants.js`, `src/09-ui-widgets.js`, `styles.css`, `script.js`
+
+## [2026-05-20 14:47:00]
+- **Type**: Fix (Avoid ReferenceError on debounce)
+- **Content**: 将 `debounce` 通用防抖函数移至首个加载模块 `src/01-constants.js`，解决打包合并后 `src/08-ai-sidebar.js` 引用该函数时因加载时差导致的 `debounce is not defined` 报错。
+- **Impact**: `src/01-constants.js`, `script.js`
+
+## [2026-05-20 14:45:00]
+- **Type**: Design (AI Sidebar aesthetic & UX enhancements)
+- **Content**: 1) AI Tabs 高亮漂移：实现 `.ai-tabs-indicator` 滑块垫片，使 AI 侧栏的 Tabs 在切换和 resize 时支持平滑吸附过渡，统一全局动效语言；2) 3D 景深模糊视差：拉开侧栏时，为主页面（#bookmarks-tree 和 #search-container）加设 scale(0.96) 深度回退与 blur(8px) 模糊，塑造极致的前后台纵深分割；3) 控制按钮微动效：关闭按钮悬浮时 90° 旋转，新窗口打开按钮悬浮时 45° 斜向弹跳；4) Iframe 保活与内存安全：侧栏打开期间切换 AI 时仅通过 CSS 隐藏 iframe，避免销毁造成的冷启动会话丢失；仅在侧栏关闭时循环 unloadIframe 完整回收内存；5) 极光占位屏：引入 `#ai-sidebar-loading` 加载器和极光脉冲微光（.aurora-glow）与骨架闪烁线，彻底告别 iframe 载入期的空白闪烁。
+- **Impact**: `newtab.html`, `styles.css`, `src/08-ai-sidebar.js`, `script.js`
+
+## [2026-05-20 14:28:40]
+- **Type**: Design (Fluid selection animations)
+- **Content**: 1) 引入侧栏主动式滑动轨垫片（`.sidebar-active-indicator`）：为左侧目录树在平铺模式和树状模式下添加绝对定位的高亮滑块，配合弹性 transition，在切换目录项时实现背景的丝滑漂移；2) 剥离静态背景色：移除原 `.tree-folder-item.active` 的硬编码背景和边框，将其完全移交给滑动指示器，使漂移过渡连贯无闪烁；3) 边缘光追流光效果：利用 `@property --glow-angle` 和 `@keyframes conic-glow-rotate` 在选中的书签卡片（`.leaf-wrapper.is-selected` / `.bookmark-card.is-selected`）四周生成 360° 发光旋转边框；4) 弹性点击反馈：结合 `spring-pop` 弹性微缩反弹动画，在卡片点击时提供丝滑回弹与流光闪烁反馈，并配有 1.4 秒自动销毁机制，确保极佳的日常交互性能。
+- **Impact**: `styles.css`, `script.js`, `src/02-bookmarks-core.js`, `src/09-ui-widgets.js`
+
+## [2026-05-20 11:25:00]
+- **Type**: Fix (HD Background & Transparency overlays)
+- **Content**: 1) 解除存储限制（提清）：在 manifest.json 申请 unlimitedStorage 权限，允许 4K/超清壁纸无损原图写入 IndexedDB，避免触发降级压缩算法；2) 消除壁纸变色遮罩（去遮罩）：激活自定义背景时在 body 挂载 .has-custom-bg，在 styles.css 中将背景伪元素的 opacity 设为 0，100% 还原壁纸原本色彩；3) 容器彻底透明：优化 applyContainerOpacity 逻辑，若透明度滑块拉满至 10，则完全清除主容器的毛玻璃模糊、背景色、边框以及阴影，展现极度清爽的悬浮书签体验。
+- **Impact**: `manifest.json`, `styles.css`, `script.js`, `src/01-constants.js`, `src/06-settings.js`
+
 ## [2026-05-18 17:15:00]
 - **Type**: Refactor (Pure Mode Memo UX)
 - **Content**: 1) 输入区改为「幽灵光标」模式：移除所有可见输入框边框/背景，只保留 1.5px 跳动光标 (`step-end` 1.1s 动画)，focus 时原生光标接管，失焦且为空时自动恢复跳动光标；2) 待办条目前圆点改为可交互 checkbox：勾选时 checkbox 填充品牌色 + 打钩 SVG 出现 + 文字删除线，320ms 后条目淡出删除；保留右侧 ✕ 快速删除按钮。

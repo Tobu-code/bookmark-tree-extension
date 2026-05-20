@@ -7,7 +7,8 @@
     "bookmarks",
     "storage",
     "declarativeNetRequest",
-    "favicon"
+    "favicon",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "https://www.google.com/",
@@ -17,12 +18,18 @@
     "https://*.gstatic.com/*",
     "https://*.googleusercontent.com/*",
     "https://*.googleapis.com/*",
+    "*://chatgpt.com/*",
     "*://*.chatgpt.com/*",
     "*://*.openai.com/*",
+    "*://chat.qwen.ai/*",
     "*://*.chat.qwen.ai/*",
     "*://*.doubao.com/*",
+    "*://kimi.moonshot.cn/*",
     "*://*.kimi.moonshot.cn/*",
-    "*://*.deepseek.com/*"
+    "*://*.deepseek.com/*",
+    "*://*.gemini.google.com/*",
+    "*://claude.ai/*",
+    "*://*.claude.ai/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

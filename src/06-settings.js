@@ -130,14 +130,18 @@ function initSettingsUI(settings) {
         blurControls.style.opacity = hasImage ? '1' : '0.5';
     }
 
-    function saveBackgroundImage(dataUrl, onDone) {
+    // Fix #16: Save to IndexedDB instead of chrome.storage.local to bypass 8MB limit
+    async function saveBackgroundImage(dataUrl) {
         CURRENT_BG_IMAGE = dataUrl;
         updateBlurControlsState();
         applyBackground();
-        saveSetting(STORAGE_KEY_BG_IMAGE, dataUrl, () => {
-            const hasError = !!chrome.runtime.lastError;
-            if (onDone) onDone(!hasError);
-        });
+        try {
+            await bgIdbSet(dataUrl);
+            return true;
+        } catch (e) {
+            console.error('BG save failed:', e);
+            return false;
+        }
     }
 
     function compressImageDataUrl(sourceDataUrl, options = {}) {
@@ -186,9 +190,7 @@ function initSettingsUI(settings) {
             const normalizedMime = (file.type || '').toLowerCase() === 'image/jpg' ? 'image/jpeg' : (file.type || '').toLowerCase();
             const preferredMime = ['image/jpeg', 'image/webp'].includes(normalizedMime) ? normalizedMime : 'image/webp';
 
-            const trySave = (candidateDataUrl) => new Promise((resolve) => {
-                saveBackgroundImage(candidateDataUrl, resolve);
-            });
+            const trySave = async (candidateDataUrl) => saveBackgroundImage(candidateDataUrl);
 
             // Always try original first to maximize fidelity.
             const originalOk = await trySave(dataUrl);
@@ -219,13 +221,14 @@ function initSettingsUI(settings) {
         reader.readAsDataURL(file);
     });
 
-    // Clear Background
-    clearBgBtn.addEventListener('click', () => {
+    // Clear Background (Fix #16: also clear from IndexedDB)
+    clearBgBtn.addEventListener('click', async () => {
         CURRENT_BG_IMAGE = null;
         bgUpload.value = ''; // Reset input
         updateBlurControlsState();
         applyBackground();
-        chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE);
+        await bgIdbRemove();
+        chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE); // clean up legacy
     });
 
     // Slider labels
@@ -772,8 +775,10 @@ function applyBackground() {
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
+        document.body.classList.add('has-custom-bg');
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
+        document.body.classList.remove('has-custom-bg');
     }
 
     if (CURRENT_BG_BLUR > 0) {
@@ -797,14 +802,35 @@ function applyContainerOpacity() {
 
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
     const transparency = level / 10;
+
+    // 当透明度级别为最大值 10 时，容器完全透明隐形，不留边框阴影和遮罩
+    if (level === 10) {
+        container.style.background = 'transparent';
+        container.style.backdropFilter = 'none';
+        container.style.webkitBackdropFilter = 'none';
+        container.style.borderColor = 'transparent';
+        container.style.boxShadow = 'none';
+        return;
+    }
+
     // Blend transparency and frosted blur together:
     // higher transparency -> lower blur, but keep a minimum for readability.
-    const overlayAlpha = Math.max(0.28, 0.82 - transparency * 0.52);
-    const blurPx = Math.max(2, Math.round(18 - transparency * 16));
+    const overlayAlpha = Math.max(0.05, 0.82 - transparency * 0.77);
+    const blurPx = Math.max(0, Math.round(18 - transparency * 18));
 
     container.style.background =
         `linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), color-mix(in srgb, var(--bg-overlay) ${Math.round(overlayAlpha * 100)}%, transparent)`;
-    container.style.backdropFilter = `blur(${blurPx}px)`;
-    container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
+    
+    if (blurPx > 0) {
+        container.style.backdropFilter = `blur(${blurPx}px)`;
+        container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
+    } else {
+        container.style.backdropFilter = 'none';
+        container.style.webkitBackdropFilter = 'none';
+    }
+
+    // 还原默认样式
+    container.style.borderColor = '';
+    container.style.boxShadow = '';
 }
 

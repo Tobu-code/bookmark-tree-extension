@@ -66,6 +66,9 @@ function renderBookmarks(bookmarkTreeNodes) {
         container.classList.add('layout-tree');
         renderTreeBookmarks(bookmarkTreeNodes, container);
     }
+    
+    // Smooth transition indicator sync
+    setTimeout(syncSidebarActiveIndicator, 50);
 }
 
 function bindDelegatedItemDnD(container) {
