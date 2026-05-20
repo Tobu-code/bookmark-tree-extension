@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 14:47:00]
+- **Type**: Fix (Avoid ReferenceError on debounce)
+- **Content**: 将 `debounce` 通用防抖函数移至首个加载模块 `src/01-constants.js`，解决打包合并后 `src/08-ai-sidebar.js` 引用该函数时因加载时差导致的 `debounce is not defined` 报错。
+- **Impact**: `src/01-constants.js`, `script.js`
+
 ## [2026-05-20 14:45:00]
 - **Type**: Design (AI Sidebar aesthetic & UX enhancements)
 - **Content**: 1) AI Tabs 高亮漂移：实现 `.ai-tabs-indicator` 滑块垫片，使 AI 侧栏的 Tabs 在切换和 resize 时支持平滑吸附过渡，统一全局动效语言；2) 3D 景深模糊视差：拉开侧栏时，为主页面（#bookmarks-tree 和 #search-container）加设 scale(0.96) 深度回退与 blur(8px) 模糊，塑造极致的前后台纵深分割；3) 控制按钮微动效：关闭按钮悬浮时 90° 旋转，新窗口打开按钮悬浮时 45° 斜向弹跳；4) Iframe 保活与内存安全：侧栏打开期间切换 AI 时仅通过 CSS 隐藏 iframe，避免销毁造成的冷启动会话丢失；仅在侧栏关闭时循环 unloadIframe 完整回收内存；5) 极光占位屏：引入 `#ai-sidebar-loading` 加载器和极光脉冲微光（.aurora-glow）与骨架闪烁线，彻底告别 iframe 载入期的空白闪烁。
