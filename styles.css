@@ -1444,6 +1444,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     gap: 24px 20px;
     align-content: start;
     align-items: stretch;
+    padding-top: 6px;
     padding-right: 12px;
     padding-bottom: 24px;
 }

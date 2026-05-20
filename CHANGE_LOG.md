@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 17:09:00]
+- **Type**: Fix (书签卡片首行 hover 上浮裁切)
+- **Content**: 书签网格容器 `.bookmarks-pane-grid` 增加 `padding-top: 6px`，防止第一行卡片 `translateY(-3px)` 上浮时顶部阴影和高光被父容器 `overflow: hidden` 裁切。
+- **Impact**: `styles.css`
+
 ## [2026-05-20 16:59:00]
 - **Type**: Fix (拟物风格补全 — 目录/时间/纯净模式)
 - **Content**: 修复4处遗漏的拟物风格覆盖：1) 左侧目录面板增加缝线分割线（`border-right` 实线 + `::after` 虚线缝线）和微妙顶部高光渐变；2) 时钟数字增加 `text-shadow` 浮雕效果（高光 + 投影双层），问候语和日期同步增加拟物文字阴影；3) 纯净模式容器从 `transparent` 改为完整皮革笔记本表面（含缝线 + 立体阴影）；4) 纯净模式搜索栏改为拟物凹陷输入槽，问候语菱形图标颜色改为古铜金并增加阴影；5) 同步修复 `@media prefers-color-scheme: dark` 块中的旧版 Glassmorphism token 为拟物暗色皮革 token。
