@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 15:58:00]
+- **Type**: Fix (Claude bare-domain DNR rule mismatch)
+- **Content**: 修复 Claude 无法在侧栏 iframe 中加载的问题：`*://*.claude.ai/*` 仅匹配子域名，但 Claude 使用裸域 `claude.ai`（无 www 前缀），导致 DNR 规则未命中、安全头未被移除。新增规则 ID 20 精确匹配 `*://claude.ai/*` 裸域，同时在 `manifest.json` 中补充 `*://claude.ai/*` 的 host_permissions 声明。
+- **Impact**: `manifest.json`, `rules.json`
+
 ## [2026-05-20 15:54:00]
 - **Type**: Feature (Add Gemini & Claude to AI sidebar)
 - **Content**: 1) 在 `BUILTIN_AI_PROVIDERS` 默认站点列表中新增 Google Gemini 和 Anthropic Claude 选项，并配置其高清 Favicon 与入口 URL；2) 在 `manifest.json` 中配置了必要的 `host_permissions` 网络请求拦截域名；3) 在 `rules.json` 中新增 ID 19 规则以支持 `claude.ai` 解除 `X-Frame-Options` 和 `Content-Security-Policy` 嵌入限制，从而在侧栏 Iframe 中完美加载。

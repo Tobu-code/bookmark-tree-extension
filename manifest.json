@@ -25,6 +25,7 @@
     "*://*.kimi.moonshot.cn/*",
     "*://*.deepseek.com/*",
     "*://*.gemini.google.com/*",
+    "*://claude.ai/*",
     "*://*.claude.ai/*"
   ],
   "optional_host_permissions": [
