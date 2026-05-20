@@ -603,6 +603,16 @@ function cleanupLegacyFrequencyStorage() {
     chrome.storage.local.remove(LEGACY_FREQUENCY_STORAGE_KEYS);
 }
 
+function debounce(fn, delayMs) {
+    let timer = null;
+    return function (...args) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(this, args);
+        }, delayMs);
+    };
+}
+
 // --- Icon Constants ---
 function preloadImage(url) {
     return new Promise((resolve) => {
