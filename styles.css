@@ -1719,6 +1719,195 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     letter-spacing: -0.01em;
 }
 
+/* Directory pane skeuomorphic side-page pass */
+#bookmarks-tree.layout-flat .directory-pane {
+    padding-right: 18px;
+    border-right: 0;
+    background:
+        radial-gradient(ellipse at 38% 0%, rgba(255, 248, 230, 0.18) 0%, transparent 42%),
+        linear-gradient(90deg, rgba(255, 248, 230, 0.10) 0%, rgba(245, 236, 215, 0.10) 62%, rgba(92, 64, 32, 0.08) 100%);
+    box-shadow:
+        inset -12px 0 18px rgba(92, 64, 32, 0.08),
+        inset 1px 0 0 rgba(255, 248, 230, 0.16);
+}
+
+#bookmarks-tree.layout-flat .directory-pane::after {
+    top: 16px;
+    bottom: 16px;
+    right: 0;
+    width: 18px;
+    border-right: 0;
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(92, 64, 32, 0.08) 55%, rgba(255, 248, 230, 0.16) 100%);
+    box-shadow:
+        inset -1px 0 0 rgba(255, 248, 230, 0.18),
+        inset 1px 0 0 rgba(92, 64, 32, 0.06);
+    opacity: 0.9;
+}
+
+#bookmarks-tree.layout-flat .directory-pane-scroll {
+    padding: 2px 4px 8px 0;
+}
+
+#bookmarks-tree.layout-flat .directory-pane-header {
+    padding: 0 4px 12px 4px;
+    background-image: none;
+    border-bottom: 0;
+    box-shadow:
+        inset 0 -1px 0 rgba(92, 64, 32, 0.14),
+        0 1px 0 rgba(255, 248, 230, 0.26);
+    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.45);
+}
+
+#bookmarks-tree.layout-flat .directory-pane-header .folder-svg-icon {
+    background:
+        linear-gradient(180deg, rgba(255, 248, 230, 0.44), rgba(216, 198, 160, 0.24));
+    border: 1px solid rgba(92, 64, 32, 0.12);
+    box-shadow:
+        0 1px 2px rgba(50, 30, 10, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+#bookmarks-tree.layout-flat .tree-folder-item {
+    border-color: rgba(92, 64, 32, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 248, 230, 0.22) 0%, rgba(245, 236, 215, 0.08) 100%);
+    box-shadow:
+        0 1px 2px rgba(50, 30, 10, 0.04),
+        inset 0 1px 0 rgba(255, 248, 230, 0.28);
+}
+
+#bookmarks-tree.layout-flat .tree-folder-item:hover {
+    border-color: rgba(139, 105, 20, 0.18);
+    background:
+        linear-gradient(180deg, rgba(255, 248, 230, 0.44) 0%, rgba(221, 208, 178, 0.32) 100%);
+    box-shadow:
+        0 3px 8px rgba(50, 30, 10, 0.12),
+        inset 0 1px 0 rgba(255, 248, 230, 0.50);
+}
+
+#bookmarks-tree.layout-flat .tree-folder-item.active {
+    background:
+        linear-gradient(180deg, rgba(255, 248, 230, 0.46) 0%, rgba(221, 208, 178, 0.30) 100%) !important;
+    border-color: rgba(139, 105, 20, 0.16) !important;
+    box-shadow:
+        inset 3px 0 0 rgba(139, 105, 20, 0.62),
+        0 2px 5px rgba(50, 30, 10, 0.10),
+        inset 0 1px 0 rgba(255, 248, 230, 0.45) !important;
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane {
+    background:
+        radial-gradient(ellipse at 38% 0%, rgba(255, 240, 200, 0.04) 0%, transparent 42%),
+        linear-gradient(90deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.08) 62%, rgba(0, 0, 0, 0.14) 100%);
+    box-shadow:
+        inset -12px 0 18px rgba(0, 0, 0, 0.18),
+        inset 1px 0 0 rgba(255, 240, 200, 0.04);
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane::after {
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 55%, rgba(255, 240, 200, 0.04) 100%);
+    box-shadow:
+        inset -1px 0 0 rgba(255, 240, 200, 0.05),
+        inset 1px 0 0 rgba(0, 0, 0, 0.20);
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane-header {
+    background-image: none;
+    box-shadow:
+        inset 0 -1px 0 rgba(200, 164, 85, 0.10),
+        0 1px 0 rgba(0, 0, 0, 0.24);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item {
+    background:
+        linear-gradient(180deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.22) 100%);
+    border-color: rgba(200, 164, 85, 0.06);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.10),
+        inset 0 1px 0 rgba(255, 240, 200, 0.03);
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item:hover,
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item.active {
+    background:
+        linear-gradient(180deg, rgba(255, 240, 200, 0.07) 0%, rgba(68, 56, 48, 0.42) 100%) !important;
+    border-color: rgba(200, 164, 85, 0.16) !important;
+    box-shadow:
+        inset 3px 0 0 rgba(200, 164, 85, 0.42),
+        0 2px 5px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 240, 200, 0.05) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane {
+        background:
+            radial-gradient(ellipse at 38% 0%, rgba(255, 240, 200, 0.04) 0%, transparent 42%),
+            linear-gradient(90deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.08) 62%, rgba(0, 0, 0, 0.14) 100%);
+        box-shadow:
+            inset -12px 0 18px rgba(0, 0, 0, 0.18),
+            inset 1px 0 0 rgba(255, 240, 200, 0.04);
+    }
+
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane::after {
+        background:
+            linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 55%, rgba(255, 240, 200, 0.04) 100%);
+        box-shadow:
+            inset -1px 0 0 rgba(255, 240, 200, 0.05),
+            inset 1px 0 0 rgba(0, 0, 0, 0.20);
+    }
+
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane-header {
+        background-image: none;
+        box-shadow:
+            inset 0 -1px 0 rgba(200, 164, 85, 0.10),
+            0 1px 0 rgba(0, 0, 0, 0.24);
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+    }
+
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
+        background:
+            linear-gradient(180deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.22) 100%);
+        border-color: rgba(200, 164, 85, 0.06);
+        box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.10),
+            inset 0 1px 0 rgba(255, 240, 200, 0.03);
+    }
+
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover,
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+        background:
+            linear-gradient(180deg, rgba(255, 240, 200, 0.07) 0%, rgba(68, 56, 48, 0.42) 100%) !important;
+        border-color: rgba(200, 164, 85, 0.16) !important;
+        box-shadow:
+            inset 3px 0 0 rgba(200, 164, 85, 0.42),
+            0 2px 5px rgba(0, 0, 0, 0.24),
+            inset 0 1px 0 rgba(255, 240, 200, 0.05) !important;
+    }
+}
+
+@media (max-width: 899px) {
+    #bookmarks-tree.layout-flat .directory-pane {
+        padding-right: 0;
+        background:
+            radial-gradient(ellipse at 50% 0%, rgba(255, 248, 230, 0.12) 0%, transparent 46%),
+            linear-gradient(180deg, rgba(255, 248, 230, 0.08) 0%, rgba(92, 64, 32, 0.05) 100%);
+        box-shadow:
+            inset 0 -8px 14px rgba(92, 64, 32, 0.06),
+            inset 0 1px 0 rgba(255, 248, 230, 0.14);
+    }
+
+    #bookmarks-tree.layout-flat .directory-pane::after {
+        display: none;
+    }
+
+    #bookmarks-tree.layout-flat .directory-pane-scroll {
+        padding-right: 8px;
+    }
+}
+
 /* Item 8: URL preview line below the bookmark title */
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
     display: block;
