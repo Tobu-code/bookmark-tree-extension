@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 16:59:00]
+- **Type**: Fix (拟物风格补全 — 目录/时间/纯净模式)
+- **Content**: 修复4处遗漏的拟物风格覆盖：1) 左侧目录面板增加缝线分割线（`border-right` 实线 + `::after` 虚线缝线）和微妙顶部高光渐变；2) 时钟数字增加 `text-shadow` 浮雕效果（高光 + 投影双层），问候语和日期同步增加拟物文字阴影；3) 纯净模式容器从 `transparent` 改为完整皮革笔记本表面（含缝线 + 立体阴影）；4) 纯净模式搜索栏改为拟物凹陷输入槽，问候语菱形图标颜色改为古铜金并增加阴影；5) 同步修复 `@media prefers-color-scheme: dark` 块中的旧版 Glassmorphism token 为拟物暗色皮革 token。
+- **Impact**: `styles.css`
+
 ## [2026-05-20 16:54:00]
 - **Type**: Design (书签卡片拟物风格强化)
 - **Content**: 将书签网格卡片（`.leaf-wrapper`）和面板卡片（`.bookmark-card`）从扁平白色方块改造为拟物纸质便签效果：1) 羊皮纸底色 + 顶部高光渐变模拟纸张受光；2) 多层 `box-shadow` 实现物理凸起感（外投影 + 内顶高光 + 内底阴影）；3) `::before` 叠加纸纹纹理；4) hover 上浮 `translateY(-3px)` + 阴影增强模拟拿起卡片；5) active 下压 `translateY(1px) + scale(0.97)` + 内嵌阴影模拟按入桌面；6) 图标环改为金属浮雕效果（径向高光 + 边框 + 内嵌阴影）。

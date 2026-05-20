@@ -128,32 +128,36 @@
 :root[data-theme="dark"],
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #D69785;
-        --text-color: #F2F0E9;
-        --text-secondary: #C5C2BD;
-        --bg-overlay: rgba(26, 26, 26, 0.85);
-        --card-bg: #2C2C2C;
-        --card-hover: #2a303a;
-        --border-color: rgba(255, 255, 255, 0.12);
-        --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-        --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-        --modal-bg: #1f232b;
-        --modal-text: #F2F0E9;
-        --glow-color: rgba(245, 166, 122, 0.25);
-        --glow-soft: rgba(245, 166, 122, 0.1);
-        --glass-bg: rgba(31, 35, 43, 0.88);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --highlight-top: rgba(255, 255, 255, 0.04);
-        --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
-        --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
-        --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
-        --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
-        --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
-        --nav-item-hover: rgba(255, 255, 255, 0.055);
-        --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
-        --nav-item-active-border: rgba(245, 166, 122, 0.28);
-        --nav-icon-surface: rgba(245, 166, 122, 0.11);
+        --primary-color: #C8A455;
+        --text-color: #E8E0D0;
+        --text-secondary: #A89B88;
+        --bg-overlay: rgba(32, 24, 16, 0.94);
+        --card-bg: #3A3028;
+        --card-hover: #443830;
+        --border-color: rgba(200, 164, 85, 0.22);
+        --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+        --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.30);
+        --shadow-glow: 0 0 24px rgba(200, 164, 85, 0.12);
+        --modal-bg: #2E2418;
+        --modal-text: #E8E0D0;
+        --glow-color: rgba(200, 164, 85, 0.20);
+        --glow-soft: rgba(200, 164, 85, 0.08);
+        --glass-bg: #352C22;
+        --glass-border: rgba(200, 164, 85, 0.16);
+        --highlight-top: rgba(255, 240, 200, 0.04);
+        --leather-surface: linear-gradient(175deg, #3A3028 0%, #322820 40%, #2A2018 100%);
+        --leather-dark: linear-gradient(175deg, #2A2018 0%, #221810 100%);
+        --stitch-color: rgba(200, 164, 85, 0.18);
+        --metal-highlight: linear-gradient(180deg, rgba(255,240,200,0.08) 0%, rgba(255,240,200,0) 50%);
+        --elev-shadow-1: 0 3px 10px rgba(0, 0, 0, 0.32), 0 1px 3px rgba(0, 0, 0, 0.22);
+        --elev-shadow-2: 0 8px 22px rgba(0, 0, 0, 0.38), 0 3px 6px rgba(0, 0, 0, 0.26);
+        --elev-shadow-3: 0 16px 36px rgba(0, 0, 0, 0.44), 0 5px 10px rgba(0, 0, 0, 0.30);
+        --text-muted: color-mix(in srgb, var(--text-secondary) 85%, var(--text-color) 15%);
+        --text-subtle: color-mix(in srgb, var(--text-secondary) 70%, var(--text-color) 30%);
+        --nav-item-hover: rgba(200, 164, 85, 0.10);
+        --nav-item-active: linear-gradient(180deg, #443830 0%, #3A3028 100%);
+        --nav-item-active-border: rgba(200, 164, 85, 0.30);
+        --nav-icon-surface: rgba(200, 164, 85, 0.12);
     }
 }
 
@@ -462,7 +466,10 @@ body.loaded #background-layer {
     opacity: 0.95;
     line-height: 0.8;
     font-family: 'Inter', 'Outfit', sans-serif;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.03));
+    filter: drop-shadow(0 2px 4px rgba(50,30,10,0.10));
+    text-shadow:
+        0 1px 0 rgba(255, 248, 230, 0.50),
+        0 2px 6px rgba(50, 30, 10, 0.08);
 }
 
 .ambient-time-info-group {
@@ -493,6 +500,11 @@ body.loaded #background-layer {
     opacity: 0.95;
     font-weight: 600;
     letter-spacing: 0.2px;
+    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.40);
+}
+
+.ambient-time-date {
+    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.30);
 }
 
 .ambient-time.visible {
@@ -1001,8 +1013,20 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     padding-right: 0;
     padding-top: 0;
-    border-right: none;
-    background: transparent;
+    border-right: 1.5px solid var(--stitch-color);
+    background: linear-gradient(180deg, rgba(255,248,230,0.15) 0%, transparent 30%);
+    position: relative;
+}
+
+.directory-pane::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    right: -1px;
+    width: 0;
+    border-right: 1.5px dashed var(--stitch-color);
+    pointer-events: none;
 }
 
 .directory-pane-scroll {
@@ -1016,7 +1040,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow-x: hidden;
     position: relative;
     padding: 2px 14px 8px 0;
-    /* Avoid mask/transform compositing glitches while scrolling in Chrome */
     -webkit-mask-image: none;
     mask-image: none;
     will-change: auto;
@@ -1027,8 +1050,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .directory-pane {
-    border-right: none;
-    background: transparent;
+    border-right-color: rgba(200, 164, 85, 0.14);
+    background: linear-gradient(180deg, rgba(255,240,200,0.03) 0%, transparent 30%);
+}
+
+:root[data-theme="dark"] .directory-pane::after {
+    border-right-color: rgba(200, 164, 85, 0.10);
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
@@ -4858,18 +4885,38 @@ input[type="file"]:focus-visible {
     opacity: 0.8;
 }
 
-/* Pure mode: warm white search canvas */
+/* Pure mode: skeuomorphic leather surface canvas */
 body.pure-mode .container {
     justify-content: center;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    background: var(--leather-surface);
+    border: 2px solid var(--stitch-color);
+    box-shadow:
+        0 6px 24px rgba(50, 30, 10, 0.20),
+        0 2px 6px rgba(50, 30, 10, 0.12),
+        inset 0 1px 0 rgba(255, 248, 230, 0.30),
+        inset 0 -2px 4px rgba(50, 30, 10, 0.08);
+    outline: 1px solid rgba(255, 248, 230, 0.10);
+    outline-offset: -4px;
+}
+
+/* Restore stitching on pure mode container */
+body.pure-mode .container::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: calc(var(--container-radius) - 4px);
+    border: 1.5px dashed var(--stitch-color);
+    pointer-events: none;
+    z-index: 0;
 }
 
 :root[data-theme="dark"] body.pure-mode .container {
-    background: transparent;
+    background: var(--leather-surface);
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.40),
+        0 2px 6px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 240, 200, 0.05),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.12);
 }
 
 body.pure-mode #bookmarks-tree,
@@ -4985,14 +5032,18 @@ body.pure-mode .pure-greeting-text {
     opacity: 1;
     letter-spacing: -0.5px;
     min-height: 1.2em;
+    text-shadow:
+        0 1px 0 rgba(255, 248, 230, 0.50),
+        0 3px 8px rgba(50, 30, 10, 0.06);
 }
 
 /* 问候语前的小菱形图标 */
 body.pure-mode .pure-greeting-text::before {
     content: '✦';
     font-size: 20px;
-    color: #D97757;
+    color: var(--primary-color);
     flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(139, 105, 20, 0.25));
 }
 
 /* 时间显示 */
@@ -5004,15 +5055,20 @@ body.pure-mode .pure-greeting-text::before {
     letter-spacing: 1px;
 }
 
-/* 集成化搜索卡片 */
+/* 集成化搜索卡片 — Skeuomorphic */
 body.pure-mode .search-wrapper,
 body.pure-mode .search-wrapper:focus-within {
     width: 720px;
     max-width: calc(100vw - 48px);
-    background: #FFFFFF;
-    border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.35) 0%, rgba(245,236,215,0) 30%),
+        var(--card-bg);
+    border-radius: 12px;
+    border: 1.5px solid var(--border-color);
+    box-shadow:
+        inset 0 2px 6px rgba(50, 30, 10, 0.12),
+        inset 0 1px 2px rgba(50, 30, 10, 0.08),
+        0 1px 0 rgba(255, 248, 230, 0.25);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -5021,7 +5077,7 @@ body.pure-mode .search-wrapper:focus-within {
     padding-right: 0;
     transition: all 0.3s ease;
     position: relative;
-    overflow: visible; /* 允许搜索建议框溢出显示 */
+    overflow: visible;
     transform: none;
     text-align: left;
 }
