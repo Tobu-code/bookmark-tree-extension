@@ -3674,6 +3674,7 @@ body.ai-sidebar-open #ai-sidebar-btn {
 
 /* AI Tabs Container */
 .ai-tabs {
+    position: relative;
     display: flex;
     gap: 8px;
     flex: 1;

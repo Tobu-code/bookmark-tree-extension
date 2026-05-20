@@ -3410,14 +3410,12 @@ function initAiSidebar() {
             void indicator.offsetWidth;
         }
 
-        let top = 0;
-        let left = 0;
-        let current = activeTab;
-        while (current && current !== tabsContainer) {
-            top += current.offsetTop;
-            left += current.offsetLeft;
-            current = current.offsetParent;
-        }
+        // Use getBoundingClientRect for robust positioning, factoring in horizontal scrolling (scrollLeft)
+        const activeRect = activeTab.getBoundingClientRect();
+        const containerRect = tabsContainer.getBoundingClientRect();
+
+        const left = activeRect.left - containerRect.left + tabsContainer.scrollLeft;
+        const top = activeRect.top - containerRect.top;
 
         const width = activeTab.offsetWidth;
         const height = activeTab.offsetHeight;

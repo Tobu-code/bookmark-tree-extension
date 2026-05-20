@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 15:42:00]
+- **Type**: Fix (AI sidebar tabs high-precision indicator alignment)
+- **Content**: 解决 AI 侧栏打开后，高亮指示滑块定位不准向下位移的问题：1) 为 `.ai-tabs` 增加 `position: relative` 作为子元素 `.ai-tabs-indicator` 绝对定位的参考基准；2) 重构 `syncAiTabsIndicator()` 偏移量计算逻辑，使用现代高精度 `getBoundingClientRect()` 并融入 `.scrollLeft`，彻底避免 flex 布局与 offsetParent 实现差异导致的滑块跑偏脱节问题。
+- **Impact**: `src/08-ai-sidebar.js`, `styles.css`, `script.js`
+
 ## [2026-05-20 15:35:00]
 - **Type**: Fix & Design (Restore source sync & AI Sidebar glassmorphism)
 - **Content**: 1) 修复分模块同步丢失导致的白屏：将原本直接修改在 `script.js` 中的 890 多行核心初始化入口（如 `DOMContentLoaded` 监听器）和备忘录逻辑规范同步归位至 `src/01-constants.js` 和 `src/09-ui-widgets.js`，重新打包拼接彻底恢复页面加载和备忘录功能；2) AI 侧栏透明磨砂化：调低侧栏背景色透明度（浅色模式 0.68，深色模式 0.65），提高侧边栏背景毛玻璃模糊度至 `30px`，并将侧栏顶部 Tab 头部 `background` 设置为 `transparent`，实现一体化的苹果 VisionOS 级悬浮磨砂玻璃交互感。
