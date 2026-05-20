@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 16:13:00]
+- **Type**: Fix (全站点裸域审计加固)
+- **Content**: 全面审计所有内置 AI 站点的权限与 DNR 规则覆盖：1) 在 `manifest.json` 中为 ChatGPT、通义千问、Kimi 补充裸域 `host_permissions`（`*://chatgpt.com/*`、`*://chat.qwen.ai/*`、`*://kimi.moonshot.cn/*`），消除 `*://*.domain/*` 模式不匹配裸域的权限盲区；2) 在 `rules.json` 中新增规则 ID 21（`*://kimi.moonshot.cn/*`），修复 Kimi 静态 DNR 规则完全无法命中裸域的缺陷，消除冷启动时序竞争导致的偶发加载失败风险。
+- **Impact**: `manifest.json`, `rules.json`
+
 ## [2026-05-20 15:58:00]
 - **Type**: Fix (Claude bare-domain DNR rule mismatch)
 - **Content**: 修复 Claude 无法在侧栏 iframe 中加载的问题：`*://*.claude.ai/*` 仅匹配子域名，但 Claude 使用裸域 `claude.ai`（无 www 前缀），导致 DNR 规则未命中、安全头未被移除。新增规则 ID 20 精确匹配 `*://claude.ai/*` 裸域，同时在 `manifest.json` 中补充 `*://claude.ai/*` 的 host_permissions 声明。
