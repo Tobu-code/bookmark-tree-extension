@@ -42,6 +42,22 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         icon: `<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="ChatGPT" draggable="false">`
     },
     {
+        id: 'gemini',
+        name: 'Gemini',
+        url: 'https://gemini.google.com/',
+        enabled: true,
+        builtIn: true,
+        icon: `<img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Gemini" draggable="false">`
+    },
+    {
+        id: 'claude',
+        name: 'Claude',
+        url: 'https://claude.ai/',
+        enabled: true,
+        builtIn: true,
+        icon: `<img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="Claude" draggable="false">`
+    },
+    {
         id: 'qwen',
         name: '通义千问',
         url: 'https://chat.qwen.ai/',

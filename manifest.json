@@ -23,7 +23,9 @@
     "*://*.chat.qwen.ai/*",
     "*://*.doubao.com/*",
     "*://*.kimi.moonshot.cn/*",
-    "*://*.deepseek.com/*"
+    "*://*.deepseek.com/*",
+    "*://*.gemini.google.com/*",
+    "*://*.claude.ai/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

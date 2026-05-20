@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 15:54:00]
+- **Type**: Feature (Add Gemini & Claude to AI sidebar)
+- **Content**: 1) 在 `BUILTIN_AI_PROVIDERS` 默认站点列表中新增 Google Gemini 和 Anthropic Claude 选项，并配置其高清 Favicon 与入口 URL；2) 在 `manifest.json` 中配置了必要的 `host_permissions` 网络请求拦截域名；3) 在 `rules.json` 中新增 ID 19 规则以支持 `claude.ai` 解除 `X-Frame-Options` 和 `Content-Security-Policy` 嵌入限制，从而在侧栏 Iframe 中完美加载。
+- **Impact**: `src/01-constants.js`, `manifest.json`, `rules.json`, `script.js`
+
 ## [2026-05-20 15:50:00]
 - **Type**: Optimization (AI sidebar iframe 100% original scale sharpness)
 - **Content**: 废弃 AI 侧栏 iframe 缩放策略（方案 A）：移除了硬编码的 `width: 111.11%; height: 111.11%` 和 `transform: scale(0.9)` 缩放效果，恢复 1:1 原生高清显示，彻底解决非整数缩放引发的文字发虚与右侧滚动条边缘截断问题。
