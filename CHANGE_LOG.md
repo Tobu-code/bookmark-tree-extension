@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 15:50:00]
+- **Type**: Optimization (AI sidebar iframe 100% original scale sharpness)
+- **Content**: 废弃 AI 侧栏 iframe 缩放策略（方案 A）：移除了硬编码的 `width: 111.11%; height: 111.11%` 和 `transform: scale(0.9)` 缩放效果，恢复 1:1 原生高清显示，彻底解决非整数缩放引发的文字发虚与右侧滚动条边缘截断问题。
+- **Impact**: `styles.css`, `script.js`
+
 ## [2026-05-20 15:42:00]
 - **Type**: Fix (AI sidebar tabs high-precision indicator alignment)
 - **Content**: 解决 AI 侧栏打开后，高亮指示滑块定位不准向下位移的问题：1) 为 `.ai-tabs` 增加 `position: relative` 作为子元素 `.ai-tabs-indicator` 绝对定位的参考基准；2) 重构 `syncAiTabsIndicator()` 偏移量计算逻辑，使用现代高精度 `getBoundingClientRect()` 并融入 `.scrollLeft`，彻底避免 flex 布局与 offsetParent 实现差异导致的滑块跑偏脱节问题。

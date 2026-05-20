@@ -3826,16 +3826,14 @@ body.ai-sidebar-open #ai-sidebar-btn {
     position: absolute;
     top: 0;
     left: 0;
-    width: 111.11%; /* 1 / 0.9 to compensate scale */
-    height: 111.11%;
+    width: 100%;
+    height: 100%;
     border: none;
     background: transparent;
     /* Shows container background while loading */
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
-    transform: scale(0.9);
-    transform-origin: top left;
 }
 
 .ai-iframe.active {
