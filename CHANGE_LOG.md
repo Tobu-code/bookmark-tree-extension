@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 17:11:00]
+- **Type**: Design (目录条目默认拟物状态)
+- **Content**: 未选中的目录文件夹条目从完全透明改为拟物"羊皮纸标签"默认态：浅米色渐变背景 + 细边框 + 微阴影凸起 + 顶部内嵌高光。hover 时增强为更强的凸起效果。暗色模式同步添加深棕皮革默认态。清理了重复的暗色 hover 和 active 样式块。
+- **Impact**: `styles.css`
+
 ## [2026-05-20 17:09:00]
 - **Type**: Fix (书签卡片首行 hover 上浮裁切)
 - **Content**: 书签网格容器 `.bookmarks-pane-grid` 增加 `padding-top: 6px`，防止第一行卡片 `translateY(-3px)` 上浮时顶部阴影和高光被父容器 `overflow: hidden` 裁切。
