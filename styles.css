@@ -1422,11 +1422,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 
-/* Item 7: Glass cards with accent strip */
+/* Item 7: Skeuomorphic paper note cards */
 .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
-    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.40) 0%, rgba(245,236,215,0) 40%),
+        var(--card-bg);
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
     padding: 8px 9px;
     margin-bottom: 0;
     min-height: 0;
@@ -1435,7 +1437,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow:
+        /* Physical raised card shadow */
+        0 2px 5px rgba(50, 30, 10, 0.12),
+        0 1px 2px rgba(50, 30, 10, 0.08),
+        /* Inner top edge highlight */
+        inset 0 1px 0 rgba(255, 248, 230, 0.55),
+        /* Inner bottom subtle shadow for thickness */
+        inset 0 -1px 0 rgba(92, 64, 32, 0.06);
     transition: transform var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
@@ -1447,33 +1456,63 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
 }
 
-/* Accent strip — terracotta top bar */
+/* Paper grain texture on each card */
 .bookmarks-pane-grid .leaf-wrapper::before {
-    display: none;
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--paper-texture);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(37, 43, 54, 0.88);
-    border-color: rgba(255, 255, 255, 0.1);
+    background:
+        linear-gradient(180deg, rgba(255,240,200,0.04) 0%, transparent 40%),
+        var(--card-bg);
+    border-color: rgba(200, 164, 85, 0.18);
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.28),
+        0 1px 2px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 240, 200, 0.05),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.10);
 }
 
-/* Hover glow with border highlight (Aligned with left tree folder hover) */
+/* Hover: Card lifts up with enhanced shadow */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    background-color: #ffffff;
-    border-color: color-mix(in srgb, var(--border-color) 80%, transparent);
+    transform: translateY(-3px);
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.55) 0%, rgba(245,236,215,0) 45%),
+        var(--card-hover);
+    border-color: var(--primary-color);
+    box-shadow:
+        0 6px 16px rgba(50, 30, 10, 0.18),
+        0 2px 4px rgba(50, 30, 10, 0.12),
+        inset 0 1px 0 rgba(255, 248, 230, 0.65),
+        0 0 0 1px rgba(139, 105, 20, 0.08);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background-color: rgba(48, 54, 66, 0.96);
-    border-color: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255,240,200,0.08) 0%, transparent 45%),
+        var(--card-hover);
+    border-color: rgba(200, 164, 85, 0.30);
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.35),
+        0 2px 4px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 240, 200, 0.06);
 }
 
+/* Active: Card presses into the surface */
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
-    transform: scale(0.988);
-    transition: transform var(--motion-fast) var(--ease-emphasized);
+    transform: translateY(1px) scale(0.97);
+    box-shadow:
+        0 1px 2px rgba(50, 30, 10, 0.10),
+        inset 0 2px 4px rgba(50, 30, 10, 0.12);
+    transition: transform var(--motion-fast) var(--ease-emphasized),
+        box-shadow var(--motion-fast) var(--ease-emphasized);
 }
 
 /* Removed: Hover focus dimming for r4.chat clean aesthetic */
@@ -1496,19 +1535,31 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     transition: opacity 0.3s ease;
 }
 
-/* Center the icon inside the card — enhanced with background ring */
+/* Center the icon inside the card — embossed metal ring */
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important;
     margin-bottom: 5px;
     padding: 8px;
-    background: color-mix(in srgb, var(--primary-color) 7%, transparent);
+    background:
+        radial-gradient(circle at 45% 40%, rgba(255,248,230,0.30) 0%, transparent 70%),
+        rgba(139, 105, 20, 0.07);
     border-radius: 12px;
+    border: 1px solid rgba(92, 64, 32, 0.10);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 248, 230, 0.40),
+        0 1px 2px rgba(50, 30, 10, 0.08);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon,
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
-    background: rgba(245, 166, 122, 0.08);
+    background:
+        radial-gradient(circle at 45% 40%, rgba(255,240,200,0.06) 0%, transparent 70%),
+        rgba(200, 164, 85, 0.08);
+    border-color: rgba(200, 164, 85, 0.10);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 240, 200, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 /* Center the label */
@@ -1759,17 +1810,19 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card {
-    background: var(--bg-overlay);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.30) 0%, rgba(245,236,215,0) 30%),
+        var(--card-bg);
     width: 100%;
     height: var(--card-height);
-    border-radius: var(--container-radius);
-    /* More rounded, Claude-style */
+    border-radius: 12px;
     padding: var(--card-padding);
     box-sizing: border-box;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-shadow:
+        0 3px 10px rgba(50, 30, 10, 0.14),
+        0 1px 3px rgba(50, 30, 10, 0.10),
+        inset 0 1px 0 rgba(255, 248, 230, 0.45);
+    border: 1.5px solid var(--border-color);
     transition: transform var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
@@ -1782,19 +1835,23 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
 }
 
-/* Tree mode performance guard:
-   avoid heavy backdrop compositing on many cards while scrolling */
+/* Tree mode: lighter card treatment */
 #bookmarks-tree.layout-tree .bookmark-card {
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    background: rgba(255, 255, 255, 0.55);
-    border-color: color-mix(in srgb, var(--border-color) 40%, transparent);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.25) 0%, rgba(245,236,215,0) 25%),
+        var(--card-bg);
+    border: 1.5px solid var(--border-color);
+    box-shadow:
+        0 2px 6px rgba(50, 30, 10, 0.10),
+        0 1px 2px rgba(50, 30, 10, 0.06),
+        inset 0 1px 0 rgba(255, 248, 230, 0.40);
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {
-    background: rgba(37, 43, 54, 0.88);
-    border-color: rgba(255, 255, 255, 0.1);
+    background:
+        linear-gradient(180deg, rgba(255,240,200,0.03) 0%, transparent 25%),
+        var(--card-bg);
+    border-color: rgba(200, 164, 85, 0.16);
 }
 
 @media (max-width: 1800px) {
@@ -1827,17 +1884,29 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     }
 }
 
-/* Dark mode: subtle warm border tint */
+/* Dark mode: dark leather card */
 :root[data-theme="dark"] .bookmark-card {
-    border-color: rgba(217, 119, 87, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255,240,200,0.04) 0%, transparent 30%),
+        var(--card-bg);
+    border-color: rgba(200, 164, 85, 0.16);
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.30),
+        0 1px 3px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255, 240, 200, 0.04);
 }
 
 .bookmark-card:hover {
-    transform: translateY(-1px);
-    background: var(--card-hover);
-    border-color: color-mix(in srgb, var(--border-color) 70%, transparent);
+    transform: translateY(-2px);
+    background:
+        linear-gradient(180deg, rgba(255,248,230,0.40) 0%, rgba(245,236,215,0) 35%),
+        var(--card-hover);
+    border-color: var(--primary-color);
     z-index: 10;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 8px 20px rgba(50, 30, 10, 0.18),
+        0 3px 6px rgba(50, 30, 10, 0.12),
+        inset 0 1px 0 rgba(255, 248, 230, 0.55);
 }
 
 .bookmark-card:active {
@@ -1845,8 +1914,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:not(:has(.expand-btn:hover, .card-content:hover)):active {
-    transform: scale(0.988);
-    transition: transform var(--motion-fast) var(--ease-emphasized);
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+        0 1px 3px rgba(50, 30, 10, 0.10),
+        inset 0 2px 4px rgba(50, 30, 10, 0.10);
+    transition: transform var(--motion-fast) var(--ease-emphasized),
+        box-shadow var(--motion-fast) var(--ease-emphasized);
 }
 
 .card-header {
@@ -1854,7 +1927,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     margin-bottom: 14px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1.5px solid var(--border-color);
     position: relative;
 }
 
