@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-05-20 14:28:40]
+- **Type**: Design (Fluid selection animations)
+- **Content**: 1) 引入侧栏主动式滑动轨垫片（`.sidebar-active-indicator`）：为左侧目录树在平铺模式和树状模式下添加绝对定位的高亮滑块，配合弹性 transition，在切换目录项时实现背景的丝滑漂移；2) 剥离静态背景色：移除原 `.tree-folder-item.active` 的硬编码背景和边框，将其完全移交给滑动指示器，使漂移过渡连贯无闪烁；3) 边缘光追流光效果：利用 `@property --glow-angle` 和 `@keyframes conic-glow-rotate` 在选中的书签卡片（`.leaf-wrapper.is-selected` / `.bookmark-card.is-selected`）四周生成 360° 发光旋转边框；4) 弹性点击反馈：结合 `spring-pop` 弹性微缩反弹动画，在卡片点击时提供丝滑回弹与流光闪烁反馈，并配有 1.4 秒自动销毁机制，确保极佳的日常交互性能。
+- **Impact**: `styles.css`, `script.js`, `src/02-bookmarks-core.js`, `src/09-ui-widgets.js`
+
 ## [2026-05-20 11:25:00]
 - **Type**: Fix (HD Background & Transparency overlays)
 - **Content**: 1) 解除存储限制（提清）：在 manifest.json 申请 unlimitedStorage 权限，允许 4K/超清壁纸无损原图写入 IndexedDB，避免触发降级压缩算法；2) 消除壁纸变色遮罩（去遮罩）：激活自定义背景时在 body 挂载 .has-custom-bg，在 styles.css 中将背景伪元素的 opacity 设为 0，100% 还原壁纸原本色彩；3) 容器彻底透明：优化 applyContainerOpacity 逻辑，若透明度滑块拉满至 10，则完全清除主容器的毛玻璃模糊、背景色、边框以及阴影，展现极度清爽的悬浮书签体验。

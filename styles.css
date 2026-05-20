@@ -800,6 +800,7 @@ body.search-active #ai-sidebar-btn {
     transform-origin: 50% 0;
     transition: opacity var(--motion-fast) var(--ease-standard),
         transform var(--motion-fast) var(--ease-standard);
+    position: relative;
 }
 
 .tree-state {
@@ -959,6 +960,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    position: relative;
     padding: 2px 14px 8px 0;
     /* Avoid mask/transform compositing glitches while scrolling in Chrome */
     -webkit-mask-image: none;
@@ -1062,12 +1064,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .tree-folder-item.active {
-    background: var(--nav-item-active);
-    box-shadow: 0 8px 18px rgba(88, 55, 30, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.58);
-    border: 1px solid var(--nav-item-active-border);
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid transparent !important;
     color: var(--primary-color);
     font-weight: 600;
     transform: translateX(2px);
+    z-index: 2; /* 确保文字渲染在滑块之上 */
 }
 
 .tree-folder-item.active::before {
@@ -1079,9 +1082,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] .tree-folder-item.active {
-    background: var(--nav-item-active);
-    border: 1px solid var(--nav-item-active-border);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
 }
 
 .tree-folder-toggle {
@@ -5464,4 +5467,89 @@ body.pure-mode #pure-memo {
     .pure-memo-list {
         max-height: 180px;
     }
+}
+
+/* ── Fluid & Smooth selection active enhancements ── */
+
+@property --glow-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes conic-glow-rotate {
+    0% {
+        --glow-angle: 0deg;
+    }
+    100% {
+        --glow-angle: 360deg;
+    }
+}
+
+@keyframes spring-pop {
+    0% {
+        transform: scale(0.96);
+        box-shadow: 0 0 0 rgba(88, 55, 30, 0);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1.01);
+    }
+}
+
+/* Sidebar dynamic sliding indicator */
+.sidebar-active-indicator {
+    position: absolute;
+    background: var(--nav-item-active);
+    box-shadow: 0 6px 14px rgba(88, 55, 30, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    border: 1px solid var(--nav-item-active-border);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                width 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                height 0.28s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.2s ease;
+    opacity: 0;
+    transform: scale3d(0.9, 0.9, 1);
+    transform-origin: center center;
+    box-sizing: border-box;
+}
+
+:root[data-theme="dark"] .sidebar-active-indicator {
+    background: var(--nav-item-active);
+    border: 1px solid var(--nav-item-active-border);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Bookmark cards fluid spring and glow sweeps */
+.leaf-wrapper.is-selected,
+.bookmark-card.is-selected {
+    animation: spring-pop 0.32s cubic-bezier(0.25, 1.1, 0.4, 1) forwards;
+    border-color: transparent !important;
+    z-index: 5 !important;
+    box-shadow: 0 0 16px var(--nav-item-active-border), 0 8px 24px rgba(88, 55, 30, 0.08) !important;
+}
+
+:root[data-theme="dark"] .leaf-wrapper.is-selected,
+:root[data-theme="dark"] .bookmark-card.is-selected {
+    box-shadow: 0 0 20px rgba(174, 86, 48, 0.35), 0 12px 30px rgba(0, 0, 0, 0.35) !important;
+}
+
+.leaf-wrapper.is-selected::after,
+.bookmark-card.is-selected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--glow-angle), transparent 30%, var(--primary-color) 70%, transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 10;
+    animation: conic-glow-rotate 1.4s linear infinite;
 }

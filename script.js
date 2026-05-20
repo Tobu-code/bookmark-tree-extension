@@ -866,6 +866,9 @@ function renderBookmarks(bookmarkTreeNodes) {
         container.classList.add('layout-tree');
         renderTreeBookmarks(bookmarkTreeNodes, container);
     }
+    
+    // Smooth transition indicator sync
+    setTimeout(syncSidebarActiveIndicator, 50);
 }
 
 function bindDelegatedItemDnD(container) {
@@ -3985,3 +3988,77 @@ function initPureMemo() {
 
     loadItems();
 }
+
+// --- Dynamic indicator and card hover flow animations ---
+function syncSidebarActiveIndicator() {
+    updateActiveIndicator('.directory-pane-scroll', '.tree-folder-item.active');
+    updateActiveIndicator('#bookmarks-tree', '.tree-folder-item.active');
+}
+
+function updateActiveIndicator(containerSelector, activeItemSelector) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    if (containerSelector === '#bookmarks-tree' && container.classList.contains('layout-flat')) {
+        const ind = container.querySelector('.sidebar-active-indicator');
+        if (ind) ind.remove();
+        return;
+    }
+
+    const activeItem = container.querySelector(activeItemSelector);
+    let indicator = container.querySelector('.sidebar-active-indicator');
+
+    if (!activeItem) {
+        if (indicator) {
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'scale3d(0.9, 0.9, 1)';
+        }
+        return;
+    }
+
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.className = 'sidebar-active-indicator';
+        container.insertBefore(indicator, container.firstChild);
+        void indicator.offsetWidth; // Force reflow
+    }
+
+    let top = 0;
+    let left = 0;
+    let current = activeItem;
+    while (current && current !== container) {
+        top += current.offsetTop;
+        left += current.offsetLeft;
+        current = current.offsetParent;
+    }
+
+    const width = activeItem.offsetWidth;
+    const height = activeItem.offsetHeight;
+
+    indicator.style.width = `${width}px`;
+    indicator.style.height = `${height}px`;
+    indicator.style.transform = `translate3d(${left}px, ${top}px, 0) scale3d(1, 1, 1)`;
+    indicator.style.opacity = '1';
+}
+
+// Bind resize and scroll window events to recalculate indicator positions
+window.addEventListener('resize', debounce(syncSidebarActiveIndicator, 80));
+
+// Bind clicks globally to handle fluid shimmers and directory indicator shifts
+document.addEventListener('click', (e) => {
+    // 1. Fluid shimmers for bookmarks
+    const cardEl = e.target.closest('.leaf-wrapper, .bookmark-card');
+    if (cardEl) {
+        cardEl.classList.remove('is-selected');
+        void cardEl.offsetWidth; // Force animation reset
+        cardEl.classList.add('is-selected');
+        setTimeout(() => {
+            cardEl.classList.remove('is-selected');
+        }, 1400);
+    }
+
+    // 2. Directory sliding indicators
+    if (e.target.closest('.tree-folder-item') || e.target.closest('.tree-folder-toggle')) {
+        setTimeout(syncSidebarActiveIndicator, 50);
+    }
+});
