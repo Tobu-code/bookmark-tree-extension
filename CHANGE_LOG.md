@@ -907,3 +907,8 @@
 - **Type**: Refactor (Ambient Time Spacing)
 - **Content**: 调整搜索框上方时间区排版，增大“时间”与“日期/语录”信息组之间的水平间距与内缩，改善顶部留白节奏与可读性。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## 2026-05-26 14:03:00
+- **变更类型**: Chore / Design
+- **变更内容**: 替换扩展图标为精致小飞猪+书签风格新图标（粉色渐变玻璃态风格），覆盖 16/48/128px 三种尺寸及根目录 icon.png
+- **影响范围**: icons/icon16.png, icons/icon48.png, icons/icon128.png, icon.png
