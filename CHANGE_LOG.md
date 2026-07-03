@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:49:00]
+- **Type**: Fix (修复 Claude.ai 侧栏401错误、卡片固定高度与左右标题水平对齐)
+- **Content**: 视觉与引擎双重提效：1) 在 `rules.json` 中，针对 `claude.ai` 的两条 DNR 规则新增 `requestHeaders` 拦截改写，强行伪装请求头中的 `Origin` 为 `https://claude.ai`，`Referer` 为 `https://claude.ai/`，绕过了服务端的跨域 401 盾牌，彻底恢复侧栏中 Claude 会话与模型加载；2) 从 `styles.css` 中完全删除了常规书签第 `6n+4` 项的纵向 span 2 高窄卡片属性及相应排版，使右侧卡片高度完全统一为常规单倍高度（78px）；3) 将左侧 `.directory-pane` 的 `padding-top` 修正为与右侧一致 the `32px`，底 `padding` 修正为 `8px`，实现左侧“书签目录”标题与右侧分类目录标题的 Y 轴完全平齐对齐。
+- **Impact**: `rules.json`, `styles.css`
+
 ## [2026-07-03 14:39:00]
 - **Type**: Fix (恢复搜索框通用Flex排版并追加Bento尾部缓冲对齐)
 - **Content**: 完美样式校准：1) 补回通用的 `.search-top-row` 的 `display: contents;` 规则，修复因删除纯净模式时遗漏的子容器块级阻断，使其完美恢复为单行胶囊搜索框；2) 在 `styles.css` 的 Bento 网格定义中，为文件夹卡片、`6n+1` 扁卡片、`6n+4` 高卡片追加安全防护过滤 `:not(:last-child):not(:nth-last-child(-n+4))`，强制倒数末尾几项退化为规整的 `1x1` 常规卡片，彻底消灭末端产生单独一行突出或跳格的不齐瑕疵。

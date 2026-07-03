@@ -771,6 +771,18 @@
         "priority": 1,
         "action": {
             "type": "modifyHeaders",
+            "requestHeaders": [
+                {
+                    "header": "Origin",
+                    "operation": "set",
+                    "value": "https://claude.ai"
+                },
+                {
+                    "header": "Referer",
+                    "operation": "set",
+                    "value": "https://claude.ai/"
+                }
+            ],
             "responseHeaders": [
                 {
                     "header": "X-Frame-Options",
@@ -820,6 +832,18 @@
         "priority": 1,
         "action": {
             "type": "modifyHeaders",
+            "requestHeaders": [
+                {
+                    "header": "Origin",
+                    "operation": "set",
+                    "value": "https://claude.ai"
+                },
+                {
+                    "header": "Referer",
+                    "operation": "set",
+                    "value": "https://claude.ai/"
+                }
+            ],
             "responseHeaders": [
                 {
                     "header": "X-Frame-Options",

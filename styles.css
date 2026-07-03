@@ -915,7 +915,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     min-height: 0;
     height: 100%;
     overflow: hidden;
-    padding-top: 40px;
+    padding-top: 32px;
     padding-left: 24px; /* Added left padding to remove visual pressure */
     padding-right: 16px;
     padding-bottom: 24px;
@@ -1418,34 +1418,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-column: span 2;
 }
 
-/* 1x2 Tall Leaf (span 1 width & span 2 height) - nth(6n+4) */
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:last-child):not(:nth-last-child(-n+4)) {
-    grid-column: span 1;
-    grid-row: span 2;
-}
 
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:last-child):not(:nth-last-child(-n+4)) a.leaf-node {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    gap: 12px;
-    padding: 16px 8px;
-}
-
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:last-child):not(:nth-last-child(-n+4)) a.leaf-node .bookmark-icon {
-    width: 32px !important;
-    height: 32px !important;
-    margin-right: 0 !important;
-    margin-bottom: 4px;
-}
-
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:last-child):not(:nth-last-child(-n+4)) a.leaf-node .bookmark-label {
-    font-size: 13px;
-    font-weight: 600;
-}
 
 /* Hover Icon scale link */
 .bookmarks-pane-grid .leaf-wrapper:hover .bookmark-icon,
@@ -1528,7 +1501,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-weight: 600;
     color: var(--text-color);
     min-height: var(--flat-pane-header-height);
-    padding: 0 4px 10px 4px;
+    padding: 0 4px 8px 4px;
     margin: 0 0 var(--flat-pane-header-gap) 0;
     border-left: none;
     background: transparent;
