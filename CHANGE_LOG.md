@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 11:25:30]
+- **Type**: Refactor (Notion与圣杯布局重构)
+- **Content**: 引入 Notion 浅色风格与 Holy Grail 深色风格及圣杯布局框架：1) 升级外层容器 `.container` 为全屏、极简微距卡片的 Notion 风格容器 `.app-shell`；2) 重构时钟与搜索顶栏 `#search-container` / `.search-wrapper` 为精细 Notion 的形态，去除所有 text-shadow 和 linear-gradient；3) 重构平铺模式下左侧目录 `.directory-pane` 宽度至 240px，应用 Notion 极简 hover/active 导航条目样式；4) 重构平铺模式卡片 `.leaf-wrapper` 和树状模式卡片 `.bookmark-card` 为纯粹 Notion 白底灰色细边框卡片，且将图标改为了扁平极简图标底座，去除一切拟物金属外圈和羊皮纸质感；5) 优化 AI 侧栏 `.ai-sidebar` 为极具高级感的磨砂极光（aurora neon glow）侧边栏，优化景深微模糊过渡效果；6) 移除 styles.css 尾部冗余复杂的 `:root` 覆盖样式段。
+- **Impact**: `newtab.html`, `styles.css`
+
 ## [2026-07-03 11:20:00]
 - **Type**: Chore (彻底删除拟物主题)
 - **Content**: 彻底移除拟物（skeuomorphic）主题配置及相关代码：1) 从设置单选按钮中移除拟物选项；2) 删除 `applyTheme()` 中对 `skeuomorphic` 的分支逻辑，并对 localStorage 的旧 `skeuomorphic` 主题值做自动 fallback 降级处理；3) 清理 `styles.css` 中所有拟物专属变量与 pass 样式（包括平铺目录面板、设置面板、纯净模式皮纹等）；4) 全局将 `:root:not([data-theme="skeuomorphic"])` 替换为常规 `:root`，恢复非拟物普通模式为唯一基础默认态。

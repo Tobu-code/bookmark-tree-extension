@@ -2,37 +2,28 @@
 
 
 :root {
-    /* r4.chat Light Mode */
-    --primary-color: #CD9A8B;
-    --text-color: #1a1a18;
-    --text-secondary: #6d675f;
-    --bg-overlay: rgba(250, 249, 246, 0.85);
-    --card-bg: #FFFFFF;
-    --card-hover: #f8f3eb;
-    --border-color: rgba(110, 78, 53, 0.18);
-    --shadow-sm: 0 4px 12px rgba(42, 30, 20, 0.06);
-    --shadow-md: 0 18px 44px rgba(40, 30, 20, 0.12);
-    --modal-bg: #FFFFFF;
-    --modal-text: #1a1a18;
+    /* Notion Light Mode */
+    --primary-color: #37352f;
+    --text-color: #37352f;
+    --text-secondary: #9b9a97;
+    --bg-overlay: rgba(255, 255, 255, 0.95);
+    --card-bg: #ffffff;
+    --card-hover: #f7f6f3;
+    --border-color: rgba(55, 53, 47, 0.09);
+    --accent-color: #2eaadc;
+    --destructive-color: #eb5757;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    --modal-bg: #ffffff;
+    --modal-text: #37352f;
 
     /* Glass surfaces */
-    --glass-bg: rgba(255, 253, 250, 0.92);
-    --glass-border: rgba(110, 78, 53, 0.14);
-    --leather-surface: linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%);
-    --leather-dark: linear-gradient(175deg, #A8946C 0%, #9A8660 100%);
-    --paper-texture: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 28px,
-        rgba(92, 64, 32, 0.03) 28px,
-        rgba(92, 64, 32, 0.03) 29px
-    );
-    --metal-highlight: linear-gradient(180deg, rgba(255,248,230,0.7) 0%, rgba(255,248,230,0) 50%);
-    --stitch-color: rgba(92, 64, 32, 0.25);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(55, 53, 47, 0.09);
 
-    --flat-pane-header-height: 52px;
+    --flat-pane-header-height: 48px;
     --flat-pane-header-gap: 12px;
-    --floating-actions-size: 40px;
+    --floating-actions-size: 36px;
     --floating-actions-gap: 8px;
     --floating-actions-offset-right: 24px;
     --floating-actions-offset-bottom: 24px;
@@ -45,36 +36,36 @@
     --motion-slow: 360ms;
     --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
-    --elev-shadow-1: 0 6px 16px rgba(28, 21, 14, 0.09);
-    --elev-shadow-2: 0 12px 28px rgba(28, 21, 14, 0.13);
-    --elev-shadow-3: 0 18px 40px rgba(28, 21, 14, 0.16);
-    --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary-color) 14%, transparent);
-    --focus-outline: 2px solid color-mix(in srgb, var(--primary-color) 82%, white);
+    --elev-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --elev-shadow-2: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --elev-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.12);
+    --focus-ring: 0 0 0 3px rgba(46, 170, 220, 0.2);
+    --focus-outline: 2px solid var(--accent-color);
 
     /* Typography tokens */
-    --font-size-title: 17px;
-    --font-size-body: 12px;
+    --font-size-title: 15px;
+    --font-size-body: 13px;
     --font-weight-medium: 500;
     --font-weight-bold: 600;
     --font-size-caption: 12px;
     --font-size-micro: 10px;
     --text-muted: color-mix(in srgb, var(--text-secondary) 88%, var(--text-color) 12%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 72%, var(--text-color) 28%);
-    --nav-item-hover: rgba(255, 253, 249, 0.58);
-    --nav-item-active: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(248, 235, 220, 0.78));
-    --nav-item-active-border: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
-    --nav-icon-surface: color-mix(in srgb, var(--primary-color) 9%, white 91%);
+    --nav-item-hover: rgba(55, 53, 47, 0.04);
+    --nav-item-active: rgba(46, 170, 220, 0.08);
+    --nav-item-active-border: rgba(46, 170, 220, 0.3);
+    --nav-icon-surface: rgba(55, 53, 47, 0.06);
 
     /* Responsive layout tokens */
-    --container-padding: 28px;
-    --container-radius: 28px;
-    --container-min-h: 680px;
-    --clock-size: 72px;
-    --search-min-w: 560px;
-    --search-margin-top: 20px;
-    --search-margin-bottom: 26px;
-    --card-height: 380px;
-    --card-padding: 24px;
+    --container-padding: 24px;
+    --container-radius: 6px; /* Notion style crisp round corners */
+    --container-min-h: 600px;
+    --clock-size: 64px;
+    --search-min-w: 480px;
+    --search-margin-top: 24px;
+    --search-margin-bottom: 24px;
+    --card-height: 360px;
+    --card-padding: 20px;
 }
 
 
@@ -123,63 +114,55 @@
    ============================================================ */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --primary-color: #D69785;
-        --text-color: #F2F0E9;
-        --text-secondary: #C5C2BD;
-        --bg-overlay: rgba(26, 26, 26, 0.85);
-        --card-bg: #2C2C2C;
-        --card-hover: #2a303a;
-        --border-color: rgba(255, 255, 255, 0.12);
-        --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-        --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-        --modal-bg: #1f232b;
-        --modal-text: #F2F0E9;
-        --glow-color: rgba(245, 166, 122, 0.25);
-        --glow-soft: rgba(245, 166, 122, 0.1);
-        --glass-bg: rgba(31, 35, 43, 0.88);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --highlight-top: rgba(255, 255, 255, 0.04);
-        --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
-        --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
-        --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
+        --primary-color: #3b82f6;
+        --text-color: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --bg-overlay: rgba(15, 23, 42, 0.92);
+        --card-bg: #1e293b;
+        --card-hover: #334155;
+        --border-color: rgba(148, 163, 184, 0.15);
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+        --modal-bg: #1e293b;
+        --modal-text: #f1f5f9;
+        --glass-bg: rgba(15, 23, 42, 0.92);
+        --glass-border: rgba(148, 163, 184, 0.15);
+        --elev-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.2);
+        --elev-shadow-2: 0 8px 20px rgba(0, 0, 0, 0.3);
+        --elev-shadow-3: 0 16px 36px rgba(0, 0, 0, 0.4);
         --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
         --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
-        --nav-item-hover: rgba(255, 255, 255, 0.055);
-        --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
-        --nav-item-active-border: rgba(245, 166, 122, 0.28);
-        --nav-icon-surface: rgba(245, 166, 122, 0.11);
+        --nav-item-hover: rgba(255, 255, 255, 0.04);
+        --nav-item-active: rgba(59, 130, 246, 0.12);
+        --nav-item-active-border: rgba(59, 130, 246, 0.4);
+        --nav-icon-surface: rgba(255, 255, 255, 0.08);
     }
 }
 
 /* Explicit dark override (data-attribute) — also covers vars not in @media block */
 :root[data-theme="dark"] {
-    --primary-color: #D69785;
-    --text-color: #F2F0E9;
-    --text-secondary: #C5C2BD;
-    --bg-overlay: rgba(26, 26, 26, 0.85);
-    --card-bg: #2C2C2C;
-    --card-hover: #2a303a;
-    --border-color: rgba(255, 255, 255, 0.12);
-    --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 20px 44px rgba(0, 0, 0, 0.42);
-    --shadow-glow: 0 0 32px rgba(245, 166, 122, 0.14);
-    --modal-bg: #1f232b;
-    --modal-text: #F2F0E9;
-    --glow-color: rgba(245, 166, 122, 0.25);
-    --glow-soft: rgba(245, 166, 122, 0.1);
-    --glass-bg: rgba(31, 35, 43, 0.88);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --highlight-top: rgba(255, 255, 255, 0.04);
-    --elev-shadow-1: 0 8px 18px rgba(0, 0, 0, 0.28);
-    --elev-shadow-2: 0 14px 30px rgba(0, 0, 0, 0.34);
-    --elev-shadow-3: 0 22px 44px rgba(0, 0, 0, 0.4);
+    --primary-color: #3b82f6;
+    --text-color: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --bg-overlay: rgba(15, 23, 42, 0.92);
+    --card-bg: #1e293b;
+    --card-hover: #334155;
+    --border-color: rgba(148, 163, 184, 0.15);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --modal-bg: #1e293b;
+    --modal-text: #f1f5f9;
+    --glass-bg: rgba(15, 23, 42, 0.92);
+    --glass-border: rgba(148, 163, 184, 0.15);
+    --elev-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --elev-shadow-2: 0 8px 20px rgba(0, 0, 0, 0.3);
+    --elev-shadow-3: 0 16px 36px rgba(0, 0, 0, 0.4);
     --text-muted: color-mix(in srgb, var(--text-secondary) 92%, var(--text-color) 8%);
     --text-subtle: color-mix(in srgb, var(--text-secondary) 78%, var(--text-color) 22%);
-    --nav-item-hover: rgba(255, 255, 255, 0.055);
-    --nav-item-active: linear-gradient(135deg, rgba(245, 166, 122, 0.16), rgba(255, 255, 255, 0.07));
-    --nav-item-active-border: rgba(245, 166, 122, 0.28);
-    --nav-icon-surface: rgba(245, 166, 122, 0.11);
+    --nav-item-hover: rgba(255, 255, 255, 0.04);
+    --nav-item-active: rgba(59, 130, 246, 0.12);
+    --nav-item-active-border: rgba(59, 130, 246, 0.4);
+    --nav-icon-surface: rgba(255, 255, 255, 0.08);
 }
 
 :root[data-theme="dark"] #settings-btn {
@@ -244,44 +227,11 @@ h3,
     left: 0;
     width: 100%;
     height: 100%;
-    /* Skeuomorphic: Walnut wood desk surface */
-    background-color: #5C3D2E;
-    background-image:
-        /* Wood grain — horizontal streaks */
-        repeating-linear-gradient(
-            178deg,
-            transparent,
-            transparent 4px,
-            rgba(40, 22, 10, 0.08) 4px,
-            rgba(40, 22, 10, 0.08) 5px,
-            transparent 5px,
-            transparent 11px,
-            rgba(40, 22, 10, 0.05) 11px,
-            rgba(40, 22, 10, 0.05) 12px
-        ),
-        /* Color variation bands */
-        linear-gradient(
-            175deg,
-            #6B4A38 0%,
-            #5C3D2E 20%,
-            #654535 35%,
-            #5A3B2C 50%,
-            #6B4A38 65%,
-            #5C3D2E 80%,
-            #634333 100%
-        );
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #F7F7F5;
+    background-image: none;
     z-index: -1;
     transition: background-color 0.5s ease, opacity 0.5s ease;
-    image-rendering: auto;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0);
     will-change: background-image;
-
-    /* Pre-load state */
     opacity: 0;
 }
 
@@ -295,60 +245,34 @@ h3,
 
 #background-layer::before {
     background:
-        /* Warm ambient light — desk lamp glow */
-        radial-gradient(ellipse at 30% 25%, rgba(255, 210, 150, 0.10), transparent 50%),
-        radial-gradient(ellipse at 75% 70%, rgba(200, 160, 100, 0.06), transparent 45%),
-        /* Wood knot accent */
-        radial-gradient(circle at 65% 40%, rgba(80, 45, 20, 0.08), transparent 15%);
+        radial-gradient(circle at 18% 20%, rgba(46, 170, 220, 0.04), transparent 42%),
+        radial-gradient(circle at 82% 14%, rgba(171, 206, 255, 0.03), transparent 38%),
+        radial-gradient(circle at 74% 82%, rgba(255, 170, 152, 0.03), transparent 40%);
     mix-blend-mode: screen;
 }
 
 #background-layer::after {
-    background: 
-        /* Top edge shadow (desk under shelf) */
-        linear-gradient(180deg, rgba(30, 15, 5, 0.12) 0%, transparent 10%),
-        /* Overall desk varnish sheen */
-        linear-gradient(180deg, rgba(255, 220, 160, 0.03) 0%, rgba(30, 15, 5, 0.06) 100%);
+    background:
+        linear-gradient(180deg, rgba(80, 140, 255, 0.01) 0%, transparent 15%),
+        linear-gradient(180deg, rgba(20, 16, 12, 0.01) 0%, rgba(20, 16, 12, 0.03) 100%);
 }
 
-/* Dark Theme: Ebony wood desk */
 :root[data-theme="dark"] #background-layer {
-    background-color: #1E120A;
-    background-image:
-        repeating-linear-gradient(
-            178deg,
-            transparent,
-            transparent 4px,
-            rgba(0, 0, 0, 0.12) 4px,
-            rgba(0, 0, 0, 0.12) 5px,
-            transparent 5px,
-            transparent 11px,
-            rgba(0, 0, 0, 0.08) 11px,
-            rgba(0, 0, 0, 0.08) 12px
-        ),
-        linear-gradient(
-            175deg,
-            #2A1A10 0%,
-            #1E120A 20%,
-            #24160E 35%,
-            #1C100A 50%,
-            #2A1A10 65%,
-            #1E120A 80%,
-            #221408 100%
-        );
+    background-color: #0f172a;
+    background-image: none;
 }
 
 :root[data-theme="dark"] #background-layer::before {
     background:
-        radial-gradient(ellipse at 30% 25%, rgba(200, 164, 85, 0.06), transparent 50%),
-        radial-gradient(ellipse at 75% 70%, rgba(160, 120, 60, 0.04), transparent 45%),
-        radial-gradient(circle at 65% 40%, rgba(0, 0, 0, 0.10), transparent 15%);
+        radial-gradient(circle at 20% 24%, rgba(59, 130, 246, 0.06), transparent 44%),
+        radial-gradient(circle at 84% 18%, rgba(99, 102, 241, 0.05), transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.05), transparent 42%);
 }
 
 :root[data-theme="dark"] #background-layer::after {
-    background: 
-        linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, transparent 10%),
-        linear-gradient(180deg, rgba(200, 164, 85, 0.02) 0%, rgba(0, 0, 0, 0.10) 100%);
+    background:
+        linear-gradient(180deg, rgba(59, 130, 246, 0.02) 0%, transparent 20%),
+        linear-gradient(180deg, rgba(8, 10, 14, 0.08) 0%, rgba(8, 10, 14, 0.15) 100%);
 }
 
 /* Custom Background overrides to remove system gradient lighting overlays */
@@ -358,31 +282,20 @@ body.has-custom-bg #background-layer::after {
     transition: opacity 0.3s ease;
 }
 
-/* Main Container - Skeuomorphic 3D Leather Notebook */
+/* Main Container - Notion & Holy Grail Style Layout */
 .container {
-    width: 90%;
-    height: clamp(var(--container-min-h), 92vh, 1100px);
-    margin: max(16px, 2.8vh) auto;
+    width: 94%;
+    max-width: 1440px;
+    height: clamp(var(--container-min-h), 88vh, 1080px);
+    margin: max(20px, 3.5vh) auto;
     border-radius: var(--container-radius);
-    background: var(--leather-surface, linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%));
-    box-shadow:
-        /* Primary drop shadow — book sitting on desk */
-        0 12px 40px rgba(50, 30, 10, 0.32),
-        0 4px 12px rgba(50, 30, 10, 0.20),
-        /* Contact shadow — tight under the notebook */
-        0 1px 3px rgba(50, 30, 10, 0.22),
-        /* Inner top edge — light catching the leather bevel */
-        inset 0 2px 0 rgba(255, 248, 230, 0.40),
-        /* Inner left edge highlight — 3D thickness */
-        inset 2px 0 0 rgba(255, 248, 230, 0.15),
-        /* Inner right edge shadow — 3D thickness */
-        inset -2px 0 0 rgba(50, 30, 10, 0.06),
-        /* Inner bottom — leather spine thickness */
-        inset 0 -3px 6px rgba(50, 30, 10, 0.12);
-    border: 2px solid var(--stitch-color);
-    /* Outer bevel highlight ring */
-    outline: 1px solid rgba(255, 248, 230, 0.18);
-    outline-offset: -1px;
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 8px 32px rgba(55, 53, 47, 0.04);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     padding: var(--container-padding);
@@ -392,52 +305,24 @@ body.has-custom-bg #background-layer::after {
 
     /* Pre-load state */
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--motion-slow) var(--ease-standard),
-        transform var(--motion-slow) var(--ease-standard),
+    transform: translateY(12px);
+    transition: opacity var(--motion-medium) var(--ease-standard),
+        transform var(--motion-medium) var(--ease-standard),
         background var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-medium) var(--ease-standard);
 }
 
-/* Leather grain texture overlay */
-.container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background:
-        var(--paper-texture),
-        /* Desk lamp light spot — top left corner */
-        radial-gradient(ellipse at 25% 15%, rgba(255,248,230,0.18) 0%, transparent 50%),
-        /* Subtle vignette — darkened edges for depth */
-        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(50, 30, 10, 0.04) 100%);
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Stitching inner border */
+.container::before,
 .container::after {
-    content: '';
-    position: absolute;
-    inset: 6px;
-    border-radius: calc(var(--container-radius) - 4px);
-    border: 1.5px dashed var(--stitch-color);
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 :root[data-theme="dark"] .container {
-    background: var(--leather-surface);
-    box-shadow:
-        0 14px 44px rgba(0, 0, 0, 0.50),
-        0 4px 12px rgba(0, 0, 0, 0.35),
-        0 1px 3px rgba(0, 0, 0, 0.28),
-        inset 0 2px 0 rgba(255, 240, 200, 0.06),
-        inset 2px 0 0 rgba(255, 240, 200, 0.03),
-        inset -2px 0 0 rgba(0, 0, 0, 0.08),
-        inset 0 -3px 6px rgba(0, 0, 0, 0.18);
-    border-color: rgba(200, 164, 85, 0.18);
-    outline-color: rgba(255, 240, 200, 0.06);
+    background: var(--bg-overlay);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 12px 40px rgba(0, 0, 0, 0.25);
+    border-color: var(--border-color);
 }
 
 body.loaded .container {
@@ -454,7 +339,7 @@ body.loaded #background-layer {
 }
 
 
-/* Search Bar */
+/* Search Bar Header */
 #search-container {
     margin-top: var(--search-margin-top);
     margin-bottom: var(--search-margin-bottom);
@@ -463,8 +348,9 @@ body.loaded #background-layer {
     align-items: center;
     position: relative;
     z-index: 110;
-    transition: padding 0.4s var(--ease-standard);
+    transition: padding 0.4s var(--ease-standard), margin 0.4s var(--ease-standard);
     box-sizing: border-box;
+    width: 100%;
 }
 
 /* Dynamic Alignment for Flat Mode */
@@ -473,9 +359,9 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    padding-left: calc(var(--flat-side-gutter) + 284px + 24px);
+    padding-left: calc(var(--flat-side-gutter) + 240px + 24px); /* 240px matches nav width */
     padding-right: var(--flat-side-gutter);
-    align-items: flex-start; /* Align search bar and clock with the right pane header */
+    align-items: flex-start;
 }
 
 .container:has(#bookmarks-tree.layout-tree) {
@@ -492,117 +378,106 @@ body.loaded #background-layer {
     max-width: 900px;
     font-weight: 400;
     font-variant-numeric: tabular-nums;
-    color: var(--text-subtle);
-    margin-bottom: 40px; /* Increased gap between clock and search bar */
+    color: var(--text-secondary);
+    margin-bottom: 24px;
     opacity: 0;
-    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 1s var(--ease-standard);
     user-select: none;
     pointer-events: none;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    gap: 24px;
-    letter-spacing: 0.2px;
+    gap: 20px;
+    letter-spacing: -0.01em;
 }
 
 .ambient-time-clock {
     font-size: var(--clock-size);
-    font-weight: 300;
-    letter-spacing: -3px;
+    font-weight: 400;
+    letter-spacing: -2px;
     color: var(--text-color);
     opacity: 0.95;
-    line-height: 0.8;
-    font-family: 'Inter', 'Outfit', sans-serif;
-    filter: drop-shadow(0 2px 4px rgba(50,30,10,0.10));
-    text-shadow:
-        0 1px 0 rgba(255, 248, 230, 0.50),
-        0 2px 6px rgba(50, 30, 10, 0.08);
+    line-height: 0.85;
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    text-shadow: none;
 }
 
 .ambient-time-info-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
-    padding-bottom: 8px; /* Align with baseline of large digits */
-    border-left: 1px solid rgba(0,0,0,0.03);
-    padding-left: 20px;
+    gap: 3px;
+    padding-bottom: 4px;
+    border-left: 1px solid var(--border-color);
+    padding-left: 16px;
 }
 
 :root[data-theme="dark"] .ambient-time-info-group {
-    border-left-color: rgba(255,255,255,0.1);
+    border-left-color: var(--border-color);
 }
 
 .ambient-time-date {
-    font-size: 13px;
-    color: var(--text-subtle);
-    opacity: 0.8;
-    letter-spacing: 0.3px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.85;
+    letter-spacing: 0.2px;
     font-weight: 500;
+    text-shadow: none;
 }
 
 .ambient-time-greeting {
-    font-size: 16px;
+    font-size: 14px;
     color: var(--text-color);
     opacity: 0.95;
     font-weight: 600;
-    letter-spacing: 0.2px;
-    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.40);
-}
-
-.ambient-time-date {
-    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.30);
+    letter-spacing: 0.1px;
+    text-shadow: none;
 }
 
 .ambient-time.visible {
-    opacity: 0.74;
+    opacity: 0.9;
 }
 
 .ambient-time.dimmed {
-    opacity: 0.28;
+    opacity: 0.4;
 }
 
 #search-input {
     flex: 1;
-    padding: 20px 12px; /* Increased vertical padding to make it taller */
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.6px;
+    padding: 14px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
     border: none;
     background: transparent;
     outline: none;
     min-width: 0;
     color: var(--text-color);
+    font-family: inherit;
 }
 
 #search-input::placeholder {
-    font-size: 14px;
-    opacity: 0.84;
-    color: var(--text-subtle);
+    font-size: 13px;
+    opacity: 0.6;
+    color: var(--text-secondary);
 }
 
-/* Wrapper - Skeuomorphic Sunken Metal-Rimmed Input */
+/* Notion Style Minimal Search Wrapper */
 .search-wrapper {
     display: flex;
     align-items: center;
     width: clamp(var(--search-min-w), 58.5vw, 920px);
     max-width: calc(100% - 24px);
-    border-radius: 14px;
+    border-radius: 6px; /* Notion standard radius */
     background: var(--card-bg);
-    box-shadow:
-        /* Sunken inset */
-        inset 0 2px 6px rgba(50, 30, 10, 0.18),
-        inset 0 1px 2px rgba(50, 30, 10, 0.10),
-        /* Outer rim highlight */
-        0 1px 0 rgba(255, 248, 230, 0.30);
-    border: 1.5px solid var(--border-color);
-    transition: transform var(--motion-medium) var(--ease-standard),
-        box-shadow var(--motion-medium) var(--ease-standard),
-        background-color var(--motion-medium) var(--ease-standard),
-        border-color var(--motion-medium) var(--ease-standard),
-        color var(--motion-medium) var(--ease-standard);
-    padding-left: 20px;
-    padding-right: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: 
+        box-shadow var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard);
+    padding-left: 14px;
+    padding-right: 8px;
     position: relative;
 }
 
@@ -610,31 +485,18 @@ body.loaded #background-layer {
     max-width: 800px;
 }
 
-:root[data-theme="dark"] .search-wrapper {
-    background: var(--card-bg);
-    box-shadow:
-        inset 0 2px 8px rgba(0, 0, 0, 0.35),
-        inset 0 1px 2px rgba(0, 0, 0, 0.20),
-        0 1px 0 rgba(255, 240, 200, 0.05);
-    border: 1.5px solid rgba(200, 164, 85, 0.18);
-}
-
 .search-wrapper:focus-within {
-    width: clamp(560px, 58.5vw, 920px);
     background: var(--card-bg);
-    border-color: var(--primary-color);
-    box-shadow:
-        inset 0 2px 6px rgba(50, 30, 10, 0.14),
-        0 0 0 2px rgba(139, 105, 20, 0.15),
-        0 1px 0 rgba(255, 248, 230, 0.25);
-    transform: scale(0.995);
+    border-color: var(--accent-color);
+    box-shadow: 
+        var(--shadow-md),
+        0 0 0 3px rgba(46, 170, 220, 0.15);
 }
 
 :root[data-theme="dark"] .search-wrapper:focus-within {
-    box-shadow:
-        inset 0 2px 8px rgba(0, 0, 0, 0.30),
-        0 0 0 2px rgba(200, 164, 85, 0.12),
-        0 1px 0 rgba(255, 240, 200, 0.04);
+    box-shadow: 
+        var(--shadow-md),
+        0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 /* Engine Picker Container */
@@ -1051,7 +913,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .directory-pane {
-    width: 284px;
+    width: 240px; /* Notion standard sidebar width */
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -1060,49 +922,33 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     overflow: hidden;
     padding-right: 0;
     padding-top: 0;
-    border-right: 1.5px solid var(--stitch-color);
-    background: linear-gradient(180deg, rgba(255,248,230,0.15) 0%, transparent 30%);
+    border-right: 1px solid var(--border-color);
+    background: transparent;
     position: relative;
 }
 
 .directory-pane::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    bottom: 8px;
-    right: -1px;
-    width: 0;
-    border-right: 1.5px dashed var(--stitch-color);
-    pointer-events: none;
+    display: none;
 }
 
 .directory-pane-scroll {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
-    gap: 8px;
+    gap: 4px; /* Notion style closer spacing */
     min-height: 0;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
-    padding: 2px 14px 8px 0;
-    -webkit-mask-image: none;
-    mask-image: none;
-    will-change: auto;
-    transform: none;
+    padding: 2px 8px 8px 0;
     scroll-behavior: smooth;
     overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
 }
 
 :root[data-theme="dark"] .directory-pane {
-    border-right-color: rgba(200, 164, 85, 0.14);
-    background: linear-gradient(180deg, rgba(255,240,200,0.03) 0%, transparent 30%);
-}
-
-:root[data-theme="dark"] .directory-pane::after {
-    border-right-color: rgba(200, 164, 85, 0.10);
+    border-right-color: var(--border-color);
+    background: transparent;
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
@@ -1502,12 +1348,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 7: Skeuomorphic paper note cards */
 .bookmarks-pane-grid .leaf-wrapper {
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.40) 0%, rgba(245,236,215,0) 40%),
-        var(--card-bg);
-    border: 1.5px solid var(--border-color);
-    border-radius: 10px;
-    padding: 8px 9px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card, 4px);
+    padding: 10px 12px;
     margin-bottom: 0;
     min-height: 0;
     height: 100%;
@@ -1515,97 +1359,58 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    box-shadow:
-        /* Physical raised card shadow */
-        0 2px 5px rgba(50, 30, 10, 0.12),
-        0 1px 2px rgba(50, 30, 10, 0.08),
-        /* Inner top edge highlight */
-        inset 0 1px 0 rgba(255, 248, 230, 0.55),
-        /* Inner bottom subtle shadow for thickness */
-        inset 0 -1px 0 rgba(92, 64, 32, 0.06);
-    transition: transform var(--motion-medium) var(--ease-standard),
-        background-color var(--motion-medium) var(--ease-standard),
-        border-color var(--motion-medium) var(--ease-standard),
-        box-shadow var(--motion-medium) var(--ease-standard),
-        opacity var(--motion-medium) var(--ease-standard);
+    box-shadow: var(--shadow-sm);
+    transition: 
+        transform var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard);
     will-change: auto;
     transform: none;
     position: relative;
     overflow: hidden;
 }
 
-/* Paper grain texture on each card */
 .bookmarks-pane-grid .leaf-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: var(--paper-texture);
-    opacity: 0.6;
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background:
-        linear-gradient(180deg, rgba(255,240,200,0.04) 0%, transparent 40%),
-        var(--card-bg);
-    border-color: rgba(200, 164, 85, 0.18);
-    box-shadow:
-        0 2px 6px rgba(0, 0, 0, 0.28),
-        0 1px 2px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 240, 200, 0.05),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Hover: Card lifts up with enhanced shadow */
+/* Hover: Minimal Notion Lift */
 .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-3px);
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.55) 0%, rgba(245,236,215,0) 45%),
-        var(--card-hover);
-    border-color: var(--primary-color);
-    box-shadow:
-        0 6px 16px rgba(50, 30, 10, 0.18),
-        0 2px 4px rgba(50, 30, 10, 0.12),
-        inset 0 1px 0 rgba(255, 248, 230, 0.65),
-        0 0 0 1px rgba(139, 105, 20, 0.08);
+    transform: translateY(-2px);
+    background: var(--card-bg);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-md);
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background:
-        linear-gradient(180deg, rgba(255,240,200,0.08) 0%, transparent 45%),
-        var(--card-hover);
-    border-color: rgba(200, 164, 85, 0.30);
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.35),
-        0 2px 4px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255, 240, 200, 0.06);
+    background: var(--card-bg);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-md);
 }
 
-/* Active: Card presses into the surface */
+/* Active: Minimal press */
 .bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
-    transform: translateY(1px) scale(0.97);
-    box-shadow:
-        0 1px 2px rgba(50, 30, 10, 0.10),
-        inset 0 2px 4px rgba(50, 30, 10, 0.12);
-    transition: transform var(--motion-fast) var(--ease-emphasized),
-        box-shadow var(--motion-fast) var(--ease-emphasized);
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
 }
-
-/* Removed: Hover focus dimming for r4.chat clean aesthetic */
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 6px 5px;
+    padding: 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center all children horizontally */
+    align-items: center;
     text-align: center;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
-    /* Reset tree-mode hover effects that cause the double-border */
     border-left: none !important;
     transform: none !important;
     background: none !important;
@@ -1613,40 +1418,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     transition: opacity 0.3s ease;
 }
 
-/* Center the icon inside the card — embossed metal ring */
+/* Minimalist Icon Base */
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important;
-    margin-bottom: 5px;
-    padding: 8px;
-    background:
-        radial-gradient(circle at 45% 40%, rgba(255,248,230,0.30) 0%, transparent 70%),
-        rgba(139, 105, 20, 0.07);
-    border-radius: 12px;
-    border: 1px solid rgba(92, 64, 32, 0.10);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 248, 230, 0.40),
-        0 1px 2px rgba(50, 30, 10, 0.08);
+    margin-bottom: 6px;
+    padding: 6px;
+    background: var(--nav-icon-surface);
+    border-radius: 6px;
+    border: none;
+    box-shadow: none;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon,
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
-    background:
-        radial-gradient(circle at 45% 40%, rgba(255,240,200,0.06) 0%, transparent 70%),
-        rgba(200, 164, 85, 0.08);
-    border-color: rgba(200, 164, 85, 0.10);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 240, 200, 0.04),
-        0 1px 2px rgba(0, 0, 0, 0.15);
+    background: var(--nav-icon-surface);
+    border-color: transparent;
+    box-shadow: none;
 }
 
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
     margin-bottom: 1px;
     font-size: var(--font-size-body);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.32;
-    color: color-mix(in srgb, var(--text-color) 92%, var(--text-secondary) 8%);
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text-color);
     text-align: center;
     max-width: 100%;
     display: -webkit-box;
@@ -1655,12 +1452,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: 0.08px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
-    padding-left: 6px !important;
-    padding-right: 6px !important;
+    padding: 4px !important;
     border-left: none !important;
     background: none !important;
     box-shadow: none !important;
@@ -1712,95 +1507,74 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .directory-pane-header {
-    padding: 0 4px 12px 4px;
+    padding: 12px 8px;
     background-image: none;
-    border-bottom: 0;
-    box-shadow:
-        inset 0 -1px 0 rgba(92, 64, 32, 0.14),
-        0 1px 0 rgba(255, 248, 230, 0.26);
-    text-shadow: 0 1px 0 rgba(255, 248, 230, 0.45);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: none;
+    text-shadow: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 #bookmarks-tree.layout-flat .directory-pane-header .folder-svg-icon {
-    background:
-        linear-gradient(180deg, rgba(255, 248, 230, 0.44), rgba(216, 198, 160, 0.24));
-    border: 1px solid rgba(92, 64, 32, 0.12);
-    box-shadow:
-        0 1px 2px rgba(50, 30, 10, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item {
-    border-color: rgba(92, 64, 32, 0.08);
-    background:
-        linear-gradient(180deg, rgba(255, 248, 230, 0.22) 0%, rgba(245, 236, 215, 0.08) 100%);
-    box-shadow:
-        0 1px 2px rgba(50, 30, 10, 0.04),
-        inset 0 1px 0 rgba(255, 248, 230, 0.28);
+    border: 1px solid transparent !important;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: background-color var(--motion-fast) var(--ease-standard);
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item:hover {
-    border-color: rgba(139, 105, 20, 0.18);
-    background:
-        linear-gradient(180deg, rgba(255, 248, 230, 0.44) 0%, rgba(221, 208, 178, 0.32) 100%);
-    box-shadow:
-        0 3px 8px rgba(50, 30, 10, 0.12),
-        inset 0 1px 0 rgba(255, 248, 230, 0.50);
+    border-color: transparent !important;
+    background: var(--nav-item-hover) !important;
+    box-shadow: none !important;
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item.active {
-    background:
-        linear-gradient(180deg, rgba(255, 248, 230, 0.46) 0%, rgba(221, 208, 178, 0.30) 100%) !important;
-    border-color: rgba(139, 105, 20, 0.16) !important;
-    box-shadow:
-        inset 3px 0 0 rgba(139, 105, 20, 0.62),
-        0 2px 5px rgba(50, 30, 10, 0.10),
-        inset 0 1px 0 rgba(255, 248, 230, 0.45) !important;
-}
-
-:root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane {
-    background:
-        radial-gradient(ellipse at 38% 0%, rgba(255, 240, 200, 0.04) 0%, transparent 42%),
-        linear-gradient(90deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.08) 62%, rgba(0, 0, 0, 0.14) 100%);
-    box-shadow:
-        inset -12px 0 18px rgba(0, 0, 0, 0.18),
-        inset 1px 0 0 rgba(255, 240, 200, 0.04);
-}
-
-:root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane::after {
-    background:
-        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 55%, rgba(255, 240, 200, 0.04) 100%);
-    box-shadow:
-        inset -1px 0 0 rgba(255, 240, 200, 0.05),
-        inset 1px 0 0 rgba(0, 0, 0, 0.20);
+    background: var(--nav-item-active) !important;
+    border-color: transparent !important;
+    color: var(--accent-color) !important;
+    font-weight: 600;
+    box-shadow: none !important;
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .directory-pane-header {
-    background-image: none;
-    box-shadow:
-        inset 0 -1px 0 rgba(200, 164, 85, 0.10),
-        0 1px 0 rgba(0, 0, 0, 0.24);
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+    border-bottom-color: var(--border-color);
+    box-shadow: none;
+    text-shadow: none;
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item {
-    background:
-        linear-gradient(180deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.22) 100%);
-    border-color: rgba(200, 164, 85, 0.06);
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.10),
-        inset 0 1px 0 rgba(255, 240, 200, 0.03);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
 }
 
-:root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item:hover,
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item:hover {
+    background: var(--nav-item-hover) !important;
+}
+
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item.active {
-    background:
-        linear-gradient(180deg, rgba(255, 240, 200, 0.07) 0%, rgba(68, 56, 48, 0.42) 100%) !important;
-    border-color: rgba(200, 164, 85, 0.16) !important;
-    box-shadow:
-        inset 3px 0 0 rgba(200, 164, 85, 0.42),
-        0 2px 5px rgba(0, 0, 0, 0.24),
-        inset 0 1px 0 rgba(255, 240, 200, 0.05) !important;
+    background: var(--nav-item-active) !important;
+    color: var(--accent-color) !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2158,24 +1932,20 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card {
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.30) 0%, rgba(245,236,215,0) 30%),
-        var(--card-bg);
+    background: var(--card-bg);
     width: 100%;
     height: var(--card-height);
-    border-radius: 12px;
+    border-radius: 6px;
     padding: var(--card-padding);
     box-sizing: border-box;
-    box-shadow:
-        0 3px 10px rgba(50, 30, 10, 0.14),
-        0 1px 3px rgba(50, 30, 10, 0.10),
-        inset 0 1px 0 rgba(255, 248, 230, 0.45);
-    border: 1.5px solid var(--border-color);
-    transition: transform var(--motion-medium) var(--ease-standard),
-        background-color var(--motion-medium) var(--ease-standard),
-        border-color var(--motion-medium) var(--ease-standard),
-        box-shadow var(--motion-medium) var(--ease-standard),
-        opacity var(--motion-medium) var(--ease-standard);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: 
+        transform var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard),
+        box-shadow var(--motion-fast) var(--ease-standard),
+        opacity var(--motion-fast) var(--ease-standard);
     cursor: grab;
     display: flex;
     flex-direction: column;
@@ -2185,21 +1955,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Tree mode: lighter card treatment */
 #bookmarks-tree.layout-tree .bookmark-card {
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.25) 0%, rgba(245,236,215,0) 25%),
-        var(--card-bg);
-    border: 1.5px solid var(--border-color);
-    box-shadow:
-        0 2px 6px rgba(50, 30, 10, 0.10),
-        0 1px 2px rgba(50, 30, 10, 0.06),
-        inset 0 1px 0 rgba(255, 248, 230, 0.40);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card {
-    background:
-        linear-gradient(180deg, rgba(255,240,200,0.03) 0%, transparent 25%),
-        var(--card-bg);
-    border-color: rgba(200, 164, 85, 0.16);
+    background: var(--card-bg);
+    border-color: var(--border-color);
 }
 
 @media (max-width: 1800px) {
@@ -2234,27 +1997,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Dark mode: dark leather card */
 :root[data-theme="dark"] .bookmark-card {
-    background:
-        linear-gradient(180deg, rgba(255,240,200,0.04) 0%, transparent 30%),
-        var(--card-bg);
-    border-color: rgba(200, 164, 85, 0.16);
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.30),
-        0 1px 3px rgba(0, 0, 0, 0.20),
-        inset 0 1px 0 rgba(255, 240, 200, 0.04);
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-sm);
 }
 
 .bookmark-card:hover {
     transform: translateY(-2px);
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.40) 0%, rgba(245,236,215,0) 35%),
-        var(--card-hover);
-    border-color: var(--primary-color);
+    background: var(--card-bg);
+    border-color: var(--accent-color);
     z-index: 10;
-    box-shadow:
-        0 8px 20px rgba(50, 30, 10, 0.18),
-        0 3px 6px rgba(50, 30, 10, 0.12),
-        inset 0 1px 0 rgba(255, 248, 230, 0.55);
+    box-shadow: var(--shadow-md);
 }
 
 .bookmark-card:active {
@@ -2262,12 +2015,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmark-card:not(:has(.expand-btn:hover, .card-content:hover)):active {
-    transform: translateY(1px) scale(0.985);
-    box-shadow:
-        0 1px 3px rgba(50, 30, 10, 0.10),
-        inset 0 2px 4px rgba(50, 30, 10, 0.10);
-    transition: transform var(--motion-fast) var(--ease-emphasized),
-        box-shadow var(--motion-fast) var(--ease-emphasized);
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
 }
 
 .card-header {
@@ -4385,28 +4134,36 @@ input[type="file"] {
 }
 
 /* AI Sidebar Panel - Matching Theme Colors */
+/* AI Sidebar Panel - Premium Aurora Glassmorphism */
 .ai-sidebar {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    top: var(--container-padding);
+    bottom: var(--container-padding);
+    right: var(--container-padding);
+    width: 360px;
+    height: calc(100% - var(--container-padding) * 2);
     margin: 0;
     box-sizing: border-box;
-    /* Glass effect: high-transparency frosted glass with deeper blur */
-    background: rgba(255, 253, 250, 0.68);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    /* Aurora Glass effect: multi-stops gradient overlay with blur */
+    background: 
+        radial-gradient(circle at 100% 0%, rgba(46, 170, 220, 0.14), transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(255, 170, 152, 0.08), transparent 45%),
+        rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border-radius: var(--container-radius);
-    box-shadow: var(--shadow-md);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 20px 48px rgba(55, 53, 47, 0.08);
     z-index: 1001;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
-    /* Hidden state: slides from right and stays out of viewport */
-    transform: translateX(105%);
+    /* Hidden state: slides from right */
+    transform: translateX(110%);
     transition: transform var(--motion-slow) var(--ease-emphasized), 
                 opacity var(--motion-medium) ease;
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--border-color);
     opacity: 0;
 }
 
@@ -4417,8 +4174,14 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 :root[data-theme="dark"] .ai-sidebar {
-    background: rgba(18, 22, 28, 0.65);
-    border-left-color: rgba(255, 255, 255, 0.08);
+    background: 
+        radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.18), transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.12), transparent 45%),
+        rgba(15, 23, 42, 0.76);
+    border-color: var(--border-color);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        0 24px 64px rgba(0, 0, 0, 0.4);
 }
 
 /* Sidebar Header - Seamlessly transparent over sidebar glass */
@@ -4426,8 +4189,8 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 18px;
-    min-height: 52px;
+    padding: 12px 18px;
+    min-height: 48px;
     box-sizing: border-box;
     background: transparent;
     border-bottom: 1px solid var(--border-color);
@@ -4437,10 +4200,10 @@ body.ai-sidebar-open .ai-sidebar,
 
 :root[data-theme="dark"] .ai-sidebar-header {
     background: transparent;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--border-color);
 }
 
-/* Focus mode: when AI panel is open, reduce background competition */
+/* Focus mode: when AI panel is open, reduce background competition with micro-blur */
 body.ai-sidebar-open #search-container,
 body.ai-sidebar-open #bookmarks-tree {
     transition: opacity var(--motion-slow) var(--ease-emphasized),
@@ -4449,15 +4212,15 @@ body.ai-sidebar-open #bookmarks-tree {
 }
 
 body.ai-sidebar-open #search-container {
-    opacity: 0.45;
-    transform: scale(0.98) translate3d(-16px, 0, 0);
-    filter: blur(3px);
+    opacity: 0.5;
+    transform: scale(0.99) translate3d(-12px, 0, 0);
+    filter: blur(1.5px);
 }
 
 body.ai-sidebar-open #bookmarks-tree {
-    opacity: 0.45;
-    transform: scale(0.96) translate3d(-16px, 0, 0);
-    filter: blur(8px);
+    opacity: 0.5;
+    transform: scale(0.98) translate3d(-12px, 0, 0);
+    filter: blur(2px);
 }
 
 body.ai-sidebar-open #layout-toggle-btn,
@@ -5460,9 +5223,9 @@ input[type="file"]:focus-visible {
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
-    color: var(--primary-color);
+    border-radius: 6px;
+    background: var(--nav-icon-surface);
+    color: var(--accent-color);
     margin-bottom: 4px;
 }
 
@@ -5605,9 +5368,7 @@ body.pure-mode .pure-greeting-text {
     opacity: 1;
     letter-spacing: -0.5px;
     min-height: 1.2em;
-    text-shadow:
-        0 1px 0 rgba(255, 248, 230, 0.50),
-        0 3px 8px rgba(50, 30, 10, 0.06);
+    text-shadow: none;
 }
 
 /* 问候语前的小菱形图标 */
@@ -5628,20 +5389,15 @@ body.pure-mode .pure-greeting-text::before {
     letter-spacing: 1px;
 }
 
-/* 集成化搜索卡片 — Skeuomorphic */
+/* 集成化搜索卡片 — Notion 风格 */
 body.pure-mode .search-wrapper,
 body.pure-mode .search-wrapper:focus-within {
     width: 720px;
     max-width: calc(100vw - 48px);
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.35) 0%, rgba(245,236,215,0) 30%),
-        var(--card-bg);
-    border-radius: 12px;
-    border: 1.5px solid var(--border-color);
-    box-shadow:
-        inset 0 2px 6px rgba(50, 30, 10, 0.12),
-        inset 0 1px 2px rgba(50, 30, 10, 0.08),
-        0 1px 0 rgba(255, 248, 230, 0.25);
+    background: var(--card-bg);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -5777,13 +5533,13 @@ body.pure-mode #engine-picker-container {
 }
 
 :root[data-theme="dark"] body.pure-mode .search-wrapper {
-    background: rgba(45, 45, 45, 0.95);
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-md);
 }
 
 :root[data-theme="dark"] .search-bottom-row {
-    border-top-color: rgba(255, 255, 255, 0.06);
+    border-top-color: var(--border-color);
 }
 
 .pure-engine-btn {
@@ -6573,97 +6329,7 @@ body.pure-mode #pure-memo {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-:root .directory-pane {
-    border-right: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-    background: transparent;
-    box-shadow: none;
-    padding-right: 0;
-}
 
-:root .directory-pane::after {
-    display: none;
-}
-
-:root #bookmarks-tree.layout-flat .directory-pane {
-    padding-right: 0;
-    background: transparent;
-    box-shadow: none;
-}
-
-:root .directory-pane-header {
-    background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
-    box-shadow: none;
-    border: 0;
-    text-shadow: none;
-}
-
-:root .tree-folder-item,
-:root #bookmarks-tree.layout-flat .tree-folder-item {
-    background: transparent;
-    border: 1px solid transparent !important;
-    box-shadow: none;
-    text-shadow: none;
-}
-
-:root .tree-folder-item:hover,
-:root #bookmarks-tree.layout-flat .tree-folder-item:hover {
-    background: var(--nav-item-hover) !important;
-    border-color: color-mix(in srgb, var(--border-color) 70%, transparent) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36) !important;
-}
-
-:root .tree-folder-item.active,
-:root #bookmarks-tree.layout-flat .tree-folder-item.active {
-    background: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-}
-
-:root .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
-    border-radius: 14px;
-    padding: 8px 9px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-:root .bookmarks-pane-grid .leaf-wrapper::before {
-    display: none;
-}
-
-:root .bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    background-color: #ffffff;
-    border-color: color-mix(in srgb, var(--border-color) 80%, transparent);
-}
-
-:root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper {
-    background: rgba(37, 43, 54, 0.88);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-:root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background-color: rgba(48, 54, 66, 0.96);
-    border-color: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-}
-
-:root #bookmarks-tree.layout-tree .bookmark-card,
-:root .bookmark-card {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
-    border-radius: var(--container-radius);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-}
-
-:root[data-theme="dark"] #bookmarks-tree.layout-tree .bookmark-card,
-:root[data-theme="dark"] .bookmark-card {
-    background: rgba(37, 43, 54, 0.88);
-    border-color: rgba(255, 255, 255, 0.1);
-}
 
 :root #settings-modal {
     background: rgba(0, 0, 0, 0.5);
@@ -6734,37 +6400,4 @@ body.pure-mode #pure-memo {
     box-shadow: none;
 }
 
-:root body.pure-mode .container {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    outline: none;
-}
 
-:root body.pure-mode .container::after {
-    display: none;
-}
-
-:root[data-theme="dark"] body.pure-mode .container {
-    background: rgba(26, 26, 26, 0.55);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-color: rgba(255, 255, 255, 0.06);
-}
-
-:root body.pure-mode .pure-greeting-text {
-    text-shadow: none;
-}
-
-:root body.pure-mode .pure-greeting-text::before {
-    filter: none;
-}
-
-:root body.pure-mode .search-wrapper,
-:root body.pure-mode .search-wrapper:focus-within {
-    background: var(--card-bg);
-    border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-    border-radius: 32px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-}
