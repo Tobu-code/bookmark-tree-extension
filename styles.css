@@ -298,9 +298,8 @@ body.has-custom-bg #background-layer::after {
     position: relative;
     overflow: hidden;
 
-    /* Pre-load state */
-    opacity: 0;
-    transition: opacity var(--motion-medium) var(--ease-standard);
+    /* Pre-load state: Remove opacity 0 fade-in to prevent backdrop-filter synth lag */
+    opacity: 1;
 }
 
 .container::before,
@@ -315,7 +314,7 @@ body.has-custom-bg #background-layer::after {
 }
 
 body.loaded .container {
-    opacity: 1;
+    /* Keep it 1 to prevent layout shift */
 }
 
 body.ai-sidebar-open .container {
@@ -765,8 +764,7 @@ body.search-active #ai-sidebar-btn {
     overflow-x: hidden;
     padding: 8px 6px;
     transform-origin: 50% 0;
-    transition: opacity var(--motion-fast) var(--ease-standard),
-        transform var(--motion-fast) var(--ease-standard);
+    transition: transform var(--motion-fast) var(--ease-standard);
     position: relative;
 }
 
@@ -858,7 +856,6 @@ body.search-active #ai-sidebar-btn {
 }
 
 body.layout-switching #bookmarks-tree {
-    opacity: 0.88;
     transform: translateY(2px) scale(0.995);
 }
 

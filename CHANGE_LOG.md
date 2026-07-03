@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 17:03:00]
+- **Type**: Fix (彻底根除卡片磨砂层在进入页面和切换模式时的透明闪烁)
+- **Content**: 1) 取消页面加载的 opacity 渐变：将 `.container` 初始 `opacity` 锁定为 `1` 并去除渐变属性，移除了 `body.loaded .container` 对透明度的干预，从而确保初始渲染时卡片的 `backdrop-filter` 立即显示，不会在页面载入时产生闪烁；2) 取消切换模式和区域的 opacity 渐变：移除了 `#bookmarks-tree` 基础定义中的 `opacity` 过渡属性，并删除了 `body.layout-switching #bookmarks-tree` 的 `opacity: 0.88` 状态。由于完全解除了过渡期透明度非 1 的设定，浏览器不会在切换时卸载毛玻璃合成层，彻底消灭了“模式切换时卡片瞬间变透明再还原”的违和感。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 16:58:00]
 - **Type**: Fix (修复布局切换和搜索激活时的磨砂层闪烁并扩展搜索栏宽度)
 - **Content**: 1) 消除模式切换透明闪烁：移除 `@keyframes layoutSwitchFadeIn` 中将透明度从 0 到 1 渐变的代码，使磨砂材质在切换时连贯显示，只保留顺滑的小像素上升（`translateY(4px)`）与微弱缩放；2) 消除搜索激活毛玻璃失效：移除了 `body.search-active #bookmarks-tree` 的 `opacity: 0.95` 规则，完美规避了现代浏览器“半透明下 backdrop-filter 失效变成透明”的合成层 Bug，点击搜索框时磨砂感保持完好；3) 搜索框拉宽：将 `.search-wrapper` 基础宽度上限从 `620px` 拓宽至 `780px`（`clamp(var(--search-min-w), 50vw, 780px)`），平铺模式同步扩展，大屏视觉更舒展、大气。
