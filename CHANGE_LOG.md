@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:52:00]
+- **Type**: Feature (彻底修复树形模式滚动局限与平铺模式胶囊目录舱升级)
+- **Content**: 1) 双保险解开全局滚动：不仅对根容器 `.container` 设置自适应，还在有 `#bookmarks-tree.layout-tree` 存在时将 `html` 和 `body` 元素的 `overflow-y` 设置为 `auto !important`，彻底消除了深层嵌套导致的整页滚动死锁；2) 悬浮胶囊目录舱：重构平铺模式下左侧的书签目录面板 `.directory-pane`，取消了原本和右侧直切的 `border-right` 直线边界，为面板上下留空各 `20px`（`height: calc(100% - 40px)`）、增加 `margin`、统一应用 `border-radius: 20px` 四周细框线与磨砂投影，改造成一个独立精致的圆角胶囊悬浮舱，并为右侧留出 `20px` 呼吸间距，视觉融合度大幅跃升。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 16:46:30]
 - **Type**: Feature (实现树形模式全屏滚动与全局自适应卡片磨砂感调节)
 - **Content**: 1) 解锁全屏滚动：重构树状模式下的滚动机制，将滚动条外提到网页根容器 `.container` 上（`overflow-y: auto; height: auto;`），并将 `#bookmarks-tree` 高度和内卷滚动限制移除（`overflow-y: visible;`），实现鼠标在屏幕任何位置均能使用滚轮滑动网页；2) 全局柔和磨砂底色：将原本纯白的硬背景调整为半透明柔和色，并在 `.bookmark-card`、`.directory-pane` 和网格卡片上挂载毛玻璃模糊（`backdrop-filter: blur(var(--glass-blur))`），使卡片美观透气；3) 滑块磨砂绑定：修改透明度滑块在 `src/06-settings.js` 和 `script.js` 中的逻辑，使其直接通过改变 `:root` 变量（`--card-bg`, `--glass-bg`, `--glass-blur`）来动态遥控全局所有卡片和左侧目录树的透明度与模糊程度，彻底解决主容器被弃用后滑块失效的问题。

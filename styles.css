@@ -186,6 +186,12 @@
 
 }
 
+body:has(#bookmarks-tree.layout-tree),
+html:has(#bookmarks-tree.layout-tree) {
+    overflow-y: auto !important;
+    height: auto !important;
+}
+
 body,
 html {
     margin: 0;
@@ -885,7 +891,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 0;
+    gap: 20px;
     padding: 0;
     padding-left: clamp(0px, calc((100vw - 1600px) / 2), 128px); /* Shift right on large screens */
     align-items: stretch;
@@ -912,18 +918,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    height: 100%;
+    height: calc(100% - 40px); /* 留出上下各 20px 边距 */
+    margin: 20px 0 20px 20px;
+    border-radius: 20px; /* 圆角胶囊形状 */
     overflow: hidden;
     padding-top: 32px;
     padding-left: 24px; /* Added left padding to remove visual pressure */
     padding-right: 16px;
     padding-bottom: 24px;
-    border-right: 1px solid var(--border-color);
+    border: 1px solid var(--border-color); /* 统一卡片四周的细边框 */
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur, 16px));
     -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
     position: relative;
     box-sizing: border-box;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03); /* 柔和悬浮阴影 */
 }
 
 .directory-pane::after {
@@ -1724,12 +1733,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Directory pane no-line refinement */
 #bookmarks-tree.layout-flat .directory-pane {
-    padding-left: 48px;
-    padding-right: 18px;
+    padding-left: 24px;
+    padding-right: 16px;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur, 16px));
     -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
-    box-shadow: none;
 }
 
 #bookmarks-tree.layout-flat .directory-pane::after {
