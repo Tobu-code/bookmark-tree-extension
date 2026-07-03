@@ -347,14 +347,18 @@ body.loaded #background-layer {
 
 /* Dynamic Alignment for Flat Mode */
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    padding-left: 240px; /* Offset by the left sidebar width to achieve perfect centering */
+    padding-left: 260px; /* Offset by the new 260px sidebar width to achieve perfect centering */
     padding-right: 0;
     align-items: center;
 }
 
+.container:has(#bookmarks-tree.layout-tree) {
+    --tree-side-gutter: clamp(24px, calc((100% - 1400px) / 2), 164px);
+}
+
 .container:has(#bookmarks-tree.layout-tree) #search-container {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: var(--tree-side-gutter);
+    padding-right: var(--tree-side-gutter);
     align-items: center;
 }
 
@@ -897,21 +901,19 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .directory-pane {
-    width: 240px; /* Notion standard sidebar width */
+    width: 260px; /* Enhanced width for breathing room */
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
     height: 100%;
     overflow: hidden;
-    padding-top: 32px;
-    padding-left: 20px;
-    padding-right: 8px;
+    padding-top: 40px;
+    padding-left: 24px; /* Added left padding to remove visual pressure */
+    padding-right: 16px;
     padding-bottom: 24px;
     border-right: 1px solid var(--border-color);
-    background: rgba(247, 246, 243, 0.65); /* Notion classic gray sidebar translucent */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #f7f7f8; /* Solid light gray background to partition sidebar from content */
     position: relative;
     box-sizing: border-box;
 }
@@ -937,7 +939,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 :root[data-theme="dark"] .directory-pane {
     border-right-color: var(--border-color);
-    background: rgba(15, 23, 42, 0.45); /* Slate transparent */
+    background: #18191c; /* Dark slate gray background for sidebar */
 }
 
 /* Optimization 3: Hover focus - dim others in directory pane */
@@ -962,6 +964,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding: 32px 40px 24px 40px;
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Vertically center content when grid is short */
+    align-items: center; /* Horizontally center grid */
     min-height: 0;
     height: 100%;
     overflow: hidden;
@@ -970,7 +974,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-scroll {
-    flex: 1;
+    flex: 0 1 auto; /* Allow auto shrinking to prevent blank bottom space */
+    max-height: calc(100% - var(--flat-pane-header-height) - 40px); /* Keep boundary for scroll behavior */
+    width: 100%;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
@@ -1266,7 +1272,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background-repeat: no-repeat;
     background-position: bottom;
     width: 90%;
-    max-width: 1140px;
+    max-width: 1400px;
     box-sizing: border-box;
 }
 
@@ -1332,7 +1338,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding-top: 6px;
     padding-bottom: 32px;
     width: 90%;
-    max-width: 1140px;
+    max-width: 1400px;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -6283,12 +6289,12 @@ body.pure-mode #pure-memo {
 }
 
 :root .container {
-    border-radius: var(--container-radius);
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border: none;
     outline: none;
 }
 
@@ -6298,9 +6304,9 @@ body.pure-mode #pure-memo {
 }
 
 :root[data-theme="dark"] .container {
-    background: rgba(26, 26, 26, 0.55);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: transparent;
+    box-shadow: none;
+    border: none;
 }
 
 :root .ambient-time-clock,

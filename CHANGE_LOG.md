@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 11:49:40]
+- **Type**: Design (Notion圣杯对齐与垂直居中重构)
+- **Content**: 彻底优化全屏画布下的美学比例与重心稳定性，解决左侧挤压和右侧空洞的痛点：1) 清理 `:root .container` 的高优先级覆盖样式段，使全屏无框架构彻底生效；2) 将左侧目录栏 `.directory-pane` 宽度扩至 `260px`，加入 `padding-left: 24px` 消除靠边压抑感，应用实灰色背景（Light `#f7f7f8` / Dark `#18191c`）建立高档系统侧栏分区；3) 书签主内容区与搜索顶栏的最大宽度从 `1140px` 拓宽至 `1400px` 并严格水平居中，平铺搜索框 `padding-left` 步进至 `260px`；4) 引入收缩自适应与垂直居中布局（`justify-content: center`），使右侧内容在卡片稀少时自动整体垂直居中，完美消除顶部和底部的大片空洞。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 11:41:30]
 - **Type**: Refactor (平铺模式居中对齐与AI侧栏宽度升级)
 - **Content**: 解决平铺模式在大屏幕下布局整体偏左、缺乏中轴对称美感的体验缺陷，并大幅升级 AI 侧栏展现画幅：1) 调整平铺模式下顶栏 `#search-container` 的 padding-left 偏置，时钟大字与搜索框在右侧主视口内绝对水平居中；2) 面包屑标题 `.bookmarks-pane-header` 与卡片网格 `.bookmarks-pane-grid` 引入 `max-width: 1140px; margin: 0 auto;` 限制，建立垂直中轴对齐体系，彻底解决右侧大面积空余偏斜问题；3) 卡片网格的列最小宽度优化至 180px，卡片间隙收窄，还原 Notion 高品质紧凑格调；4) AI 侧栏 `.ai-sidebar` 的宽度从 420px 跃升至 `66vw`（占屏幕 2/3 宽），设定合理的 min-width / max-width 保护阈值，提供开阔的会话渲染画幅。
