@@ -5838,7 +5838,7 @@ input[type="file"]:focus-visible {
 }
 
 /* --- Global 3D Perspective Tilt & Shine Sweep Hover Effects --- */
-.leaf-wrapper::after,
+.bookmarks-pane-grid .leaf-wrapper::after,
 .bookmark-card::after,
 .tree-folder-item::after {
     content: '';
@@ -5855,14 +5855,14 @@ input[type="file"]:focus-visible {
     z-index: 10;
 }
 
-.leaf-wrapper:hover::after,
+.bookmarks-pane-grid .leaf-wrapper:hover::after,
 .bookmark-card:hover::after,
 .tree-folder-item:hover::after {
     opacity: 1;
 }
 
 /* Light theme adjustment for shine overlay (uses soft dark sheen on light themes) */
-:root[data-theme="light"] .leaf-wrapper::after,
+:root[data-theme="light"] .bookmarks-pane-grid .leaf-wrapper::after,
 :root[data-theme="light"] .bookmark-card::after,
 :root[data-theme="light"] .tree-folder-item::after {
     background: radial-gradient(
@@ -5873,13 +5873,13 @@ input[type="file"]:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .leaf-wrapper,
+    .bookmarks-pane-grid .leaf-wrapper,
     .bookmark-card,
     .tree-folder-item {
         transition: none !important;
         transform: none !important;
     }
-    .leaf-wrapper::after,
+    .bookmarks-pane-grid .leaf-wrapper::after,
     .bookmark-card::after,
     .tree-folder-item::after {
         display: none !important;

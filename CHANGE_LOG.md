@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:23:00]
+- **Type**: Fix (修复嵌套3D悬浮冲突引起的卡片内书签高频震颤抽搐Bug)
+- **Content**: 1) 解决嵌套物理悬浮冲突：在 `initMagneticHover` 中将 `.leaf-wrapper` 范围限定为 `.bookmarks-pane-grid .leaf-wrapper`，排除了嵌套在树状大卡片（`.bookmark-card`）内部的书签条目（`.leaf-wrapper`），避免了子级与父级 3D 变换相互拉扯；2) 引入无抖动静态缓存：在鼠标移入目标时，通过 `getBoundingClientRect()` 缓存下其未发生倾斜的 pristine 初始包围盒坐标，避免在 `mousemove` 周期中高频计算跳变的相对坐标，彻底消除了反馈振荡环，使得 3D 偏转极度平滑顺畅。
+- **Impact**: `src/09-ui-widgets.js`, `styles.css`
+
 ## [2026-07-03 18:19:00]
 - **Type**: Fix (修复首次进入页面右侧书签栏为空白而没有激活首个目录的Bug)
 - **Content**: 1) 首个目录默认激活：在初始化激活 ID 时，不再写死为 `1`（因为 `bookmarksBar` 仅为大容器并不实际渲染在侧边栏上，子节点如“常用入口”才是首个渲染目录）。重构后会自动获取子目录树中的绝对首个渲染节点 `bookmarksBar.children.find(child => child.children)` 并提取其 ID 作为默认激活项；2) 解决了用户进入页面后无任何选中项、右侧面板呈全白色的逻辑漏洞。

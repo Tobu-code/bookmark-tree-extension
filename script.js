@@ -3940,8 +3940,12 @@ document.addEventListener('click', (e) => {
 
 // --- Dynamic mouse magnetic physics and 3D Tilt Hover effects (Apple/Notion style) ---
 function initMagneticHover() {
+    let initialRect = null;
+    let lastTarget = null;
+
     document.addEventListener('mousemove', (e) => {
-        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
+        // Exclude nested .leaf-wrapper items inside .bookmark-card to prevent transform conflict
+        const target = e.target.closest('.bookmarks-pane-grid .leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
         
         if (!target) {
             const activeEl = document.querySelector('.is-magnetized');
@@ -3951,6 +3955,8 @@ function initMagneticHover() {
                 activeEl.style.removeProperty('--mouse-y');
                 activeEl.classList.remove('is-magnetized');
             }
+            initialRect = null;
+            lastTarget = null;
             return;
         }
 
@@ -3964,7 +3970,16 @@ function initMagneticHover() {
 
         target.classList.add('is-magnetized');
         
-        const rect = target.getBoundingClientRect();
+        // Cache pristine bounding box on initial entry to prevent coordinate feedback loop
+        if (lastTarget !== target || !initialRect) {
+            lastTarget = target;
+            const prevTransform = target.style.transform;
+            target.style.transform = '';
+            initialRect = target.getBoundingClientRect();
+            target.style.transform = prevTransform;
+        }
+        
+        const rect = initialRect;
         const clientX = e.clientX;
         const clientY = e.clientY;
         
@@ -4007,6 +4022,8 @@ function initMagneticHover() {
             activeEl.style.removeProperty('--mouse-y');
             activeEl.classList.remove('is-magnetized');
         }
+        initialRect = null;
+        lastTarget = null;
     });
 }
 
