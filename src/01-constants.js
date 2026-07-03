@@ -627,7 +627,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSearch();
     initAiSidebarLazy();
     initAmbientTime();
-    initGreeting();
 
 
     // 2. Data Loading (Async)

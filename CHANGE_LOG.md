@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:31:00]
+- **Type**: Fix (修复 initGreeting 缺失导致的白屏报错)
+- **Content**: 消除遗漏的失效调用：在 `src/01-constants.js` 的 DOMContentLoaded 加载事件中删除了已被解耦清除的 `initGreeting()` 函数调用，解决了由于找不到引用导致的 JS Uncaught ReferenceError 页面阻断报错。
+- **Impact**: `src/01-constants.js`, `script.js`
+
 ## [2026-07-03 14:28:00]
 - **Type**: Chore (彻底删除纯净模式相关代码与UI元素)
 - **Content**: 满足极简减法重构：1) 在 `newtab.html` 中移除 `.pure-greeting-group` 时钟问候容器、`#pure-engine-list` 底部搜索行、`#pure-memo` 备忘录及 `.pure-footer-hint`；2) 在 `styles.css` 中清除约 800 行以 `body.pure-mode` 开头的隐藏控制、组件布局和移动端覆盖样式；3) 在 `src/` JS 模块中彻底剥离 `PURE_MODE_ENABLED` 变量、`togglePureMode` 及 `applyPureModeState` 函数，并清空了 `initPureTime` / `initPureShortcuts` / `initPureMemo` 备忘录核心业务逻辑；4) 重新打包构建生成完全瘦身的 `script.js`。
