@@ -329,7 +329,7 @@ body.loaded #background-layer {
 /* Search Bar Header */
 #search-container {
     margin-top: 0;
-    padding-top: 76px;
+    padding-top: clamp(24px, 6.5vh, 80px);
     margin-bottom: var(--search-margin-bottom);
     display: flex;
     flex-direction: column;
@@ -343,8 +343,8 @@ body.loaded #background-layer {
 
 /* Dynamic Alignment for Flat Mode */
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    /* 260px sidebar + large-screen layout shift offset to center search above content */
-    padding-left: calc(260px + clamp(0px, calc((100vw - 1600px) / 2), 128px));
+    /* Adaptive sidebar + large-screen layout shift offset to center search above content */
+    padding-left: calc(clamp(200px, 18vw, 260px) + clamp(0px, calc((100vw - 1600px) / 2), 128px));
     padding-right: 0;
     align-items: center;
 }
@@ -943,7 +943,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 #bookmarks-tree.layout-flat {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: clamp(12px, 1.8vw, 24px); /* Fluid layout separation spacing */
     padding: 0;
     padding-left: clamp(0px, calc((100vw - 1600px) / 2), 128px); /* Shift right on large screens */
     align-items: stretch;
@@ -965,17 +965,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .directory-pane {
-    width: 260px; /* Enhanced width for breathing room */
+    width: clamp(200px, 18vw, 260px); /* Fluid width */
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    height: calc(100% - 40px); /* 留出上下各 20px 边距 */
-    margin: 20px 0 20px 20px;
-    border-radius: 20px; /* 圆角胶囊形状 */
+    height: calc(100% - 4vh); /* Responsive height relative to viewport */
+    margin: 2vh 0 2vh 2.5vw; /* Adaptive percentage gutters */
+    border-radius: 20px; /* Bento classic radius */
     overflow: hidden;
     padding-top: 32px;
-    padding-left: 24px; /* Added left padding to remove visual pressure */
+    padding-left: clamp(14px, 1.8vw, 24px); /* Dynamic indentation to prevent layout pressure */
     padding-right: 16px;
     padding-bottom: 24px;
     border: 1px solid var(--border-color); /* 统一卡片四周的细边框 */
@@ -1030,7 +1030,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex: 1;
     width: 100%;
     background: transparent;
-    padding: 32px 40px 24px 40px;
+    padding: clamp(16px, 3vh, 32px) clamp(16px, 3.5vw, 40px) 24px clamp(16px, 3.5vw, 40px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start grid strictly from top to align with left directory header */
@@ -1394,15 +1394,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     grid-auto-rows: 100px; /* Uniform card height giving room for icon + label */
     grid-auto-flow: dense; /* Fill layout gaps automatically to prevent offset gaps */
-    gap: 20px 20px;
+    gap: clamp(10px, 1.6vw, 20px) clamp(10px, 1.6vw, 20px);
     align-content: start;
     align-items: stretch;
     padding-top: 6px;
     padding-bottom: 32px;
-    width: 90%;
+    width: 100%;
     perspective: 1000px; /* Perspective FOV for 3D tilt tracking */
     max-width: 1400px;
-    margin: 0 auto;
     box-sizing: border-box;
 }
 
@@ -2139,7 +2138,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     grid-auto-rows: 320px; /* Standard Bento unified row height */
     grid-auto-flow: dense; /* Fill layout gaps automatically */
-    gap: 20px 20px;
+    gap: clamp(12px, 1.8vw, 24px) clamp(12px, 1.8vw, 24px);
     justify-content: stretch;
     padding: 24px 0 120px 0;
     width: 100%;

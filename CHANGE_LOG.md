@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 20:42:00]
+- **Type**: Feature (为小屏幕重构全站容器高度与网格间距的百分比自适应体系)
+- **Content**: 1) 侧边栏与布局解耦：废弃了左侧 `.directory-pane` 固定的 260px 宽度、40px 固定高度计算与 20px 硬编码边距，改为基于视口百分比的 `width: clamp(200px, 18vw, 260px)`、`height: calc(100% - 4vh)` 以及 `margin: 2vh 0 2vh 2.5vw` 弹性呼吸布局；2) 网页头部微缩自适应：时钟与搜索框容器 `#search-container` 的 `padding-top` 改为基于视口高度的 `clamp(24px, 6.5vh, 80px)`，在小高度屏幕下自动收缩，释放主网格展示空间；3) 响应式 Gap 间距体系：平铺网格与树状卡片网格的 gap 均升级为 `clamp(12px, 1.8vw, 24px)`，并将平铺网格设为 `width: 100%` 以 `4vw` 百分比内边距提供侧边留白，彻底消除了小屏幕下布局拥挤、错落凌乱的视觉痛点。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 18:23:00]
 - **Type**: Fix (修复嵌套3D悬浮冲突引起的卡片内书签高频震颤抽搐Bug)
 - **Content**: 1) 解决嵌套物理悬浮冲突：在 `initMagneticHover` 中将 `.leaf-wrapper` 范围限定为 `.bookmarks-pane-grid .leaf-wrapper`，排除了嵌套在树状大卡片（`.bookmark-card`）内部的书签条目（`.leaf-wrapper`），避免了子级与父级 3D 变换相互拉扯；2) 引入无抖动静态缓存：在鼠标移入目标时，通过 `getBoundingClientRect()` 缓存下其未发生倾斜的 pristine 初始包围盒坐标，避免在 `mousemove` 周期中高频计算跳变的相对坐标，彻底消除了反馈振荡环，使得 3D 偏转极度平滑顺畅。
