@@ -23,9 +23,10 @@
     --glass-blur: 16px;
 
     --flat-shell-width: min(92vw, 1500px);
-    --flat-left-col: minmax(180px, 30%);
-    --flat-right-col: minmax(0, 70%);
-    --flat-split-gap: clamp(18px, 3vw, 48px);
+    --flat-left-col: minmax(176px, 28%);
+    --flat-right-col: minmax(0, 72%);
+    --flat-split-gap: clamp(28px, 4.4vw, 72px);
+    --flat-main-offset: clamp(22px, 4vh, 48px);
     --flat-pane-header-height: 48px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 36px;
@@ -978,6 +979,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     width: var(--flat-shell-width);
     margin-left: auto;
     margin-right: auto;
+    margin-top: var(--flat-main-offset);
     padding: 0;
     align-items: stretch;
     height: 100%;
@@ -2195,6 +2197,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         grid-template-columns: 1fr;
         gap: 14px;
         width: min(94vw, 780px);
+        margin-top: 14px;
         padding: 14px 0 8px;
         height: auto;
         overflow: visible;
