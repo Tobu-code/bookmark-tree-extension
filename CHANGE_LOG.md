@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 11:20:00]
+- **Type**: Chore (彻底删除拟物主题)
+- **Content**: 彻底移除拟物（skeuomorphic）主题配置及相关代码：1) 从设置单选按钮中移除拟物选项；2) 删除 `applyTheme()` 中对 `skeuomorphic` 的分支逻辑，并对 localStorage 的旧 `skeuomorphic` 主题值做自动 fallback 降级处理；3) 清理 `styles.css` 中所有拟物专属变量与 pass 样式（包括平铺目录面板、设置面板、纯净模式皮纹等）；4) 全局将 `:root:not([data-theme="skeuomorphic"])` 替换为常规 `:root`，恢复非拟物普通模式为唯一基础默认态。
+- **Impact**: `newtab.html`, `script.js`, `styles.css`
+
 ## [2026-06-11 10:00:00]
 - **Type**: Chore (移除 Yandex 搜索引擎)
 - **Content**: 从搜索栏引擎下拉列表中移除 Yandex 选项。已设置为 Yandex 的用户在刷新后将自动切换回默认引擎。

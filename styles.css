@@ -77,44 +77,7 @@
     --card-padding: 24px;
 }
 
-:root[data-theme="skeuomorphic"] {
-    color-scheme: light;
-    --primary-color: #8B6914;
-    --text-color: #2C1E0F;
-    --text-secondary: #7A6B57;
-    --bg-overlay: rgba(215, 195, 165, 0.92);
-    --card-bg: #F5ECD7;
-    --card-hover: #EDE3C8;
-    --border-color: rgba(92, 64, 32, 0.40);
-    --shadow-sm: 0 2px 4px rgba(60, 40, 15, 0.18), 0 1px 2px rgba(60, 40, 15, 0.12);
-    --shadow-md: 0 8px 24px rgba(50, 30, 10, 0.22), 0 4px 8px rgba(50, 30, 10, 0.14);
-    --modal-bg: #F0E6D0;
-    --modal-text: #2C1E0F;
-    --glass-bg: #EDE3CB;
-    --glass-border: rgba(92, 64, 32, 0.28);
-    --leather-surface: linear-gradient(175deg, #D4C4A0 0%, #C8B48E 40%, #BDA87C 100%);
-    --leather-dark: linear-gradient(175deg, #A8946C 0%, #9A8660 100%);
-    --paper-texture: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 28px,
-        rgba(92, 64, 32, 0.03) 28px,
-        rgba(92, 64, 32, 0.03) 29px
-    );
-    --metal-highlight: linear-gradient(180deg, rgba(255,248,230,0.7) 0%, rgba(255,248,230,0) 50%);
-    --stitch-color: rgba(92, 64, 32, 0.25);
-    --elev-shadow-1: 0 3px 8px rgba(50, 30, 10, 0.16), 0 1px 3px rgba(50, 30, 10, 0.10);
-    --elev-shadow-2: 0 8px 20px rgba(50, 30, 10, 0.20), 0 3px 6px rgba(50, 30, 10, 0.12);
-    --elev-shadow-3: 0 14px 32px rgba(50, 30, 10, 0.24), 0 4px 10px rgba(50, 30, 10, 0.14);
-    --focus-ring: 0 0 0 3px rgba(139, 105, 20, 0.18);
-    --focus-outline: 2px solid rgba(139, 105, 20, 0.6);
-    --text-muted: color-mix(in srgb, var(--text-secondary) 80%, var(--text-color) 20%);
-    --text-subtle: color-mix(in srgb, var(--text-secondary) 65%, var(--text-color) 35%);
-    --nav-item-hover: rgba(196, 176, 136, 0.45);
-    --nav-item-active: linear-gradient(180deg, #E8DCC0 0%, #DDD0B2 100%);
-    --nav-item-active-border: rgba(139, 105, 20, 0.30);
-    --nav-icon-surface: rgba(139, 105, 20, 0.10);
-}
+
 
 /* --- Global Scrollbar Styling (Webkit) --- */
 ::-webkit-scrollbar {
@@ -159,7 +122,7 @@
    when user hasn't forced light theme.
    ============================================================ */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) {
+    :root:not([data-theme="light"]) {
         --primary-color: #D69785;
         --text-color: #F2F0E9;
         --text-secondary: #C5C2BD;
@@ -235,18 +198,18 @@
 /* System Dark Theme — additional non-variable rules */
 @media (prefers-color-scheme: dark) {
     /* Fix: Ensure background layer is dark when in system dark mode and not forced light */
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #background-layer {
+    :root:not([data-theme="light"]) #background-layer {
         background-color: #1E120A;
     }
 
     /* Fix: Ensure folder modal is dark in system dark mode */
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) .folder-modal-content {
+    :root:not([data-theme="light"]) .folder-modal-content {
         background: var(--glass-bg);
         border-color: var(--glass-border);
     }
 
     /* Fix: Ensure settings button is visible in system dark mode */
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-btn {
+    :root:not([data-theme="light"]) #settings-btn {
         background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
         border-color: rgba(217, 119, 87, 0.15);
     }
@@ -1742,31 +1705,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     letter-spacing: -0.01em;
 }
 
-/* Directory pane skeuomorphic side-page pass */
-#bookmarks-tree.layout-flat .directory-pane {
-    padding-right: 18px;
-    border-right: 0;
-    background:
-        radial-gradient(ellipse at 38% 0%, rgba(255, 248, 230, 0.18) 0%, transparent 42%),
-        linear-gradient(90deg, rgba(255, 248, 230, 0.10) 0%, rgba(245, 236, 215, 0.10) 62%, rgba(92, 64, 32, 0.08) 100%);
-    box-shadow:
-        inset -12px 0 18px rgba(92, 64, 32, 0.08),
-        inset 1px 0 0 rgba(255, 248, 230, 0.16);
-}
 
-#bookmarks-tree.layout-flat .directory-pane::after {
-    top: 16px;
-    bottom: 16px;
-    right: 0;
-    width: 18px;
-    border-right: 0;
-    background:
-        linear-gradient(90deg, transparent 0%, rgba(92, 64, 32, 0.08) 55%, rgba(255, 248, 230, 0.16) 100%);
-    box-shadow:
-        inset -1px 0 0 rgba(255, 248, 230, 0.18),
-        inset 1px 0 0 rgba(92, 64, 32, 0.06);
-    opacity: 0.9;
-}
 
 #bookmarks-tree.layout-flat .directory-pane-scroll {
     padding: 2px 4px 8px 0;
@@ -1865,7 +1804,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane {
         background:
             radial-gradient(ellipse at 38% 0%, rgba(255, 240, 200, 0.04) 0%, transparent 42%),
             linear-gradient(90deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.08) 62%, rgba(0, 0, 0, 0.14) 100%);
@@ -1874,7 +1813,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 1px 0 0 rgba(255, 240, 200, 0.04);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane::after {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane::after {
         background:
             linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.22) 55%, rgba(255, 240, 200, 0.04) 100%);
         box-shadow:
@@ -1882,7 +1821,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 1px 0 0 rgba(0, 0, 0, 0.20);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane-header {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane-header {
         background-image: none;
         box-shadow:
             inset 0 -1px 0 rgba(200, 164, 85, 0.10),
@@ -1890,7 +1829,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
         background:
             linear-gradient(180deg, rgba(255, 240, 200, 0.03) 0%, rgba(58, 48, 40, 0.22) 100%);
         border-color: rgba(200, 164, 85, 0.06);
@@ -1899,8 +1838,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
             inset 0 1px 0 rgba(255, 240, 200, 0.03);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item:hover,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover,
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
         background:
             linear-gradient(180deg, rgba(255, 240, 200, 0.07) 0%, rgba(68, 56, 48, 0.42) 100%) !important;
         border-color: rgba(200, 164, 85, 0.16) !important;
@@ -2004,32 +1943,32 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane {
         background:
             radial-gradient(ellipse at 42% 0%, rgba(255, 240, 200, 0.035) 0%, transparent 44%),
             linear-gradient(180deg, rgba(255, 240, 200, 0.025) 0%, rgba(0, 0, 0, 0.04) 100%);
         box-shadow: none;
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane-header {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .directory-pane-header {
         box-shadow: none;
         background-image: none;
         border: 0;
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
         background: rgba(255, 240, 200, 0.025);
         border-color: transparent !important;
         box-shadow: none;
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
         background: rgba(255, 240, 200, 0.055) !important;
         border-color: transparent !important;
         box-shadow: none !important;
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+    :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
         background: rgba(255, 240, 200, 0.075) !important;
         border-color: transparent !important;
         box-shadow: none !important;
@@ -3943,40 +3882,7 @@ input[type=range]::-moz-range-thumb {
     background: rgba(255, 255, 255, 0.5);
 }
 
-/* Settings modal skeuomorphic pass */
-#settings-modal {
-    background:
-        radial-gradient(circle at 50% 42%, rgba(255, 235, 190, 0.10), transparent 34%),
-        rgba(35, 22, 12, 0.48);
-}
 
-#settings-modal .modal-content {
-    background:
-        radial-gradient(circle at 20% 0%, rgba(255, 250, 232, 0.34), transparent 32%),
-        var(--paper-texture),
-        linear-gradient(175deg, rgba(245, 236, 215, 0.95) 0%, rgba(226, 210, 178, 0.94) 52%, rgba(203, 181, 142, 0.94) 100%);
-    border: 1px solid rgba(92, 64, 32, 0.34);
-    box-shadow:
-        0 34px 74px rgba(45, 28, 12, 0.38),
-        0 8px 18px rgba(45, 28, 12, 0.20),
-        inset 0 1px 0 rgba(255, 250, 232, 0.78),
-        inset 0 -14px 28px rgba(92, 64, 32, 0.10);
-    outline: 1px solid rgba(255, 250, 232, 0.30);
-}
-
-#settings-modal .modal-content::before {
-    content: '';
-    position: absolute;
-    inset: 10px;
-    border-radius: 22px;
-    border: 1px dashed rgba(92, 64, 32, 0.18);
-    pointer-events: none;
-}
-
-#settings-modal .modal-content h2 {
-    color: var(--text-color);
-    text-shadow: 0 1px 0 rgba(255, 250, 232, 0.60), 0 2px 5px rgba(92, 64, 32, 0.14);
-}
 
 #settings-modal .setting-item>label {
     color: var(--text-color);
@@ -4204,7 +4110,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content {
+    :root:not([data-theme="light"]) #settings-modal .modal-content {
         background:
             radial-gradient(circle at 20% 0%, rgba(255, 222, 152, 0.08), transparent 34%),
             var(--paper-texture),
@@ -4217,28 +4123,28 @@ input[type=range]::-moz-range-thumb {
             inset 0 -14px 28px rgba(0, 0, 0, 0.16);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content::before {
+    :root:not([data-theme="light"]) #settings-modal .modal-content::before {
         border-color: rgba(200, 164, 85, 0.14);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .setting-item>label,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .modal-content h2,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-option {
+    :root:not([data-theme="light"]) #settings-modal .setting-item>label,
+    :root:not([data-theme="light"]) #settings-modal .modal-content h2,
+    :root:not([data-theme="light"]) #settings-modal .radio-option {
         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.56);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-group,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal input[type=range]::-webkit-slider-runnable-track,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal input[type=range]::-moz-range-track {
+    :root:not([data-theme="light"]) #settings-modal .radio-group,
+    :root:not([data-theme="light"]) #settings-modal input[type=range]::-webkit-slider-runnable-track,
+    :root:not([data-theme="light"]) #settings-modal input[type=range]::-moz-range-track {
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.30), rgba(255, 240, 200, 0.04));
         border-color: rgba(200, 164, 85, 0.14);
         box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.34), 0 1px 0 rgba(255, 240, 200, 0.04);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .radio-option:has(input:checked),
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .confirm-btn,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-action-btn,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal label.ai-provider-switch {
+    :root:not([data-theme="light"]) #settings-modal .radio-option:has(input:checked),
+    :root:not([data-theme="light"]) #settings-modal .confirm-btn,
+    :root:not([data-theme="light"]) #settings-modal .ai-provider-action-btn,
+    :root:not([data-theme="light"]) #settings-modal label.ai-provider-switch {
         background:
             linear-gradient(180deg, rgba(68, 56, 48, 0.94) 0%, rgba(48, 38, 30, 0.94) 100%);
         border-color: rgba(200, 164, 85, 0.18);
@@ -4248,11 +4154,11 @@ input[type=range]::-moz-range-thumb {
             inset 0 -1px 0 rgba(0, 0, 0, 0.22);
     }
 
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-intro,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-item,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-composer,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-summary-item,
-    :root:not([data-theme="light"]):not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-icon {
+    :root:not([data-theme="light"]) #settings-modal .ai-settings-intro,
+    :root:not([data-theme="light"]) #settings-modal .ai-provider-item,
+    :root:not([data-theme="light"]) #settings-modal .ai-provider-composer,
+    :root:not([data-theme="light"]) #settings-modal .ai-settings-summary-item,
+    :root:not([data-theme="light"]) #settings-modal .ai-provider-icon {
         background:
             radial-gradient(circle at top left, rgba(200, 164, 85, 0.08), transparent 36%),
             linear-gradient(180deg, rgba(58, 48, 40, 0.74) 0%, rgba(42, 32, 24, 0.68) 100%);
@@ -5584,39 +5490,7 @@ input[type="file"]:focus-visible {
     opacity: 0.8;
 }
 
-/* Pure mode: skeuomorphic leather surface canvas */
-body.pure-mode .container {
-    justify-content: center;
-    background: var(--leather-surface);
-    border: 2px solid var(--stitch-color);
-    box-shadow:
-        0 6px 24px rgba(50, 30, 10, 0.20),
-        0 2px 6px rgba(50, 30, 10, 0.12),
-        inset 0 1px 0 rgba(255, 248, 230, 0.30),
-        inset 0 -2px 4px rgba(50, 30, 10, 0.08);
-    outline: 1px solid rgba(255, 248, 230, 0.10);
-    outline-offset: -4px;
-}
 
-/* Restore stitching on pure mode container */
-body.pure-mode .container::after {
-    content: '';
-    position: absolute;
-    inset: 6px;
-    border-radius: calc(var(--container-radius) - 4px);
-    border: 1.5px dashed var(--stitch-color);
-    pointer-events: none;
-    z-index: 0;
-}
-
-:root[data-theme="dark"] body.pure-mode .container {
-    background: var(--leather-surface);
-    box-shadow:
-        0 8px 28px rgba(0, 0, 0, 0.40),
-        0 2px 6px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 240, 200, 0.05),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.12);
-}
 
 body.pure-mode #bookmarks-tree,
 body.pure-mode #layout-toggle-btn,
@@ -6612,12 +6486,12 @@ body.pure-mode #pure-memo {
 }
 
 /* Theme isolation: glass remains the default; skeuomorphic only applies when selected. */
-:root:not([data-theme="skeuomorphic"]) #background-layer {
+:root #background-layer {
     background-color: #F7F7F5;
     background-image: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #background-layer::before {
+:root #background-layer::before {
     background:
         radial-gradient(circle at 18% 20%, rgba(255, 210, 168, 0.04), transparent 42%),
         radial-gradient(circle at 82% 14%, rgba(171, 206, 255, 0.04), transparent 38%),
@@ -6625,7 +6499,7 @@ body.pure-mode #pure-memo {
     mix-blend-mode: screen;
 }
 
-:root:not([data-theme="skeuomorphic"]) #background-layer::after {
+:root #background-layer::after {
     background:
         linear-gradient(180deg, rgba(80, 140, 255, 0.02) 0%, transparent 15%),
         linear-gradient(180deg, rgba(20, 16, 12, 0.02) 0%, rgba(20, 16, 12, 0.06) 100%);
@@ -6649,7 +6523,7 @@ body.pure-mode #pure-memo {
         linear-gradient(180deg, rgba(8, 10, 14, 0.08) 0%, rgba(8, 10, 14, 0.18) 100%);
 }
 
-:root:not([data-theme="skeuomorphic"]) .container {
+:root .container {
     border-radius: var(--container-radius);
     background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(6px);
@@ -6659,8 +6533,8 @@ body.pure-mode #pure-memo {
     outline: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .container::before,
-:root:not([data-theme="skeuomorphic"]) .container::after {
+:root .container::before,
+:root .container::after {
     display: none;
 }
 
@@ -6670,13 +6544,13 @@ body.pure-mode #pure-memo {
     border-color: rgba(255, 255, 255, 0.06);
 }
 
-:root:not([data-theme="skeuomorphic"]) .ambient-time-clock,
-:root:not([data-theme="skeuomorphic"]) .ambient-time-greeting,
-:root:not([data-theme="skeuomorphic"]) .ambient-time-date {
+:root .ambient-time-clock,
+:root .ambient-time-greeting,
+:root .ambient-time-date {
     text-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .search-wrapper {
+:root .search-wrapper {
     border-radius: 32px;
     background: var(--card-bg);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
@@ -6685,7 +6559,7 @@ body.pure-mode #pure-memo {
     padding-right: 12px;
 }
 
-:root:not([data-theme="skeuomorphic"]) .search-wrapper:focus-within {
+:root .search-wrapper:focus-within {
     background: var(--card-bg);
     border-color: color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
     box-shadow:
@@ -6699,53 +6573,53 @@ body.pure-mode #pure-memo {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-:root:not([data-theme="skeuomorphic"]) .directory-pane {
+:root .directory-pane {
     border-right: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
     background: transparent;
     box-shadow: none;
     padding-right: 0;
 }
 
-:root:not([data-theme="skeuomorphic"]) .directory-pane::after {
+:root .directory-pane::after {
     display: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .directory-pane {
+:root #bookmarks-tree.layout-flat .directory-pane {
     padding-right: 0;
     background: transparent;
     box-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .directory-pane-header {
+:root .directory-pane-header {
     background-image: linear-gradient(to right, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
     box-shadow: none;
     border: 0;
     text-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .tree-folder-item,
-:root:not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item {
+:root .tree-folder-item,
+:root #bookmarks-tree.layout-flat .tree-folder-item {
     background: transparent;
     border: 1px solid transparent !important;
     box-shadow: none;
     text-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .tree-folder-item:hover,
-:root:not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
+:root .tree-folder-item:hover,
+:root #bookmarks-tree.layout-flat .tree-folder-item:hover {
     background: var(--nav-item-hover) !important;
     border-color: color-mix(in srgb, var(--border-color) 70%, transparent) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36) !important;
 }
 
-:root:not([data-theme="skeuomorphic"]) .tree-folder-item.active,
-:root:not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
+:root .tree-folder-item.active,
+:root #bookmarks-tree.layout-flat .tree-folder-item.active {
     background: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
 }
 
-:root:not([data-theme="skeuomorphic"]) .bookmarks-pane-grid .leaf-wrapper {
+:root .bookmarks-pane-grid .leaf-wrapper {
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid color-mix(in srgb, var(--border-color) 40%, transparent);
     border-radius: 14px;
@@ -6753,11 +6627,11 @@ body.pure-mode #pure-memo {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-:root:not([data-theme="skeuomorphic"]) .bookmarks-pane-grid .leaf-wrapper::before {
+:root .bookmarks-pane-grid .leaf-wrapper::before {
     display: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) .bookmarks-pane-grid .leaf-wrapper:hover {
+:root .bookmarks-pane-grid .leaf-wrapper:hover {
     transform: translateX(4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     background-color: #ffffff;
@@ -6775,8 +6649,8 @@ body.pure-mode #pure-memo {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-:root:not([data-theme="skeuomorphic"]) #bookmarks-tree.layout-tree .bookmark-card,
-:root:not([data-theme="skeuomorphic"]) .bookmark-card {
+:root #bookmarks-tree.layout-tree .bookmark-card,
+:root .bookmark-card {
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -6791,11 +6665,11 @@ body.pure-mode #pure-memo {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal {
+:root #settings-modal {
     background: rgba(0, 0, 0, 0.5);
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .modal-content {
+:root #settings-modal .modal-content {
     background: var(--bg-overlay);
     border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
     box-shadow:
@@ -6804,46 +6678,46 @@ body.pure-mode #pure-memo {
     outline: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .modal-content::before {
+:root #settings-modal .modal-content::before {
     display: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .radio-group {
+:root #settings-modal .radio-group {
     background: rgba(0, 0, 0, 0.04);
     border: 0;
     box-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .radio-option {
+:root #settings-modal .radio-option {
     border: 0;
     text-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .radio-option:has(input:checked) {
+:root #settings-modal .radio-option:has(input:checked) {
     background: #fff;
     color: var(--primary-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .confirm-btn,
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-action-btn,
-:root:not([data-theme="skeuomorphic"]) #settings-modal label.ai-provider-switch {
+:root #settings-modal .confirm-btn,
+:root #settings-modal .ai-provider-action-btn,
+:root #settings-modal label.ai-provider-switch {
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.035);
     border: 1px solid rgba(255, 255, 255, 0.07);
     box-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .confirm-btn-primary,
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-action-btn-primary {
+:root #settings-modal .confirm-btn-primary,
+:root #settings-modal .ai-provider-action-btn-primary {
     background: rgba(217, 123, 87, 0.12);
     border-color: rgba(217, 123, 87, 0.18);
     color: var(--primary-color);
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-intro,
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-item,
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-composer {
+:root #settings-modal .ai-settings-intro,
+:root #settings-modal .ai-provider-item,
+:root #settings-modal .ai-provider-composer {
     background:
         radial-gradient(circle at top left, rgba(211, 131, 86, 0.12), transparent 38%),
         rgba(255, 255, 255, 0.04);
@@ -6853,14 +6727,14 @@ body.pure-mode #pure-memo {
         0 18px 36px rgba(0, 0, 0, 0.1);
 }
 
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-settings-summary-item,
-:root:not([data-theme="skeuomorphic"]) #settings-modal .ai-provider-icon {
+:root #settings-modal .ai-settings-summary-item,
+:root #settings-modal .ai-provider-icon {
     background: rgba(255, 255, 255, 0.045);
     border-color: rgba(255, 255, 255, 0.06);
     box-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .container {
+:root body.pure-mode .container {
     background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -6869,7 +6743,7 @@ body.pure-mode #pure-memo {
     outline: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .container::after {
+:root body.pure-mode .container::after {
     display: none;
 }
 
@@ -6879,16 +6753,16 @@ body.pure-mode #pure-memo {
     border-color: rgba(255, 255, 255, 0.06);
 }
 
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .pure-greeting-text {
+:root body.pure-mode .pure-greeting-text {
     text-shadow: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .pure-greeting-text::before {
+:root body.pure-mode .pure-greeting-text::before {
     filter: none;
 }
 
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .search-wrapper,
-:root:not([data-theme="skeuomorphic"]) body.pure-mode .search-wrapper:focus-within {
+:root body.pure-mode .search-wrapper,
+:root body.pure-mode .search-wrapper:focus-within {
     background: var(--card-bg);
     border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
     border-radius: 32px;

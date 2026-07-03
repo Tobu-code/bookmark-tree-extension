@@ -717,7 +717,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSettingsUI(settings);
 
     // 5. Apply Visuals
-    const theme = settings[STORAGE_KEY_THEME] || 'system';
+    let theme = settings[STORAGE_KEY_THEME] || 'system';
+    if (theme === 'skeuomorphic') {
+        theme = 'system';
+        chrome.storage.local.set({ [STORAGE_KEY_THEME]: 'system' });
+    }
     applyTheme(theme);
 
     // 6. Background Preload
@@ -2413,7 +2417,10 @@ function initSettingsUI(settings) {
         });
 
         // Initial state
-        const savedTheme = settings[STORAGE_KEY_THEME] || 'system';
+        let savedTheme = settings[STORAGE_KEY_THEME] || 'system';
+        if (savedTheme === 'skeuomorphic') {
+            savedTheme = 'system';
+        }
         if (radio.value === savedTheme) radio.checked = true;
     });
 
@@ -3037,9 +3044,6 @@ function applyTheme(theme) {
         root._themeMediaQuery = darkModeQuery;
         root._themeListener = handleSystemThemeChange;
         darkModeQuery.addEventListener('change', handleSystemThemeChange);
-    } else if (theme === 'skeuomorphic') {
-        cleanupSystemThemeListener();
-        root.setAttribute('data-theme', 'skeuomorphic');
     } else {
         cleanupSystemThemeListener();
         root.setAttribute('data-theme', theme);
