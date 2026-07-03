@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:26:30]
+- **Type**: Refactor (优化右侧卡片网格间距以增强呼吸感)
+- **Content**: 提升视觉呼吸感：在 `styles.css` 中，将右侧 `.bookmarks-pane-grid` 的默认卡片间距由 `16px` 增大为 `20px`；同时在小于 1440px 宽的小分辨率下，将卡片间距由 `16px` 微调为 `18px`，让整个 Bento 网格更加透气美观。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 16:22:30]
 - **Type**: Fix (彻底删除拟物遗留代码并修复背景自适应)
 - **Content**: 1) 背景图自适应贴合：在 `#background-layer` 的 CSS 定义中补齐 `background-size: cover; background-position: center; background-repeat: no-repeat;`，彻底解决了用户上传自定义高清壁纸被局部放大且不贴合屏幕边缘的问题；2) 彻底剔除拟物设计残留：清理并废弃 `.tree-folder-item` 原本的 `Skeuomorphic`（拟物风格）背景纸张渐变、1px 褐色框线和立体投影阴影，将其默认态重构为干净透明、无缝融入壁纸的 Notion 极简玻璃风；3) 简化平铺覆盖：移除平铺模式下左侧项额外的拟物暖黄色背景覆盖，使得悬浮高亮指示器能够完美显示而不被遮挡。
