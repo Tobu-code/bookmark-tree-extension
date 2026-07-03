@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 12:00:40]
+- **Type**: Design (Bento Grid 便当盒布局重构)
+- **Content**: 优化平铺模式和树状模式的网格排版，重塑为参差错落、充满设计灵动的 Bento Grid 拼图卡片：1) 将右侧卡片网格 `.bookmarks-pane-grid` 改为 Bento Grid，格宽 `190px`，间隙 `16px`，圆角统升为 `12px` 大圆角；2) 注入 Bento 自动排版逻辑：平铺下的子目录 `.leaf-wrapper--folder` 横跨两列；第 `6n+1` 个常规书签横跨两列；第 `6n+4` 个书签纵向跨两行，自动转为 `flex-col` 纵向流，并将图标自动放大 2 倍至 `32px`，化为Favicon重点应用卡片；3) 树形模式大卡片 `.top-level-container` 重置为 `280px` 行高的 Bento 栅格，`:nth-child(4n+1)` 跨 2 列，`:nth-child(4n+3)` 跨 2 行且内容支持内部滚动；4) 全局注入微物理动效，包括微悬浮 `translateY(-4px) scale(1.01)`，Hover Favicon 联动微放大，以及 Active 弹性压感 `scale(0.98)`。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 11:49:40]
 - **Type**: Design (Notion圣杯对齐与垂直居中重构)
 - **Content**: 彻底优化全屏画布下的美学比例与重心稳定性，解决左侧挤压和右侧空洞的痛点：1) 清理 `:root .container` 的高优先级覆盖样式段，使全屏无框架构彻底生效；2) 将左侧目录栏 `.directory-pane` 宽度扩至 `260px`，加入 `padding-left: 24px` 消除靠边压抑感，应用实灰色背景（Light `#f7f7f8` / Dark `#18191c`）建立高档系统侧栏分区；3) 书签主内容区与搜索顶栏的最大宽度从 `1140px` 拓宽至 `1400px` 并严格水平居中，平铺搜索框 `padding-left` 步进至 `260px`；4) 引入收缩自适应与垂直居中布局（`justify-content: center`），使右侧内容在卡片稀少时自动整体垂直居中，完美消除顶部和底部的大片空洞。
