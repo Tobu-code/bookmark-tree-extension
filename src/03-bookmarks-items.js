@@ -107,7 +107,7 @@ function createBookmarkIcon(iconData, size = 16) {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
-        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
+        img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
@@ -135,13 +135,13 @@ function createBookmarkIcon(iconData, size = 16) {
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
-        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.style.cssText = `margin-right:8px;display:flex;align-items:center;justify-content:center;`;
         span.innerHTML = iconData.value;
         return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
-        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
+        span.style.cssText = `margin-right:8px;`;
         span.textContent = iconData.value;
         return span;
     }

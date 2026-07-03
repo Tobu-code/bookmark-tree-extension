@@ -1400,7 +1400,7 @@ function createBookmarkIcon(iconData, size = 16) {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
-        img.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;`;
+        img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
@@ -1428,13 +1428,13 @@ function createBookmarkIcon(iconData, size = 16) {
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
-        span.style.cssText = `width:${size}px;height:${size}px;margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.style.cssText = `margin-right:8px;display:flex;align-items:center;justify-content:center;`;
         span.innerHTML = iconData.value;
         return span;
     } else {
         const span = document.createElement('span');
         span.className = 'bookmark-icon';
-        span.style.cssText = `font-size:${size}px;margin-right:8px;`;
+        span.style.cssText = `margin-right:8px;`;
         span.textContent = iconData.value;
         return span;
     }
@@ -3916,7 +3916,7 @@ document.addEventListener('click', (e) => {
 // --- Dynamic mouse magnetic physics and 3D Tilt Hover effects (Apple/Notion style) ---
 function initMagneticHover() {
     document.addEventListener('mousemove', (e) => {
-        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic');
+        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
         
         if (!target) {
             const activeEl = document.querySelector('.is-magnetized');
@@ -3953,16 +3953,25 @@ function initMagneticHover() {
         const dx = clientX - (rect.left + rect.width / 2);
         const dy = clientY - (rect.top + rect.height / 2);
         
-        // Rotate X (pitch) and Rotate Y (yaw) max bounds at soft 8 degrees
-        const rotateX = -(dy / (rect.height / 2)) * 8;
-        const rotateY = (dx / (rect.width / 2)) * 8;
+        // Fine-tune dampening variables based on target element geometries
+        let maxRotate = 8;
+        let transFactor = 0.12;
+        let scale = 1.02;
         
-        // Magnetic translations
-        const tx = dx * 0.12;
-        const ty = dy * 0.12;
+        if (target.classList.contains('tree-folder-item')) {
+            maxRotate = 4;       // Long flat nodes use subtle tilt
+            transFactor = 0.05;  // Subtle magnetic slide
+            scale = 1.01;        // Slight zoom
+        }
+        
+        const rotateX = -(dy / (rect.height / 2)) * maxRotate;
+        const rotateY = (dx / (rect.width / 2)) * maxRotate;
+        
+        const tx = dx * transFactor;
+        const ty = dy * transFactor;
         
         // Combine 3D rotations, translations, and micro scaling for a premium Bento-tilt feel
-        target.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        target.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${scale}, ${scale}, ${scale})`;
     });
 
     document.addEventListener('mouseleave', () => {

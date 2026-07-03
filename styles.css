@@ -1040,7 +1040,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     border-radius: 8px;
     cursor: pointer;
     color: var(--text-color);
-    transition: transform var(--motion-fast) var(--ease-standard),
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
         background-color var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
@@ -1054,6 +1054,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     box-shadow: none;
     position: relative;
     box-sizing: border-box;
+    transform-style: preserve-3d; /* Support 3D tilts */
+}
+
+.tree-folder-item.is-magnetized {
+    transition: transform 0.08s ease-out !important;
 }
 
 :root[data-theme="dark"] .tree-folder-item {
@@ -5802,7 +5807,8 @@ input[type="file"]:focus-visible {
 
 /* --- Global 3D Perspective Tilt & Shine Sweep Hover Effects --- */
 .leaf-wrapper::after,
-.bookmark-card::after {
+.bookmark-card::after,
+.tree-folder-item::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -5818,13 +5824,15 @@ input[type="file"]:focus-visible {
 }
 
 .leaf-wrapper:hover::after,
-.bookmark-card:hover::after {
+.bookmark-card:hover::after,
+.tree-folder-item:hover::after {
     opacity: 1;
 }
 
 /* Light theme adjustment for shine overlay (uses soft dark sheen on light themes) */
 :root[data-theme="light"] .leaf-wrapper::after,
-:root[data-theme="light"] .bookmark-card::after {
+:root[data-theme="light"] .bookmark-card::after,
+:root[data-theme="light"] .tree-folder-item::after {
     background: radial-gradient(
         circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
         rgba(0, 0, 0, 0.04),
@@ -5834,12 +5842,14 @@ input[type="file"]:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
     .leaf-wrapper,
-    .bookmark-card {
+    .bookmark-card,
+    .tree-folder-item {
         transition: none !important;
         transform: none !important;
     }
     .leaf-wrapper::after,
-    .bookmark-card::after {
+    .bookmark-card::after,
+    .tree-folder-item::after {
         display: none !important;
     }
 }

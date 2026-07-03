@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:10:00]
+- **Type**: Fix (将3D悬浮复用到侧边栏书签目录并彻底修复卡片图标模糊Bug)
+- **Content**: 1) 书签目录 3D 悬浮复用：将左侧侧边栏 `.tree-folder-item` 全面纳入 3D 倾斜和伪元素跟手扫光动画体系，并专门针对其扁长盒模型特异化微调了偏转角度（限制为最大 4 度）及磁吸位移因子（限制为 0.05 倍），确保平滑舒适；2) 彻底修复卡片图标拉伸模糊：移除了 `createBookmarkIcon` 在 DOM 生成阶段写死 `width: 16px; height: 16px` 的行内 Style 限制，使其能完全采用从 chrome favicon 获取的 64px 高清源，并在大卡片（36px）和普通卡片（16px）上实现高保真 Retina 超采样渲染。
+- **Impact**: `src/03-bookmarks-items.js`, `src/09-ui-widgets.js`, `styles.css`
+
 ## [2026-07-03 18:07:00]
 - **Type**: Feature (实现卡片3D Perspective透视倾斜和鼠标跟随扫光动效)
 - **Content**: 1) 引入 3D 物理倾斜：在卡片和文件夹网格容器上加入 `perspective: 1000px`，并将磁吸平移与基于 dx/dy 的 3D rotateX/rotateY 偏转夹角（最大 8 度）以及 `scale3d(1.02, 1.02, 1.02)` 缩放进行矩阵叠加；2) 实现 ::after 伪元素扫光：免除 DOM 修改，使用 CSS 变量 `--mouse-x` 和 `--mouse-y` 结合 `radial-gradient` 伪元素实现了跟手白润扫光；3) 浅色主题暗光优化：浅色模式下扫光自动切换为黑色光芒阴影（rgba(0, 0, 0, 0.04)），并为 `prefers-reduced-motion` 提供降级重置。

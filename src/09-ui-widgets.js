@@ -173,7 +173,7 @@ document.addEventListener('click', (e) => {
 // --- Dynamic mouse magnetic physics and 3D Tilt Hover effects (Apple/Notion style) ---
 function initMagneticHover() {
     document.addEventListener('mousemove', (e) => {
-        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic');
+        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
         
         if (!target) {
             const activeEl = document.querySelector('.is-magnetized');
@@ -210,16 +210,25 @@ function initMagneticHover() {
         const dx = clientX - (rect.left + rect.width / 2);
         const dy = clientY - (rect.top + rect.height / 2);
         
-        // Rotate X (pitch) and Rotate Y (yaw) max bounds at soft 8 degrees
-        const rotateX = -(dy / (rect.height / 2)) * 8;
-        const rotateY = (dx / (rect.width / 2)) * 8;
+        // Fine-tune dampening variables based on target element geometries
+        let maxRotate = 8;
+        let transFactor = 0.12;
+        let scale = 1.02;
         
-        // Magnetic translations
-        const tx = dx * 0.12;
-        const ty = dy * 0.12;
+        if (target.classList.contains('tree-folder-item')) {
+            maxRotate = 4;       // Long flat nodes use subtle tilt
+            transFactor = 0.05;  // Subtle magnetic slide
+            scale = 1.01;        // Slight zoom
+        }
+        
+        const rotateX = -(dy / (rect.height / 2)) * maxRotate;
+        const rotateY = (dx / (rect.width / 2)) * maxRotate;
+        
+        const tx = dx * transFactor;
+        const ty = dy * transFactor;
         
         // Combine 3D rotations, translations, and micro scaling for a premium Bento-tilt feel
-        target.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        target.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${scale}, ${scale}, ${scale})`;
     });
 
     document.addEventListener('mouseleave', () => {
