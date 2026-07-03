@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:34:00]
+- **Type**: Fix (修复右下角设置按钮的拟物化遗留风格)
+- **Content**: 统一右下角悬浮控制台质感：在 `styles.css` 中，彻底清除了 `#settings-btn` 针对 dark 主题和系统 dark 媒体查询的紫色硬编码有色渐变覆盖；重构设置按钮的基础样式，移除金属古铜金盘、粗边框和高亮投影，将其重构为与其他控制按钮高度统一的 12px 圆角正方形、白色磨砂玻璃背景（`var(--glass-bg)`）及轻柔阴影，实现高档磨砂视觉的绝对统一。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 16:30:50]
 - **Type**: Feature (实现树形模式下包含子目录时自动变大卡片的智能自适应排版)
 - **Content**: 智能判定与卡片自适应：1) 在 `src/03-bookmarks-items.js` 和 `script.js` 的 `createBookmarkCard` 方法中，新增对子文件夹的动态探测逻辑。如果当前渲染 of 顶层文件夹包含任何下一级目录，则自动为卡片容器添加 `.card--large` 类；若只含有普通书签，则不添加类，以此自动识别目录层级深度；2) 重构 `styles.css`，废弃原本机械的 `.top-level-container .bookmark-card:nth-child(4n+1)` 顺序大卡片规则，改为按动态类名生效：`.top-level-container .bookmark-card.card--large { grid-column: span 2; }`，完成自适应大卡片重映射。

@@ -165,18 +165,7 @@
     --nav-icon-surface: rgba(255, 255, 255, 0.08);
 }
 
-:root[data-theme="dark"] #settings-btn {
-    background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
-    border-color: rgba(217, 119, 87, 0.15);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
 
-:root[data-theme="dark"] #settings-btn:hover {
-    background: linear-gradient(135deg, #3A3245 0%, #2D2638 100%);
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.4),
-        0 0 20px var(--glow-soft, rgba(217, 119, 87, 0.15));
-}
 
 /* System Dark Theme — additional non-variable rules */
 @media (prefers-color-scheme: dark) {
@@ -191,11 +180,7 @@
         border-color: var(--glass-border);
     }
 
-    /* Fix: Ensure settings button is visible in system dark mode */
-    :root:not([data-theme="light"]) #settings-btn {
-        background: linear-gradient(135deg, #2D2638 0%, #221D2A 100%);
-        border-color: rgba(217, 119, 87, 0.15);
-    }
+
 }
 
 body,
@@ -2537,17 +2522,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     right: var(--floating-actions-offset-right);
     width: var(--floating-actions-size);
     height: var(--floating-actions-size);
-    border-radius: 50%;
-    /* Metal knob radial gradient — center bright, edge dark */
-    background:
-        radial-gradient(circle at 40% 35%, rgba(255,248,230,0.50) 0%, transparent 55%),
-        linear-gradient(145deg, #C8B48E 0%, #A8946C 50%, #8B7A56 100%);
-    border: 2px solid rgba(92, 64, 32, 0.35);
-    box-shadow:
-        0 3px 8px rgba(50, 30, 10, 0.22),
-        0 1px 2px rgba(50, 30, 10, 0.14),
-        inset 0 1px 0 rgba(255, 248, 230, 0.40),
-        inset 0 -1px 2px rgba(50, 30, 10, 0.15);
+    border-radius: 12px;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+    box-shadow: var(--elev-shadow-1), 0 0 0 1px color-mix(in srgb, var(--primary-color) 5%, transparent);
     font-size: 16px;
     cursor: pointer;
     transition: transform var(--motion-medium) var(--ease-standard),
@@ -2559,8 +2539,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #4A3A20;
-    opacity: 0.92;
+    color: var(--text-secondary);
+    opacity: 0.84;
 }
 
 #settings-btn svg {
@@ -2570,25 +2550,16 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #settings-btn:hover {
-    transform: translateY(-1px) scale(1.06);
-    background:
-        radial-gradient(circle at 40% 35%, rgba(255,248,230,0.60) 0%, transparent 55%),
-        linear-gradient(145deg, #D4C4A0 0%, #BDA87C 50%, #A8946C 100%);
-    border-color: var(--primary-color);
+    background: color-mix(in srgb, var(--card-hover) 88%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--glass-border));
     color: var(--primary-color);
-    box-shadow:
-        0 6px 16px rgba(50, 30, 10, 0.28),
-        0 2px 4px rgba(50, 30, 10, 0.16),
-        inset 0 1px 0 rgba(255, 248, 230, 0.50),
-        0 0 12px rgba(139, 105, 20, 0.12);
+    box-shadow: var(--elev-shadow-2), 0 0 12px color-mix(in srgb, var(--primary-color) 10%, transparent);
+    transform: translateY(-2px);
     opacity: 1;
 }
 
 #settings-btn:active {
     transform: translateY(1px) scale(0.96);
-    box-shadow:
-        0 1px 3px rgba(50, 30, 10, 0.18),
-        inset 0 2px 4px rgba(50, 30, 10, 0.20);
 }
 
 #settings-btn:hover svg {
