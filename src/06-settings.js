@@ -680,6 +680,11 @@ function initSettingsUI(settings) {
 
 function applyTheme(theme) {
     const root = document.documentElement;
+    const syncThemeSurfaceVars = () => {
+        if (typeof applyContainerOpacity === 'function') {
+            applyContainerOpacity();
+        }
+    };
     const cleanupSystemThemeListener = () => {
         if (root._themeMediaQuery && root._themeListener) {
             root._themeMediaQuery.removeEventListener('change', root._themeListener);
@@ -694,6 +699,7 @@ function applyTheme(theme) {
 
         const syncThemeFromSystem = () => {
             root.setAttribute('data-theme', darkModeQuery.matches ? 'dark' : 'light');
+            syncThemeSurfaceVars();
         };
 
         const handleSystemThemeChange = () => {
@@ -707,9 +713,11 @@ function applyTheme(theme) {
     } else if (theme === 'skeuomorphic') {
         cleanupSystemThemeListener();
         root.setAttribute('data-theme', 'skeuomorphic');
+        syncThemeSurfaceVars();
     } else {
         cleanupSystemThemeListener();
         root.setAttribute('data-theme', theme);
+        syncThemeSurfaceVars();
     }
 }
 
