@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 11:41:30]
+- **Type**: Refactor (平铺模式居中对齐与AI侧栏宽度升级)
+- **Content**: 解决平铺模式在大屏幕下布局整体偏左、缺乏中轴对称美感的体验缺陷，并大幅升级 AI 侧栏展现画幅：1) 调整平铺模式下顶栏 `#search-container` 的 padding-left 偏置，时钟大字与搜索框在右侧主视口内绝对水平居中；2) 面包屑标题 `.bookmarks-pane-header` 与卡片网格 `.bookmarks-pane-grid` 引入 `max-width: 1140px; margin: 0 auto;` 限制，建立垂直中轴对齐体系，彻底解决右侧大面积空余偏斜问题；3) 卡片网格的列最小宽度优化至 180px，卡片间隙收窄，还原 Notion 高品质紧凑格调；4) AI 侧栏 `.ai-sidebar` 的宽度从 420px 跃升至 `66vw`（占屏幕 2/3 宽），设定合理的 min-width / max-width 保护阈值，提供开阔的会话渲染画幅。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 11:35:10]
 - **Type**: Design (全屏化画布与边缘贴合侧栏重构)
 - **Content**: 彻底页框扁平化，移除中间的嵌套悬浮玻璃框体，改用无缝铺满浏览器的全屏 Canvas 布局：1) 将 `.container` 改为 transparent 全屏，彻底清除外壁的阴影、边框、毛玻璃背景与 border-radius；2) 重构平铺模式为贴边尺寸，目录栏 `.directory-pane` 升级为顶天立地、左贴边缘、带有 Notion 透明淡灰背景的系统级左侧栏；3) 调整右侧书签网格面板 `.bookmarks-pane` 边距，使其在顶部、右侧与左边分割线处保留更透气的 Notion 呼吸空隙；4) 顶栏 `#search-container` 增加舒适顶边距以适配全屏模式。
