@@ -478,19 +478,26 @@ body.loaded #background-layer {
 }
 
 /* Notion Style Minimal Search Wrapper */
+/* Notion Style Minimal Search Wrapper with Adaptive Border Tracing */
 .search-wrapper {
     display: flex;
     align-items: center;
     width: clamp(var(--search-min-w), 50vw, 780px);
     max-width: calc(100% - 24px);
-    border-radius: 6px; /* Notion standard radius */
-    background: var(--card-bg);
+    border-radius: 6px;
+    background:
+        linear-gradient(to right, var(--primary-color), var(--primary-color)) top left / 0 1.5px no-repeat,
+        linear-gradient(to bottom, var(--primary-color), var(--primary-color)) top right / 1.5px 0 no-repeat,
+        linear-gradient(to left, var(--primary-color), var(--primary-color)) bottom right / 0 1.5px no-repeat,
+        linear-gradient(to top, var(--primary-color), var(--primary-color)) bottom left / 1.5px 0 no-repeat,
+        var(--card-bg);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     transition: 
         box-shadow var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
-        background-color var(--motion-fast) var(--ease-standard);
+        background-color var(--motion-fast) var(--ease-standard),
+        background-size 600ms ease-in-out;
     padding-left: 14px;
     padding-right: 8px;
     position: relative;
@@ -505,17 +512,19 @@ body.loaded #background-layer {
 }
 
 .search-wrapper:focus-within {
-    background: var(--card-bg);
-    border-color: var(--accent-color);
+    border-color: transparent;
+    background-size: 100% 1.5px, 1.5px 100%, 100% 1.5px, 1.5px 100%;
     box-shadow: 
         var(--shadow-md),
-        0 0 0 3px rgba(46, 170, 220, 0.15);
+        0 0 0 4px color-mix(in srgb, var(--primary-color) 12%, transparent);
 }
 
 :root[data-theme="dark"] .search-wrapper:focus-within {
+    border-color: transparent;
+    background-size: 100% 1.5px, 1.5px 100%, 100% 1.5px, 1.5px 100%;
     box-shadow: 
         var(--shadow-md),
-        0 0 0 3px rgba(59, 130, 246, 0.2);
+        0 0 0 4px color-mix(in srgb, var(--primary-color) 18%, transparent);
 }
 
 /* Engine Picker Container */

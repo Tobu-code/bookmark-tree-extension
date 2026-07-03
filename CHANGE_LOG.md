@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:13:00]
+- **Type**: Feature (为搜索框聚焦状态引入顺时针流光边框描边特效)
+- **Content**: 1) 搜索框流光描边：在 `.search-wrapper:focus-within` 聚焦时，通过 CSS background-size 将 top-right-bottom-left 四个边的 linear-gradient 背景线在 600ms 内平滑展开，完成极具呼吸科技感的顺时针边框描边环绕；2) 智能主题色彩适配：废弃了案例中的固定蓝色，改用自适应当前主题主基调的 `--primary-color`（珊瑚橙），并搭配柔和的 `color-mix` 扩散发光圈，使描边效果与系统 UI 高度和谐统一。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 18:10:00]
 - **Type**: Fix (将3D悬浮复用到侧边栏书签目录并彻底修复卡片图标模糊Bug)
 - **Content**: 1) 书签目录 3D 悬浮复用：将左侧侧边栏 `.tree-folder-item` 全面纳入 3D 倾斜和伪元素跟手扫光动画体系，并专门针对其扁长盒模型特异化微调了偏转角度（限制为最大 4 度）及磁吸位移因子（限制为 0.05 倍），确保平滑舒适；2) 彻底修复卡片图标拉伸模糊：移除了 `createBookmarkIcon` 在 DOM 生成阶段写死 `width: 16px; height: 16px` 的行内 Style 限制，使其能完全采用从 chrome favicon 获取的 64px 高清源，并在大卡片（36px）和普通卡片（16px）上实现高保真 Retina 超采样渲染。
