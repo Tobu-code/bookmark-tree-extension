@@ -3913,16 +3913,8 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// --- Dynamic mouse magnetic physics hover effects (Apple/Notion style) ---
+// --- Dynamic mouse magnetic physics and 3D Tilt Hover effects (Apple/Notion style) ---
 function initMagneticHover() {
-    const getOffset = (el, clientX, clientY) => {
-        const rect = el.getBoundingClientRect();
-        // 0.12 scale factor yields premium, smooth tracking without layout nausea
-        const x = (clientX - (rect.left + rect.width / 2)) * 0.12;
-        const y = (clientY - (rect.top + rect.height / 2)) * 0.12;
-        return { x, y };
-    };
-
     document.addEventListener('mousemove', (e) => {
         const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic');
         
@@ -3930,6 +3922,8 @@ function initMagneticHover() {
             const activeEl = document.querySelector('.is-magnetized');
             if (activeEl) {
                 activeEl.style.transform = '';
+                activeEl.style.removeProperty('--mouse-x');
+                activeEl.style.removeProperty('--mouse-y');
                 activeEl.classList.remove('is-magnetized');
             }
             return;
@@ -3938,18 +3932,45 @@ function initMagneticHover() {
         const activeEl = document.querySelector('.is-magnetized');
         if (activeEl && activeEl !== target) {
             activeEl.style.transform = '';
+            activeEl.style.removeProperty('--mouse-x');
+            activeEl.style.removeProperty('--mouse-y');
             activeEl.classList.remove('is-magnetized');
         }
 
         target.classList.add('is-magnetized');
-        const { x, y } = getOffset(target, e.clientX, e.clientY);
-        target.style.transform = `translate(${x}px, ${y}px)`;
+        
+        const rect = target.getBoundingClientRect();
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        
+        // 1. Calculate relative coordinates in percentage for ::after radial-gradient shine sweep
+        const mouseXPercent = ((clientX - rect.left) / rect.width) * 100;
+        const mouseYPercent = ((clientY - rect.top) / rect.height) * 100;
+        target.style.setProperty('--mouse-x', `${mouseXPercent}%`);
+        target.style.setProperty('--mouse-y', `${mouseYPercent}%`);
+        
+        // 2. Calculate 3D perspective rotate angles & magnetic offsets
+        const dx = clientX - (rect.left + rect.width / 2);
+        const dy = clientY - (rect.top + rect.height / 2);
+        
+        // Rotate X (pitch) and Rotate Y (yaw) max bounds at soft 8 degrees
+        const rotateX = -(dy / (rect.height / 2)) * 8;
+        const rotateY = (dx / (rect.width / 2)) * 8;
+        
+        // Magnetic translations
+        const tx = dx * 0.12;
+        const ty = dy * 0.12;
+        
+        // Combine 3D rotations, translations, and micro scaling for a premium Bento-tilt feel
+        target.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
     });
 
     document.addEventListener('mouseleave', () => {
         const activeEl = document.querySelector('.is-magnetized');
         if (activeEl) {
             activeEl.style.transform = '';
+            activeEl.style.removeProperty('--mouse-x');
+            activeEl.style.removeProperty('--mouse-y');
             activeEl.classList.remove('is-magnetized');
         }
     });

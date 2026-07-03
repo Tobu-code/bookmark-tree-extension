@@ -1363,6 +1363,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding-top: 6px;
     padding-bottom: 32px;
     width: 90%;
+    perspective: 1000px; /* Perspective FOV for 3D tilt tracking */
     max-width: 1400px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -1395,6 +1396,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    transform-style: preserve-3d; /* Support 3D tilts */
 }
 
 .bookmarks-pane-grid .leaf-wrapper.is-magnetized {
@@ -2105,6 +2107,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding: 24px 0 120px 0;
     width: 100%;
     box-sizing: border-box;
+    perspective: 1000px; /* Perspective FOV for 3D tilt tracking */
 }
 
 .bookmark-card {
@@ -2131,6 +2134,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: flex;
     flex-direction: column;
     position: relative;
+    transform-style: preserve-3d; /* Support 3D tilts */
     overflow: hidden;
 }
 
@@ -5796,4 +5800,47 @@ input[type="file"]:focus-visible {
     box-shadow: none;
 }
 
+/* --- Global 3D Perspective Tilt & Shine Sweep Hover Effects --- */
+.leaf-wrapper::after,
+.bookmark-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.16),
+        transparent 60%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+    z-index: 10;
+}
+
+.leaf-wrapper:hover::after,
+.bookmark-card:hover::after {
+    opacity: 1;
+}
+
+/* Light theme adjustment for shine overlay (uses soft dark sheen on light themes) */
+:root[data-theme="light"] .leaf-wrapper::after,
+:root[data-theme="light"] .bookmark-card::after {
+    background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(0, 0, 0, 0.04),
+        transparent 60%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaf-wrapper,
+    .bookmark-card {
+        transition: none !important;
+        transform: none !important;
+    }
+    .leaf-wrapper::after,
+    .bookmark-card::after {
+        display: none !important;
+    }
+}
 

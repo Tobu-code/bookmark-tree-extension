@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:07:00]
+- **Type**: Feature (实现卡片3D Perspective透视倾斜和鼠标跟随扫光动效)
+- **Content**: 1) 引入 3D 物理倾斜：在卡片和文件夹网格容器上加入 `perspective: 1000px`，并将磁吸平移与基于 dx/dy 的 3D rotateX/rotateY 偏转夹角（最大 8 度）以及 `scale3d(1.02, 1.02, 1.02)` 缩放进行矩阵叠加；2) 实现 ::after 伪元素扫光：免除 DOM 修改，使用 CSS 变量 `--mouse-x` 和 `--mouse-y` 结合 `radial-gradient` 伪元素实现了跟手白润扫光；3) 浅色主题暗光优化：浅色模式下扫光自动切换为黑色光芒阴影（rgba(0, 0, 0, 0.04)），并为 `prefers-reduced-motion` 提供降级重置。
+- **Impact**: `src/09-ui-widgets.js`, `styles.css`
+
 ## [2026-07-03 18:03:00]
 - **Type**: Feature (为顶部时间和标语容器引入毛玻璃胶囊卡片与脉搏跳动呼吸光晕特效)
 - **Content**: 1) 引入 @keyframes pulse 动画：定义了 `0% -> 50% -> 100%` 的 scale 及蓝色 rgba(59, 130, 246) box-shadow 发光圈扩散扩散动画；2) 升级毛玻璃胶囊容器：将原有纯文字 `.ambient-time` 升级为物理实体的微磨砂半透明圆角胶囊卡片（`padding: 10px 18px`），以支撑脉搏光晕从胶囊边缘完美、顺滑地向外晕染扩散；3) 视觉与可访问性调优：优化了时间数字与标语信息的高度居中对齐，并加入了 `prefers-reduced-motion` 减弱动效响应。
