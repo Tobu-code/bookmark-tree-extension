@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:39:00]
+- **Type**: Fix (恢复搜索框通用Flex排版并追加Bento尾部缓冲对齐)
+- **Content**: 完美样式校准：1) 补回通用的 `.search-top-row` 的 `display: contents;` 规则，修复因删除纯净模式时遗漏的子容器块级阻断，使其完美恢复为单行胶囊搜索框；2) 在 `styles.css` 的 Bento 网格定义中，为文件夹卡片、`6n+1` 扁卡片、`6n+4` 高卡片追加安全防护过滤 `:not(:last-child):not(:nth-last-child(-n+4))`，强制倒数末尾几项退化为规整的 `1x1` 常规卡片，彻底消灭末端产生单独一行突出或跳格的不齐瑕疵。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 14:31:00]
 - **Type**: Fix (修复 initGreeting 缺失导致的白屏报错)
 - **Content**: 消除遗漏的失效调用：在 `src/01-constants.js` 的 DOMContentLoaded 加载事件中删除了已被解耦清除的 `initGreeting()` 函数调用，解决了由于找不到引用导致的 JS Uncaught ReferenceError 页面阻断报错。
