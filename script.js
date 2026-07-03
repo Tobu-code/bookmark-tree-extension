@@ -976,6 +976,27 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     let currentActiveFolder = null;
     let pendingRenderFrame = null;
 
+    const findFolderById = (nodes, id) => {
+        for (const node of nodes) {
+            if (node.id === id) return node;
+            if (node.children) {
+                const found = findFolderById(node.children, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
+
+    let targetActiveId = window.CURRENT_ACTIVE_FOLDER_ID;
+    if (targetActiveId) {
+        const folderExists = findFolderById(bookmarkTreeNodes, targetActiveId);
+        if (!folderExists) {
+            targetActiveId = '1';
+        }
+    } else {
+        targetActiveId = '1';
+    }
+
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
@@ -1130,6 +1151,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         dirPane.querySelectorAll('.tree-folder-item').forEach(t => t.classList.remove('active'));
         if (element) element.classList.add('active');
         currentActiveFolder = folder;
+        window.CURRENT_ACTIVE_FOLDER_ID = folder.id;
         
         if (pendingRenderFrame) {
             cancelAnimationFrame(pendingRenderFrame);
@@ -1251,11 +1273,11 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         parentContainer.appendChild(folderItem);
         parentContainer.appendChild(childrenContainer);
 
-        // Auto-activate the first rendered folder if nothing is active
-        if (!currentActiveFolder && (node.id === '1' || depth === 0)) {
+        if (node.id === targetActiveId) {
              folderItem.classList.add('active');
              currentActiveFolder = node;
              renderBmkPane(node);
+             window.CURRENT_ACTIVE_FOLDER_ID = node.id;
         }
 
         node.children.forEach(child => {

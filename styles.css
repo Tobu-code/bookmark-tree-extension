@@ -485,12 +485,27 @@ body.loaded #background-layer {
     width: clamp(var(--search-min-w), 50vw, 780px);
     max-width: calc(100% - 24px);
     border-radius: 6px;
-    background:
-        linear-gradient(to right, var(--primary-color), var(--primary-color)) top left / 0 1.5px no-repeat,
-        linear-gradient(to bottom, var(--primary-color), var(--primary-color)) top right / 1.5px 0 no-repeat,
-        linear-gradient(to left, var(--primary-color), var(--primary-color)) bottom right / 0 1.5px no-repeat,
-        linear-gradient(to top, var(--primary-color), var(--primary-color)) bottom left / 1.5px 0 no-repeat,
-        var(--card-bg);
+    background-image:
+        linear-gradient(to right, var(--primary-color), var(--primary-color)),
+        linear-gradient(to bottom, var(--primary-color), var(--primary-color)),
+        linear-gradient(to left, var(--primary-color), var(--primary-color)),
+        linear-gradient(to top, var(--primary-color), var(--primary-color));
+    background-position:
+        top left,
+        top right,
+        bottom right,
+        bottom left;
+    background-repeat:
+        no-repeat,
+        no-repeat,
+        no-repeat,
+        no-repeat;
+    background-size:
+        0 1.5px,
+        1.5px 0,
+        0 1.5px,
+        1.5px 0;
+    background-color: var(--card-bg);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     transition: 
@@ -513,7 +528,11 @@ body.loaded #background-layer {
 
 .search-wrapper:focus-within {
     border-color: transparent;
-    background-size: 100% 1.5px, 1.5px 100%, 100% 1.5px, 1.5px 100%;
+    background-size:
+        100% 1.5px,
+        1.5px 100%,
+        100% 1.5px,
+        1.5px 100% !important;
     box-shadow: 
         var(--shadow-md),
         0 0 0 4px color-mix(in srgb, var(--primary-color) 12%, transparent);
@@ -521,7 +540,11 @@ body.loaded #background-layer {
 
 :root[data-theme="dark"] .search-wrapper:focus-within {
     border-color: transparent;
-    background-size: 100% 1.5px, 1.5px 100%, 100% 1.5px, 1.5px 100%;
+    background-size:
+        100% 1.5px,
+        1.5px 100%,
+        100% 1.5px,
+        1.5px 100% !important;
     box-shadow: 
         var(--shadow-md),
         0 0 0 4px color-mix(in srgb, var(--primary-color) 18%, transparent);

@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:17:00]
+- **Type**: Fix (修复多层渐变背景下的描边遮挡与修改布局后重回常用目录问题)
+- **Content**: 1) 解耦多背景语法陷阱：在 `.search-wrapper` 中将 `background-color` 与多重 `linear-gradient` 背景图完全拆开声明，使输入框底色不再被 background-size 影响，彻底修复了描边不生效的问题；2) 全局激活目录持久化：在 `window.CURRENT_ACTIVE_FOLDER_ID` 中缓存了当前正在浏览的文件夹 ID。并在 `renderFlatBookmarks` 开始阶段先进行存在性校验，重绘时自动导航回之前浏览的深层子目录节点，彻底解决了修改卡片大小时页面被强行刷新跳转回顶层常用入口的痛点。
+- **Impact**: `src/02-bookmarks-core.js`, `styles.css`
+
 ## [2026-07-03 18:13:00]
 - **Type**: Feature (为搜索框聚焦状态引入顺时针流光边框描边特效)
 - **Content**: 1) 搜索框流光描边：在 `.search-wrapper:focus-within` 聚焦时，通过 CSS background-size 将 top-right-bottom-left 四个边的 linear-gradient 背景线在 600ms 内平滑展开，完成极具呼吸科技感的顺时针边框描边环绕；2) 智能主题色彩适配：废弃了案例中的固定蓝色，改用自适应当前主题主基调的 `--primary-color`（珊瑚橙），并搭配柔和的 `color-mix` 扩散发光圈，使描边效果与系统 UI 高度和谐统一。
