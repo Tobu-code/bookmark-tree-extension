@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:58:00]
+- **Type**: Fix (修复布局切换和搜索激活时的磨砂层闪烁并扩展搜索栏宽度)
+- **Content**: 1) 消除模式切换透明闪烁：移除 `@keyframes layoutSwitchFadeIn` 中将透明度从 0 到 1 渐变的代码，使磨砂材质在切换时连贯显示，只保留顺滑的小像素上升（`translateY(4px)`）与微弱缩放；2) 消除搜索激活毛玻璃失效：移除了 `body.search-active #bookmarks-tree` 的 `opacity: 0.95` 规则，完美规避了现代浏览器“半透明下 backdrop-filter 失效变成透明”的合成层 Bug，点击搜索框时磨砂感保持完好；3) 搜索框拉宽：将 `.search-wrapper` 基础宽度上限从 `620px` 拓宽至 `780px`（`clamp(var(--search-min-w), 50vw, 780px)`），平铺模式同步扩展，大屏视觉更舒展、大气。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 16:52:00]
 - **Type**: Feature (彻底修复树形模式滚动局限与平铺模式胶囊目录舱升级)
 - **Content**: 1) 双保险解开全局滚动：不仅对根容器 `.container` 设置自适应，还在有 `#bookmarks-tree.layout-tree` 存在时将 `html` 和 `body` 元素的 `overflow-y` 设置为 `auto !important`，彻底消除了深层嵌套导致的整页滚动死锁；2) 悬浮胶囊目录舱：重构平铺模式下左侧的书签目录面板 `.directory-pane`，取消了原本和右侧直切的 `border-right` 直线边界，为面板上下留空各 `20px`（`height: calc(100% - 40px)`）、增加 `margin`、统一应用 `border-radius: 20px` 四周细框线与磨砂投影，改造成一个独立精致的圆角胶囊悬浮舱，并为右侧留出 `20px` 呼吸间距，视觉融合度大幅跃升。

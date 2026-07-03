@@ -456,7 +456,7 @@ body.loaded #background-layer {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: clamp(var(--search-min-w), 42vw, 620px);
+    width: clamp(var(--search-min-w), 50vw, 780px);
     max-width: calc(100% - 24px);
     border-radius: 6px; /* Notion standard radius */
     background: var(--card-bg);
@@ -472,7 +472,7 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
-    max-width: 620px;
+    max-width: 780px;
 }
 
 .search-top-row {
@@ -625,7 +625,6 @@ body.search-active #search-container {
 
 /* Focus mode: maintain brightness when searching */
 body.search-active #bookmarks-tree {
-    opacity: 0.95;
     transform: translateY(1px) scale(0.996);
 }
 
@@ -851,11 +850,9 @@ body.search-active #ai-sidebar-btn {
 
 @keyframes layoutSwitchFadeIn {
     from {
-        opacity: 0;
-        transform: translateY(6px) scale(0.994);
+        transform: translateY(4px) scale(0.998);
     }
     to {
-        opacity: 1;
         transform: translateY(0) scale(1);
     }
 }
