@@ -348,7 +348,7 @@ body.loaded #background-layer {
 /* Dynamic Alignment for Flat Mode */
 .container:has(#bookmarks-tree.layout-flat) #search-container {
     /* 260px sidebar + large-screen layout shift offset to center search above content */
-    padding-left: calc(260px + clamp(0px, calc((100vw - 1600px) / 2), 200px));
+    padding-left: calc(260px + clamp(0px, calc((100vw - 1600px) / 2), 160px));
     padding-right: 0;
     align-items: center;
 }
@@ -893,7 +893,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     flex-direction: row;
     gap: 0;
     padding: 0;
-    padding-left: clamp(0px, calc((100vw - 1600px) / 2), 200px); /* Shift right on large screens */
+    padding-left: clamp(0px, calc((100vw - 1600px) / 2), 160px); /* Shift right on large screens */
     align-items: stretch;
     height: 100%;
     min-height: 0;
