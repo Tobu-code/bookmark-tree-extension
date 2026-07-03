@@ -1420,6 +1420,51 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-column: span 2;
 }
 
+/* --- Bento Rule 3: Tall Square Cards (1×1 visual square = grid-row span 2) --- */
+/* Every 6n+4 regular bookmark becomes a tall square card */
+/* Orphan guard: not if it's among the last 4 items (tall cards need 2 rows of space) */
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) {
+    grid-row: span 2;
+    /* Flex layout adjusts to fill tall space */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tall card inner content: stack icon above label vertically */
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) .leaf-node {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) .leaf-node .bookmark-icon-fallback {
+    margin-right: 0 !important;
+    margin-bottom: 6px;
+    padding: 8px;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px;
+}
+
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) .leaf-node .bookmark-label {
+    text-align: center;
+    max-width: 100%;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4):not(:nth-last-child(-n+4)) .leaf-node .bookmark-url-preview {
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+}
+
 
 
 /* Hover Icon scale link */
