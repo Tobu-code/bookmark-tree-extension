@@ -25,8 +25,10 @@
     --flat-shell-width: min(92vw, 1500px);
     --flat-left-col: minmax(176px, 28%);
     --flat-right-col: minmax(0, 72%);
-    --flat-split-gap: clamp(28px, 4.4vw, 72px);
+    --flat-split-gap: clamp(14px, 2.2vw, 36px);
     --flat-main-offset: clamp(22px, 4vh, 48px);
+    --flat-time-width: clamp(440px, 30vw, 560px);
+    --flat-directory-indent: clamp(22px, 2.1vw, 34px);
     --flat-pane-header-height: 48px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 36px;
@@ -366,6 +368,8 @@ body.loaded #background-layer {
 .container:has(#bookmarks-tree.layout-flat) .ambient-time {
     grid-column: 1;
     justify-self: end;
+    width: var(--flat-time-width);
+    max-width: calc(100vw - 48px);
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -376,6 +380,11 @@ body.loaded #background-layer {
     justify-self: stretch;
     width: 100%;
     margin-left: 0;
+}
+
+.container:has(#bookmarks-tree.layout-flat) .ambient-time-date,
+.container:has(#bookmarks-tree.layout-flat) .ambient-time-greeting {
+    white-space: nowrap;
 }
 
 .container:has(#bookmarks-tree.layout-tree) {
@@ -2001,7 +2010,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #bookmarks-tree.layout-flat .directory-pane-scroll {
     padding-top: 0;
-    padding-left: 0;
+    padding-left: var(--flat-directory-indent);
     padding-right: 0;
 }
 
@@ -2220,6 +2229,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     #bookmarks-tree.layout-flat .directory-pane-scroll {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px 12px;
+        padding-left: 0;
         padding-right: 8px;
         -webkit-mask-image: none;
         mask-image: none;
