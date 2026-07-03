@@ -1405,10 +1405,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Bento Rule 1: Folder Tiles occupy span 2 (Wide Cards) --- */
-.bookmarks-pane-grid .leaf-wrapper.leaf-wrapper--folder {
+/* --- Bento Rule 1: Folder Tiles always span 2 columns (Wide Cards 2×1) --- */
+/* Orphan guard: if folder is one of last 3 items, revert to 1×1 to avoid sticking out alone */
+.bookmarks-pane-grid .leaf-wrapper.leaf-wrapper--folder:not(:nth-last-child(-n+2)) {
     grid-column: span 2;
     background: color-mix(in srgb, var(--nav-icon-surface) 35%, var(--card-bg));
+}
+
+/* --- Bento Rule 2: Regular bookmark at every 6n+1 position spans 2 columns (Wide 2×1) --- */
+/* Orphan guard: not if it's among the last 3 items */
+.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+1):not(:nth-last-child(-n+2)) {
+    grid-column: span 2;
 }
 
 
