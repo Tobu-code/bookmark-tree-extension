@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 15:03:00]
+- **Type**: Fix (修复右侧面板起始高度随卡片数量抖动不平齐的问题)
+- **Content**: 锁定起始排版：1) 在 `styles.css` 中将 `.bookmarks-pane` 容器的 `justify-content` 属性由 `center` 修改为 `flex-start`。彻底消除了因不同文件夹下书签卡片数量不一导致的内容区整体垂直居中、起始高度上下抖动跳跃的视觉缺陷，使其恒久固定在顶部与左侧的“书签目录”Header 处于同一条 32px 的水平线上对齐开始渲染；2) 将书签卡片与文件夹卡片完整恢复为饱满的 82px 固定高度垂直排版（Bento 经典 12px 圆角、图标居中在上、文字在下、url 预览全部恢复），保留了大卡片的方块质感。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 14:55:00]
 - **Type**: Fix (精细校准卡片高度与重写请求头权限支持)
 - **Content**: 1) 将 `styles.css` 中平铺网格的行高由自适应的 `minmax(78px, auto)` 彻底修改为固定的 `grid-auto-rows: 82px;`，解决了因长文字卡片折行导致百分比高度失效、高度参差不齐的问题，强制所有卡片高度绝对固定为 82px 对齐；2) 在 `manifest.json` 中补齐了 `"declarativeNetRequestWithHostAccess"` 权限，用以在底层完全授权对 Origin 和 Referer 等安全请求头的修改。
