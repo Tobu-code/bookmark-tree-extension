@@ -279,7 +279,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                     folderCard.classList.remove(cls);
                 }
             });
-            let activeSize = size === 'default' ? '1*1' : size;
+            let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : size;
             folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
@@ -522,4 +522,3 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         dirScroll.appendChild(toggleHiddenBtn);
     }
 }
-

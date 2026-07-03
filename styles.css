@@ -374,7 +374,7 @@ body.loaded #background-layer {
     margin-right: 0;
     margin-bottom: 0;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     gap: 8px;
     min-height: 118px;
@@ -413,12 +413,12 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) .ambient-time-date {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .container:has(#bookmarks-tree.layout-flat) .ambient-time-greeting {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -1525,6 +1525,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper {
+    border-radius: 16px !important;
     padding: 8px 10px;
 }
 
@@ -2213,8 +2214,25 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-node .bookmark-icon,
 #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 5px !important;
     margin-right: 0 !important;
     margin-bottom: 0 !important;
+    border-radius: 9px !important;
+    object-fit: contain;
+}
+
+#bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-node .bookmark-icon-wrap {
+    width: 32px !important;
+    height: 32px !important;
+    margin-bottom: 0 !important;
+    border-radius: 9px !important;
+}
+
+#bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-node .bookmark-icon-wrap .folder-svg-icon {
+    width: 18px !important;
+    height: 18px !important;
 }
 
 #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-node .bookmark-label {
