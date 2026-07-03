@@ -249,6 +249,10 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         subFolders.forEach((subFolder) => {
             const folderCard = document.createElement('div');
             folderCard.className = 'leaf-wrapper leaf-wrapper--folder';
+            const size = BOOKMARK_CARD_SIZES[subFolder.id] || 'default';
+            if (size === 'large') {
+                folderCard.classList.add('card--large');
+            }
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');
@@ -389,7 +393,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const actionsSpan = document.createElement('span');
         actionsSpan.className = 'tree-folder-actions';
         const hideBtnHtml = `<button type="button" class="folder-action-btn hide-btn" title="${isHidden ? '取消隐藏' : '隐藏目录'}">${eyeSvg}</button>`;
-        actionsSpan.innerHTML = hideBtnHtml;
+        const editBtnHtml = `<button type="button" class="folder-action-btn edit-btn" title="编辑目录"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>`;
+        actionsSpan.innerHTML = hideBtnHtml + editBtnHtml;
 
         folderItem.appendChild(toggleBtn);
         folderItem.appendChild(iconContainer);
@@ -435,6 +440,12 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 chrome.storage.local.set({ [STORAGE_KEY_HIDDEN_FOLDERS]: HIDDEN_FOLDERS }, () => {
                     renderBookmarks(bookmarkTreeNodes);
                 });
+                return;
+            }
+
+            if (e.target.closest('.edit-btn')) {
+                e.stopPropagation();
+                editBookmark(node, folderItem);
                 return;
             }
 

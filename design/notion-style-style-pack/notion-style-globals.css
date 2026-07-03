@@ -1,0 +1,101 @@
+/* Notion Style 全局样式 */
+
+:root {
+  --notion-text: #37352f;
+  --notion-text-gray: #9b9a97;
+  --notion-bg: #ffffff;
+  --notion-bg-gray: #f7f6f3;
+  --notion-blue: #2eaadc;
+  --notion-red: #eb5757;
+  --notion-green: #0f7b6c;
+  --notion-yellow: #dfab01;
+  --notion-border: rgba(55, 53, 47, 0.09);
+}
+
+/* 基础文字样式 */
+body {
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+  color: var(--notion-text);
+  line-height: 1.5;
+}
+
+/* Notion 风格链接 */
+.notion-link {
+  color: var(--notion-text);
+  text-decoration: underline;
+  text-decoration-color: rgba(55, 53, 47, 0.4);
+  text-underline-offset: 2px;
+}
+
+.notion-link:hover {
+  text-decoration-color: var(--notion-text);
+}
+
+/* Notion 风格代码块 */
+.notion-code {
+  font-family: SFMono-Regular, Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace;
+  font-size: 85%;
+  background: rgba(135, 131, 120, 0.15);
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+}
+
+/* Notion 风格分割线 */
+.notion-divider {
+  border: none;
+  border-top: 1px solid var(--notion-border);
+  margin: 1rem 0;
+}
+@keyframes notion-style-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notion-style-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.notion-style-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.notion-style-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(135deg, rgba(55, 53, 47, 0.05), transparent);
+  pointer-events: none;
+}
+
+.notion-style-card:hover::before {
+  opacity: 1;
+}
+
+.notion-style-gradient {
+  background: linear-gradient(135deg, #37352f, #2eaadc);
+}
+
+.notion-style-gradient-text {
+  background: linear-gradient(135deg, #37352f, #2eaadc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.notion-style-frosted {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.notion-style-accent-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
+}
+
+.notion-style-animate-in {
+  animation: notion-style-fade-in 0.5s ease-out both;
+}

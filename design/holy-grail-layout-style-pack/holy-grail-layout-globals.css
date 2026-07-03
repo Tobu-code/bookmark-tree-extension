@@ -1,0 +1,135 @@
+/* Holy Grail Layout 全局样式 */
+
+/* 圣杯布局容器 */
+.holy-grail {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 页头 */
+.holy-grail-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* 三列主体 */
+.holy-grail-body {
+  display: flex;
+  flex: 1;
+}
+
+/* 左侧导航栏 */
+.holy-grail-nav {
+  width: 240px;
+  flex-shrink: 0;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+/* 主内容区 */
+.holy-grail-main {
+  flex: 1;
+  padding: 1.5rem;
+  min-width: 0;
+}
+
+/* 右侧边栏 */
+.holy-grail-aside {
+  width: 256px;
+  flex-shrink: 0;
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+/* 页脚 */
+.holy-grail-footer {
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .holy-grail-aside {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .holy-grail-body {
+    flex-direction: column;
+  }
+  .holy-grail-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+}
+/* Holy Grail Layout Design Tokens */
+:root {
+  --holy-grail-layout-primary: #1e293b;
+  --holy-grail-layout-secondary: #f1f5f9;
+  --holy-grail-layout-accent: #3b82f6;
+  --holy-grail-layout-glow: rgba(30, 41, 59, 0.3);
+}
+
+@keyframes holy-grail-layout-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes holy-grail-layout-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.holy-grail-layout-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.holy-grail-layout-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.05), transparent);
+  pointer-events: none;
+}
+
+.holy-grail-layout-card:hover::before {
+  opacity: 1;
+}
+
+.holy-grail-layout-gradient {
+  background: linear-gradient(135deg, #1e293b, #3b82f6);
+}
+
+.holy-grail-layout-gradient-text {
+  background: linear-gradient(135deg, #1e293b, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.holy-grail-layout-frosted {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(30, 41, 59, 0.08);
+}
+
+.holy-grail-layout-accent-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 0 100%);
+}
+
+.holy-grail-layout-animate-in {
+  animation: holy-grail-layout-fade-in 0.5s ease-out both;
+}

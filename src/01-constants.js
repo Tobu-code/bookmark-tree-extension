@@ -11,6 +11,7 @@ const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const STORAGE_KEY_TREE_EXPANDED = 'tree_expanded_folders';
+const STORAGE_KEY_CARD_SIZES = 'settings_bookmark_card_sizes';
 const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
 const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
 const STORAGE_KEY_AI_CONFIG = 'bookmark_tree_ai_config_v2';
@@ -108,6 +109,7 @@ let FLAT_DIR_EXPANDED = false;
 let TREE_EXPANDED_FOLDERS = new Set(['1']);
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
+let BOOKMARK_CARD_SIZES = {};
 let BOOKMARK_SEARCH_INDEX = [];
 let BOOKMARK_SEARCH_BUCKETS = new Map();
 let AI_SIDEBAR_CONTROLLER = null;
@@ -639,7 +641,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
-            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
+            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
+            STORAGE_KEY_CARD_SIZES
         ]),
         getBookmarks()
     ]);
@@ -690,6 +693,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (Array.isArray(settings[STORAGE_KEY_TREE_EXPANDED])) {
         TREE_EXPANDED_FOLDERS = new Set(settings[STORAGE_KEY_TREE_EXPANDED]);
+    }
+
+    if (settings[STORAGE_KEY_CARD_SIZES]) {
+        BOOKMARK_CARD_SIZES = settings[STORAGE_KEY_CARD_SIZES];
+    } else {
+        BOOKMARK_CARD_SIZES = {};
     }
 
     // 4. Init Settings UI (Bindings)
