@@ -23,11 +23,9 @@
     --glass-blur: 16px;
 
     --flat-shell-width: min(92vw, 1500px);
-    --flat-nav-min-width: clamp(184px, 14vw, 240px);
-    --flat-nav-max-width: 32ch;
-    --flat-left-col: minmax(var(--flat-nav-min-width), fit-content(var(--flat-nav-max-width)));
-    --flat-right-col: minmax(0, 1fr);
-    --flat-split-gap: clamp(28px, 3.2vw, 56px);
+    --flat-left-col: minmax(176px, 28%);
+    --flat-right-col: minmax(0, 72%);
+    --flat-split-gap: clamp(28px, 4.4vw, 72px);
     --flat-main-offset: clamp(22px, 4vh, 48px);
     --flat-pane-header-height: 48px;
     --flat-pane-header-gap: 12px;
@@ -367,11 +365,10 @@ body.loaded #background-layer {
 
 .container:has(#bookmarks-tree.layout-flat) .ambient-time {
     grid-column: 1;
-    justify-self: start;
+    justify-self: end;
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
-    max-width: none;
 }
 
 .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
@@ -379,15 +376,6 @@ body.loaded #background-layer {
     justify-self: stretch;
     width: 100%;
     margin-left: 0;
-}
-
-.container:has(#bookmarks-tree.layout-flat) .ambient-time-info-group {
-    min-width: max-content;
-}
-
-.container:has(#bookmarks-tree.layout-flat) .ambient-time-date,
-.container:has(#bookmarks-tree.layout-flat) .ambient-time-greeting {
-    white-space: nowrap;
 }
 
 .container:has(#bookmarks-tree.layout-tree) {
@@ -560,9 +548,9 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
-    width: 100%;
-    max-width: none;
-    margin-left: 0;
+    width: var(--flat-top-width);
+    max-width: 780px;
+    margin-left: calc((100% - var(--flat-top-width)) / 2);
 }
 
 .search-top-row {
@@ -1979,9 +1967,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Directory pane no-line refinement */
 #bookmarks-tree.layout-flat .directory-pane {
     grid-column: 1;
-    width: max-content;
-    min-width: var(--flat-nav-min-width);
-    max-width: var(--flat-nav-max-width);
+    width: 100%;
     padding-top: 0;
     padding-left: 0;
     padding-right: 0;
@@ -2014,7 +2000,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .directory-pane-scroll {
-    width: 100%;
     padding-top: 0;
     padding-left: 0;
     padding-right: 0;
@@ -2031,9 +2016,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     background: transparent;
     box-shadow: none;
     min-height: 38px;
-    width: 100%;
-    min-width: var(--flat-nav-min-width);
-    max-width: var(--flat-nav-max-width);
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item:hover {
@@ -2224,8 +2206,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     #bookmarks-tree.layout-flat .directory-pane {
         grid-column: 1;
         width: 100%;
-        min-width: 0;
-        max-width: none;
         max-height: 220px;
         height: auto;
         margin: 0;
@@ -2243,11 +2223,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         padding-right: 8px;
         -webkit-mask-image: none;
         mask-image: none;
-    }
-
-    #bookmarks-tree.layout-flat .tree-folder-item {
-        min-width: 0;
-        max-width: none;
     }
 
     :root[data-theme="dark"] .directory-pane {
