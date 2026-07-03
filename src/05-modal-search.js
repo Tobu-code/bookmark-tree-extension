@@ -66,7 +66,6 @@ function initSearch() {
     const overlay = document.getElementById('engine-picker-overlay');
     const searchOverlay = document.getElementById('search-overlay');
     const suggestions = document.getElementById('search-suggestions');
-    const pureEngineList = document.getElementById('pure-engine-list');
     const options = document.querySelectorAll('.wheel-option');
     const STORAGE_KEY_ENGINE = 'bookmark_tree_search_engine';
 
@@ -103,13 +102,7 @@ function initSearch() {
             opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
 
-        // Update pure engine list buttons
-        if (pureEngineList) {
-            const pureButtons = pureEngineList.querySelectorAll('.pure-engine-btn');
-            pureButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.engine === currentEngine);
-            });
-        }
+
     }
 
     // Search mode - blur background
@@ -296,41 +289,7 @@ function initSearch() {
         }
     });
 
-    // Init pure engine list
-    if (pureEngineList) {
-        pureEngineList.innerHTML = '';
-        options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'pure-engine-btn';
-            btn.dataset.engine = opt.dataset.engine;
-            btn.dataset.url = opt.dataset.url;
-            
-            // Add icon to the button
-            const iconImg = document.createElement('img');
-            iconImg.src = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(opt.dataset.url)}&size=32`;
-            iconImg.width = 16;
-            iconImg.height = 16;
-            iconImg.style.borderRadius = '4px';
-            btn.appendChild(iconImg);
 
-            const textSpan = document.createElement('span');
-            textSpan.textContent = opt.textContent.trim();
-            btn.appendChild(textSpan);
-            
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                currentEngine = btn.dataset.engine;
-                currentUrl = btn.dataset.url;
-                label.textContent = btn.textContent.trim();
-                updateActiveOption();
-                chrome.storage.local.set({ [STORAGE_KEY_ENGINE]: currentEngine });
-                input.focus();
-            });
-            pureEngineList.appendChild(btn);
-        });
-    }
 
     // Tab key to switch engine (Universal)
     input.addEventListener('keydown', (e) => {

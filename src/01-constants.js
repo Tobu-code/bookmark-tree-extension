@@ -7,7 +7,7 @@ const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
 const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
 const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
-const STORAGE_KEY_PURE_MODE = 'settings_pure_mode_enabled';
+
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const STORAGE_KEY_TREE_EXPANDED = 'tree_expanded_folders';
@@ -101,7 +101,7 @@ let CURRENT_BG_BLUR = 0;
 let CURRENT_CONTAINER_BLUR = 0;
 let HOVER_DELAY = 100;
 let LAYOUT_MODE = 'tree';
-let PURE_MODE_ENABLED = false;
+
 let HIDDEN_FOLDERS = [];
 let SHOW_HIDDEN_FOLDERS = false;
 let FLAT_DIR_EXPANDED = false;
@@ -172,24 +172,7 @@ async function bgIdbRemove() {
     } catch { /* ignore */ }
 }
 
-function applyPureModeState(enabled) {
-    PURE_MODE_ENABLED = Boolean(enabled);
-    document.body.classList.toggle('pure-mode', PURE_MODE_ENABLED);
 
-    const pureModeBtn = document.getElementById('pure-mode-btn');
-    if (!pureModeBtn) return;
-
-    const nextTitle = PURE_MODE_ENABLED ? '退出纯净模式' : '打开纯净模式';
-    pureModeBtn.classList.toggle('is-active', PURE_MODE_ENABLED);
-    pureModeBtn.title = nextTitle;
-    pureModeBtn.setAttribute('aria-label', nextTitle);
-    pureModeBtn.setAttribute('aria-pressed', PURE_MODE_ENABLED ? 'true' : 'false');
-}
-
-async function togglePureMode() {
-    applyPureModeState(!PURE_MODE_ENABLED);
-    await storageSet({ [STORAGE_KEY_PURE_MODE]: PURE_MODE_ENABLED });
-}
 
 function getDynamicRules() {
     return new Promise((resolve) => chrome.declarativeNetRequest.getDynamicRules(resolve));
@@ -644,10 +627,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSearch();
     initAiSidebarLazy();
     initAmbientTime();
-    initPureTime();
     initGreeting();
-    initPureShortcuts();
-    initPureMemo();
 
 
     // 2. Data Loading (Async)
@@ -659,7 +639,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
-            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED, STORAGE_KEY_PURE_MODE,
+            STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
         ]),
         getBookmarks()
@@ -698,7 +678,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
     else LAYOUT_MODE = 'tree';
 
-    PURE_MODE_ENABLED = !!settings[STORAGE_KEY_PURE_MODE];
+
 
     if (settings[STORAGE_KEY_HIDDEN_FOLDERS]) HIDDEN_FOLDERS = settings[STORAGE_KEY_HIDDEN_FOLDERS];
     else HIDDEN_FOLDERS = [];
@@ -732,7 +712,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 7.5 Layout Toggle Button (outside settings for quick access)
     const layoutToggleBtn = document.getElementById('layout-toggle-btn');
-    const pureModeBtn = document.getElementById('pure-mode-btn');
     const layoutIconTree = document.getElementById('layout-icon-tree');
     const layoutIconFlat = document.getElementById('layout-icon-flat');
     
@@ -760,12 +739,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderBookmarksWithLayoutTransition();
     });
 
-    if (pureModeBtn) {
-        pureModeBtn.addEventListener('click', async () => {
-            await togglePureMode();
-        });
-        applyPureModeState(PURE_MODE_ENABLED);
-    }
 
     // 8. Reveal Page
     requestAnimationFrame(() => {

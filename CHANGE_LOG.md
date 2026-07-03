@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:28:00]
+- **Type**: Chore (彻底删除纯净模式相关代码与UI元素)
+- **Content**: 满足极简减法重构：1) 在 `newtab.html` 中移除 `.pure-greeting-group` 时钟问候容器、`#pure-engine-list` 底部搜索行、`#pure-memo` 备忘录及 `.pure-footer-hint`；2) 在 `styles.css` 中清除约 800 行以 `body.pure-mode` 开头的隐藏控制、组件布局和移动端覆盖样式；3) 在 `src/` JS 模块中彻底剥离 `PURE_MODE_ENABLED` 变量、`togglePureMode` 及 `applyPureModeState` 函数，并清空了 `initPureTime` / `initPureShortcuts` / `initPureMemo` 备忘录核心业务逻辑；4) 重新打包构建生成完全瘦身的 `script.js`。
+- **Impact**: `newtab.html`, `styles.css`, `script.js`, `src/01-constants.js`, `src/05-modal-search.js`, `src/09-ui-widgets.js`
+
 ## [2026-07-03 14:08:00]
 - **Type**: Fix (优化Bento高宽比与时间搜索框胶囊设计)
 - **Content**: 持续迭代版式体验：1) 将平铺模式中庞大笨重的 `2x2` 书签卡片重组为 `1x2` 高窄书签卡片（`span 1` 宽且 `span 2` 高），与文件夹 `2x1` 及普通 `1x1` 书签形成高低错落拼图，视觉更加紧凑；2) 加宽左侧目录栏平铺 `padding-left` 至 `48px`，拉开侧栏树安全缓冲；3) 搜索顶栏整体下移（`padding-top: 76px;`）开阔留白；4) 搜索框做高大/宽窄药丸胶囊化改造（`min-height: 52px; border-radius: 26px; max-width: 620px;`）。
