@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:55:00]
+- **Type**: Fix (精细校准卡片高度与重写请求头权限支持)
+- **Content**: 1) 将 `styles.css` 中平铺网格的行高由自适应的 `minmax(78px, auto)` 彻底修改为固定的 `grid-auto-rows: 82px;`，解决了因长文字卡片折行导致百分比高度失效、高度参差不齐的问题，强制所有卡片高度绝对固定为 82px 对齐；2) 在 `manifest.json` 中补齐了 `"declarativeNetRequestWithHostAccess"` 权限，用以在底层完全授权对 Origin 和 Referer 等安全请求头的修改。
+- **Impact**: `manifest.json`, `styles.css`
+
 ## [2026-07-03 14:49:00]
 - **Type**: Fix (修复 Claude.ai 侧栏401错误、卡片固定高度与左右标题水平对齐)
 - **Content**: 视觉与引擎双重提效：1) 在 `rules.json` 中，针对 `claude.ai` 的两条 DNR 规则新增 `requestHeaders` 拦截改写，强行伪装请求头中的 `Origin` 为 `https://claude.ai`，`Referer` 为 `https://claude.ai/`，绕过了服务端的跨域 401 盾牌，彻底恢复侧栏中 Claude 会话与模型加载；2) 从 `styles.css` 中完全删除了常规书签第 `6n+4` 项的纵向 span 2 高窄卡片属性及相应排版，使右侧卡片高度完全统一为常规单倍高度（78px）；3) 将左侧 `.directory-pane` 的 `padding-top` 修正为与右侧一致 the `32px`，底 `padding` 修正为 `8px`，实现左侧“书签目录”标题与右侧分类目录标题的 Y 轴完全平齐对齐。
