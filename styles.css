@@ -1372,14 +1372,57 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     cursor: pointer;
 }
 
-.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 { grid-column: span 1; grid-row: span 1; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 { grid-column: span 1; grid-row: span 2; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 { grid-column: span 2; grid-row: span 1; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-2-2 { grid-column: span 2; grid-row: span 2; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 { grid-column: span 3; grid-row: span 1; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-3-2 { grid-column: span 3; grid-row: span 2; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 { grid-column: span 4; grid-row: span 1; }
-.bookmarks-pane-grid .leaf-wrapper.layout-size-4-2 { grid-column: span 4; grid-row: span 2; }
+/* Custom size configurations with absolute priority (!important) to override auto-layout rules */
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 { grid-column: span 1 !important; grid-row: span 1 !important; flex-direction: row !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 { grid-column: span 1 !important; grid-row: span 2 !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 { grid-column: span 2 !important; grid-row: span 1 !important; flex-direction: row !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-2 { grid-column: span 2 !important; grid-row: span 2 !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 { grid-column: span 3 !important; grid-row: span 1 !important; flex-direction: row !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-2 { grid-column: span 3 !important; grid-row: span 2 !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 { grid-column: span 4 !important; grid-row: span 1 !important; flex-direction: row !important; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-2 { grid-column: span 4 !important; grid-row: span 2 !important; }
+
+/* Force standard horizontal alignments back for explicitly customized 1-height row layouts */
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 .leaf-node,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 .leaf-node,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 .leaf-node,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 .leaf-node {
+    flex-direction: row !important;
+    text-align: left !important;
+}
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 .leaf-node .bookmark-icon-fallback,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 .leaf-node .bookmark-icon-fallback,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 .leaf-node .bookmark-icon-fallback,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 .leaf-node .bookmark-icon-fallback {
+    width: 16px !important;
+    height: 16px !important;
+    padding: 0 !important;
+    margin-right: 8px !important;
+    margin-bottom: 0 !important;
+}
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 .leaf-node .bookmark-label,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 .leaf-node .bookmark-label,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 .leaf-node .bookmark-label,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 .leaf-node .bookmark-label {
+    text-align: left !important;
+    font-size: 13px !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+}
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 .leaf-node .bookmark-url-preview,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 .leaf-node .bookmark-url-preview,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 .leaf-node .bookmark-url-preview,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 .leaf-node .bookmark-url-preview {
+    display: inline-block !important;
+    text-align: left !important;
+    margin-top: 0 !important;
+    font-size: 11px !important;
+}
 
 /* Hover: Float & Glow */
 .bookmarks-pane-grid .leaf-wrapper:hover {
