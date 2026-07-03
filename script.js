@@ -3076,41 +3076,39 @@ function applyBackground() {
 }
 
 function applyContainerOpacity() {
-    const container = document.querySelector('.container');
-    if (!container) return;
-
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
-    const transparency = level / 10;
+    const root = document.documentElement;
+    const isDark = root.getAttribute('data-theme') === 'dark';
 
-    // 当透明度级别为最大值 10 时，容器完全透明隐形，不留边框阴影和遮罩
-    if (level === 10) {
+    // Base color values for rgb
+    const r = isDark ? 24 : 255;
+    const g = isDark ? 25 : 255;
+    const b = isDark ? 28 : 255;
+
+    // Card and Glass alpha interpolation (0.65/0.72 to 0.02, 0.70/0.76 to 0.02)
+    const baseAlphaCard = isDark ? 0.65 : 0.72;
+    const baseAlphaGlass = isDark ? 0.70 : 0.76;
+
+    const cardAlpha = Math.max(0.02, baseAlphaCard - (level / 10) * (baseAlphaCard - 0.02));
+    const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
+
+    // Blur px mapping: level 0 maps to 24px, level 10 maps to 0px
+    const blurPx = Math.max(0, Math.round(24 - (level / 10) * 24));
+
+    // Set properties on root to globally control card/directory backgrounds
+    root.style.setProperty('--card-bg', `rgba(${r}, ${g}, ${b}, ${cardAlpha})`);
+    root.style.setProperty('--glass-bg', `rgba(${r}, ${g}, ${b}, ${glassAlpha})`);
+    root.style.setProperty('--glass-blur', `${blurPx}px`);
+
+    // Reset container's styling to ensure full transparent fullscreen shell
+    const container = document.querySelector('.container');
+    if (container) {
         container.style.background = 'transparent';
         container.style.backdropFilter = 'none';
         container.style.webkitBackdropFilter = 'none';
         container.style.borderColor = 'transparent';
         container.style.boxShadow = 'none';
-        return;
     }
-
-    // Blend transparency and frosted blur together:
-    // higher transparency -> lower blur, but keep a minimum for readability.
-    const overlayAlpha = Math.max(0.05, 0.82 - transparency * 0.77);
-    const blurPx = Math.max(0, Math.round(18 - transparency * 18));
-
-    container.style.background =
-        `linear-gradient(160deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 34%, rgba(255, 255, 255, 0.06) 100%), color-mix(in srgb, var(--bg-overlay) ${Math.round(overlayAlpha * 100)}%, transparent)`;
-    
-    if (blurPx > 0) {
-        container.style.backdropFilter = `blur(${blurPx}px)`;
-        container.style.webkitBackdropFilter = `blur(${blurPx}px)`;
-    } else {
-        container.style.backdropFilter = 'none';
-        container.style.webkitBackdropFilter = 'none';
-    }
-
-    // 还原默认样式
-    container.style.borderColor = '';
-    container.style.boxShadow = '';
 }
 
 // --- Item-Level Drag & Drop ---

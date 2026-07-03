@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:46:30]
+- **Type**: Feature (实现树形模式全屏滚动与全局自适应卡片磨砂感调节)
+- **Content**: 1) 解锁全屏滚动：重构树状模式下的滚动机制，将滚动条外提到网页根容器 `.container` 上（`overflow-y: auto; height: auto;`），并将 `#bookmarks-tree` 高度和内卷滚动限制移除（`overflow-y: visible;`），实现鼠标在屏幕任何位置均能使用滚轮滑动网页；2) 全局柔和磨砂底色：将原本纯白的硬背景调整为半透明柔和色，并在 `.bookmark-card`、`.directory-pane` 和网格卡片上挂载毛玻璃模糊（`backdrop-filter: blur(var(--glass-blur))`），使卡片美观透气；3) 滑块磨砂绑定：修改透明度滑块在 `src/06-settings.js` 和 `script.js` 中的逻辑，使其直接通过改变 `:root` 变量（`--card-bg`, `--glass-bg`, `--glass-blur`）来动态遥控全局所有卡片和左侧目录树的透明度与模糊程度，彻底解决主容器被弃用后滑块失效的问题。
+- **Impact**: `newtab.html`, `styles.css`, `src/06-settings.js`, `script.js`
+
 ## [2026-07-03 16:34:00]
 - **Type**: Fix (修复右下角设置按钮的拟物化遗留风格)
 - **Content**: 统一右下角悬浮控制台质感：在 `styles.css` 中，彻底清除了 `#settings-btn` 针对 dark 主题和系统 dark 媒体查询的紫色硬编码有色渐变覆盖；重构设置按钮的基础样式，移除金属古铜金盘、粗边框和高亮投影，将其重构为与其他控制按钮高度统一的 12px 圆角正方形、白色磨砂玻璃背景（`var(--glass-bg)`）及轻柔阴影，实现高档磨砂视觉的绝对统一。
