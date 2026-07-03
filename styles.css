@@ -363,7 +363,7 @@ body.loaded #background-layer {
 }
 
 .ambient-time {
-    width: auto;
+    width: fit-content;
     max-width: 900px;
     font-weight: 400;
     font-variant-numeric: tabular-nums;
@@ -372,12 +372,21 @@ body.loaded #background-layer {
     opacity: 0;
     transition: opacity 1s var(--ease-standard);
     user-select: none;
-    pointer-events: none;
+    pointer-events: auto;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-    gap: 20px;
+    align-items: center;
+    gap: 16px;
     letter-spacing: -0.01em;
+
+    /* Capsule glass container for box-shadow pulse wave propagation */
+    padding: 10px 18px;
+    background: color-mix(in srgb, var(--card-bg) 30%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .ambient-time-clock {
@@ -396,7 +405,6 @@ body.loaded #background-layer {
     flex-direction: column;
     align-items: flex-start;
     gap: 3px;
-    padding-bottom: 4px;
     border-left: 1px solid var(--border-color);
     padding-left: 16px;
 }
@@ -423,12 +431,30 @@ body.loaded #background-layer {
     text-shadow: none;
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+  }
+}
+
 .ambient-time.visible {
     opacity: 0.9;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .ambient-time.dimmed {
     opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-time.visible {
+    animation: none;
+  }
 }
 
 #search-input {
