@@ -22,6 +22,10 @@
     --glass-border: rgba(55, 53, 47, 0.09);
     --glass-blur: 16px;
 
+    --flat-shell-width: min(92vw, 1500px);
+    --flat-left-col: minmax(180px, 30%);
+    --flat-right-col: minmax(0, 70%);
+    --flat-split-gap: clamp(18px, 3vw, 48px);
     --flat-pane-header-height: 48px;
     --flat-pane-header-gap: 12px;
     --floating-actions-size: 36px;
@@ -347,21 +351,30 @@ body.loaded #background-layer {
 
 /* Dynamic Alignment for Flat Mode */
 .container:has(#bookmarks-tree.layout-flat) #search-container {
-    /* Adaptive sidebar + large-screen layout shift offset to center search above content */
-    padding-left: calc(clamp(200px, 18vw, 260px) + clamp(0px, calc((100vw - 1600px) / 2), 128px));
+    display: grid;
+    grid-template-columns: var(--flat-left-col) var(--flat-right-col);
+    column-gap: var(--flat-split-gap);
+    align-items: center;
+    width: var(--flat-shell-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
     padding-right: 0;
-    align-items: flex-start;
-    --flat-top-width: min(780px, max(var(--search-min-w), 50vw));
 }
 
 .container:has(#bookmarks-tree.layout-flat) .ambient-time {
-    margin-left: calc((100% - var(--flat-top-width)) / 2);
+    grid-column: 1;
+    justify-self: end;
+    margin-left: 0;
     margin-right: 0;
+    margin-bottom: 0;
 }
 
 .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
-    margin-left: calc((100% - var(--flat-top-width)) / 2);
-    width: var(--flat-top-width);
+    grid-column: 2;
+    justify-self: stretch;
+    width: 100%;
+    margin-left: 0;
 }
 
 .container:has(#bookmarks-tree.layout-tree) {
@@ -958,11 +971,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* --- Flat Layout (Split Pane) --- */
 #bookmarks-tree.layout-flat {
-    display: flex;
-    flex-direction: row;
-    gap: clamp(12px, 1.8vw, 24px); /* Fluid layout separation spacing */
+    display: grid;
+    grid-template-columns: var(--flat-left-col) var(--flat-right-col);
+    column-gap: var(--flat-split-gap);
+    row-gap: 0;
+    width: var(--flat-shell-width);
+    margin-left: auto;
+    margin-right: auto;
     padding: 0;
-    padding-left: clamp(0px, calc((100vw - 1600px) / 2), 128px); /* Shift right on large screens */
     align-items: stretch;
     height: 100%;
     min-height: 0;
@@ -1448,10 +1464,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .bookmarks-pane-header {
-    min-height: 34px;
-    margin-bottom: 2px;
-    padding-bottom: 0;
-    background-image: none;
+    display: none;
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .bookmarks-pane-header {
@@ -1951,9 +1964,10 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Directory pane no-line refinement */
 #bookmarks-tree.layout-flat .directory-pane {
-    width: clamp(164px, 14.5vw, 210px);
+    grid-column: 1;
+    width: 100%;
     padding-top: 0;
-    padding-left: 12px;
+    padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
     border: none;
@@ -1962,6 +1976,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: none;
+}
+
+#bookmarks-tree.layout-flat .bookmarks-pane {
+    grid-column: 2;
+    width: 100%;
+    padding: 0;
+}
+
+#bookmarks-tree.layout-flat .bookmarks-pane-scroll {
+    max-height: 100%;
+    width: 100%;
 }
 
 #bookmarks-tree.layout-flat .directory-pane::after {
@@ -2152,15 +2177,31 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 
 @media (max-width: 899px) {
-    #bookmarks-tree.layout-flat {
-        flex-direction: column;
+    .container:has(#bookmarks-tree.layout-flat) #search-container {
+        display: flex;
+        width: min(94vw, 780px);
+        align-items: center;
         gap: 14px;
-        padding: 14px 8px 8px;
+    }
+
+    .container:has(#bookmarks-tree.layout-flat) .ambient-time,
+    .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #bookmarks-tree.layout-flat {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        width: min(94vw, 780px);
+        padding: 14px 0 8px;
         height: auto;
         overflow: visible;
     }
 
-    .directory-pane {
+    #bookmarks-tree.layout-flat .directory-pane {
+        grid-column: 1;
         width: 100%;
         max-height: 220px;
         height: auto;
@@ -2173,7 +2214,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    .directory-pane-scroll {
+    #bookmarks-tree.layout-flat .directory-pane-scroll {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px 12px;
         padding-right: 8px;
@@ -2185,13 +2226,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         border-bottom-color: rgba(255, 255, 255, 0.16);
     }
 
-    .bookmarks-pane {
+    #bookmarks-tree.layout-flat .bookmarks-pane {
+        grid-column: 1;
         width: 100%;
         height: auto;
         padding: 0;
     }
 
-    .bookmarks-pane-grid {
+    #bookmarks-tree.layout-flat .bookmarks-pane-grid {
         grid-template-columns: 1fr;
     }
 
@@ -2246,7 +2288,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     }
 
     #bookmarks-tree.layout-flat {
-        gap: 18px;
+        column-gap: var(--flat-split-gap);
     }
 
     .bookmarks-pane-grid {
