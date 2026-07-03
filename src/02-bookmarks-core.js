@@ -196,13 +196,16 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     };
 
     let targetActiveId = window.CURRENT_ACTIVE_FOLDER_ID;
+    const firstSubFolder = bookmarksBar.children.find(child => child.children);
+    const defaultActiveId = firstSubFolder ? firstSubFolder.id : '1';
+
     if (targetActiveId) {
         const folderExists = findFolderById(bookmarkTreeNodes, targetActiveId);
         if (!folderExists) {
-            targetActiveId = '1';
+            targetActiveId = defaultActiveId;
         }
     } else {
-        targetActiveId = '1';
+        targetActiveId = defaultActiveId;
     }
 
     const renderBmkPane = (folder) => {

@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 18:19:00]
+- **Type**: Fix (修复首次进入页面右侧书签栏为空白而没有激活首个目录的Bug)
+- **Content**: 1) 首个目录默认激活：在初始化激活 ID 时，不再写死为 `1`（因为 `bookmarksBar` 仅为大容器并不实际渲染在侧边栏上，子节点如“常用入口”才是首个渲染目录）。重构后会自动获取子目录树中的绝对首个渲染节点 `bookmarksBar.children.find(child => child.children)` 并提取其 ID 作为默认激活项；2) 解决了用户进入页面后无任何选中项、右侧面板呈全白色的逻辑漏洞。
+- **Impact**: `src/02-bookmarks-core.js`
+
 ## [2026-07-03 18:17:00]
 - **Type**: Fix (修复多层渐变背景下的描边遮挡与修改布局后重回常用目录问题)
 - **Content**: 1) 解耦多背景语法陷阱：在 `.search-wrapper` 中将 `background-color` 与多重 `linear-gradient` 背景图完全拆开声明，使输入框底色不再被 background-size 影响，彻底修复了描边不生效的问题；2) 全局激活目录持久化：在 `window.CURRENT_ACTIVE_FOLDER_ID` 中缓存了当前正在浏览的文件夹 ID。并在 `renderFlatBookmarks` 开始阶段先进行存在性校验，重绘时自动导航回之前浏览的深层子目录节点，彻底解决了修改卡片大小时页面被强行刷新跳转回顶层常用入口的痛点。
