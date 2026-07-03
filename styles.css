@@ -333,7 +333,7 @@ body.loaded #background-layer {
 /* Search Bar Header */
 #search-container {
     margin-top: 0;
-    padding-top: 36px;
+    padding-top: 76px;
     margin-bottom: var(--search-margin-bottom);
     display: flex;
     flex-direction: column;
@@ -455,7 +455,7 @@ body.loaded #background-layer {
 .search-wrapper {
     display: flex;
     align-items: center;
-    width: clamp(var(--search-min-w), 58.5vw, 920px);
+    width: clamp(var(--search-min-w), 42vw, 620px);
     max-width: calc(100% - 24px);
     border-radius: 6px; /* Notion standard radius */
     background: var(--card-bg);
@@ -471,7 +471,7 @@ body.loaded #background-layer {
 }
 
 .container:has(#bookmarks-tree.layout-flat) .search-wrapper {
-    max-width: 800px;
+    max-width: 620px;
 }
 
 .search-wrapper:focus-within {
@@ -1415,9 +1415,9 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-column: span 2;
 }
 
-/* 2x2 Square Leaf (span 2 width & span 2 height) - nth(6n+4) */
+/* 1x2 Tall Leaf (span 1 width & span 2 height) - nth(6n+4) */
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4) {
-    grid-column: span 2;
+    grid-column: span 1;
     grid-row: span 2;
 }
 
@@ -1700,7 +1700,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Directory pane no-line refinement */
 #bookmarks-tree.layout-flat .directory-pane {
-    padding-left: 36px;
+    padding-left: 48px;
     padding-right: 18px;
     background:
         radial-gradient(ellipse at 42% 0%, rgba(255, 248, 230, 0.14) 0%, transparent 44%),
@@ -6363,12 +6363,13 @@ body.pure-mode #pure-memo {
 }
 
 :root .search-wrapper {
-    border-radius: 32px;
+    min-height: 52px;
+    border-radius: 26px; /* 52px / 2 = perfect capsule rounded corners */
     background: var(--card-bg);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
     border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
-    padding-left: 20px;
-    padding-right: 12px;
+    padding-left: 24px;
+    padding-right: 14px;
 }
 
 :root .search-wrapper:focus-within {

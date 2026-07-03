@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:08:00]
+- **Type**: Fix (优化Bento高宽比与时间搜索框胶囊设计)
+- **Content**: 持续迭代版式体验：1) 将平铺模式中庞大笨重的 `2x2` 书签卡片重组为 `1x2` 高窄书签卡片（`span 1` 宽且 `span 2` 高），与文件夹 `2x1` 及普通 `1x1` 书签形成高低错落拼图，视觉更加紧凑；2) 加宽左侧目录栏平铺 `padding-left` 至 `48px`，拉开侧栏树安全缓冲；3) 搜索顶栏整体下移（`padding-top: 76px;`）开阔留白；4) 搜索框做高大/宽窄药丸胶囊化改造（`min-height: 52px; border-radius: 26px; max-width: 620px;`）。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 14:01:25]
 - **Type**: Fix (优化侧栏呼吸间距与2x2方形卡片回填对齐)
 - **Content**: 满足精细版式微调：1) 增加平铺侧栏 `#bookmarks-tree.layout-flat .directory-pane` 的左边距（`padding-left: 36px; padding-right: 18px;`），拉开与浏览器物理边缘的距离，解决点击局促感；2) 在右侧平铺网格中恢复第 `6n+4` 项的 `2x2` 方形大卡片规则（`span 2` 宽且 `span 2` 高），并将 Favicon 图标放大 2 倍至 `32px` 纵向居中，丰富网格韵律；3) 结合 `grid-auto-flow: dense;` 自动排版填充，保证多规格卡片高度对齐，绝不错行产生零散间隙。
