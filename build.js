@@ -70,6 +70,8 @@ async function build() {
         );
         scriptContent = parts.join('\n');
         console.log(`Bundled ${srcFiles.length} modules from src/: ${srcFiles.join(', ')}`);
+        await fs.writeFile(path.join(rootDir, 'script.js'), scriptContent);
+        console.log('Updated root script.js with bundled modules');
     } else {
         const scriptPath = path.join(rootDir, 'script.js');
         if (!fs.existsSync(scriptPath)) {

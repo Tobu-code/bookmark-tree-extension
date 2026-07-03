@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 17:32:00]
+- **Type**: Fix (打通 build.js 编译链对根目录 script.js 的实时同步并修复重绘逻辑)
+- **Content**: 1) 修复编译链同步：在 `build.js` 合并 `src/` 模块后，自动执行 `fs.writeFile` 写回项目根目录下的 `script.js` 开发版文件，解决了此前因 Chrome 扩展直接加载根目录文件而导致“改动无法在解压版扩展程序中生效”的底层编译 Bug；2) 修复重绘未触发：补全了 `src/03-bookmarks-items.js` 中保存布局尺寸后未向 `refreshBookmarkTreeCache` 传参的回调，正式传入 `(tree) => renderBookmarks(tree)`，实现了编辑后秒级无缝重绘卡片；3) 正方形布局入库：添加了各选项下对 `square` 的解析支持，清除了每次更新时的多余类名干扰。
+- **Impact**: `build.js`, `src/03-bookmarks-items.js`, `script.js`
+
 ## [2026-07-03 17:27:00]
 - **Type**: Feature (实现卡片自定义正方形布局大小并修复编辑重绘和入口遮挡)
 - **Content**: 1) 新增正方形卡片尺寸选项：在编辑弹窗的“卡片布局大小”中新增“正方形卡片”选项。树形模式下占 1×1 保持经典比率，平铺模式下占 1×2（`grid-row: span 2`）呈现真正的 Bento 正方形；2) 彻底修复重绘未生效：在保存自定义大小修改并更新 `chrome.storage.local` 后，将 `renderBookmarks(tree)` 作为回调传入 `refreshBookmarkTreeCache` 执行，保证大小切换瞬间生效，无需手动刷新页面；3) 解决大卡片右上角操作入口缺失：用 FlexBox 按钮组（`.card-header-actions`）重新实现大卡片右上角的对齐，彻底废除绝对定位（`position: absolute`）的重叠布局，将“编辑目录”按钮和“放大查看”按钮规范放置在 Header 右侧，彻底解决了操作按钮被遮挡和尺寸失效的问题。

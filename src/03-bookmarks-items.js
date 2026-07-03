@@ -536,7 +536,9 @@ function editBookmark(node, wrapperEl) {
             }
 
             chrome.storage.local.set({ [STORAGE_KEY_CARD_SIZES]: BOOKMARK_CARD_SIZES }, () => {
-                refreshBookmarkTreeCache();
+                refreshBookmarkTreeCache((tree) => {
+                    renderBookmarks(tree);
+                });
                 closeDialog();
             });
         };

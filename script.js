@@ -11,6 +11,7 @@ const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const STORAGE_KEY_TREE_EXPANDED = 'tree_expanded_folders';
+const STORAGE_KEY_CARD_SIZES = 'settings_bookmark_card_sizes';
 const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
 const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
 const STORAGE_KEY_AI_CONFIG = 'bookmark_tree_ai_config_v2';
@@ -108,6 +109,7 @@ let FLAT_DIR_EXPANDED = false;
 let TREE_EXPANDED_FOLDERS = new Set(['1']);
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
+let BOOKMARK_CARD_SIZES = {};
 let BOOKMARK_SEARCH_INDEX = [];
 let BOOKMARK_SEARCH_BUCKETS = new Map();
 let AI_SIDEBAR_CONTROLLER = null;
@@ -639,7 +641,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
-            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG
+            STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
+            STORAGE_KEY_CARD_SIZES
         ]),
         getBookmarks()
     ]);
@@ -690,6 +693,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (Array.isArray(settings[STORAGE_KEY_TREE_EXPANDED])) {
         TREE_EXPANDED_FOLDERS = new Set(settings[STORAGE_KEY_TREE_EXPANDED]);
+    }
+
+    if (settings[STORAGE_KEY_CARD_SIZES]) {
+        BOOKMARK_CARD_SIZES = settings[STORAGE_KEY_CARD_SIZES];
+    } else {
+        BOOKMARK_CARD_SIZES = {};
     }
 
     // 4. Init Settings UI (Bindings)
@@ -1032,6 +1041,15 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         subFolders.forEach((subFolder) => {
             const folderCard = document.createElement('div');
             folderCard.className = 'leaf-wrapper leaf-wrapper--folder';
+            const size = BOOKMARK_CARD_SIZES[subFolder.id] || 'default';
+            folderCard.classList.remove('card--large', 'card--small', 'card--square');
+            if (size === 'large') {
+                folderCard.classList.add('card--large');
+            } else if (size === 'small') {
+                folderCard.classList.add('card--small');
+            } else if (size === 'square') {
+                folderCard.classList.add('card--square');
+            }
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');
@@ -1172,7 +1190,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         const actionsSpan = document.createElement('span');
         actionsSpan.className = 'tree-folder-actions';
         const hideBtnHtml = `<button type="button" class="folder-action-btn hide-btn" title="${isHidden ? '取消隐藏' : '隐藏目录'}">${eyeSvg}</button>`;
-        actionsSpan.innerHTML = hideBtnHtml;
+        const editBtnHtml = `<button type="button" class="folder-action-btn edit-btn" title="编辑目录"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>`;
+        actionsSpan.innerHTML = hideBtnHtml + editBtnHtml;
 
         folderItem.appendChild(toggleBtn);
         folderItem.appendChild(iconContainer);
@@ -1218,6 +1237,12 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                 chrome.storage.local.set({ [STORAGE_KEY_HIDDEN_FOLDERS]: HIDDEN_FOLDERS }, () => {
                     renderBookmarks(bookmarkTreeNodes);
                 });
+                return;
+            }
+
+            if (e.target.closest('.edit-btn')) {
+                e.stopPropagation();
+                editBookmark(node, folderItem);
                 return;
             }
 
@@ -1274,8 +1299,21 @@ function createBookmarkCard(folderNode) {
     
     // Detect if this folder contains any sub-folders dynamically
     const hasSubFolder = folderNode.children && folderNode.children.some(child => child.children);
-    if (hasSubFolder) {
+    const savedSize = BOOKMARK_CARD_SIZES[folderNode.id] || 'default';
+    
+    card.classList.remove('card--large', 'card--small', 'card--square');
+    if (savedSize === 'large') {
         card.classList.add('card--large');
+    } else if (savedSize === 'small') {
+        card.classList.add('card--small');
+    } else if (savedSize === 'square') {
+        card.classList.add('card--square');
+    } else {
+        if (hasSubFolder) {
+            card.classList.add('card--large');
+        } else {
+            card.classList.add('card--small');
+        }
     }
 
     card.setAttribute('draggable', 'true');
@@ -1293,9 +1331,25 @@ function createBookmarkCard(folderNode) {
     header.className = 'card-header';
     header.innerHTML = `${FOLDER_ICON_SVG} <span class="card-title">${folderNode.title}</span>`;
 
+    // Header Actions Container (flex alignment for layout edit/expand buttons)
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'card-header-actions';
+
+    // Edit Button for card (folder) custom layout
+    const editCardBtn = document.createElement('button');
+    editCardBtn.className = 'card-action-btn edit-btn';
+    editCardBtn.title = '编辑目录';
+    editCardBtn.setAttribute('aria-label', `编辑目录 ${folderNode.title}`);
+    editCardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+    editCardBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editBookmark(folderNode, card);
+    });
+    actionsContainer.appendChild(editCardBtn);
+
     // Mac-style Expand Button
     const expandBtn = document.createElement('button');
-    expandBtn.className = 'expand-btn';
+    expandBtn.className = 'card-action-btn expand-btn';
     expandBtn.title = '放大查看';
     expandBtn.setAttribute('aria-label', `展开查看 ${folderNode.title}`);
     expandBtn.innerHTML = `
@@ -1311,8 +1365,9 @@ function createBookmarkCard(folderNode) {
         e.stopPropagation();
         showFolderModal(folderNode);
     });
-    header.appendChild(expandBtn);
+    actionsContainer.appendChild(expandBtn);
 
+    header.appendChild(actionsContainer);
     card.appendChild(header);
 
     // Content List
@@ -1439,6 +1494,16 @@ function renderFlatBookmarkItem(node) {
     wrapper.dataset.id = node.id;
     wrapper.dataset.parentId = node.parentId;
     wrapper.dataset.type = 'bookmark';
+
+    const size = BOOKMARK_CARD_SIZES[node.id] || 'default';
+    wrapper.classList.remove('card--large', 'card--small', 'card--square');
+    if (size === 'large') {
+        wrapper.classList.add('card--large');
+    } else if (size === 'small') {
+        wrapper.classList.add('card--small');
+    } else if (size === 'square') {
+        wrapper.classList.add('card--square');
+    }
 
     const a = document.createElement('a');
     a.className = 'leaf-node';
@@ -1679,6 +1744,7 @@ function editBookmark(node, wrapperEl) {
     const dialog = document.getElementById('edit-bookmark-dialog');
     const titleInput = document.getElementById('edit-bookmark-title');
     const urlInput = document.getElementById('edit-bookmark-url');
+    const sizeSelect = document.getElementById('edit-bookmark-size');
     const cancelBtn = document.getElementById('edit-bookmark-cancel');
     const saveBtn = document.getElementById('edit-bookmark-save');
     const closeBtn = document.getElementById('edit-bookmark-close');
@@ -1688,11 +1754,27 @@ function editBookmark(node, wrapperEl) {
         return;
     }
 
+    const isFolder = node.url === undefined;
+    const urlField = urlInput.closest('.edit-bookmark-field');
+    const titleLabel = dialog.querySelector('.edit-bookmark-title-label');
+
     // Pre-fill with current values
     titleInput.value = node.title || '';
     urlInput.value = node.url || '';
+    if (sizeSelect) {
+        sizeSelect.value = BOOKMARK_CARD_SIZES[node.id] || 'default';
+    }
     titleInput.classList.remove('input-error');
     urlInput.classList.remove('input-error');
+
+    // Toggle URL field visibility for folders vs bookmarks
+    if (isFolder) {
+        if (urlField) urlField.classList.add('hidden');
+        if (titleLabel) titleLabel.textContent = '编辑目录';
+    } else {
+        if (urlField) urlField.classList.remove('hidden');
+        if (titleLabel) titleLabel.textContent = '编辑书签';
+    }
 
     dialog.classList.remove('hidden');
 
@@ -1714,6 +1796,7 @@ function editBookmark(node, wrapperEl) {
     saveBtn.addEventListener('click', () => {
         const newTitle = titleInput.value.trim();
         const newUrl = urlInput.value.trim();
+        const newSize = sizeSelect ? sizeSelect.value : 'default';
 
         if (!newTitle) {
             titleInput.focus();
@@ -1721,7 +1804,7 @@ function editBookmark(node, wrapperEl) {
             setTimeout(() => titleInput.classList.remove('input-error'), 1500);
             return;
         }
-        if (!newUrl) {
+        if (!isFolder && !newUrl) {
             urlInput.focus();
             urlInput.classList.add('input-error');
             setTimeout(() => urlInput.classList.remove('input-error'), 1500);
@@ -1730,40 +1813,44 @@ function editBookmark(node, wrapperEl) {
 
         const changes = {};
         if (newTitle !== node.title) changes.title = newTitle;
-        if (newUrl !== node.url) changes.url = newUrl;
+        if (!isFolder && newUrl !== node.url) changes.url = newUrl;
 
-        if (Object.keys(changes).length === 0) {
+        const sizeChanged = newSize !== (BOOKMARK_CARD_SIZES[node.id] || 'default');
+
+        if (Object.keys(changes).length === 0 && !sizeChanged) {
             closeDialog();
             return;
         }
 
-        chrome.bookmarks.update(node.id, changes, (updated) => {
-            if (chrome.runtime.lastError) {
-                console.error('Edit failed:', chrome.runtime.lastError.message);
-                return;
+        const proceedSave = () => {
+            if (newSize === 'default') {
+                delete BOOKMARK_CARD_SIZES[node.id];
+            } else {
+                BOOKMARK_CARD_SIZES[node.id] = newSize;
             }
-            // Update node object in-place
-            if (changes.title) node.title = changes.title;
-            if (changes.url) node.url = changes.url;
 
-            // Update DOM without full re-render
-            const labelEl = wrapperEl.querySelector('.bookmark-label');
-            if (labelEl && changes.title) labelEl.textContent = changes.title;
+            chrome.storage.local.set({ [STORAGE_KEY_CARD_SIZES]: BOOKMARK_CARD_SIZES }, () => {
+                refreshBookmarkTreeCache((tree) => {
+                    renderBookmarks(tree);
+                });
+                closeDialog();
+            });
+        };
 
-            const linkEl = wrapperEl.querySelector('.leaf-node');
-            if (linkEl && changes.url) {
-                linkEl.href = changes.url;
-                const oldIcon = linkEl.querySelector('.bookmark-icon');
-                if (oldIcon) {
-                    const iconData = getIconForBookmark(changes.url);
-                    const newIcon = createBookmarkIcon(iconData, 16);
-                    oldIcon.replaceWith(newIcon);
+        if (Object.keys(changes).length > 0) {
+            chrome.bookmarks.update(node.id, changes, (updated) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Edit failed:', chrome.runtime.lastError.message);
+                    return;
                 }
-            }
+                if (changes.title) node.title = changes.title;
+                if (!isFolder && changes.url) node.url = changes.url;
 
-            refreshBookmarkTreeCache();
-            closeDialog();
-        });
+                proceedSave();
+            });
+        } else {
+            proceedSave();
+        }
     }, { signal });
 
     // Enter key to save
