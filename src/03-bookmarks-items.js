@@ -6,17 +6,20 @@ function createBookmarkCard(folderNode) {
     // Detect if this folder contains any sub-folders dynamically
     const hasSubFolder = folderNode.children && folderNode.children.some(child => child.children);
     const savedSize = BOOKMARK_CARD_SIZES[folderNode.id] || 'default';
-    let isLarge = false;
-    if (savedSize === 'large') {
-        isLarge = true;
-    } else if (savedSize === 'small') {
-        isLarge = false;
-    } else {
-        isLarge = hasSubFolder;
-    }
     
-    if (isLarge) {
+    card.classList.remove('card--large', 'card--small', 'card--square');
+    if (savedSize === 'large') {
         card.classList.add('card--large');
+    } else if (savedSize === 'small') {
+        card.classList.add('card--small');
+    } else if (savedSize === 'square') {
+        card.classList.add('card--square');
+    } else {
+        if (hasSubFolder) {
+            card.classList.add('card--large');
+        } else {
+            card.classList.add('card--small');
+        }
     }
 
     card.setAttribute('draggable', 'true');
@@ -34,9 +37,13 @@ function createBookmarkCard(folderNode) {
     header.className = 'card-header';
     header.innerHTML = `${FOLDER_ICON_SVG} <span class="card-title">${folderNode.title}</span>`;
 
+    // Header Actions Container (flex alignment for layout edit/expand buttons)
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'card-header-actions';
+
     // Edit Button for card (folder) custom layout
     const editCardBtn = document.createElement('button');
-    editCardBtn.className = 'bookmark-action-btn edit-btn card-edit-btn';
+    editCardBtn.className = 'card-action-btn edit-btn';
     editCardBtn.title = '编辑目录';
     editCardBtn.setAttribute('aria-label', `编辑目录 ${folderNode.title}`);
     editCardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
@@ -44,11 +51,11 @@ function createBookmarkCard(folderNode) {
         e.stopPropagation();
         editBookmark(folderNode, card);
     });
-    header.appendChild(editCardBtn);
+    actionsContainer.appendChild(editCardBtn);
 
     // Mac-style Expand Button
     const expandBtn = document.createElement('button');
-    expandBtn.className = 'expand-btn';
+    expandBtn.className = 'card-action-btn expand-btn';
     expandBtn.title = '放大查看';
     expandBtn.setAttribute('aria-label', `展开查看 ${folderNode.title}`);
     expandBtn.innerHTML = `
@@ -64,8 +71,9 @@ function createBookmarkCard(folderNode) {
         e.stopPropagation();
         showFolderModal(folderNode);
     });
-    header.appendChild(expandBtn);
+    actionsContainer.appendChild(expandBtn);
 
+    header.appendChild(actionsContainer);
     card.appendChild(header);
 
     // Content List
@@ -194,8 +202,13 @@ function renderFlatBookmarkItem(node) {
     wrapper.dataset.type = 'bookmark';
 
     const size = BOOKMARK_CARD_SIZES[node.id] || 'default';
+    wrapper.classList.remove('card--large', 'card--small', 'card--square');
     if (size === 'large') {
         wrapper.classList.add('card--large');
+    } else if (size === 'small') {
+        wrapper.classList.add('card--small');
+    } else if (size === 'square') {
+        wrapper.classList.add('card--square');
     }
 
     const a = document.createElement('a');

@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 17:27:00]
+- **Type**: Feature (实现卡片自定义正方形布局大小并修复编辑重绘和入口遮挡)
+- **Content**: 1) 新增正方形卡片尺寸选项：在编辑弹窗的“卡片布局大小”中新增“正方形卡片”选项。树形模式下占 1×1 保持经典比率，平铺模式下占 1×2（`grid-row: span 2`）呈现真正的 Bento 正方形；2) 彻底修复重绘未生效：在保存自定义大小修改并更新 `chrome.storage.local` 后，将 `renderBookmarks(tree)` 作为回调传入 `refreshBookmarkTreeCache` 执行，保证大小切换瞬间生效，无需手动刷新页面；3) 解决大卡片右上角操作入口缺失：用 FlexBox 按钮组（`.card-header-actions`）重新实现大卡片右上角的对齐，彻底废除绝对定位（`position: absolute`）的重叠布局，将“编辑目录”按钮和“放大查看”按钮规范放置在 Header 右侧，彻底解决了操作按钮被遮挡和尺寸失效的问题。
+- **Impact**: `newtab.html`, `styles.css`, `src/02-bookmarks-core.js`, `src/03-bookmarks-items.js`, `script.js`
+
 ## [2026-07-03 17:18:00]
 - **Type**: Feature (实现卡片自定义布局大小控制功能并下放到编辑弹窗)
 - **Content**: 1) 卡片尺寸选项下放：在编辑弹窗（`newtab.html`）中新增“卡片布局大小”下拉菜单，提供“默认 / 小卡片（占1列） / 大卡片（占2列）”选项；2) 智能数据持久化：采用 `chrome.storage.local` 持久化存储每个卡片的尺寸（`BOOKMARK_CARD_SIZES`），并实现了与原书签重命名/修改操作在 AbortController 控制下的统一保存与实时刷新重绘；3) 顶层卡片与平铺卡片布局扩展：支持树形布局的文件夹大卡片（`.bookmark-card`）与平铺布局的普通书签/文件夹项（`.leaf-wrapper`）对自定义尺寸的渲染，平铺模式下的大卡片会自动占 2 列（`grid-column: span 2`）；4) 目录树操作闭环：在左侧目录树中的每一项（`.tree-folder-item`）右侧新增“编辑目录”按钮，并可在右上角点击大卡片的“编辑目录”图标，在任何地方快捷调整标题或大小。
