@@ -971,7 +971,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     padding: 32px 40px 24px 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Vertically center content when grid is short */
+    justify-content: flex-start; /* Start grid strictly from top to align with left directory header */
     align-items: center; /* Horizontally center grid */
     min-height: 0;
     height: 100%;
@@ -1338,7 +1338,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    grid-auto-rows: 48px;
+    grid-auto-rows: 82px; /* Uniform card height of 82px */
     grid-auto-flow: dense; /* Fill layout gaps automatically to prevent offset gaps */
     gap: 16px 16px;
     align-content: start;
@@ -1355,8 +1355,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmarks-pane-grid .leaf-wrapper {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 8px !important; /* Elegant 8px radius for row tiles */
-    padding: 0 12px;
+    border-radius: 12px !important; /* Bento classic 12px radius */
+    padding: 10px 12px;
     margin-bottom: 0;
     min-height: 0;
     height: 100%;
@@ -1425,15 +1425,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-node {
-    padding: 0;
+    padding: 4px;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    text-align: left;
+    text-align: center;
     height: 100%;
     width: 100%;
-    gap: 8px;
     box-sizing: border-box;
     border-left: none !important;
     transform: none !important;
@@ -1445,16 +1444,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* Minimalist Icon Base */
 .bookmarks-pane-grid .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-node .bookmark-icon-fallback {
-    margin-right: 4px !important;
-    margin-bottom: 0 !important;
-    padding: 4px;
-    width: 22px !important;
-    height: 22px !important;
+    margin-right: 0 !important;
+    margin-bottom: 6px;
+    padding: 6px;
     background: var(--nav-icon-surface);
-    border-radius: 4px;
+    border-radius: 6px;
     border: none;
     box-shadow: none;
-    box-sizing: border-box;
 }
 
 :root[data-theme="dark"] .bookmarks-pane-grid .leaf-node .bookmark-icon,
@@ -1466,20 +1462,23 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Center the label */
 .bookmarks-pane-grid .leaf-node .bookmark-label {
-    margin-bottom: 0;
-    font-size: 13px;
+    margin-bottom: 1px;
+    font-size: var(--font-size-body);
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.35;
     color: var(--text-color);
-    text-align: left;
-    max-width: calc(100% - 32px);
-    white-space: nowrap;
+    text-align: center;
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:hover .leaf-node {
-    padding: 0 !important;
+    padding: 4px !important;
     border-left: none !important;
     background: none !important;
     box-shadow: none !important;
@@ -1776,7 +1775,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Item 8: URL preview line below the bookmark title */
 .bookmarks-pane-grid .leaf-node .bookmark-url-preview {
-    display: none !important;
+    display: block;
+    font-size: 9px;
+    color: var(--text-muted);
+    opacity: 0.98;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 0; /* Centered layout, no offset needed */
+    text-align: center;
+    max-width: 100%;
 }
 
 
@@ -5199,57 +5208,51 @@ input[type="file"]:focus-visible {
 
 .bookmarks-pane-grid .leaf-wrapper--folder .leaf-node--folder {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    text-align: left;
-    padding: 0;
+    justify-content: center;
+    text-align: center;
+    padding: 6px 5px;
     width: 100%;
-    height: 100%;
     text-decoration: none;
     color: inherit;
-    gap: 8px;
+    gap: 2px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper--folder .bookmark-icon-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     background: var(--nav-icon-surface);
     color: var(--accent-color);
-    margin-bottom: 0 !important;
-    flex-shrink: 0;
+    margin-bottom: 4px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper--folder .bookmark-icon-wrap .folder-svg-icon {
-    width: 11px;
-    height: 11px;
+    width: 16px;
+    height: 16px;
 }
 
 .bookmarks-pane-grid .leaf-wrapper--folder .bookmark-label {
-    margin-bottom: 0;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.2;
-    color: var(--text-color);
-    text-align: left;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: calc(100% - 75px);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.35;
+    color: var(--text-color);
+    word-break: break-all;
 }
 
 .bookmarks-pane-grid .leaf-wrapper--folder .bookmark-url-preview {
-    margin-left: auto;
     font-size: 10px;
     color: var(--text-muted);
     opacity: 0.8;
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding-right: 4px;
 }
 
 
