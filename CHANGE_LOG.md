@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 11:35:10]
+- **Type**: Design (全屏化画布与边缘贴合侧栏重构)
+- **Content**: 彻底页框扁平化，移除中间的嵌套悬浮玻璃框体，改用无缝铺满浏览器的全屏 Canvas 布局：1) 将 `.container` 改为 transparent 全屏，彻底清除外壁的阴影、边框、毛玻璃背景与 border-radius；2) 重构平铺模式为贴边尺寸，目录栏 `.directory-pane` 升级为顶天立地、左贴边缘、带有 Notion 透明淡灰背景的系统级左侧栏；3) 调整右侧书签网格面板 `.bookmarks-pane` 边距，使其在顶部、右侧与左边分割线处保留更透气的 Notion 呼吸空隙；4) 顶栏 `#search-container` 增加舒适顶边距以适配全屏模式。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 11:29:45]
 - **Type**: Fix (修复AI侧栏溢出裁剪与宽度过窄问题)
 - **Content**: 解决绝对定位的 AI 侧栏在容器 padding 及 `overflow: hidden` 下边缘被裁剪、直角外露的视觉缺陷：1) 将 `.ai-sidebar` 定位重构为贴合大盒子的 `top: 0; bottom: 0; right: 0; height: 100%`；2) 宽度拓宽至 420px，赋予 iframe 内嵌 AI 面板足够的自适应宽度，避免标签和内容在右侧被截断；3) 引入右侧圆角继承，使其与大盒子自身的圆角弧度完美贴合，左侧保留主面板景深大圆角；4) 简化边框，仅保留左侧极细分割线。
