@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:22:30]
+- **Type**: Fix (彻底删除拟物遗留代码并修复背景自适应)
+- **Content**: 1) 背景图自适应贴合：在 `#background-layer` 的 CSS 定义中补齐 `background-size: cover; background-position: center; background-repeat: no-repeat;`，彻底解决了用户上传自定义高清壁纸被局部放大且不贴合屏幕边缘的问题；2) 彻底剔除拟物设计残留：清理并废弃 `.tree-folder-item` 原本的 `Skeuomorphic`（拟物风格）背景纸张渐变、1px 褐色框线和立体投影阴影，将其默认态重构为干净透明、无缝融入壁纸的 Notion 极简玻璃风；3) 简化平铺覆盖：移除平铺模式下左侧项额外的拟物暖黄色背景覆盖，使得悬浮高亮指示器能够完美显示而不被遮挡。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 15:03:00]
 - **Type**: Fix (修复右侧面板起始高度随卡片数量抖动不平齐的问题)
 - **Content**: 锁定起始排版：1) 在 `styles.css` 中将 `.bookmarks-pane` 容器的 `justify-content` 属性由 `center` 修改为 `flex-start`。彻底消除了因不同文件夹下书签卡片数量不一导致的内容区整体垂直居中、起始高度上下抖动跳跃的视觉缺陷，使其恒久固定在顶部与左侧的“书签目录”Header 处于同一条 32px 的水平线上对齐开始渲染；2) 将书签卡片与文件夹卡片完整恢复为饱满的 82px 固定高度垂直排版（Bento 经典 12px 圆角、图标居中在上、文字在下、url 预览全部恢复），保留了大卡片的方块质感。

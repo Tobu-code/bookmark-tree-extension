@@ -229,6 +229,9 @@ h3,
     height: 100%;
     background-color: #F7F7F5;
     background-image: none;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: -1;
     transition: background-color 0.5s ease, opacity 0.5s ease;
     will-change: background-image;
@@ -1009,11 +1012,11 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     align-items: center;
     min-height: 38px;
     padding: 8px 12px 8px 8px;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    color: color-mix(in srgb, var(--text-color) 86%, var(--text-secondary) 14%);
+    color: var(--text-color);
     transition: transform var(--motion-fast) var(--ease-standard),
-        background var(--motion-fast) var(--ease-standard),
+        background-color var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard),
         box-shadow var(--motion-fast) var(--ease-standard),
         color var(--motion-fast) var(--ease-standard),
@@ -1021,44 +1024,31 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     font-size: var(--font-size-body);
     font-weight: var(--font-weight-medium);
     user-select: none;
-    /* Skeuomorphic default: subtle raised parchment chip */
-    background:
-        linear-gradient(180deg, rgba(255,248,230,0.25) 0%, rgba(245,236,215,0) 60%),
-        rgba(245, 236, 215, 0.30);
-    border: 1px solid rgba(92, 64, 32, 0.12);
-    box-shadow:
-        0 1px 2px rgba(50, 30, 10, 0.06),
-        inset 0 1px 0 rgba(255, 248, 230, 0.35);
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
     position: relative;
     box-sizing: border-box;
 }
 
 :root[data-theme="dark"] .tree-folder-item {
-    background:
-        linear-gradient(180deg, rgba(255,240,200,0.03) 0%, transparent 60%),
-        rgba(58, 48, 40, 0.40);
-    border-color: rgba(200, 164, 85, 0.10);
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 240, 200, 0.03);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
 }
 
 .tree-folder-item:hover {
-    background: linear-gradient(180deg, rgba(255,248,230,0.50) 0%, rgba(220,200,160,0.35) 100%);
-    border-color: var(--border-color);
-    box-shadow:
-        0 2px 5px rgba(50, 30, 10, 0.14),
-        inset 0 1px 0 rgba(255, 248, 230, 0.55);
+    background: var(--nav-item-hover, rgba(0, 0, 0, 0.04));
+    border-color: transparent;
+    box-shadow: none;
     color: var(--text-color);
     transform: translateX(2px);
 }
 
 :root[data-theme="dark"] .tree-folder-item:hover {
-    background: linear-gradient(180deg, rgba(255,240,200,0.08) 0%, rgba(200,164,85,0.06) 100%);
-    border-color: rgba(200, 164, 85, 0.20);
-    box-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255, 240, 200, 0.05);
+    background: var(--nav-item-hover, rgba(255, 255, 255, 0.04));
+    border-color: transparent;
+    box-shadow: none;
 }
 
 .tree-folder-item.active {
@@ -1762,17 +1752,17 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item {
-    background: rgba(255, 248, 230, 0.08);
+    background: transparent;
     box-shadow: none;
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item:hover {
-    background: rgba(255, 248, 230, 0.20);
+    background: var(--nav-item-hover, rgba(0, 0, 0, 0.04));
     box-shadow: none;
 }
 
 #bookmarks-tree.layout-flat .tree-folder-item.active {
-    background: rgba(255, 248, 230, 0.28) !important;
+    background: transparent !important;
     box-shadow: none !important;
 }
 
@@ -1790,19 +1780,19 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item {
-    background: rgba(255, 240, 200, 0.025);
+    background: transparent;
     border-color: transparent !important;
     box-shadow: none;
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item:hover {
-    background: rgba(255, 240, 200, 0.055) !important;
+    background: var(--nav-item-hover, rgba(255, 255, 255, 0.04)) !important;
     border-color: transparent !important;
     box-shadow: none !important;
 }
 
 :root[data-theme="dark"] #bookmarks-tree.layout-flat .tree-folder-item.active {
-    background: rgba(255, 240, 200, 0.075) !important;
+    background: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
 }
@@ -1822,19 +1812,19 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     }
 
     :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item {
-        background: rgba(255, 240, 200, 0.025);
+        background: transparent;
         border-color: transparent !important;
         box-shadow: none;
     }
 
     :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item:hover {
-        background: rgba(255, 240, 200, 0.055) !important;
+        background: var(--nav-item-hover, rgba(255, 255, 255, 0.04)) !important;
         border-color: transparent !important;
         box-shadow: none !important;
     }
 
     :root:not([data-theme="light"]) #bookmarks-tree.layout-flat .tree-folder-item.active {
-        background: rgba(255, 240, 200, 0.075) !important;
+        background: transparent !important;
         border-color: transparent !important;
         box-shadow: none !important;
     }
