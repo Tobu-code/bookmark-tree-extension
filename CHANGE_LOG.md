@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 13:55:30]
+- **Type**: Fix (修复Bento网格错行并统一树形模式间距)
+- **Content**: 消除动态卡片混排中的错行瑕疵，并规范树状模式两侧白边：1) 开启 `.bookmarks-pane-grid` 和 `.top-level-container` 的 `grid-auto-flow: dense;` 紧凑流动定位，使漏空自动被小卡片回填；2) 剔除所有导致高低错位、产生空洞断层的纵向 `span 2` 跨行高卡片，仅保留横向 `span 2` 跨列宽卡片（如平铺下的文件夹与首个书签、树形下的重点盒子），确保行内高度永远精确对齐；3) 树形外容器 `#bookmarks-tree.layout-tree` 限制为 `max-width: 1400px; margin: 0 auto; width: 90%`，使其在大屏下的左右物理边距与平铺模式完全一致。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 12:00:40]
 - **Type**: Design (Bento Grid 便当盒布局重构)
 - **Content**: 优化平铺模式和树状模式的网格排版，重塑为参差错落、充满设计灵动的 Bento Grid 拼图卡片：1) 将右侧卡片网格 `.bookmarks-pane-grid` 改为 Bento Grid，格宽 `190px`，间隙 `16px`，圆角统升为 `12px` 大圆角；2) 注入 Bento 自动排版逻辑：平铺下的子目录 `.leaf-wrapper--folder` 横跨两列；第 `6n+1` 个常规书签横跨两列；第 `6n+4` 个书签纵向跨两行，自动转为 `flex-col` 纵向流，并将图标自动放大 2 倍至 `32px`，化为Favicon重点应用卡片；3) 树形模式大卡片 `.top-level-container` 重置为 `280px` 行高的 Bento 栅格，`:nth-child(4n+1)` 跨 2 列，`:nth-child(4n+3)` 跨 2 行且内容支持内部滚动；4) 全局注入微物理动效，包括微悬浮 `translateY(-4px) scale(1.01)`，Hover Favicon 联动微放大，以及 Active 弹性压感 `scale(0.98)`。

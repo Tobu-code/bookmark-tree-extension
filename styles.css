@@ -896,8 +896,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-tree {
-    padding: 30px var(--tree-side-gutter) calc(18px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom));
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 0 calc(18px + var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom)) 0;
     scroll-padding-bottom: calc(var(--floating-actions-stack-height) + var(--floating-actions-safe-bottom) + 16px);
+    box-sizing: border-box;
 }
 
 .directory-pane {
@@ -1332,6 +1336,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     grid-auto-rows: minmax(78px, auto);
+    grid-auto-flow: dense; /* Fill layout gaps automatically to prevent offset gaps */
     gap: 16px 16px;
     align-content: start;
     align-items: stretch;
@@ -1410,34 +1415,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     grid-column: span 2;
 }
 
-/* Tall Leaf (span 2 height) - nth(6n+4) */
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4) {
-    grid-row: span 2;
-}
-
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4) a.leaf-node {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    gap: 12px;
-    padding: 16px 8px;
-}
-
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4) a.leaf-node .bookmark-icon {
-    width: 32px !important;
-    height: 32px !important;
-    margin-right: 0 !important;
-    margin-bottom: 4px;
-}
-
-.bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(6n+4) a.leaf-node .bookmark-label {
-    font-size: 13px;
-    font-weight: 600;
-}
-
 /* Hover Icon scale link */
 .bookmarks-pane-grid .leaf-wrapper:hover .bookmark-icon,
 .bookmarks-pane-grid .leaf-wrapper:hover .bookmark-icon-wrap {
@@ -1447,26 +1424,6 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmark-icon,
 .bookmark-icon-wrap {
     transition: transform var(--motion-medium) var(--ease-standard);
-}
-
-/* Hover: Minimal Notion Lift */
-.bookmarks-pane-grid .leaf-wrapper:hover {
-    transform: translateY(-2px);
-    background: var(--card-bg);
-    border-color: var(--accent-color);
-    box-shadow: var(--shadow-md);
-}
-
-:root[data-theme="dark"] .bookmarks-pane-grid .leaf-wrapper:hover {
-    background: var(--card-bg);
-    border-color: var(--accent-color);
-    box-shadow: var(--shadow-md);
-}
-
-/* Active: Minimal press */
-.bookmarks-pane-grid .leaf-wrapper:not(:has(.bookmark-action-btn:hover)):active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
 }
 
 .bookmarks-pane-grid .leaf-node {
@@ -1992,7 +1949,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .top-level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    grid-auto-rows: 280px; /* Standard Bento row height */
+    grid-auto-rows: 320px; /* Standard Bento unified row height */
+    grid-auto-flow: dense; /* Fill layout gaps automatically */
     gap: 20px 20px;
     justify-content: stretch;
     padding: 24px 0 120px 0;
@@ -2003,7 +1961,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 .bookmark-card {
     background: var(--card-bg);
     width: 100%;
-    height: 100%; /* Occupy full grid bento height */
+    height: 100%; /* Height is strictly bound to row height to prevent offsets */
     border-radius: 12px; /* Bento rounded corners */
     padding: var(--card-padding);
     box-sizing: border-box;
@@ -2051,18 +2009,13 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Bento Category Rule 1: Wide cards (span 2 width) */
-.top-level-container .bookmark-card:nth-child(4n+1) {
+/* Bento Category Rule 1: Wide cards (span 2 width only for aligned rows) */
+.top-level-container .bookmark-card:nth-child(3n+1) {
     grid-column: span 2;
 }
 
-/* Bento Category Rule 2: Tall cards (span 2 height) */
-.top-level-container .bookmark-card:nth-child(4n+3) {
-    grid-row: span 2;
-}
-
-/* Tall bookmark card content scrolling */
-.top-level-container .bookmark-card:nth-child(4n+3) .card-content {
+/* Scroll content lists inside unified-height cards */
+.top-level-container .bookmark-card .card-content {
     flex: 1;
     overflow-y: auto;
     padding-right: 4px;
@@ -2070,11 +2023,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 /* Responsive bento downgrades */
 @media (max-width: 1024px) {
-    .top-level-container .bookmark-card:nth-child(4n+1) {
-        grid-column: span 1;
+    .top-level-container {
+        grid-auto-rows: auto;
     }
-    .top-level-container .bookmark-card:nth-child(4n+3) {
-        grid-row: span 1;
+    .top-level-container .bookmark-card {
+        height: 320px;
+    }
+    .top-level-container .bookmark-card:nth-child(3n+1) {
+        grid-column: span 1;
     }
 }
 
