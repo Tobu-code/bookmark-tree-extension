@@ -3912,3 +3912,51 @@ document.addEventListener('click', (e) => {
         setTimeout(syncSidebarActiveIndicator, 50);
     }
 });
+
+// --- Dynamic mouse magnetic physics hover effects (Apple/Notion style) ---
+function initMagneticHover() {
+    const getOffset = (el, clientX, clientY) => {
+        const rect = el.getBoundingClientRect();
+        // 0.12 scale factor yields premium, smooth tracking without layout nausea
+        const x = (clientX - (rect.left + rect.width / 2)) * 0.12;
+        const y = (clientY - (rect.top + rect.height / 2)) * 0.12;
+        return { x, y };
+    };
+
+    document.addEventListener('mousemove', (e) => {
+        const target = e.target.closest('.leaf-wrapper, .bookmark-card, .btn-magnetic');
+        
+        if (!target) {
+            const activeEl = document.querySelector('.is-magnetized');
+            if (activeEl) {
+                activeEl.style.transform = '';
+                activeEl.classList.remove('is-magnetized');
+            }
+            return;
+        }
+
+        const activeEl = document.querySelector('.is-magnetized');
+        if (activeEl && activeEl !== target) {
+            activeEl.style.transform = '';
+            activeEl.classList.remove('is-magnetized');
+        }
+
+        target.classList.add('is-magnetized');
+        const { x, y } = getOffset(target, e.clientX, e.clientY);
+        target.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        const activeEl = document.querySelector('.is-magnetized');
+        if (activeEl) {
+            activeEl.style.transform = '';
+            activeEl.classList.remove('is-magnetized');
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMagneticHover);
+} else {
+    initMagneticHover();
+}

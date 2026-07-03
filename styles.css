@@ -1361,15 +1361,18 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 1px 2px rgba(0, 0, 0, 0.02),
         0 4px 12px rgba(55, 53, 47, 0.02);
     transition: 
-        transform var(--motion-medium) var(--ease-standard),
+        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
         box-shadow var(--motion-medium) var(--ease-standard),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard);
-    will-change: auto;
-    transform: none;
+    will-change: transform;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+}
+
+.bookmarks-pane-grid .leaf-wrapper.is-magnetized {
+    transition: transform 0.08s ease-out !important;
 }
 
 /* Custom size configurations with absolute priority (!important) to override auto-layout rules */
@@ -2092,16 +2095,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 6px 16px rgba(55, 53, 47, 0.02);
     border: 1px solid var(--border-color);
     transition: 
-        transform var(--motion-medium) var(--ease-standard),
+        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
         background-color var(--motion-medium) var(--ease-standard),
         border-color var(--motion-medium) var(--ease-standard),
         box-shadow var(--motion-medium) var(--ease-standard),
         opacity var(--motion-medium) var(--ease-standard);
+    will-change: transform;
     cursor: grab;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+}
+
+.bookmark-card.is-magnetized {
+    transition: transform 0.08s ease-out !important;
 }
 
 .bookmark-card:hover {
