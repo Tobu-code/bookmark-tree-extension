@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 16:30:50]
+- **Type**: Feature (实现树形模式下包含子目录时自动变大卡片的智能自适应排版)
+- **Content**: 智能判定与卡片自适应：1) 在 `src/03-bookmarks-items.js` 和 `script.js` 的 `createBookmarkCard` 方法中，新增对子文件夹的动态探测逻辑。如果当前渲染 of 顶层文件夹包含任何下一级目录，则自动为卡片容器添加 `.card--large` 类；若只含有普通书签，则不添加类，以此自动识别目录层级深度；2) 重构 `styles.css`，废弃原本机械的 `.top-level-container .bookmark-card:nth-child(4n+1)` 顺序大卡片规则，改为按动态类名生效：`.top-level-container .bookmark-card.card--large { grid-column: span 2; }`，完成自适应大卡片重映射。
+- **Impact**: `src/03-bookmarks-items.js`, `script.js`, `styles.css`
+
 ## [2026-07-03 16:26:30]
 - **Type**: Refactor (优化右侧卡片网格间距以增强呼吸感)
 - **Content**: 提升视觉呼吸感：在 `styles.css` 中，将右侧 `.bookmarks-pane-grid` 的默认卡片间距由 `16px` 增大为 `20px`；同时在小于 1440px 宽的小分辨率下，将卡片间距由 `16px` 微调为 `18px`，让整个 Bento 网格更加透气美观。

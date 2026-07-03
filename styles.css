@@ -2065,9 +2065,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Tree Layout Top-Level Bento: every 4n+1 card is wide (span 2 columns) */
-/* This creates a balanced 2+1+1+2+1+1 rhythm so right side never looks hollow */
-.top-level-container .bookmark-card:nth-child(4n+1) {
+/* Tree Layout Top-Level Bento: wide cards span 2 columns based on content dynamically */
+.top-level-container .bookmark-card.card--large {
     grid-column: span 2;
 }
 
@@ -2086,7 +2085,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     .top-level-container .bookmark-card {
         height: 320px;
     }
-    .top-level-container .bookmark-card:nth-child(4n+1) {
+    .top-level-container .bookmark-card.card--large {
         grid-column: span 1;
     }
 }

@@ -1271,6 +1271,13 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 function createBookmarkCard(folderNode) {
     const card = document.createElement('div');
     card.className = 'bookmark-card';
+    
+    // Detect if this folder contains any sub-folders dynamically
+    const hasSubFolder = folderNode.children && folderNode.children.some(child => child.children);
+    if (hasSubFolder) {
+        card.classList.add('card--large');
+    }
+
     card.setAttribute('draggable', 'true');
     card.dataset.id = folderNode.id;
 
