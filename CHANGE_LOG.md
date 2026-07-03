@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 21:55:44]
+- **Type**: Fix (移除平铺内容标题横线并上移卡片网格)
+- **Content**: 1) 移除平铺模式 `.bookmarks-pane-header` 的背景分隔线，避免标题区形成多余横条；2) 收紧标题区域高度和底部间距，并清除网格顶部额外 padding，使下方卡片整体上移。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 21:50:41]
 - **Type**: Fix (修复主题切换后卡片与目录颜色需刷新才更新的问题)
 - **Content**: 1) 在 `applyTheme()` 写入 `data-theme` 后同步调用 `applyContainerOpacity()`，让运行时切换深浅色时立即重算 `--card-bg`、`--glass-bg` 等内联主题变量；2) 同步覆盖 `system` 模式的系统主题变化监听，避免系统深浅色变化时卡片和目录继续沿用旧主题颜色；3) 同步更新根目录运行文件 `script.js`，使本地加载扩展无需重新构建 release 包即可验证。

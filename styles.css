@@ -1447,6 +1447,21 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     box-sizing: border-box;
 }
 
+#bookmarks-tree.layout-flat .bookmarks-pane-header {
+    min-height: 34px;
+    margin-bottom: 2px;
+    padding-bottom: 0;
+    background-image: none;
+}
+
+:root[data-theme="dark"] #bookmarks-tree.layout-flat .bookmarks-pane-header {
+    background-image: none;
+}
+
+#bookmarks-tree.layout-flat .bookmarks-pane-grid {
+    padding-top: 0;
+}
+
 /* Bento Cards Common - Smooth physics-based spring feel */
 .bookmarks-pane-grid .leaf-wrapper {
     background: var(--card-bg);
