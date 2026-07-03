@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-03 14:01:25]
+- **Type**: Fix (优化侧栏呼吸间距与2x2方形卡片回填对齐)
+- **Content**: 满足精细版式微调：1) 增加平铺侧栏 `#bookmarks-tree.layout-flat .directory-pane` 的左边距（`padding-left: 36px; padding-right: 18px;`），拉开与浏览器物理边缘的距离，解决点击局促感；2) 在右侧平铺网格中恢复第 `6n+4` 项的 `2x2` 方形大卡片规则（`span 2` 宽且 `span 2` 高），并将 Favicon 图标放大 2 倍至 `32px` 纵向居中，丰富网格韵律；3) 结合 `grid-auto-flow: dense;` 自动排版填充，保证多规格卡片高度对齐，绝不错行产生零散间隙。
+- **Impact**: `styles.css`
+
 ## [2026-07-03 13:55:30]
 - **Type**: Fix (修复Bento网格错行并统一树形模式间距)
 - **Content**: 消除动态卡片混排中的错行瑕疵，并规范树状模式两侧白边：1) 开启 `.bookmarks-pane-grid` 和 `.top-level-container` 的 `grid-auto-flow: dense;` 紧凑流动定位，使漏空自动被小卡片回填；2) 剔除所有导致高低错位、产生空洞断层的纵向 `span 2` 跨行高卡片，仅保留横向 `span 2` 跨列宽卡片（如平铺下的文件夹与首个书签、树形下的重点盒子），确保行内高度永远精确对齐；3) 树形外容器 `#bookmarks-tree.layout-tree` 限制为 `max-width: 1400px; margin: 0 auto; width: 90%`，使其在大屏下的左右物理边距与平铺模式完全一致。
