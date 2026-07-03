@@ -4137,33 +4137,39 @@ input[type="file"] {
 /* AI Sidebar Panel - Premium Aurora Glassmorphism */
 .ai-sidebar {
     position: absolute;
-    top: var(--container-padding);
-    bottom: var(--container-padding);
-    right: var(--container-padding);
-    width: 360px;
-    height: calc(100% - var(--container-padding) * 2);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 420px; /* 420px provides optimal container width for iframe responsive pages */
+    height: 100%;
     margin: 0;
     box-sizing: border-box;
     /* Aurora Glass effect: multi-stops gradient overlay with blur */
     background: 
-        radial-gradient(circle at 100% 0%, rgba(46, 170, 220, 0.14), transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(46, 170, 220, 0.12), transparent 50%),
         radial-gradient(circle at 0% 100%, rgba(255, 170, 152, 0.08), transparent 45%),
         rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-radius: var(--container-radius);
+    border-top-left-radius: var(--container-radius);
+    border-bottom-left-radius: var(--container-radius);
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
     box-shadow: 
-        0 1px 2px rgba(0, 0, 0, 0.02),
-        0 20px 48px rgba(55, 53, 47, 0.08);
+        -5px 0 25px rgba(55, 53, 47, 0.04),
+        var(--shadow-md);
     z-index: 1001;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
     /* Hidden state: slides from right */
-    transform: translateX(110%);
+    transform: translateX(105%);
     transition: transform var(--motion-slow) var(--ease-emphasized), 
                 opacity var(--motion-medium) ease;
-    border: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
     opacity: 0;
 }
 
@@ -4178,9 +4184,12 @@ body.ai-sidebar-open .ai-sidebar,
         radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.18), transparent 50%),
         radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.12), transparent 45%),
         rgba(15, 23, 42, 0.76);
-    border-color: var(--border-color);
+    border-left-color: var(--border-color);
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
     box-shadow: 
-        0 1px 2px rgba(0, 0, 0, 0.1),
+        -5px 0 32px rgba(0, 0, 0, 0.3),
         0 24px 64px rgba(0, 0, 0, 0.4);
 }
 
