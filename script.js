@@ -1042,14 +1042,13 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             const folderCard = document.createElement('div');
             folderCard.className = 'leaf-wrapper leaf-wrapper--folder';
             const size = BOOKMARK_CARD_SIZES[subFolder.id] || 'default';
-            folderCard.classList.remove('card--large', 'card--small', 'card--square');
-            if (size === 'large') {
-                folderCard.classList.add('card--large');
-            } else if (size === 'small') {
-                folderCard.classList.add('card--small');
-            } else if (size === 'square') {
-                folderCard.classList.add('card--square');
-            }
+            folderCard.classList.forEach(cls => {
+                if (cls.startsWith('layout-size-') || cls === 'card--large' || cls === 'card--small' || cls === 'card--square') {
+                    folderCard.classList.remove(cls);
+                }
+            });
+            let activeSize = size === 'default' ? '1*1' : size;
+            folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');
@@ -1301,20 +1300,18 @@ function createBookmarkCard(folderNode) {
     const hasSubFolder = folderNode.children && folderNode.children.some(child => child.children);
     const savedSize = BOOKMARK_CARD_SIZES[folderNode.id] || 'default';
     
-    card.classList.remove('card--large', 'card--small', 'card--square');
-    if (savedSize === 'large') {
-        card.classList.add('card--large');
-    } else if (savedSize === 'small') {
-        card.classList.add('card--small');
-    } else if (savedSize === 'square') {
-        card.classList.add('card--square');
-    } else {
-        if (hasSubFolder) {
-            card.classList.add('card--large');
-        } else {
-            card.classList.add('card--small');
+    card.classList.forEach(cls => {
+        if (cls.startsWith('layout-size-') || cls === 'card--large' || cls === 'card--small' || cls === 'card--square') {
+            card.classList.remove(cls);
         }
+    });
+
+    let activeSize = savedSize;
+    if (activeSize === 'default') {
+        activeSize = hasSubFolder ? '2*1' : '1*1';
     }
+    const sizeClass = `layout-size-${activeSize.replace('*', '-')}`;
+    card.classList.add(sizeClass);
 
     card.setAttribute('draggable', 'true');
     card.dataset.id = folderNode.id;
@@ -1496,14 +1493,13 @@ function renderFlatBookmarkItem(node) {
     wrapper.dataset.type = 'bookmark';
 
     const size = BOOKMARK_CARD_SIZES[node.id] || 'default';
-    wrapper.classList.remove('card--large', 'card--small', 'card--square');
-    if (size === 'large') {
-        wrapper.classList.add('card--large');
-    } else if (size === 'small') {
-        wrapper.classList.add('card--small');
-    } else if (size === 'square') {
-        wrapper.classList.add('card--square');
-    }
+    wrapper.classList.forEach(cls => {
+        if (cls.startsWith('layout-size-') || cls === 'card--large' || cls === 'card--small' || cls === 'card--square') {
+            wrapper.classList.remove(cls);
+        }
+    });
+    let activeSize = size === 'default' ? '1*1' : size;
+    wrapper.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
 
     const a = document.createElement('a');
     a.className = 'leaf-node';

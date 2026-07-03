@@ -1372,14 +1372,14 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     cursor: pointer;
 }
 
-.bookmarks-pane-grid .leaf-wrapper.card--large {
-    grid-column: span 2;
-}
-
-.bookmarks-pane-grid .leaf-wrapper.card--square {
-    grid-column: span 1;
-    grid-row: span 2;
-}
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-1 { grid-column: span 1; grid-row: span 1; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 { grid-column: span 1; grid-row: span 2; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-1 { grid-column: span 2; grid-row: span 1; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-2-2 { grid-column: span 2; grid-row: span 2; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-1 { grid-column: span 3; grid-row: span 1; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-3-2 { grid-column: span 3; grid-row: span 2; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-1 { grid-column: span 4; grid-row: span 1; }
+.bookmarks-pane-grid .leaf-wrapper.layout-size-4-2 { grid-column: span 4; grid-row: span 2; }
 
 /* Hover: Float & Glow */
 .bookmarks-pane-grid .leaf-wrapper:hover {
@@ -1430,20 +1430,20 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 /* 7n+5 and 7n+1 never collide (5 ≠ 1 mod 7), so no conflict between wide & tall */
 /* Orphan guard: last 5 items stay normal to avoid empty gaps at bottom */
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)),
-.bookmarks-pane-grid .leaf-wrapper.card--square {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 {
     grid-row: span 2;
 }
 
 /* Tall card inner layout: switch to vertical column to fill the square space */
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)),
-.bookmarks-pane-grid .leaf-wrapper.card--square {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)) .leaf-node,
-.bookmarks-pane-grid .leaf-wrapper.card--square .leaf-node {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 .leaf-node {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1454,8 +1454,8 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)) .leaf-node .bookmark-icon,
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)) .leaf-node .bookmark-icon-fallback,
-.bookmarks-pane-grid .leaf-wrapper.card--square .leaf-node .bookmark-icon,
-.bookmarks-pane-grid .leaf-wrapper.card--square .leaf-node .bookmark-icon-fallback {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 .leaf-node .bookmark-icon,
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 .leaf-node .bookmark-icon-fallback {
     margin-right: 0 !important;
     margin-bottom: 8px;
     padding: 8px;
@@ -1465,7 +1465,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)) .leaf-node .bookmark-label,
-.bookmarks-pane-grid .leaf-wrapper.card--square .leaf-node .bookmark-label {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 .leaf-node .bookmark-label {
     text-align: center;
     max-width: 100%;
     white-space: normal;
@@ -1478,7 +1478,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 .bookmarks-pane-grid .leaf-wrapper:not(.leaf-wrapper--folder):nth-of-type(7n+5):not(:nth-last-child(-n+5)) .leaf-node .bookmark-url-preview,
-.bookmarks-pane-grid .leaf-wrapper.card--square .leaf-node .bookmark-url-preview {
+.bookmarks-pane-grid .leaf-wrapper.layout-size-1-2 .leaf-node .bookmark-url-preview {
     display: block;
     text-align: center;
     margin-top: 4px;
@@ -2083,10 +2083,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
         0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Tree Layout Top-Level Bento: wide cards span 2 columns based on content dynamically */
-.top-level-container .bookmark-card.card--large {
-    grid-column: span 2;
-}
+/* Tree Layout Top-Level Bento: custom grid span sizes */
+.top-level-container .bookmark-card.layout-size-1-1 { grid-column: span 1; grid-row: span 1; }
+.top-level-container .bookmark-card.layout-size-1-2 { grid-column: span 1; grid-row: span 2; }
+.top-level-container .bookmark-card.layout-size-2-1 { grid-column: span 2; grid-row: span 1; }
+.top-level-container .bookmark-card.layout-size-2-2 { grid-column: span 2; grid-row: span 2; }
+.top-level-container .bookmark-card.layout-size-3-1 { grid-column: span 3; grid-row: span 1; }
+.top-level-container .bookmark-card.layout-size-3-2 { grid-column: span 3; grid-row: span 2; }
+.top-level-container .bookmark-card.layout-size-4-1 { grid-column: span 4; grid-row: span 1; }
+.top-level-container .bookmark-card.layout-size-4-2 { grid-column: span 4; grid-row: span 2; }
 
 /* Scroll content lists inside unified-height cards */
 .top-level-container .bookmark-card .card-content {
@@ -2103,7 +2108,12 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     .top-level-container .bookmark-card {
         height: 320px;
     }
-    .top-level-container .bookmark-card.card--large {
+    .top-level-container .bookmark-card.layout-size-2-1,
+    .top-level-container .bookmark-card.layout-size-2-2,
+    .top-level-container .bookmark-card.layout-size-3-1,
+    .top-level-container .bookmark-card.layout-size-3-2,
+    .top-level-container .bookmark-card.layout-size-4-1,
+    .top-level-container .bookmark-card.layout-size-4-2 {
         grid-column: span 1;
     }
 }

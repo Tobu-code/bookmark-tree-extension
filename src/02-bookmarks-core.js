@@ -250,14 +250,13 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             const folderCard = document.createElement('div');
             folderCard.className = 'leaf-wrapper leaf-wrapper--folder';
             const size = BOOKMARK_CARD_SIZES[subFolder.id] || 'default';
-            folderCard.classList.remove('card--large', 'card--small', 'card--square');
-            if (size === 'large') {
-                folderCard.classList.add('card--large');
-            } else if (size === 'small') {
-                folderCard.classList.add('card--small');
-            } else if (size === 'square') {
-                folderCard.classList.add('card--square');
-            }
+            folderCard.classList.forEach(cls => {
+                if (cls.startsWith('layout-size-') || cls === 'card--large' || cls === 'card--small' || cls === 'card--square') {
+                    folderCard.classList.remove(cls);
+                }
+            });
+            let activeSize = size === 'default' ? '1*1' : size;
+            folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');
