@@ -2055,7 +2055,7 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
     width: var(--flat-directory-width);
     margin-left: auto;
     margin-right: auto;
-    padding-top: 6px;
+    padding-top: 0;
     padding-left: 0;
     padding-right: 0;
 }
