@@ -1,6 +1,6 @@
 {
   "name": "bookmark-tree-extension-builder",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Build script for Bookmark Tree Extension",
   "scripts": {
     "build": "node build.js"
