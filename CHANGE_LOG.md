@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-04 23:21:48]
+- **Type**: Refactor (基于 Soft UI 与 Masonry Flow 彻底重构界面)
+- **Content**: 1) 用全新的 soft/masonry token 化样式体系重建主页视觉，移除旧 Notion/Bento/分屏调参遗留样式层；2) 将平铺模式重构为左侧柔和目录导航与右侧 masonry 卡片流，统一卡片圆角、阴影、呼吸间距、悬停反馈和深浅色变量；3) 将树状模式同步纳入 soft card/masonry 视觉语言，覆盖目录卡、书签条目、弹窗、设置面板、AI 侧栏、浮动按钮和空状态；4) 清理平铺模式旧标题栏与域名预览 DOM，并优化默认随机卡片尺寸分布，继续保留用户手动尺寸优先；5) 纳入新增 Soft UI 与 Masonry Flow 设计资源目录。
+- **Impact**: `styles.css`, `src/02-bookmarks-core.js`, `src/03-bookmarks-items.js`, `src/06-settings.js`, `script.js`, `design/soft-ui-style-pack`, `design/masonry-flow-style-pack`
+
 ## [2026-07-04 22:43:47]
 - **Type**: Release (升级项目版本至 v4.0.0 并更新 README)
 - **Content**: 1) 将扩展与项目版本号统一更新为 `4.0.0`；2) 重写 README，补充 v4.0.0 的平铺分屏布局、稳定默认随机卡片尺寸、主题即时切换、AI 侧栏、卡片比例优化和书签管理能力说明；3) 同步 package lock 顶部版本元数据，保持构建配置一致。

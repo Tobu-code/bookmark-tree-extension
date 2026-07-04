@@ -163,12 +163,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
 
-    // Add "书签目录" title header to the left pane
-    const dirHeader = document.createElement('div');
-    dirHeader.className = 'directory-pane-header';
-    dirHeader.innerHTML = `${FOLDER_ICON_SVG} <span>书签目录</span>`;
-    dirPane.appendChild(dirHeader);
-
     const dirScroll = document.createElement('div');
     dirScroll.className = 'directory-pane-scroll';
     // Directory scroll container represents root for left pane reordering
@@ -211,12 +205,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
-        
-        const header = document.createElement('div');
-        header.className = 'bookmarks-pane-header';
-        
-        buildFolderBreadcrumb(header, folder.title);
-        bmkPane.appendChild(header);
 
         const bmkPaneScroll = document.createElement('div');
         bmkPaneScroll.className = 'bookmarks-pane-scroll';
@@ -297,13 +285,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             label.textContent = subFolder.title || '未命名目录';
             label.title = subFolder.title || '未命名目录';
 
-            const meta = document.createElement('span');
-            meta.className = 'bookmark-url-preview';
-            meta.textContent = `${subFolder.children.length} 项`;
-
             folderInner.appendChild(iconWrap);
             folderInner.appendChild(label);
-            folderInner.appendChild(meta);
             folderCard.appendChild(folderInner);
 
             folderCard.addEventListener('click', () => activateFolderByNode(subFolder));
@@ -320,24 +303,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // Render bookmarks into the grid
         bookmarks.forEach(child => {
             const bmkItem = renderFlatBookmarkItem(child);
-            if (child.url) {
-                const leafNode = bmkItem.querySelector('.leaf-node');
-                if (leafNode) {
-                    const urlPreview = document.createElement('span');
-                    urlPreview.className = 'bookmark-url-preview';
-                    try {
-                        let hostname = new URL(child.url).hostname.replace(/^www\./, '');
-                        const parts = hostname.split('.');
-                        if (parts.length > 2 && hostname.length > 20) {
-                            hostname = parts.slice(-2).join('.');
-                        }
-                        urlPreview.textContent = hostname;
-                    } catch (e) {
-                        urlPreview.textContent = child.url.substring(0, 30);
-                    }
-                    leafNode.appendChild(urlPreview);
-                }
-            }
             listContainer.appendChild(bmkItem);
         });
 

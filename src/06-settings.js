@@ -812,24 +812,24 @@ function applyContainerOpacity() {
     const root = document.documentElement;
     const isDark = root.getAttribute('data-theme') === 'dark';
 
-    // Base color values for rgb
-    const r = isDark ? 24 : 255;
-    const g = isDark ? 25 : 255;
-    const b = isDark ? 28 : 255;
+    const r = isDark ? 30 : 255;
+    const g = isDark ? 28 : 255;
+    const b = isDark ? 42 : 255;
 
-    // Card and Glass alpha interpolation (0.65/0.72 to 0.02, 0.70/0.76 to 0.02)
-    const baseAlphaCard = isDark ? 0.65 : 0.72;
-    const baseAlphaGlass = isDark ? 0.70 : 0.76;
+    const baseAlphaCard = isDark ? 0.76 : 0.78;
+    const baseAlphaGlass = isDark ? 0.72 : 0.72;
+    const baseAlphaStrong = isDark ? 0.9 : 0.9;
 
     const cardAlpha = Math.max(0.02, baseAlphaCard - (level / 10) * (baseAlphaCard - 0.02));
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
+    const strongAlpha = Math.max(0.08, baseAlphaStrong - (level / 10) * (baseAlphaStrong - 0.08));
 
     // Blur px mapping: level 0 maps to 24px, level 10 maps to 0px
     const blurPx = Math.max(0, Math.round(24 - (level / 10) * 24));
 
-    // Set properties on root to globally control card/directory backgrounds
     root.style.setProperty('--card-bg', `rgba(${r}, ${g}, ${b}, ${cardAlpha})`);
     root.style.setProperty('--glass-bg', `rgba(${r}, ${g}, ${b}, ${glassAlpha})`);
+    root.style.setProperty('--glass-bg-strong', `rgba(${r}, ${g}, ${b}, ${strongAlpha})`);
     root.style.setProperty('--glass-blur', `${blurPx}px`);
 
     // Reset container's styling to ensure full transparent fullscreen shell

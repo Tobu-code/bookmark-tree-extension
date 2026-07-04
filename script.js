@@ -955,12 +955,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const dirPane = document.createElement('div');
     dirPane.className = 'directory-pane';
 
-    // Add "书签目录" title header to the left pane
-    const dirHeader = document.createElement('div');
-    dirHeader.className = 'directory-pane-header';
-    dirHeader.innerHTML = `${FOLDER_ICON_SVG} <span>书签目录</span>`;
-    dirPane.appendChild(dirHeader);
-
     const dirScroll = document.createElement('div');
     dirScroll.className = 'directory-pane-scroll';
     // Directory scroll container represents root for left pane reordering
@@ -1003,12 +997,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     const renderBmkPane = (folder) => {
         bmkPane.innerHTML = '';
         if (!folder || !folder.children) return;
-        
-        const header = document.createElement('div');
-        header.className = 'bookmarks-pane-header';
-        
-        buildFolderBreadcrumb(header, folder.title);
-        bmkPane.appendChild(header);
 
         const bmkPaneScroll = document.createElement('div');
         bmkPaneScroll.className = 'bookmarks-pane-scroll';
@@ -1089,13 +1077,8 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             label.textContent = subFolder.title || '未命名目录';
             label.title = subFolder.title || '未命名目录';
 
-            const meta = document.createElement('span');
-            meta.className = 'bookmark-url-preview';
-            meta.textContent = `${subFolder.children.length} 项`;
-
             folderInner.appendChild(iconWrap);
             folderInner.appendChild(label);
-            folderInner.appendChild(meta);
             folderCard.appendChild(folderInner);
 
             folderCard.addEventListener('click', () => activateFolderByNode(subFolder));
@@ -1112,24 +1095,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
         // Render bookmarks into the grid
         bookmarks.forEach(child => {
             const bmkItem = renderFlatBookmarkItem(child);
-            if (child.url) {
-                const leafNode = bmkItem.querySelector('.leaf-node');
-                if (leafNode) {
-                    const urlPreview = document.createElement('span');
-                    urlPreview.className = 'bookmark-url-preview';
-                    try {
-                        let hostname = new URL(child.url).hostname.replace(/^www\./, '');
-                        const parts = hostname.split('.');
-                        if (parts.length > 2 && hostname.length > 20) {
-                            hostname = parts.slice(-2).join('.');
-                        }
-                        urlPreview.textContent = hostname;
-                    } catch (e) {
-                        urlPreview.textContent = child.url.substring(0, 30);
-                    }
-                    leafNode.appendChild(urlPreview);
-                }
-            }
             listContainer.appendChild(bmkItem);
         });
 
@@ -1315,7 +1280,6 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
     }
 }
 
-
 // --- Bookmark Card / Item Helpers ---
 function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
     const id = String(node?.id || node?.url || node?.title || '');
@@ -1325,8 +1289,8 @@ function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
     }
 
     const sizes = variant === 'folder'
-        ? ['1*1', '2*1', '1*1', '1*2', '2*1']
-        : ['1*1', '1*1', '2*1', '1*2', '1*1', '2*2'];
+        ? ['1*1', '2*1', '1*2', '2*2', '2*1', '1*1']
+        : ['1*1', '2*1', '1*2', '1*1', '2*2', '2*1', '1*1', '3*1'];
     return sizes[Math.abs(hash) % sizes.length];
 }
 
@@ -1909,7 +1873,6 @@ function editBookmark(node, wrapperEl) {
         }
     }, { signal });
 }
-
 
 // --- Card-Level Drag & Drop ---
 // --- Drag & Drop Logic ---
@@ -3209,24 +3172,24 @@ function applyContainerOpacity() {
     const root = document.documentElement;
     const isDark = root.getAttribute('data-theme') === 'dark';
 
-    // Base color values for rgb
-    const r = isDark ? 24 : 255;
-    const g = isDark ? 25 : 255;
-    const b = isDark ? 28 : 255;
+    const r = isDark ? 30 : 255;
+    const g = isDark ? 28 : 255;
+    const b = isDark ? 42 : 255;
 
-    // Card and Glass alpha interpolation (0.65/0.72 to 0.02, 0.70/0.76 to 0.02)
-    const baseAlphaCard = isDark ? 0.65 : 0.72;
-    const baseAlphaGlass = isDark ? 0.70 : 0.76;
+    const baseAlphaCard = isDark ? 0.76 : 0.78;
+    const baseAlphaGlass = isDark ? 0.72 : 0.72;
+    const baseAlphaStrong = isDark ? 0.9 : 0.9;
 
     const cardAlpha = Math.max(0.02, baseAlphaCard - (level / 10) * (baseAlphaCard - 0.02));
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
+    const strongAlpha = Math.max(0.08, baseAlphaStrong - (level / 10) * (baseAlphaStrong - 0.08));
 
     // Blur px mapping: level 0 maps to 24px, level 10 maps to 0px
     const blurPx = Math.max(0, Math.round(24 - (level / 10) * 24));
 
-    // Set properties on root to globally control card/directory backgrounds
     root.style.setProperty('--card-bg', `rgba(${r}, ${g}, ${b}, ${cardAlpha})`);
     root.style.setProperty('--glass-bg', `rgba(${r}, ${g}, ${b}, ${glassAlpha})`);
+    root.style.setProperty('--glass-bg-strong', `rgba(${r}, ${g}, ${b}, ${strongAlpha})`);
     root.style.setProperty('--glass-blur', `${blurPx}px`);
 
     // Reset container's styling to ensure full transparent fullscreen shell

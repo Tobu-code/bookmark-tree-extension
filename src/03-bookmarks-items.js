@@ -7,8 +7,8 @@ function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
     }
 
     const sizes = variant === 'folder'
-        ? ['1*1', '2*1', '1*1', '1*2', '2*1']
-        : ['1*1', '1*1', '2*1', '1*2', '1*1', '2*2'];
+        ? ['1*1', '2*1', '1*2', '2*2', '2*1', '1*1']
+        : ['1*1', '2*1', '1*2', '1*1', '2*2', '2*1', '1*1', '3*1'];
     return sizes[Math.abs(hash) % sizes.length];
 }
 
