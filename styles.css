@@ -1518,15 +1518,15 @@ body.layout-switching #bookmarks-tree.layout-tree .bookmark-card {
 }
 
 #bookmarks-tree.layout-flat .bookmarks-pane-grid {
-    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
-    grid-auto-rows: 76px;
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-auto-rows: 81px;
+    gap: 18px;
     padding-top: 0;
 }
 
 #bookmarks-tree.layout-flat .bookmarks-pane-grid .leaf-wrapper {
     border-radius: 16px !important;
-    padding: 8px 10px;
+    padding: 10px 12px;
 }
 
 /* Bento Cards Common - Smooth physics-based spring feel */
