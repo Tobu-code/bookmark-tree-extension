@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-05 21:47:39]
+- **Type**: Fix (修复 AI 侧边栏嵌入网页右侧裁切)
+- **Content**: 为 AI 侧栏 iframe 增加 1440px 虚拟画布与自适应缩放，避免 ChatGPT 等桌面站点在 2/3 宽侧栏中右侧内容被外层 `overflow: hidden` 裁掉。
+- **Impact**: `styles.css`
+
 ## [2026-07-05 21:44:27]
 - **Type**: Fix (修正搜索建议与书签卡片层级)
 - **Content**: 为顶部搜索区域建立高层级 stacking context，并将书签区固定在较低层级，避免搜索匹配结果框展开后被下方书签卡片覆盖，看起来像透明。
