@@ -372,6 +372,8 @@ body.has-custom-bg::after {
 }
 
 .app-header {
+    position: relative;
+    z-index: 30;
     display: grid;
     grid-template-columns: var(--flat-sidebar) minmax(0, 1fr);
     align-items: end;
@@ -748,6 +750,7 @@ body.has-custom-bg #search-suggestions {
 
 #bookmarks-tree {
     position: relative;
+    z-index: 1;
     width: 100%;
     transition: opacity 180ms ease, transform 180ms ease;
 }
