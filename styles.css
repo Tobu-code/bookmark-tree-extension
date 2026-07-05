@@ -1563,9 +1563,9 @@ input[type="range"] {
     position: fixed;
     inset: 0;
     z-index: 70;
-    background: rgba(8, 10, 20, 0.34);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background: rgba(8, 10, 20, 0.52);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     opacity: 0;
     pointer-events: none;
     transition: opacity 200ms ease;
@@ -1577,7 +1577,7 @@ input[type="range"] {
 }
 
 .ai-sidebar {
-    --ai-sidebar-width: 66.666vw;
+    --ai-sidebar-width: clamp(1180px, 82vw, 1680px);
     position: fixed;
     top: 0;
     right: 0;
@@ -1587,15 +1587,15 @@ input[type="range"] {
     grid-template-rows: auto minmax(0, 1fr);
     width: var(--ai-sidebar-width);
     border: 0;
-    border-left: 1px solid var(--line-soft);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0;
-    background: #f8fbff;
-    box-shadow: -28px 0 72px rgba(15, 23, 42, 0.22);
+    background: #11101d;
+    box-shadow: -18px 0 48px rgba(0, 0, 0, 0.34);
     overflow: hidden;
     transform: translateX(calc(100% + 42px));
     transition: transform 260ms cubic-bezier(.2, .8, .2, 1);
-    backdrop-filter: blur(28px) saturate(160%);
-    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 body.ai-sidebar-open .ai-sidebar,
@@ -1607,9 +1607,11 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--line-soft);
+    gap: 8px;
+    min-height: 42px;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: #171424;
 }
 
 .ai-tabs {
@@ -1624,19 +1626,19 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-tab,
 .ai-action-btn,
 .ai-provider-action-btn {
-    min-height: 30px;
+    min-height: 28px;
     border: 0;
     border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--text-primary), transparent 93%);
-    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.68);
 }
 
 .ai-tab {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 0 9px;
-    font-size: 13px;
+    padding: 0 8px;
+    font-size: 12px;
     font-weight: 720;
     white-space: nowrap;
 }
@@ -1659,36 +1661,40 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 .ai-tab.active {
-    color: var(--soft-indigo);
-    background: color-mix(in srgb, var(--soft-indigo), transparent 84%);
+    color: #fff;
+    background: rgba(99, 102, 241, 0.28);
 }
 
 .ai-action-btn {
     display: grid;
     place-items: center;
-    width: 32px;
+    width: 30px;
 }
 
 .ai-sidebar-content {
     position: relative;
     min-height: 0;
-    background: color-mix(in srgb, var(--text-primary), transparent 97%);
+    background: #fff;
     overflow: hidden;
-    --ai-iframe-base-width: max(100%, 1440px);
-    --ai-iframe-scale: min(1, calc(var(--ai-sidebar-width) / 1440px));
 }
 
 .ai-sidebar-content iframe {
-    width: var(--ai-iframe-base-width);
-    height: calc(100% / var(--ai-iframe-scale));
+    width: 100%;
+    height: 100%;
     border: 0;
-    transform: scale(var(--ai-iframe-scale));
-    transform-origin: top left;
+    transform: none;
 }
 
 :root[data-theme="dark"] .ai-sidebar {
-    background: #171424;
-    box-shadow: -28px 0 72px rgba(0, 0, 0, 0.5);
+    background: #11101d;
+    box-shadow: -18px 0 48px rgba(0, 0, 0, 0.42);
+}
+
+body.ai-sidebar-open #search-container,
+body.ai-sidebar-open #bookmarks-tree,
+body.ai-sidebar-open #settings-btn {
+    opacity: 0.34;
+    filter: saturate(70%) blur(1px);
 }
 
 .ai-sidebar-placeholder,
@@ -1960,6 +1966,12 @@ body.ai-sidebar-open .ai-sidebar,
 @media (max-width: 899px) {
     .app-shell {
         min-width: 900px;
+    }
+}
+
+@media (max-width: 1280px) {
+    .ai-sidebar {
+        --ai-sidebar-width: 100vw;
     }
 }
 
