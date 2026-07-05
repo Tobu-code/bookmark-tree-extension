@@ -1606,23 +1606,25 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-sidebar-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
     border-bottom: 1px solid var(--line-soft);
 }
 
 .ai-tabs {
     display: flex;
+    flex: 1 1 auto;
     min-width: 0;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 6px;
     overflow: auto;
 }
 
 .ai-tab,
 .ai-action-btn,
 .ai-provider-action-btn {
-    min-height: 36px;
+    min-height: 30px;
     border: 0;
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--text-primary), transparent 93%);
@@ -1632,9 +1634,28 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-tab {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 12px;
+    gap: 6px;
+    padding: 0 9px;
+    font-size: 13px;
+    font-weight: 720;
     white-space: nowrap;
+}
+
+.ai-tab-icon,
+.ai-tab-icon img,
+.ai-tab-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.ai-tab-icon {
+    display: grid;
+    flex: 0 0 18px;
+    place-items: center;
+}
+
+.ai-tab-name {
+    line-height: 1;
 }
 
 .ai-tab.active {
@@ -1645,7 +1666,7 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-action-btn {
     display: grid;
     place-items: center;
-    width: 38px;
+    width: 32px;
 }
 
 .ai-sidebar-content {
