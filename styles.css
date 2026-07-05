@@ -388,7 +388,7 @@ body.has-custom-bg::after {
     gap: 8px;
     min-height: clamp(104px, 12.5vh, 136px);
     padding: clamp(18px, 2vw, 26px);
-    border: 1px solid var(--line-soft);
+    border: 1px solid transparent;
     border-radius: 26px;
     background:
         linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent 58%),
@@ -442,13 +442,14 @@ body.has-custom-bg::after {
 }
 
 .search-greeting {
-    min-height: 22px;
+    min-height: 31px;
     padding-left: 18px;
-    color: var(--text-secondary);
-    font-size: clamp(15px, 1vw, 18px);
-    font-weight: 720;
+    color: color-mix(in srgb, var(--text-primary), transparent 12%);
+    font-size: clamp(18px, 1.35vw, 24px);
+    font-weight: 800;
     line-height: 1.3;
     letter-spacing: 0;
+    animation: greetingBreath 4.8s ease-in-out infinite;
 }
 
 .search-wrapper {
@@ -1266,6 +1267,17 @@ body.has-custom-bg #search-suggestions {
     }
 }
 
+@keyframes greetingBreath {
+    0%, 100% {
+        opacity: 0.82;
+        filter: brightness(0.96);
+    }
+    50% {
+        opacity: 1;
+        filter: brightness(1.08);
+    }
+}
+
 .drag-over,
 .drag-over-item,
 .drag-into-folder {
@@ -2005,5 +2017,9 @@ body.ai-sidebar-open #settings-btn {
     .leaf-wrapper:hover,
     .tree-folder-item:hover {
         transform: none;
+    }
+
+    .search-greeting {
+        animation: none;
     }
 }
