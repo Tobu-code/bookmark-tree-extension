@@ -141,6 +141,10 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+body.has-custom-bg {
+    background: transparent;
+}
+
 body::before {
     content: "";
     position: fixed;
@@ -153,6 +157,12 @@ body::before {
         linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+body.has-custom-bg::before {
+    z-index: -2;
+    opacity: 0.08;
+    mask-image: none;
 }
 
 button,
@@ -182,7 +192,7 @@ svg {
 #background-layer {
     position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: -3;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -201,17 +211,17 @@ body.has-custom-bg::after {
     content: "";
     position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
     background:
-        linear-gradient(135deg, rgba(246, 248, 252, 0.5), rgba(232, 237, 247, 0.36)),
-        radial-gradient(circle at 72% 20%, rgba(236, 72, 153, 0.12), transparent 28vw);
+        linear-gradient(135deg, rgba(246, 248, 252, 0.22), rgba(232, 237, 247, 0.16)),
+        radial-gradient(circle at 72% 20%, rgba(236, 72, 153, 0.08), transparent 28vw);
 }
 
 :root[data-theme="dark"] body.has-custom-bg::after {
     background:
-        linear-gradient(135deg, rgba(10, 10, 18, 0.5), rgba(17, 16, 28, 0.58)),
-        radial-gradient(circle at 72% 20%, rgba(99, 102, 241, 0.14), transparent 28vw);
+        linear-gradient(135deg, rgba(10, 10, 18, 0.34), rgba(17, 16, 28, 0.42)),
+        radial-gradient(circle at 72% 20%, rgba(99, 102, 241, 0.1), transparent 28vw);
 }
 
 .app-shell {
@@ -1404,7 +1414,7 @@ body.ai-sidebar-open .ai-sidebar,
 
 #settings-modal .ai-provider-item {
     display: grid;
-    grid-template-columns: 34px minmax(180px, 1.1fr) minmax(220px, 1fr) auto;
+    grid-template-columns: 28px minmax(190px, 1fr) minmax(220px, 1.12fr) 184px;
     align-items: center;
     gap: 14px;
     min-height: 78px;
@@ -1520,20 +1530,33 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    width: 184px;
+    min-width: 184px;
     gap: 10px;
+    flex-wrap: nowrap;
 }
 
 #settings-modal .ai-provider-switch {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    min-height: 34px;
+    width: 82px;
+    min-width: 82px;
+    height: 38px;
+    min-height: 38px;
     padding: 0 10px;
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--text-primary), transparent 94%);
     color: var(--text-secondary);
     cursor: pointer;
+    white-space: nowrap;
+}
+
+#settings-modal .ai-provider-switch-label {
+    line-height: 1;
+    white-space: nowrap;
 }
 
 #settings-modal .ai-provider-switch input {
