@@ -55,7 +55,7 @@
     --flat-sidebar: clamp(230px, 20vw, 330px);
     --flat-grid-cell: clamp(94px, 5.6vw, 112px);
     --flat-grid-row: var(--flat-grid-cell);
-    --flat-grid-gap: clamp(11px, 0.8vw, 15px);
+    --flat-grid-gap: clamp(18px, 1.25vw, 24px);
     --tree-grid-cell: clamp(246px, 18vw, 340px);
     --tree-grid-row: 88px;
 
