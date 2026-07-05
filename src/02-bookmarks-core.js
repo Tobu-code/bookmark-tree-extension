@@ -228,7 +228,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                     folderCard.classList.remove(cls);
                 }
             });
-            let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : size;
+            let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : normalizeCardLayoutSize(size, 'folder');
             folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');

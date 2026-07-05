@@ -982,7 +982,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
                     folderCard.classList.remove(cls);
                 }
             });
-            let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : size;
+            let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : normalizeCardLayoutSize(size, 'folder');
             folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
@@ -1204,8 +1204,19 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 }
 
 // --- Bookmark Card / Item Helpers ---
+const CARD_LAYOUT_SIZES = new Set([
+    '1*1', '1*2', '1*3',
+    '2*1', '2*2', '2*3',
+    '3*1', '3*2', '3*3'
+]);
+
 function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
-    return variant === 'folder' ? '2*1' : '1*1';
+    return '2*1';
+}
+
+function normalizeCardLayoutSize(size, variant = 'bookmark') {
+    if (size && CARD_LAYOUT_SIZES.has(size)) return size;
+    return getStableDefaultFlatCardSize(null, variant);
 }
 
 // --- Helpers ---
@@ -1270,7 +1281,7 @@ function renderFlatBookmarkItem(node) {
             wrapper.classList.remove(cls);
         }
     });
-    let activeSize = size === 'default' ? getStableDefaultFlatCardSize(node) : size;
+    let activeSize = size === 'default' ? getStableDefaultFlatCardSize(node) : normalizeCardLayoutSize(size);
     wrapper.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
 
     const a = document.createElement('a');
