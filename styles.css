@@ -237,12 +237,16 @@ body.has-custom-bg::after {
     --card-border: rgba(15, 23, 42, 0.2);
 }
 
-:root[data-theme="light"] body.has-custom-bg .ambient-time,
 :root[data-theme="light"] body.has-custom-bg .search-wrapper,
 :root[data-theme="light"] body.has-custom-bg .leaf-wrapper,
 :root[data-theme="light"] body.has-custom-bg #settings-btn {
     border-color: rgba(15, 23, 42, 0.2);
     box-shadow: 0 18px 46px rgba(15, 23, 42, 0.16);
+}
+
+:root[data-theme="light"] body.has-custom-bg .ambient-time {
+    border-color: transparent;
+    box-shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
 }
 
 :root[data-theme="light"] body.has-custom-bg .ambient-time,
@@ -307,12 +311,16 @@ body.has-custom-bg::after {
         --card-border: rgba(15, 23, 42, 0.2);
     }
 
-    :root:not([data-theme]) body.has-custom-bg .ambient-time,
     :root:not([data-theme]) body.has-custom-bg .search-wrapper,
     :root:not([data-theme]) body.has-custom-bg .leaf-wrapper,
     :root:not([data-theme]) body.has-custom-bg #settings-btn {
         border-color: rgba(15, 23, 42, 0.2);
         box-shadow: 0 18px 46px rgba(15, 23, 42, 0.16);
+    }
+
+    :root:not([data-theme]) body.has-custom-bg .ambient-time {
+        border-color: transparent;
+        box-shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
     }
 
     :root:not([data-theme]) body.has-custom-bg .ambient-time,
@@ -437,6 +445,7 @@ body.has-custom-bg::after {
 .search-stack {
     display: grid;
     align-self: end;
+    width: min(100%, 1280px);
     gap: 12px;
     min-width: 0;
 }
