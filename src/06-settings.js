@@ -273,33 +273,6 @@ function initSettingsUI(settings) {
     // 初始化模糊控制状态
     updateBlurControlsState();
 
-    // 5. Hover Delay Setting
-    const hoverDelayInput = document.getElementById('hover-delay');
-    const hoverDelayValueDisplay = document.getElementById('hover-delay-value');
-
-    hoverDelayInput.addEventListener('input', (e) => {
-        HOVER_DELAY = parseInt(e.target.value);
-        if (HOVER_DELAY === 1100) {
-            hoverDelayValueDisplay.textContent = '已关闭';
-        } else {
-            hoverDelayValueDisplay.textContent = `${HOVER_DELAY}ms`;
-        }
-    });
-
-    hoverDelayInput.addEventListener('change', () => {
-        saveSetting(STORAGE_KEY_HOVER_DELAY, HOVER_DELAY);
-    });
-
-    // Initial Hover Delay State
-    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
-        hoverDelayInput.value = settings[STORAGE_KEY_HOVER_DELAY];
-        if (parseInt(settings[STORAGE_KEY_HOVER_DELAY]) === 1100) {
-            hoverDelayValueDisplay.textContent = '已关闭';
-        } else {
-            hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
-        }
-    }
-
     const exportBtn = document.getElementById('export-bookmarks-btn');
     if (exportBtn) {
         exportBtn.addEventListener('click', () => {

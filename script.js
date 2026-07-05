@@ -5,7 +5,6 @@ const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
 const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
 const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
-const STORAGE_KEY_HOVER_DELAY = 'settings_hover_delay';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 
 const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
@@ -100,7 +99,6 @@ let CURRENT_ICON_STYLE = 'default';
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
 let CURRENT_CONTAINER_BLUR = 0;
-let HOVER_DELAY = 100;
 let LAYOUT_MODE = 'tree';
 
 let HIDDEN_FOLDERS = [];
@@ -639,7 +637,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
-            STORAGE_KEY_HOVER_DELAY, STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
+            STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
             STORAGE_KEY_CARD_SIZES
@@ -671,10 +669,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_CONTAINER_BLUR]);
         CURRENT_CONTAINER_BLUR = level;
-    }
-
-    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
-        HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
     }
 
     LAYOUT_MODE = 'flat';
@@ -1308,11 +1302,9 @@ function renderFlatBookmarkItem(node) {
 function bindSubFolderHoverExpand(wrapper, childrenContainer) {
     let hoverTimer = null;
     wrapper.addEventListener('mouseenter', () => {
-        if (HOVER_DELAY === 1100) return; // "Closed" setting
-        const effectiveDelay = Math.min(HOVER_DELAY, 40);
         hoverTimer = setTimeout(() => {
             childrenContainer.classList.remove('hidden');
-        }, effectiveDelay);
+        }, 40);
     });
     wrapper.addEventListener('mouseleave', () => {
         if (hoverTimer) {
@@ -2336,33 +2328,6 @@ function initSettingsUI(settings) {
 
     // 初始化模糊控制状态
     updateBlurControlsState();
-
-    // 5. Hover Delay Setting
-    const hoverDelayInput = document.getElementById('hover-delay');
-    const hoverDelayValueDisplay = document.getElementById('hover-delay-value');
-
-    hoverDelayInput.addEventListener('input', (e) => {
-        HOVER_DELAY = parseInt(e.target.value);
-        if (HOVER_DELAY === 1100) {
-            hoverDelayValueDisplay.textContent = '已关闭';
-        } else {
-            hoverDelayValueDisplay.textContent = `${HOVER_DELAY}ms`;
-        }
-    });
-
-    hoverDelayInput.addEventListener('change', () => {
-        saveSetting(STORAGE_KEY_HOVER_DELAY, HOVER_DELAY);
-    });
-
-    // Initial Hover Delay State
-    if (settings[STORAGE_KEY_HOVER_DELAY] !== undefined) {
-        hoverDelayInput.value = settings[STORAGE_KEY_HOVER_DELAY];
-        if (parseInt(settings[STORAGE_KEY_HOVER_DELAY]) === 1100) {
-            hoverDelayValueDisplay.textContent = '已关闭';
-        } else {
-            hoverDelayValueDisplay.textContent = `${settings[STORAGE_KEY_HOVER_DELAY]}ms`;
-        }
-    }
 
     const exportBtn = document.getElementById('export-bookmarks-btn');
     if (exportBtn) {

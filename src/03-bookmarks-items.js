@@ -97,11 +97,9 @@ function renderFlatBookmarkItem(node) {
 function bindSubFolderHoverExpand(wrapper, childrenContainer) {
     let hoverTimer = null;
     wrapper.addEventListener('mouseenter', () => {
-        if (HOVER_DELAY === 1100) return; // "Closed" setting
-        const effectiveDelay = Math.min(HOVER_DELAY, 40);
         hoverTimer = setTimeout(() => {
             childrenContainer.classList.remove('hidden');
-        }, effectiveDelay);
+        }, 40);
     });
     wrapper.addEventListener('mouseleave', () => {
         if (hoverTimer) {

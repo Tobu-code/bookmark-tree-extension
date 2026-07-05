@@ -1718,7 +1718,7 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-settings-intro,
 .ai-provider-composer {
     display: grid;
-    gap: 12px;
+    gap: 8px;
 }
 
 #settings-modal .ai-provider-list {
@@ -1729,13 +1729,13 @@ body.ai-sidebar-open .ai-sidebar,
 
 #settings-modal .ai-provider-item {
     display: grid;
-    grid-template-columns: 28px minmax(190px, 1fr) minmax(220px, 1.12fr) 184px;
+    grid-template-columns: 24px minmax(170px, 1fr) minmax(200px, 1.05fr) 162px;
     align-items: center;
-    gap: 14px;
-    min-height: 78px;
-    padding: 14px 16px;
+    gap: 10px;
+    min-height: 64px;
+    padding: 10px 12px;
     border: 1px solid var(--line-soft);
-    border-radius: 18px;
+    border-radius: 14px;
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 52%),
         color-mix(in srgb, var(--text-primary), transparent 95%);
@@ -1755,28 +1755,28 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 #settings-modal .ai-provider-drag-handle {
-    width: 28px;
-    height: 42px;
+    width: 24px;
+    height: 34px;
     color: var(--text-subtle);
     cursor: grab;
 }
 
 #settings-modal .ai-provider-drag-handle svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
 }
 
 #settings-modal .ai-provider-identity {
     display: flex;
     align-items: center;
     min-width: 0;
-    gap: 12px;
+    gap: 9px;
 }
 
 #settings-modal .ai-provider-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
     background: color-mix(in srgb, var(--soft-indigo), transparent 88%);
     color: var(--soft-indigo);
     overflow: hidden;
@@ -1784,12 +1784,12 @@ body.ai-sidebar-open .ai-sidebar,
 
 #settings-modal .ai-provider-icon img,
 #settings-modal .ai-provider-icon svg {
-    width: 22px !important;
-    height: 22px !important;
-    max-width: 22px;
-    max-height: 22px;
+    width: 18px !important;
+    height: 18px !important;
+    max-width: 18px;
+    max-height: 18px;
     margin: 0 !important;
-    border-radius: 7px;
+    border-radius: 6px;
     object-fit: contain;
     background: transparent !important;
     box-shadow: none !important;
@@ -1799,7 +1799,7 @@ body.ai-sidebar-open .ai-sidebar,
 #settings-modal .ai-provider-endpoint {
     display: grid;
     min-width: 0;
-    gap: 4px;
+    gap: 2px;
 }
 
 #settings-modal .ai-provider-title-row {
@@ -1812,14 +1812,15 @@ body.ai-sidebar-open .ai-sidebar,
 #settings-modal .ai-provider-name {
     overflow: hidden;
     color: var(--text-primary);
-    font-weight: 760;
+    font-size: 13px;
+    font-weight: 740;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 #settings-modal .ai-provider-badge {
     flex: 0 0 auto;
-    padding: 2px 7px;
+    padding: 1px 6px;
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--soft-indigo), transparent 85%);
     color: var(--soft-indigo);
@@ -1845,9 +1846,9 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 184px;
-    min-width: 184px;
-    gap: 10px;
+    width: 162px;
+    min-width: 162px;
+    gap: 8px;
     flex-wrap: nowrap;
 }
 
@@ -1855,12 +1856,12 @@ body.ai-sidebar-open .ai-sidebar,
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 82px;
-    min-width: 82px;
-    height: 38px;
-    min-height: 38px;
-    padding: 0 10px;
+    gap: 6px;
+    width: 74px;
+    min-width: 74px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0 8px;
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--text-primary), transparent 94%);
