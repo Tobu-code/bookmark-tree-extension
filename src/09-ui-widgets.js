@@ -32,6 +32,7 @@ function getDailyGreeting() {
  */
 function initAmbientTime() {
     const timeContainer = document.getElementById('ambient-time-container');
+    const searchGreeting = document.getElementById('search-greeting');
     if (!timeContainer) return;
 
     let idleTimer;
@@ -44,10 +45,7 @@ function initAmbientTime() {
     infoGroup.className = 'ambient-time-info-group';
     const dateEl = document.createElement('span');
     dateEl.className = 'ambient-time-date';
-    const greetingEl = document.createElement('span');
-    greetingEl.className = 'ambient-time-greeting';
     infoGroup.appendChild(dateEl);
-    infoGroup.appendChild(greetingEl);
     timeContainer.appendChild(clockEl);
     timeContainer.appendChild(infoGroup);
 
@@ -65,7 +63,7 @@ function initAmbientTime() {
         // textContent-only update: no DOM rebuild, no layout thrash (Fix #5)
         clockEl.textContent = `${hours}:${minutes}`;
         dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
-        greetingEl.textContent = getDailyGreeting();
+        if (searchGreeting) searchGreeting.textContent = getDailyGreeting();
 
         // Precise next-minute scheduling (Fix #6 applied to ambient clock)
         const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();

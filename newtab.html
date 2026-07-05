@@ -18,43 +18,46 @@
             
 
 
-            <div class="search-wrapper">
-                <div class="search-top-row">
-                    <div id="engine-picker-container">
-                        <button id="search-engine-label" type="button" aria-haspopup="listbox" aria-expanded="false">
-                            Google
-                        </button>
-                        <div id="engine-picker-overlay" class="hidden"></div>
-                        <div id="engine-wheel" class="hidden" role="listbox" aria-label="搜索引擎">
-                            <button type="button" class="wheel-option" role="option" data-engine="google"
-                                data-url="https://www.google.com/search?q=">
+            <div class="search-stack">
+                <div id="search-greeting" class="search-greeting"></div>
+                <div class="search-wrapper">
+                    <div class="search-top-row">
+                        <div id="engine-picker-container">
+                            <button id="search-engine-label" type="button" aria-haspopup="listbox" aria-expanded="false">
                                 Google
                             </button>
-                            <button type="button" class="wheel-option" role="option" data-engine="bing"
-                                data-url="https://www.bing.com/search?q=">
-                                Bing
-                            </button>
-                            <button type="button" class="wheel-option" role="option" data-engine="baidu"
-                                data-url="https://www.baidu.com/s?wd=">
-                                Baidu
-                            </button>
+                            <div id="engine-picker-overlay" class="hidden"></div>
+                            <div id="engine-wheel" class="hidden" role="listbox" aria-label="搜索引擎">
+                                <button type="button" class="wheel-option" role="option" data-engine="google"
+                                    data-url="https://www.google.com/search?q=">
+                                    Google
+                                </button>
+                                <button type="button" class="wheel-option" role="option" data-engine="bing"
+                                    data-url="https://www.bing.com/search?q=">
+                                    Bing
+                                </button>
+                                <button type="button" class="wheel-option" role="option" data-engine="baidu"
+                                    data-url="https://www.baidu.com/s?wd=">
+                                    Baidu
+                                </button>
+                            </div>
                         </div>
+
+
+
+                        <input type="text" id="search-input" placeholder="寻找、发现，或者只是在此沉思..." autocomplete="off"
+                            aria-label="搜索书签或搜索全网" aria-autocomplete="list" aria-controls="search-suggestions"
+                            aria-expanded="false">
+
+                        <button id="ai-sidebar-btn" title="打开 AI 面板" aria-label="打开 AI 面板">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai-sparkle-icon">
+                                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                            </svg>
+                        </button>
+                        <div id="search-suggestions" class="hidden" aria-live="polite" role="listbox" aria-label="搜索建议"></div>
                     </div>
 
-
-
-                    <input type="text" id="search-input" placeholder="寻找、发现，或者只是在此沉思..." autocomplete="off"
-                        aria-label="搜索书签或搜索全网" aria-autocomplete="list" aria-controls="search-suggestions"
-                        aria-expanded="false">
-
-                    <button id="ai-sidebar-btn" title="打开 AI 面板" aria-label="打开 AI 面板">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai-sparkle-icon">
-                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                        </svg>
-                    </button>
-                    <div id="search-suggestions" class="hidden" aria-live="polite" role="listbox" aria-label="搜索建议"></div>
                 </div>
-
             </div>
         </header>
 
