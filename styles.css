@@ -15,22 +15,22 @@
     --masonry-amber: #ffd460;
     --masonry-lavender: #7579e7;
 
-    --page-bg: #f6f8fc;
-    --page-bg-2: #eef3fa;
+    --page-bg: #f3f6fb;
+    --page-bg-2: #e8edf7;
     --text-primary: #172033;
     --text-secondary: #5d687c;
     --text-subtle: #8b96aa;
     --text-inverse: #f8fbff;
     --line-soft: rgba(23, 32, 51, 0.1);
     --line-strong: rgba(23, 32, 51, 0.18);
-    --glass-bg: rgba(255, 255, 255, 0.72);
-    --glass-bg-strong: rgba(255, 255, 255, 0.9);
-    --card-bg: rgba(255, 255, 255, 0.78);
-    --card-bg-hover: rgba(255, 255, 255, 0.94);
-    --card-border: rgba(23, 32, 51, 0.1);
-    --panel-shadow: 0 24px 70px rgba(74, 85, 112, 0.14);
-    --card-shadow: 0 14px 34px rgba(74, 85, 112, 0.11);
-    --card-shadow-hover: 0 22px 54px rgba(74, 85, 112, 0.18);
+    --glass-bg: rgba(248, 250, 255, 0.7);
+    --glass-bg-strong: rgba(252, 253, 255, 0.86);
+    --card-bg: rgba(252, 253, 255, 0.74);
+    --card-bg-hover: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(91, 104, 132, 0.16);
+    --panel-shadow: 0 22px 58px rgba(74, 85, 112, 0.12);
+    --card-shadow: 0 10px 26px rgba(74, 85, 112, 0.09);
+    --card-shadow-hover: 0 18px 42px rgba(74, 85, 112, 0.15);
     --accent-shadow: 0 18px 48px rgba(99, 102, 241, 0.2);
     --focus-ring: 0 0 0 4px rgba(99, 102, 241, 0.18);
 
@@ -43,12 +43,12 @@
 
     --page-pad-x: clamp(28px, 6vw, 128px);
     --shell-max: 1680px;
-    --header-gap: clamp(28px, 4vw, 72px);
-    --content-gap: clamp(38px, 5.2vw, 92px);
+    --header-gap: clamp(28px, 4vw, 64px);
+    --content-gap: clamp(42px, 5.2vw, 86px);
     --flat-sidebar: clamp(230px, 20vw, 330px);
-    --flat-grid-cell: clamp(174px, 10.5vw, 214px);
-    --flat-grid-row: clamp(80px, 4.8vw, 98px);
-    --flat-grid-gap: clamp(18px, 1.35vw, 26px);
+    --flat-grid-cell: clamp(188px, 11.2vw, 224px);
+    --flat-grid-row: clamp(88px, 5.1vw, 104px);
+    --flat-grid-gap: clamp(22px, 1.55vw, 30px);
     --tree-grid-cell: clamp(246px, 18vw, 340px);
     --tree-grid-row: 96px;
 
@@ -122,9 +122,9 @@ body {
     overflow-x: hidden;
     color: var(--text-primary);
     background:
-        radial-gradient(circle at 13% 8%, rgba(99, 102, 241, 0.2), transparent 28vw),
-        radial-gradient(circle at 83% 15%, rgba(233, 69, 96, 0.14), transparent 24vw),
-        radial-gradient(circle at 50% 95%, rgba(22, 199, 154, 0.12), transparent 30vw),
+        radial-gradient(circle at 12% 10%, rgba(99, 102, 241, 0.14), transparent 27vw),
+        radial-gradient(circle at 82% 18%, rgba(233, 69, 96, 0.08), transparent 24vw),
+        radial-gradient(circle at 52% 96%, rgba(22, 199, 154, 0.08), transparent 30vw),
         linear-gradient(135deg, var(--page-bg), var(--page-bg-2));
     font-family: var(--font-body);
     font-size: 16px;
@@ -139,7 +139,7 @@ body::before {
     inset: 0;
     z-index: -3;
     pointer-events: none;
-    opacity: 0.45;
+    opacity: 0.24;
     background-image:
         linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
         linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
@@ -187,7 +187,7 @@ svg {
     width: min(var(--shell-max), calc(100vw - (var(--page-pad-x) * 2)));
     min-height: 100vh;
     margin: 0 auto;
-    padding: clamp(34px, 6vh, 86px) 0 clamp(34px, 7vh, 92px);
+    padding: clamp(30px, 5.2vh, 72px) 0 clamp(34px, 7vh, 92px);
 }
 
 .app-header {
@@ -196,21 +196,21 @@ svg {
     align-items: end;
     gap: var(--header-gap);
     width: 100%;
-    margin-bottom: clamp(48px, 7vh, 86px);
+    margin-bottom: clamp(42px, 6vh, 72px);
 }
 
 .ambient-time {
     display: grid;
     align-content: center;
     gap: 8px;
-    min-height: clamp(128px, 17vh, 178px);
-    padding: clamp(22px, 2.8vw, 34px);
+    min-height: clamp(112px, 14vh, 150px);
+    padding: clamp(20px, 2.4vw, 30px);
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-xl);
     background:
         linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent 58%),
         var(--glass-bg);
-    box-shadow: var(--panel-shadow);
+    box-shadow: 0 18px 48px rgba(74, 85, 112, 0.1);
     backdrop-filter: blur(var(--container-blur)) saturate(150%);
     -webkit-backdrop-filter: blur(var(--container-blur)) saturate(150%);
     opacity: 0.9;
@@ -228,7 +228,7 @@ svg {
 .ambient-time-clock {
     display: block;
     font-family: var(--font-mono);
-    font-size: clamp(58px, 5.6vw, 92px);
+    font-size: clamp(52px, 4.9vw, 78px);
     font-weight: 500;
     line-height: 0.95;
     letter-spacing: -0.08em;
@@ -255,13 +255,13 @@ svg {
 .search-wrapper {
     position: relative;
     width: 100%;
-    min-height: 66px;
+    min-height: 60px;
     border: 1px solid var(--line-soft);
     border-radius: var(--radius-pill);
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 42%),
         var(--glass-bg-strong);
-    box-shadow: var(--panel-shadow);
+    box-shadow: 0 18px 48px rgba(74, 85, 112, 0.11);
     backdrop-filter: blur(var(--container-blur)) saturate(160%);
     -webkit-backdrop-filter: blur(var(--container-blur)) saturate(160%);
     transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
@@ -278,8 +278,8 @@ svg {
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 16px;
-    min-height: 66px;
-    padding: 8px 10px 8px 18px;
+    min-height: 60px;
+    padding: 7px 9px 7px 16px;
 }
 
 #engine-picker-container {
@@ -441,7 +441,7 @@ svg {
     top: clamp(22px, 4vh, 42px);
     max-height: calc(100vh - 84px);
     overflow: auto;
-    padding: 8px;
+    padding: 6px 8px;
     border-radius: var(--radius-xl);
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--soft-indigo), transparent 55%) transparent;
@@ -453,12 +453,12 @@ svg {
     grid-template-columns: 18px 24px minmax(0, 1fr) auto;
     align-items: center;
     gap: 10px;
-    min-height: 48px;
-    margin: 3px 0;
-    padding: 9px 12px !important;
-    border-radius: var(--radius-md);
+    min-height: 46px;
+    margin: 4px 0;
+    padding: 8px 12px !important;
+    border-radius: 16px;
     color: var(--text-secondary);
-    font-weight: 720;
+    font-weight: 730;
     letter-spacing: -0.01em;
     cursor: pointer;
     transition: color 180ms ease, background 180ms ease, transform 180ms ease;
@@ -467,14 +467,14 @@ svg {
 .tree-folder-item:hover,
 .tree-folder-item:focus-within {
     color: var(--text-primary);
-    background: color-mix(in srgb, var(--soft-indigo), transparent 91%);
+    background: color-mix(in srgb, var(--soft-indigo), transparent 94%);
     transform: translateX(2px);
 }
 
 .tree-folder-item.active {
     color: color-mix(in srgb, var(--soft-indigo), var(--text-primary) 18%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--soft-indigo), transparent 84%), color-mix(in srgb, var(--soft-pink), transparent 94%));
+    background: color-mix(in srgb, var(--soft-indigo), transparent 88%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--soft-indigo), transparent 80%);
 }
 
 .tree-folder-item.active::before {
@@ -485,7 +485,7 @@ svg {
     bottom: 13px;
     width: 3px;
     border-radius: var(--radius-pill);
-    background: linear-gradient(to bottom, var(--soft-indigo), var(--soft-pink));
+    background: var(--soft-indigo);
 }
 
 .tree-folder-toggle,
@@ -604,6 +604,8 @@ svg {
     grid-template-columns: repeat(auto-fill, minmax(var(--flat-grid-cell), 1fr));
     grid-auto-rows: var(--flat-grid-row);
     gap: var(--flat-grid-gap);
+    align-items: stretch;
+    padding-top: 2px;
 }
 
 .top-level-container {
@@ -618,9 +620,10 @@ svg {
     min-width: 0;
     min-height: 0;
     border: 1px solid var(--card-border);
-    border-radius: var(--radius-lg);
+    border-radius: 22px;
     background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 44%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 46%),
+        linear-gradient(180deg, rgba(99, 102, 241, 0.03), transparent 62%),
         var(--card-bg);
     box-shadow: var(--card-shadow);
     overflow: hidden;
@@ -635,17 +638,17 @@ svg {
     opacity: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.28), transparent 34%),
-        linear-gradient(135deg, color-mix(in srgb, var(--soft-indigo), transparent 92%), transparent 58%);
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2), transparent 30%),
+        linear-gradient(135deg, color-mix(in srgb, var(--soft-indigo), transparent 94%), transparent 58%);
     transition: opacity 200ms ease;
 }
 
 .leaf-wrapper:hover,
 .bookmark-card:hover {
-    border-color: color-mix(in srgb, var(--soft-indigo), transparent 58%);
+    border-color: color-mix(in srgb, var(--soft-indigo), transparent 48%);
     background: var(--card-bg-hover);
     box-shadow: var(--card-shadow-hover);
-    transform: translateY(-4px);
+    transform: translateY(-3px);
 }
 
 .leaf-wrapper:hover::before,
@@ -715,8 +718,8 @@ svg {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: clamp(16px, 1.6vw, 24px);
+    gap: 10px;
+    padding: clamp(18px, 1.6vw, 24px);
     color: var(--text-primary);
     text-align: center;
 }
@@ -725,13 +728,13 @@ svg {
 .bookmark-icon-fallback,
 .bookmark-icon-wrap {
     flex: 0 0 auto;
-    width: clamp(38px, 3.1vw, 54px);
-    height: clamp(38px, 3.1vw, 54px);
+    width: clamp(34px, 2.7vw, 48px);
+    height: clamp(34px, 2.7vw, 48px);
     margin: 0 !important;
     border-radius: 14px;
     object-fit: contain;
     background: color-mix(in srgb, var(--text-primary), transparent 93%);
-    box-shadow: 0 8px 20px rgba(15, 18, 32, 0.12);
+    box-shadow: 0 8px 18px rgba(15, 18, 32, 0.1);
 }
 
 .bookmark-icon-fallback {
@@ -747,9 +750,9 @@ svg {
     max-width: 100%;
     overflow: hidden;
     color: var(--text-primary);
-    font-weight: 780;
+    font-weight: 760;
     letter-spacing: -0.02em;
-    line-height: 1.28;
+    line-height: 1.24;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -765,14 +768,15 @@ svg {
 .layout-size-1-1 .bookmark-icon,
 .layout-size-1-1 .bookmark-icon-fallback,
 .layout-size-1-1 .bookmark-icon-wrap {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
 }
 
 .layout-size-2-1 .leaf-node,
 .layout-size-3-1 .leaf-node {
     flex-direction: row;
     justify-content: center;
+    gap: 16px;
 }
 
 .layout-size-2-1 .bookmark-label,

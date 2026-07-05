@@ -816,9 +816,9 @@ function applyContainerOpacity() {
     const g = isDark ? 28 : 255;
     const b = isDark ? 42 : 255;
 
-    const baseAlphaCard = isDark ? 0.76 : 0.78;
-    const baseAlphaGlass = isDark ? 0.72 : 0.72;
-    const baseAlphaStrong = isDark ? 0.9 : 0.9;
+    const baseAlphaCard = isDark ? 0.76 : 0.74;
+    const baseAlphaGlass = isDark ? 0.72 : 0.70;
+    const baseAlphaStrong = isDark ? 0.9 : 0.86;
 
     const cardAlpha = Math.max(0.02, baseAlphaCard - (level / 10) * (baseAlphaCard - 0.02));
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
