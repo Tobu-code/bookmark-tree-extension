@@ -592,15 +592,29 @@ body.has-custom-bg::after {
     left: 0;
     right: 0;
     z-index: 120;
+    isolation: isolate;
     max-height: min(48vh, 520px);
     overflow: auto;
     padding: 12px;
     border: 1px solid rgba(15, 23, 42, 0.14);
     border-radius: var(--radius-lg);
-    background: #f8fbff;
-    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+    background:
+        linear-gradient(180deg, #fbfdff, #f3f7ff);
+    background-color: #f8fbff;
+    background-clip: padding-box;
+    box-shadow: 0 28px 72px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.82) inset;
+    opacity: 1;
+    transform: translateZ(0);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+}
+
+body.has-custom-bg #search-suggestions {
+    border-color: rgba(15, 23, 42, 0.18);
+    background:
+        linear-gradient(180deg, #ffffff, #f4f8ff);
+    background-color: #ffffff;
+    box-shadow: 0 30px 76px rgba(15, 23, 42, 0.34), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
 }
 
 #search-suggestions > * {
@@ -617,7 +631,7 @@ body.has-custom-bg::after {
     padding: 10px 12px;
     border: 0;
     border-radius: 16px;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.78);
     color: var(--text-primary);
     font: inherit;
     text-align: left;
@@ -631,7 +645,7 @@ body.has-custom-bg::after {
 #search-suggestions .suggestion-item:hover,
 #search-suggestions .suggestion-item.selected,
 #search-suggestions .suggestion-item[aria-selected="true"] {
-    background: rgba(99, 102, 241, 0.12);
+    background: #eef2ff;
     transform: translateY(-1px);
 }
 
@@ -705,8 +719,21 @@ body.has-custom-bg::after {
 
 :root[data-theme="dark"] #search-suggestions {
     border-color: rgba(255, 255, 255, 0.12);
-    background: #171424;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.42);
+    background:
+        linear-gradient(180deg, #1f1b2d, #171424);
+    background-color: #171424;
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.56), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+:root[data-theme="dark"] body.has-custom-bg #search-suggestions {
+    border-color: rgba(255, 255, 255, 0.16);
+    background:
+        linear-gradient(180deg, #211d30, #151320);
+    background-color: #171424;
+}
+
+:root[data-theme="dark"] #search-suggestions .suggestion-item {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 :root[data-theme="dark"] #search-suggestions .suggestion-item:hover,
