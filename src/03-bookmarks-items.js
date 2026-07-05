@@ -1,15 +1,6 @@
 // --- Bookmark Card / Item Helpers ---
 function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
-    const id = String(node?.id || node?.url || node?.title || '');
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) {
-        hash = ((hash << 5) - hash + id.charCodeAt(i)) | 0;
-    }
-
-    const sizes = variant === 'folder'
-        ? ['2*1', '2*1', '2*2', '1*2', '2*1', '2*2']
-        : ['2*1', '2*1', '1*1', '2*1', '2*2', '1*2', '2*1', '1*1'];
-    return sizes[Math.abs(hash) % sizes.length];
+    return '2*1';
 }
 
 function createBookmarkCard(folderNode) {
