@@ -58,14 +58,9 @@ function renderBookmarks(bookmarkTreeNodes) {
     }
     container.innerHTML = ''; // Clear previous
     container.className = 'tree-view'; // reset
-
-    if (LAYOUT_MODE === 'flat') {
-        container.classList.add('layout-flat');
-        renderFlatBookmarks(bookmarkTreeNodes, container);
-    } else {
-        container.classList.add('layout-tree');
-        renderTreeBookmarks(bookmarkTreeNodes, container);
-    }
+    LAYOUT_MODE = 'flat';
+    container.classList.add('layout-flat');
+    renderFlatBookmarks(bookmarkTreeNodes, container);
     
     // Smooth transition indicator sync
     setTimeout(syncSidebarActiveIndicator, 50);
@@ -110,40 +105,6 @@ function bindDelegatedItemDnD(container) {
         const target = getTarget(e);
         if (!target || target.classList.contains('bookmarks-pane-grid')) return;
         handleItemDragEnd.call(target, e);
-    });
-}
-
-function renderTreeBookmarks(bookmarkTreeNodes, container) {
-    // We want to primarily show "Bookmarks Bar" content
-    // Root -> [0] is usually the root node
-    const rootNode = bookmarkTreeNodes[0];
-
-    // Find Bookmarks Bar (usually id '1' or title 'Bookmarks Bar')
-    let bookmarksBar = rootNode.children.find(node => node.id === '1');
-    if (!bookmarksBar && rootNode.children.length > 0) {
-        // Fallback: Use the first child if id '1' not found
-        bookmarksBar = rootNode.children[0];
-    }
-
-    if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
-        renderBookmarkState('empty', '书签栏还是空的，先收藏几个常用站点吧。');
-        return;
-    }
-
-    // Create a wrapper for top-level columns
-    const topLevelContainer = document.createElement('div');
-    topLevelContainer.className = 'top-level-container';
-    container.appendChild(topLevelContainer);
-    bindDelegatedItemDnD(topLevelContainer);
-
-    bookmarksBar.children.forEach(child => {
-        if (child.children) { // Is Folder
-            const card = createBookmarkCard(child);
-            topLevelContainer.appendChild(card);
-        } else {
-            const card = createSimpleTile(child);
-            topLevelContainer.appendChild(card);
-        }
     });
 }
 
@@ -219,7 +180,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         const getFlatDragTarget = (e) => {
             const eventTarget = e.target instanceof Element ? e.target : null;
-            const item = eventTarget ? eventTarget.closest('.leaf-wrapper, .bookmark-card') : null;
+            const item = eventTarget ? eventTarget.closest('.leaf-wrapper') : null;
             return item && listContainer.contains(item) ? item : listContainer;
         };
 

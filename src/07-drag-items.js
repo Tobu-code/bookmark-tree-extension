@@ -93,10 +93,6 @@ function handleItemDrop(e) {
         // API Update
         // Determine Destination Parent ID
         let destParentId = parent.dataset.parentId;
-        if (!destParentId) {
-            const card = parent.closest('.bookmark-card');
-            if (card) destParentId = card.dataset.id;
-        }
 
         const destination = { index: newIndex };
         if (destParentId) {
@@ -131,4 +127,3 @@ function handleItemDragEnd(e) {
     DRAG_HIGHLIGHTED_ELEMENTS.clear();
     dragSrcEl = null;
 }
-

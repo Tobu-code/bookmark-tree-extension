@@ -677,8 +677,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
     }
 
-    if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
-    else LAYOUT_MODE = 'tree';
+    LAYOUT_MODE = 'flat';
 
 
 
@@ -717,36 +716,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 7. Render Bookmarks
     renderBookmarksFromCache();
-
-    // 7.5 Layout Toggle Button (outside settings for quick access)
-    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
-    const layoutIconTree = document.getElementById('layout-icon-tree');
-    const layoutIconFlat = document.getElementById('layout-icon-flat');
-    
-    function updateLayoutToggleIcon() {
-        if (LAYOUT_MODE === 'flat') {
-            layoutIconTree.classList.add('icon-hidden');
-            layoutIconFlat.classList.remove('icon-hidden');
-            layoutToggleBtn.title = '切换到树状模式';
-        } else {
-            layoutIconTree.classList.remove('icon-hidden');
-            layoutIconFlat.classList.add('icon-hidden');
-            layoutToggleBtn.title = '切换到平铺模式';
-        }
-    }
-    updateLayoutToggleIcon(); // Set initial icon state
-    
-    layoutToggleBtn.addEventListener('click', () => {
-        LAYOUT_MODE = LAYOUT_MODE === 'tree' ? 'flat' : 'tree';
-        chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: LAYOUT_MODE });
-        updateLayoutToggleIcon();
-        // Also sync the radio buttons inside settings modal
-        const layoutRadios = document.getElementsByName('layout-mode');
-        layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
-        // Re-render
-        renderBookmarksWithLayoutTransition();
-    });
-
 
     // 8. Reveal Page
     requestAnimationFrame(() => {
@@ -788,7 +757,6 @@ function preloadImage(url, timeoutMs = 5000) {
         }
     });
 }
-
 
 // --- Icon Constants ---
 function preloadImage(url) {
@@ -850,14 +818,9 @@ function renderBookmarks(bookmarkTreeNodes) {
     }
     container.innerHTML = ''; // Clear previous
     container.className = 'tree-view'; // reset
-
-    if (LAYOUT_MODE === 'flat') {
-        container.classList.add('layout-flat');
-        renderFlatBookmarks(bookmarkTreeNodes, container);
-    } else {
-        container.classList.add('layout-tree');
-        renderTreeBookmarks(bookmarkTreeNodes, container);
-    }
+    LAYOUT_MODE = 'flat';
+    container.classList.add('layout-flat');
+    renderFlatBookmarks(bookmarkTreeNodes, container);
     
     // Smooth transition indicator sync
     setTimeout(syncSidebarActiveIndicator, 50);
@@ -902,40 +865,6 @@ function bindDelegatedItemDnD(container) {
         const target = getTarget(e);
         if (!target || target.classList.contains('bookmarks-pane-grid')) return;
         handleItemDragEnd.call(target, e);
-    });
-}
-
-function renderTreeBookmarks(bookmarkTreeNodes, container) {
-    // We want to primarily show "Bookmarks Bar" content
-    // Root -> [0] is usually the root node
-    const rootNode = bookmarkTreeNodes[0];
-
-    // Find Bookmarks Bar (usually id '1' or title 'Bookmarks Bar')
-    let bookmarksBar = rootNode.children.find(node => node.id === '1');
-    if (!bookmarksBar && rootNode.children.length > 0) {
-        // Fallback: Use the first child if id '1' not found
-        bookmarksBar = rootNode.children[0];
-    }
-
-    if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
-        renderBookmarkState('empty', '书签栏还是空的，先收藏几个常用站点吧。');
-        return;
-    }
-
-    // Create a wrapper for top-level columns
-    const topLevelContainer = document.createElement('div');
-    topLevelContainer.className = 'top-level-container';
-    container.appendChild(topLevelContainer);
-    bindDelegatedItemDnD(topLevelContainer);
-
-    bookmarksBar.children.forEach(child => {
-        if (child.children) { // Is Folder
-            const card = createBookmarkCard(child);
-            topLevelContainer.appendChild(card);
-        } else {
-            const card = createSimpleTile(child);
-            topLevelContainer.appendChild(card);
-        }
     });
 }
 
@@ -1011,7 +940,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
         const getFlatDragTarget = (e) => {
             const eventTarget = e.target instanceof Element ? e.target : null;
-            const item = eventTarget ? eventTarget.closest('.leaf-wrapper, .bookmark-card') : null;
+            const item = eventTarget ? eventTarget.closest('.leaf-wrapper') : null;
             return item && listContainer.contains(item) ? item : listContainer;
         };
 
@@ -1285,106 +1214,6 @@ function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
     return variant === 'folder' ? '2*1' : '1*1';
 }
 
-function createBookmarkCard(folderNode) {
-    const card = document.createElement('div');
-    card.className = 'bookmark-card';
-    
-    // Detect if this folder contains any sub-folders dynamically
-    const hasSubFolder = folderNode.children && folderNode.children.some(child => child.children);
-    const savedSize = BOOKMARK_CARD_SIZES[folderNode.id] || 'default';
-    
-    card.classList.forEach(cls => {
-        if (cls.startsWith('layout-size-') || cls === 'card--large' || cls === 'card--small' || cls === 'card--square') {
-            card.classList.remove(cls);
-        }
-    });
-
-    let activeSize = savedSize;
-    if (activeSize === 'default') {
-        activeSize = hasSubFolder ? '2*2' : '2*1';
-    }
-    const sizeClass = `layout-size-${activeSize.replace('*', '-')}`;
-    card.classList.add(sizeClass);
-
-    card.setAttribute('draggable', 'true');
-    card.dataset.id = folderNode.id;
-
-    // Drag Events
-    card.addEventListener('dragstart', handleDragStart);
-    card.addEventListener('dragover', handleDragOver);
-    card.addEventListener('dragleave', handleDragLeave);
-    card.addEventListener('drop', handleDrop);
-    card.addEventListener('dragend', handleDragEnd);
-
-    // Header
-    const header = document.createElement('div');
-    header.className = 'card-header';
-    header.innerHTML = `${FOLDER_ICON_SVG} <span class="card-title">${folderNode.title}</span>`;
-
-    // Header Actions Container (flex alignment for layout edit/expand buttons)
-    const actionsContainer = document.createElement('div');
-    actionsContainer.className = 'card-header-actions';
-
-    // Edit Button for card (folder) custom layout
-    const editCardBtn = document.createElement('button');
-    editCardBtn.className = 'card-action-btn edit-btn';
-    editCardBtn.title = '编辑目录';
-    editCardBtn.setAttribute('aria-label', `编辑目录 ${folderNode.title}`);
-    editCardBtn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
-    editCardBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        editBookmark(folderNode, card);
-    });
-    actionsContainer.appendChild(editCardBtn);
-
-    // Mac-style Expand Button
-    const expandBtn = document.createElement('button');
-    expandBtn.className = 'card-action-btn expand-btn';
-    expandBtn.title = '放大查看';
-    expandBtn.setAttribute('aria-label', `展开查看 ${folderNode.title}`);
-    expandBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <polyline points="9 21 3 21 3 15"></polyline>
-            <line x1="21" y1="3" x2="14" y2="10"></line>
-            <line x1="3" y1="21" x2="10" y2="14"></line>
-        </svg>
-    `;
-    expandBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showFolderModal(folderNode);
-    });
-    actionsContainer.appendChild(expandBtn);
-
-    header.appendChild(actionsContainer);
-    card.appendChild(header);
-
-    // Content List
-    const content = document.createElement('div');
-    content.className = 'card-content';
-
-    if (folderNode.children) {
-        folderNode.children.forEach(child => {
-            content.appendChild(renderTreeItem(child));
-        });
-    }
-
-    card.appendChild(content);
-
-    // Auto-collapse all sub-folders when mouse leaves the entire card
-    card.addEventListener('mouseleave', () => {
-        const subFolders = content.querySelectorAll('.sub-folder');
-        subFolders.forEach(folder => {
-            if (folder.collapseIfUnlocked) {
-                folder.collapseIfUnlocked();
-            }
-        });
-    });
-
-    return card;
-}
-
 // --- Helpers ---
 
 // Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
@@ -1431,50 +1260,6 @@ function createBookmarkIcon(iconData, size = 16) {
         span.textContent = iconData.value;
         return span;
     }
-}
-
-function createSimpleTile(node) {
-    // For single bookmarks at the top level, we make a mini card
-    const card = document.createElement('div');
-    card.className = 'bookmark-card';
-    card.style.height = 'auto'; // Auto height for single items
-    card.setAttribute('draggable', 'true');
-    card.dataset.id = node.id;
-
-    // Drag Events
-    card.addEventListener('dragstart', handleDragStart);
-    card.addEventListener('dragover', handleDragOver);
-    card.addEventListener('dragleave', handleDragLeave);
-    card.addEventListener('drop', handleDrop);
-    card.addEventListener('dragend', handleDragEnd);
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'leaf-wrapper';
-
-    const leaf = document.createElement('a');
-    leaf.className = 'leaf-node';
-    leaf.href = node.url;
-    if (OPEN_IN_NEW_TAB) {
-        leaf.target = '_blank';
-    }
-    leaf.style.padding = '0';
-
-    // Icon handling (CSP-compliant)
-    const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 16);
-    leaf.appendChild(iconElement);
-
-    const labelSpan = document.createElement('span');
-    labelSpan.className = 'bookmark-label';
-    labelSpan.style.fontWeight = 'bold';
-    labelSpan.textContent = node.title;
-    labelSpan.title = node.title || '';
-    leaf.title = node.title || '';
-    leaf.appendChild(labelSpan);
-
-    wrapper.appendChild(leaf);
-    card.appendChild(wrapper);
-    return card;
 }
 
 function renderFlatBookmarkItem(node) {
@@ -1864,78 +1649,6 @@ function editBookmark(node, wrapperEl) {
         }
     }, { signal });
 }
-
-// --- Card-Level Drag & Drop ---
-// --- Drag & Drop Logic ---
-
-function handleDragStart(e) {
-    if (e.target !== this) return;
-    this.style.opacity = '0.4';
-    dragSrcEl = this;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
-}
-
-function handleDragOver(e) {
-    if (e.target !== this) return false;
-    if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
-    }
-    e.dataTransfer.dropEffect = 'move';
-    this.classList.add('drag-over');
-    return false;
-}
-
-function handleDragLeave(e) {
-    if (e.target !== this) return;
-    this.classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-    if (e.target !== this) return false;
-    if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
-    }
-    this.classList.remove('drag-over');
-
-    if (dragSrcEl && dragSrcEl !== this) {
-        // Swap DOM elements
-        const parent = this.parentNode;
-        const allCards = Array.from(parent.children);
-        const srcIndex = allCards.indexOf(dragSrcEl);
-        const targetIndex = allCards.indexOf(this);
-
-        if (srcIndex < targetIndex) {
-            parent.insertBefore(dragSrcEl, this.nextSibling);
-        } else {
-            parent.insertBefore(dragSrcEl, this);
-        }
-
-        // Update Chrome Bookmarks
-        const srcId = dragSrcEl.dataset.id;
-        // We need the numeric index in the actual folder
-        // For simplicity, we assume the valid index is just the DOM index now.
-        // NOTE: Chrome index is 0-based within the parent.
-        // We are reordering inside top-level-container, which corresponds to bookmarksBar.children
-
-        chrome.bookmarks.move(srcId, { index: targetIndex }, (res) => {
-            console.log('Moved bookmark:', res);
-            refreshBookmarkTreeCache();
-        });
-
-        this.style.opacity = '1';
-        dragSrcEl.style.opacity = '1';
-    }
-    return false;
-}
-
-function handleDragEnd(e) {
-    if (e.target !== this) return;
-    this.style.opacity = '1';
-    const items = document.querySelectorAll('.bookmark-card');
-    items.forEach(item => item.classList.remove('drag-over'));
-}
-
 
 // --- Folder Modal & Search ---
 // --- Folder Modal Logic ---
@@ -2384,7 +2097,6 @@ function initSettingsUI(settings) {
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
-    const layoutModeInputs = document.getElementsByName('layout-mode');
 
     // Background Inputs
     const bgUpload = document.getElementById('bg-image-upload');
@@ -2452,24 +2164,8 @@ function initSettingsUI(settings) {
         }
     });
 
-    // 4. Layout Mode
-    layoutModeInputs.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.checked) {
-                LAYOUT_MODE = radio.value;
-                saveSetting(STORAGE_KEY_LAYOUT_MODE, LAYOUT_MODE);
-                // Re-render bookmarks
-                renderBookmarksFromCache();
-            }
-        });
-
-        // Initial state
-        if (settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === settings[STORAGE_KEY_LAYOUT_MODE]) {
-            radio.checked = true;
-        } else if (!settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === 'tree') {
-            radio.checked = true; // Default
-        }
-    });
+    LAYOUT_MODE = 'flat';
+    chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: 'flat' });
 
     // 4. Background Settings
 
@@ -3289,10 +2985,6 @@ function handleItemDrop(e) {
         // API Update
         // Determine Destination Parent ID
         let destParentId = parent.dataset.parentId;
-        if (!destParentId) {
-            const card = parent.closest('.bookmark-card');
-            if (card) destParentId = card.dataset.id;
-        }
 
         const destination = { index: newIndex };
         if (destParentId) {
@@ -3327,7 +3019,6 @@ function handleItemDragEnd(e) {
     DRAG_HIGHLIGHTED_ELEMENTS.clear();
     dragSrcEl = null;
 }
-
 
 // --- AI Sidebar ---
 // --- AI Sidebar Logic ---
@@ -3897,7 +3588,7 @@ window.addEventListener('resize', debounce(syncSidebarActiveIndicator, 80));
 // Bind clicks globally to handle fluid shimmers and directory indicator shifts
 document.addEventListener('click', (e) => {
     // 1. Fluid shimmers for bookmarks
-    const cardEl = e.target.closest('.leaf-wrapper, .bookmark-card');
+    const cardEl = e.target.closest('.leaf-wrapper');
     if (cardEl) {
         cardEl.classList.remove('is-selected');
         void cardEl.offsetWidth; // Force animation reset
@@ -3919,8 +3610,7 @@ function initMagneticHover() {
     let lastTarget = null;
 
     document.addEventListener('mousemove', (e) => {
-        // Exclude nested .leaf-wrapper items inside .bookmark-card to prevent transform conflict
-        const target = e.target.closest('.bookmarks-pane-grid .leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
+        const target = e.target.closest('.bookmarks-pane-grid .leaf-wrapper, .btn-magnetic, .tree-folder-item');
         
         if (!target) {
             const activeEl = document.querySelector('.is-magnetized');

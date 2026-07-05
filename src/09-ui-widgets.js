@@ -154,7 +154,7 @@ window.addEventListener('resize', debounce(syncSidebarActiveIndicator, 80));
 // Bind clicks globally to handle fluid shimmers and directory indicator shifts
 document.addEventListener('click', (e) => {
     // 1. Fluid shimmers for bookmarks
-    const cardEl = e.target.closest('.leaf-wrapper, .bookmark-card');
+    const cardEl = e.target.closest('.leaf-wrapper');
     if (cardEl) {
         cardEl.classList.remove('is-selected');
         void cardEl.offsetWidth; // Force animation reset
@@ -176,8 +176,7 @@ function initMagneticHover() {
     let lastTarget = null;
 
     document.addEventListener('mousemove', (e) => {
-        // Exclude nested .leaf-wrapper items inside .bookmark-card to prevent transform conflict
-        const target = e.target.closest('.bookmarks-pane-grid .leaf-wrapper, .bookmark-card, .btn-magnetic, .tree-folder-item');
+        const target = e.target.closest('.bookmarks-pane-grid .leaf-wrapper, .btn-magnetic, .tree-folder-item');
         
         if (!target) {
             const activeEl = document.querySelector('.is-magnetized');

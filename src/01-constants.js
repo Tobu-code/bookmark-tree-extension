@@ -677,8 +677,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         HOVER_DELAY = parseInt(settings[STORAGE_KEY_HOVER_DELAY]);
     }
 
-    if (settings[STORAGE_KEY_LAYOUT_MODE]) LAYOUT_MODE = settings[STORAGE_KEY_LAYOUT_MODE];
-    else LAYOUT_MODE = 'tree';
+    LAYOUT_MODE = 'flat';
 
 
 
@@ -717,36 +716,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 7. Render Bookmarks
     renderBookmarksFromCache();
-
-    // 7.5 Layout Toggle Button (outside settings for quick access)
-    const layoutToggleBtn = document.getElementById('layout-toggle-btn');
-    const layoutIconTree = document.getElementById('layout-icon-tree');
-    const layoutIconFlat = document.getElementById('layout-icon-flat');
-    
-    function updateLayoutToggleIcon() {
-        if (LAYOUT_MODE === 'flat') {
-            layoutIconTree.classList.add('icon-hidden');
-            layoutIconFlat.classList.remove('icon-hidden');
-            layoutToggleBtn.title = '切换到树状模式';
-        } else {
-            layoutIconTree.classList.remove('icon-hidden');
-            layoutIconFlat.classList.add('icon-hidden');
-            layoutToggleBtn.title = '切换到平铺模式';
-        }
-    }
-    updateLayoutToggleIcon(); // Set initial icon state
-    
-    layoutToggleBtn.addEventListener('click', () => {
-        LAYOUT_MODE = LAYOUT_MODE === 'tree' ? 'flat' : 'tree';
-        chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: LAYOUT_MODE });
-        updateLayoutToggleIcon();
-        // Also sync the radio buttons inside settings modal
-        const layoutRadios = document.getElementsByName('layout-mode');
-        layoutRadios.forEach(r => r.checked = r.value === LAYOUT_MODE);
-        // Re-render
-        renderBookmarksWithLayoutTransition();
-    });
-
 
     // 8. Reveal Page
     requestAnimationFrame(() => {
@@ -788,4 +757,3 @@ function preloadImage(url, timeoutMs = 5000) {
         }
     });
 }
-

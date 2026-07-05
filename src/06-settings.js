@@ -33,7 +33,6 @@ function initSettingsUI(settings) {
     const linkTargetInputs = document.getElementsByName('link-target');
     const themeInputs = document.getElementsByName('theme');
     const iconStyleInputs = document.getElementsByName('icon-style');
-    const layoutModeInputs = document.getElementsByName('layout-mode');
 
     // Background Inputs
     const bgUpload = document.getElementById('bg-image-upload');
@@ -101,24 +100,8 @@ function initSettingsUI(settings) {
         }
     });
 
-    // 4. Layout Mode
-    layoutModeInputs.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.checked) {
-                LAYOUT_MODE = radio.value;
-                saveSetting(STORAGE_KEY_LAYOUT_MODE, LAYOUT_MODE);
-                // Re-render bookmarks
-                renderBookmarksFromCache();
-            }
-        });
-
-        // Initial state
-        if (settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === settings[STORAGE_KEY_LAYOUT_MODE]) {
-            radio.checked = true;
-        } else if (!settings[STORAGE_KEY_LAYOUT_MODE] && radio.value === 'tree') {
-            radio.checked = true; // Default
-        }
-    });
+    LAYOUT_MODE = 'flat';
+    chrome.storage.local.set({ [STORAGE_KEY_LAYOUT_MODE]: 'flat' });
 
     // 4. Background Settings
 
