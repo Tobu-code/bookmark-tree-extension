@@ -7,8 +7,8 @@ function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
     }
 
     const sizes = variant === 'folder'
-        ? ['1*1', '2*1', '1*1', '2*1', '2*2', '1*2']
-        : ['1*1', '1*1', '2*1', '1*1', '2*1', '2*2', '1*2', '1*1'];
+        ? ['2*1', '2*1', '2*2', '1*2', '2*1', '2*2']
+        : ['2*1', '2*1', '1*1', '2*1', '2*2', '1*2', '2*1', '1*1'];
     return sizes[Math.abs(hash) % sizes.length];
 }
 
@@ -28,7 +28,7 @@ function createBookmarkCard(folderNode) {
 
     let activeSize = savedSize;
     if (activeSize === 'default') {
-        activeSize = hasSubFolder ? '2*1' : '1*1';
+        activeSize = hasSubFolder ? '2*2' : '2*1';
     }
     const sizeClass = `layout-size-${activeSize.replace('*', '-')}`;
     card.classList.add(sizeClass);
