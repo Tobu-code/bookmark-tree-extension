@@ -1619,40 +1619,40 @@ body.ai-sidebar-open .ai-sidebar,
     flex: 1 1 auto;
     min-width: 0;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 9px;
     overflow: auto;
 }
 
 .ai-tab,
 .ai-action-btn,
 .ai-provider-action-btn {
-    min-height: 28px;
+    min-height: 32px;
     border: 0;
     border-radius: var(--radius-pill);
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(248, 250, 252, 0.68);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(248, 250, 252, 0.74);
 }
 
 .ai-tab {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 0 8px;
-    font-size: 12px;
-    font-weight: 720;
+    gap: 8px;
+    padding: 0 11px;
+    font-size: 13px;
+    font-weight: 760;
     white-space: nowrap;
 }
 
 .ai-tab-icon,
 .ai-tab-icon img,
 .ai-tab-icon svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 22px !important;
+    height: 22px !important;
 }
 
 .ai-tab-icon {
     display: grid;
-    flex: 0 0 18px;
+    flex: 0 0 22px;
     place-items: center;
 }
 
@@ -1662,7 +1662,7 @@ body.ai-sidebar-open .ai-sidebar,
 
 .ai-tab.active {
     color: #fff;
-    background: rgba(99, 102, 241, 0.28);
+    background: rgba(99, 102, 241, 0.36);
 }
 
 .ai-action-btn {
