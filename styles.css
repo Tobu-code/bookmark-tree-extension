@@ -692,6 +692,19 @@ svg {
     transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease, opacity 200ms ease;
 }
 
+.leaf-wrapper::after,
+.bookmark-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+        linear-gradient(135deg, var(--card-accent-soft, rgba(99, 102, 241, 0.12)), transparent 42%),
+        linear-gradient(90deg, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 64%) 0 0) top left / 100% 2px no-repeat;
+    opacity: 0.58;
+}
+
 .bookmarks-pane-grid .leaf-wrapper:nth-child(6n + 1),
 .top-level-container .bookmark-card:nth-child(6n + 1) {
     --card-accent: var(--soft-indigo);
@@ -737,7 +750,7 @@ svg {
     pointer-events: none;
     background:
         radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2), transparent 30%),
-        linear-gradient(135deg, color-mix(in srgb, var(--soft-indigo), transparent 94%), transparent 58%);
+        linear-gradient(135deg, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 90%), transparent 58%);
     transition: opacity 200ms ease;
 }
 
@@ -820,8 +833,8 @@ svg {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: clamp(18px, 1.6vw, 24px);
+    gap: 8px;
+    padding: clamp(14px, 1.2vw, 18px);
     color: var(--text-primary);
     text-align: center;
 }
@@ -830,15 +843,15 @@ svg {
 .bookmark-icon-fallback,
 .bookmark-icon-wrap {
     flex: 0 0 auto;
-    width: clamp(34px, 2.7vw, 48px);
-    height: clamp(34px, 2.7vw, 48px);
+    width: clamp(24px, 1.8vw, 32px);
+    height: clamp(24px, 1.8vw, 32px);
     margin: 0 !important;
-    border-radius: 14px;
+    border-radius: 10px;
     object-fit: contain;
     background:
         radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.65), transparent 34%),
         color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 88%);
-    box-shadow: 0 8px 18px rgba(15, 18, 32, 0.1);
+    box-shadow: 0 6px 14px rgba(15, 18, 32, 0.08);
 }
 
 .bookmark-icon-fallback {
@@ -866,15 +879,15 @@ svg {
 .layout-size-1-1 .leaf-node,
 .layout-size-2-1 .leaf-node,
 .layout-size-3-1 .leaf-node {
-    gap: 8px;
-    padding: 14px 16px;
+    gap: 7px;
+    padding: 12px 14px;
 }
 
 .layout-size-1-1 .bookmark-icon,
 .layout-size-1-1 .bookmark-icon-fallback,
 .layout-size-1-1 .bookmark-icon-wrap {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
 }
 
 .layout-size-1-1 .bookmark-label {
@@ -944,9 +957,13 @@ svg {
     position: relative;
     z-index: 1;
     display: grid;
-    gap: 7px;
-    overflow: auto;
-    padding-right: 2px;
+    gap: 8px;
+    max-height: clamp(168px, 24vh, 300px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 55%) transparent;
 }
 
 .card-content .leaf-wrapper,
@@ -955,7 +972,7 @@ svg {
     border-radius: 14px;
     background: color-mix(in srgb, var(--soft-indigo), transparent 94%);
     box-shadow: none;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .card-content .leaf-wrapper::before,
@@ -971,26 +988,26 @@ svg {
 
 .card-content .leaf-node {
     height: auto;
-    min-height: 32px;
+    min-height: 36px;
     flex-direction: row;
     justify-content: flex-start;
     gap: 8px;
-    padding: 6px 9px;
+    padding: 7px 10px;
     text-align: left;
 }
 
 .card-content .bookmark-icon,
 .card-content .bookmark-icon-fallback {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
     border-radius: 6px;
     box-shadow: none;
 }
 
 .card-content .bookmark-label {
     -webkit-line-clamp: 1;
-    font-size: 12.5px;
-    line-height: 1.15;
+    font-size: 13px;
+    line-height: 1.2;
     color: var(--text-primary);
     opacity: 1;
 }
@@ -1582,128 +1599,7 @@ body.ai-sidebar-open .ai-sidebar,
 
 @media (max-width: 899px) {
     .app-shell {
-        width: min(100% - 32px, 720px);
-        padding-top: 24px;
-    }
-
-    .app-header,
-    #bookmarks-tree.layout-flat {
-        grid-template-columns: 1fr;
-        gap: 22px;
-    }
-
-    .app-header {
-        margin-bottom: 28px;
-    }
-
-    .ambient-time {
-        min-height: 118px;
-    }
-
-    .search-wrapper {
-        min-height: 58px;
-    }
-
-    .search-top-row {
-        min-height: 58px;
-        gap: 10px;
-        padding-left: 12px;
-    }
-
-    #search-engine-label {
-        min-width: 64px;
-        height: 38px;
-        padding: 0 12px;
-    }
-
-    #ai-sidebar-btn {
-        width: 42px;
-        height: 42px;
-    }
-
-    .ai-sidebar {
-        inset: 12px;
-        width: auto;
-    }
-
-    .directory-pane-scroll {
-        position: relative;
-        top: 0;
-        max-height: none;
-        padding: 0;
-    }
-
-    .bookmarks-pane-grid,
-    .top-level-container {
-        grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
-        grid-auto-rows: 78px;
-        gap: 14px;
-    }
-
-    .layout-size-3-1,
-    .layout-size-3-2,
-    .layout-size-3-3 {
-        grid-column: span 2;
-    }
-
-    .layout-size-2-3,
-    .layout-size-3-3 {
-        grid-row: span 2;
-    }
-
-    .leaf-node,
-    .leaf-node--folder {
-        padding: 14px;
-    }
-
-    .layout-size-2-1 .leaf-node,
-    .layout-size-3-1 .leaf-node {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
-@media (max-width: 560px) {
-    .ambient-time-clock {
-        font-size: clamp(48px, 18vw, 68px);
-    }
-
-    .ambient-time-info-group {
-        display: grid;
-        gap: 4px;
-    }
-
-    .bookmarks-pane-grid,
-    .top-level-container,
-    .folder-modal-body {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: 76px;
-        gap: 12px;
-    }
-
-    .layout-size-2-1,
-    .layout-size-2-2,
-    .layout-size-2-3,
-    .layout-size-3-1,
-    .layout-size-3-2,
-    .layout-size-3-3 {
-        grid-column: span 2;
-    }
-
-    .layout-size-1-3,
-    .layout-size-2-3,
-    .layout-size-3-2,
-    .layout-size-3-3 {
-        grid-row: span 2;
-    }
-
-    .modal {
-        padding: 12px;
-    }
-
-    .ai-sidebar {
-        inset: 12px;
-        width: auto;
+        min-width: 900px;
     }
 }
 

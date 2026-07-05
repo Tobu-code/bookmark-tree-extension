@@ -1282,7 +1282,7 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
 
 // --- Bookmark Card / Item Helpers ---
 function getStableDefaultFlatCardSize(node, variant = 'bookmark') {
-    return '2*1';
+    return variant === 'folder' ? '2*1' : '1*1';
 }
 
 function createBookmarkCard(folderNode) {
