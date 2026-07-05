@@ -54,7 +54,7 @@
     --content-gap: clamp(42px, 5.2vw, 86px);
     --flat-sidebar: clamp(230px, 20vw, 330px);
     --flat-grid-cell: clamp(188px, 11.2vw, 224px);
-    --flat-grid-row: clamp(88px, 5.1vw, 104px);
+    --flat-grid-row: var(--flat-grid-cell);
     --flat-grid-gap: clamp(22px, 1.55vw, 30px);
     --tree-grid-cell: clamp(246px, 18vw, 340px);
     --tree-grid-row: 88px;
@@ -943,8 +943,9 @@ body.has-custom-bg #search-suggestions {
 }
 
 .bookmarks-pane-grid {
-    grid-template-columns: repeat(auto-fill, minmax(var(--flat-grid-cell), 1fr));
+    grid-template-columns: repeat(auto-fill, var(--flat-grid-cell));
     grid-auto-rows: var(--flat-grid-row);
+    justify-content: start;
     gap: var(--flat-grid-gap);
     align-items: stretch;
     padding-top: 2px;
