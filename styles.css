@@ -259,7 +259,6 @@ body.has-custom-bg::after {
         var(--card-bg);
 }
 
-:root[data-theme="light"] body.has-custom-bg .tree-folder-item,
 :root[data-theme="light"] body.has-custom-bg .bookmark-label,
 :root[data-theme="light"] body.has-custom-bg #search-input,
 :root[data-theme="light"] body.has-custom-bg #search-engine-label,
@@ -269,14 +268,17 @@ body.has-custom-bg::after {
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item {
-    color: var(--text-secondary);
-    font-weight: 780;
+    background: rgba(248, 251, 255, 0.34);
+    color: #243247;
+    font-weight: 800;
+    text-shadow: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:hover,
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:focus-within {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.44);
+    background: rgba(255, 255, 255, 0.58);
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item.active {
@@ -327,7 +329,6 @@ body.has-custom-bg::after {
             var(--card-bg);
     }
 
-    :root:not([data-theme]) body.has-custom-bg .tree-folder-item,
     :root:not([data-theme]) body.has-custom-bg .bookmark-label,
     :root:not([data-theme]) body.has-custom-bg #search-input,
     :root:not([data-theme]) body.has-custom-bg #search-engine-label,
@@ -337,14 +338,17 @@ body.has-custom-bg::after {
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item {
-        color: var(--text-secondary);
-        font-weight: 780;
+        background: rgba(248, 251, 255, 0.34);
+        color: #243247;
+        font-weight: 800;
+        text-shadow: none;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:hover,
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:focus-within {
         color: var(--text-primary);
-        background: rgba(255, 255, 255, 0.44);
+        background: rgba(255, 255, 255, 0.58);
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item.active {
