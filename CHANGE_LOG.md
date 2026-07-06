@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 15:44:37]
+- **Type**: Fix (恢复书签卡片自适应网格)
+- **Content**: 将右侧书签卡片区从固定 8 个基础列改为带舒适上限的自适应网格，4K 等大屏下可自然扩展到约 1320px 内容宽度，同时保持搜索区与卡片区宽度协调；一并收口标语文字渐变流动和删除入口合并到编辑弹窗的已确认改动。
+- **Impact**: `styles.css`, `newtab.html`, `src/03-bookmarks-items.js`, `script.js`
+
 ## [2026-07-06 09:45:58]
 - **Type**: Fix (对齐 AI 顶栏与收短搜索区)
 - **Content**: 将 AI 侧栏顶部服务标签改为自然贴左排列，并让右侧操作按钮独立靠右；同时将主页搜索区宽度上限从 `1280px` 收紧到 `1160px`，让搜索框和书签卡片区域的视觉宽度更协调。
@@ -1293,6 +1298,12 @@
 - **Type**: Chore (Merge)
 - **Content**: 将分支 `feature/feature-ui-anlaysis-0325` 合并至 `main`，同步纳入界面分析与样式调优相关变更，并完成主干收敛。
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
+
+## [2026-07-06]
+- **Time**: 2026-07-06 15:01:41 +0800
+- **Type**: Refactor (Bookmark Layout / Actions)
+- **Content**: 优化书签内容区布局与卡片操作：右侧书签网格固定为 8 个基础列，默认长 2 卡片每行显示 4 个并同步搜索框宽度；分割线下移靠近书签区域；移除卡片右上角独立删除按钮，将删除入口合并到书签编辑弹窗中，目录编辑时隐藏删除入口。
+- **Impact**: `newtab.html`、`src/03-bookmarks-items.js`、`script.js`、`styles.css`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
 - **Time**: 2026-07-06 14:12:18 +0800

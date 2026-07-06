@@ -1457,18 +1457,6 @@ function createBookmarkActions(node, wrapperEl) {
     });
     actions.appendChild(editBtn);
 
-    // Delete button
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'bookmark-action-btn delete-btn';
-    deleteBtn.title = '删除书签';
-    deleteBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
-    deleteBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        deleteBookmark(node, wrapperEl);
-    });
-    actions.appendChild(deleteBtn);
-
     return actions;
 }
 
@@ -1537,6 +1525,7 @@ function editBookmark(node, wrapperEl) {
     const urlInput = document.getElementById('edit-bookmark-url');
     const sizeSelect = document.getElementById('edit-bookmark-size');
     const pulseInput = document.getElementById('edit-bookmark-pulse');
+    const deleteBtn = document.getElementById('edit-bookmark-delete');
     const cancelBtn = document.getElementById('edit-bookmark-cancel');
     const saveBtn = document.getElementById('edit-bookmark-save');
     const closeBtn = document.getElementById('edit-bookmark-close');
@@ -1565,9 +1554,11 @@ function editBookmark(node, wrapperEl) {
     // Toggle URL field visibility for folders vs bookmarks
     if (isFolder) {
         if (urlField) urlField.classList.add('hidden');
+        if (deleteBtn) deleteBtn.classList.add('hidden');
         if (titleLabel) titleLabel.textContent = '编辑目录';
     } else {
         if (urlField) urlField.classList.remove('hidden');
+        if (deleteBtn) deleteBtn.classList.remove('hidden');
         if (titleLabel) titleLabel.textContent = '编辑书签';
     }
 
@@ -1587,6 +1578,12 @@ function editBookmark(node, wrapperEl) {
 
     cancelBtn.addEventListener('click', closeDialog, { signal });
     if (closeBtn) closeBtn.addEventListener('click', closeDialog, { signal });
+    if (deleteBtn && !isFolder) {
+        deleteBtn.addEventListener('click', () => {
+            closeDialog();
+            deleteBookmark(node, wrapperEl);
+        }, { signal });
+    }
 
     saveBtn.addEventListener('click', () => {
         const newTitle = titleInput.value.trim();
