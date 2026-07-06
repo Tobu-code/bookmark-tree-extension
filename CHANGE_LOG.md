@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 11:17:09 +0800
+- **Type**: Refactor (Custom Background Sidebar)
+- **Content**: 修正自定义背景图场景下左侧目录普通项仍呈现胶囊底色的问题：普通目录项改为透明，仅 hover 保留极轻反馈，选中项保留高亮胶囊以匹配无边框目录预期。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 11:09:22 +0800
 - **Type**: Refactor (Custom Background Sidebar)
 - **Content**: 清理自定义背景图场景下左侧书签目录项的内描边：普通态与选中态不再使用边框式阴影，仅保留半透明底色和选中指示，减少每个目录项像独立小框的割裂感。
