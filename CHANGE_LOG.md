@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 16:10:38]
+- **Type**: Feature (新增书签主页鼠标光晕指针)
+- **Content**: 为书签主页增加跟随鼠标移动的柔和光晕指针层，使用 requestAnimationFrame 合并 pointermove 更新，并在粗指针设备和低动态偏好下自动关闭，避免影响点击和性能。
+- **Impact**: `styles.css`, `src/09-ui-widgets.js`, `script.js`
+
 ## [2026-07-06 16:05:59]
 - **Type**: Fix (AI 服务图标离线可用)
 - **Content**: 将预置 AI 服务图标从 Google favicon 远程地址改为内置本地 SVG 徽标，并让自定义 AI 服务的设置列表兜底图标也使用本地 SVG，避免断网或外网不可达时顶部 AI 标签和设置列表出现破图。
