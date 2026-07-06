@@ -125,13 +125,16 @@
 }
 
 html {
+    height: 100%;
     min-height: 100%;
     background: var(--page-bg);
 }
 
 body {
+    height: 100%;
     min-height: 100vh;
     margin: 0;
+    overflow: hidden;
     overflow-x: hidden;
     color: var(--text-primary);
     background:
@@ -415,8 +418,11 @@ body.has-custom-bg::after {
 }
 
 .app-shell {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     width: min(var(--shell-max), calc(100vw - (var(--page-pad-x) * 2)));
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 0;
     margin: 0 auto;
     padding: clamp(30px, 5.2vh, 72px) 0 clamp(34px, 7vh, 92px);
 }
@@ -853,14 +859,17 @@ body.has-custom-bg #search-suggestions {
     position: relative;
     z-index: 1;
     width: 100%;
+    min-height: 0;
     transition: opacity 180ms ease, transform 180ms ease;
 }
 
 #bookmarks-tree.layout-flat {
     display: grid;
     grid-template-columns: var(--flat-sidebar) minmax(0, 1fr);
-    align-items: start;
+    align-items: stretch;
     gap: var(--content-gap);
+    height: 100%;
+    min-height: 0;
 }
 
 #bookmarks-tree.layout-flat::before {
@@ -897,18 +906,46 @@ body.has-custom-bg #search-suggestions {
 }
 
 .directory-pane {
+    height: 100%;
     min-width: 0;
+    min-height: 0;
 }
 
 .directory-pane-scroll {
-    position: sticky;
-    top: clamp(22px, 4vh, 42px);
-    max-height: calc(100vh - 84px);
-    overflow: auto;
+    height: 100%;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 6px 8px;
     border-radius: var(--radius-xl);
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--soft-indigo), transparent 55%) transparent;
+}
+
+.directory-pane-scroll::-webkit-scrollbar,
+.bookmarks-pane-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.directory-pane-scroll::-webkit-scrollbar-track,
+.bookmarks-pane-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.directory-pane-scroll::-webkit-scrollbar-thumb,
+.bookmarks-pane-scroll::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--soft-indigo), transparent 62%);
+    background-clip: padding-box;
+}
+
+.directory-pane-scroll::-webkit-scrollbar-thumb:hover,
+.bookmarks-pane-scroll::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--soft-indigo), transparent 48%);
+    background-clip: padding-box;
 }
 
 .tree-folder-item {
@@ -1062,11 +1099,44 @@ body.has-custom-bg #search-suggestions {
 }
 
 .bookmarks-pane {
+    position: relative;
+    height: 100%;
     min-width: 0;
+    min-height: 0;
 }
 
 .bookmarks-pane-scroll {
+    height: 100%;
     min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 8px clamp(28px, 4vh, 48px) 0;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--soft-indigo), transparent 56%) transparent;
+}
+
+.bookmarks-pane::before,
+.bookmarks-pane::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 14px;
+    z-index: 2;
+    height: 22px;
+    pointer-events: none;
+}
+
+.bookmarks-pane::before {
+    top: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--page-bg), transparent 6%), transparent);
+}
+
+.bookmarks-pane::after {
+    bottom: 0;
+    background: linear-gradient(0deg, color-mix(in srgb, var(--page-bg-2), transparent 12%), transparent);
 }
 
 .bookmarks-pane-grid,
