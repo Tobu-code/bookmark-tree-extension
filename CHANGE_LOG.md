@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 10:20:52 +0800
+- **Type**: Refactor (New Tab Visual Polish)
+- **Content**: 继续优化自定义背景图下的新标签页视觉比例：书签卡片基础单元整体缩小约 10%，搜索框宽度收短，时间区在背景图场景下去除卡片外框与阴影，仅保留时间日期文字；左侧目录增强玻璃面板材质、内高光与阴影层级。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 10:13:49 +0800
 - **Type**: Refactor (Custom Background Polish)
 - **Content**: 优化上传自定义背景图后的界面材质：加强全局背景遮罩，提高搜索区、时间区、书签卡片与左侧目录在浅色背景图场景下的承载层不透明度和边界稳定性，降低壁纸细节穿透造成的杂乱感。
