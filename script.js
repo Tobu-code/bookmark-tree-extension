@@ -2219,8 +2219,8 @@ function initSettingsUI(settings) {
     function updateBlurControlsState() {
         const hasImage = CURRENT_BG_IMAGE !== null;
         blurInput.disabled = !hasImage;
-        containerBlurInput.disabled = !hasImage;
-        blurControls.style.opacity = hasImage ? '1' : '0.5';
+        containerBlurInput.disabled = false;
+        blurControls.style.opacity = '1';
     }
 
     // Fix #16: Save to IndexedDB instead of chrome.storage.local to bypass 8MB limit
@@ -2847,7 +2847,6 @@ function escapeHtmlForExport(str) {
 
 function applyBackground() {
     const bgLayer = document.getElementById('background-layer');
-    const aiSidebar = document.getElementById('ai-sidebar');
     if (!bgLayer) return;
 
     if (CURRENT_BG_IMAGE) {
@@ -2864,12 +2863,6 @@ function applyBackground() {
     } else {
         bgLayer.style.filter = 'none';
         bgLayer.style.transform = 'scale(1)';
-    }
-    if (aiSidebar) {
-        // Base blur of 40px plus user's background blur
-        const totalBlur = 40 + parseInt(CURRENT_BG_BLUR);
-        aiSidebar.style.backdropFilter = `blur(${totalBlur}px)`;
-        aiSidebar.style.webkitBackdropFilter = `blur(${totalBlur}px)`;
     }
 }
 
