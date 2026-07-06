@@ -292,7 +292,7 @@ body.has-custom-bg::after {
     color: #243247;
     font-weight: 800;
     text-shadow: none;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+    box-shadow: none;
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:hover,
@@ -306,7 +306,7 @@ body.has-custom-bg::after {
     background:
         linear-gradient(90deg, rgba(99, 102, 241, 0.22), rgba(236, 72, 153, 0.1)),
         rgba(255, 255, 255, 0.86);
-    box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.36);
+    box-shadow: none;
 }
 
 :root[data-theme="light"] body.has-custom-bg #search-input::placeholder {
@@ -386,7 +386,7 @@ body.has-custom-bg::after {
         color: #243247;
         font-weight: 800;
         text-shadow: none;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+        box-shadow: none;
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:hover,
@@ -400,7 +400,7 @@ body.has-custom-bg::after {
         background:
             linear-gradient(90deg, rgba(99, 102, 241, 0.22), rgba(236, 72, 153, 0.1)),
             rgba(255, 255, 255, 0.86);
-        box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.36);
+        box-shadow: none;
     }
 
     :root:not([data-theme]) body.has-custom-bg #search-input::placeholder {

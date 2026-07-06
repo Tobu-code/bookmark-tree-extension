@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 11:09:22 +0800
+- **Type**: Refactor (Custom Background Sidebar)
+- **Content**: 清理自定义背景图场景下左侧书签目录项的内描边：普通态与选中态不再使用边框式阴影，仅保留半透明底色和选中指示，减少每个目录项像独立小框的割裂感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 10:56:35 +0800
 - **Type**: Refactor (Custom Background Behavior)
 - **Content**: 恢复自定义背景图作为主视觉的呈现方式：移除上传背景图后的固定全局遮罩、网格纹理残留和左侧目录专属外框/玻璃面板效果，让背景清晰度主要由设置中的模糊参数控制。
