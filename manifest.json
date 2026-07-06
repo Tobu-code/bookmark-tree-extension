@@ -26,10 +26,13 @@
     "*://*.chat.qwen.ai/*",
     "*://qwen.ai/*",
     "*://*.qwen.ai/*",
+    "*://z.ai/*",
     "*://chat.z.ai/*",
     "*://*.z.ai/*",
     "*://kimi.moonshot.cn/*",
-    "*://*.kimi.moonshot.cn/*"
+    "*://*.kimi.moonshot.cn/*",
+    "*://chat.deepseek.com/*",
+    "*://*.deepseek.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

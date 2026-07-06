@@ -65,15 +65,15 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.z.ai/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('Z', '#eef2ff', '#3b71fe')
+        icon: createAiIconImage('icons/ai/z.svg', 'Z')
     },
     {
         id: 'qwen',
-        name: '通义千问',
+        name: 'Qwen',
         url: 'https://chat.qwen.ai/',
         enabled: true,
         builtIn: true,
-        icon: createAiIconImage('icons/ai/qwen.png', '通义千问')
+        icon: createAiIconImage('icons/ai/qwen.png', 'Qwen')
     },
     {
         id: 'kimi',
@@ -82,6 +82,14 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         enabled: true,
         builtIn: true,
         icon: createAiIconImage('icons/ai/kimi.ico', 'Kimi')
+    },
+    {
+        id: 'deepseek',
+        name: 'DeepSeek',
+        url: 'https://chat.deepseek.com/',
+        enabled: true,
+        builtIn: true,
+        icon: createAiIconImage('icons/ai/deepseek.svg', 'DeepSeek')
     }
 ]);
 const BUILTIN_AI_PROVIDER_MAP = new Map(BUILTIN_AI_PROVIDERS.map((provider) => [provider.id, provider]));

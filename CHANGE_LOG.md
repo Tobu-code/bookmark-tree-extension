@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 23:42:16]
+- **Type**: Fix (补充 DeepSeek 并修复 Z 嵌入规则)
+- **Content**: 新增 DeepSeek 内置 AI 服务并使用本地 `deepseek.svg` 图标；将通义千问显示名改为 Qwen；将 Z 的图标改为本地 `z.svg`，并为 `chat.z.ai`、`z.ai` 增加显式 DNR 与 host permission 覆盖，避免侧边栏 iframe 因 `X-Frame-Options: sameorigin` 被拒绝显示；同步收敛六个 AI 标签下的侧栏顶栏间距。
+- **Impact**: `manifest.json`, `rules.json`, `src/01-constants.js`, `script.js`, `styles.css`, `icons/ai/z.svg`, `icons/ai/deepseek.svg`
+
 ## [2026-07-06 23:34:25]
 - **Type**: Refactor (精简内置 AI 服务与侧栏顶栏间距)
 - **Content**: 将内置 AI 服务精简为 Google、ChatGPT、Z、通义千问、Kimi 五项，新增 Z 入口 `https://chat.z.ai/`，并移除 Claude、Gemini、豆包、DeepSeek 等旧内置服务残留；同步收敛 host permissions 与 DNR 规则，只保留目标服务相关域名；过滤旧本地存储中的已删除内置服务，避免其作为自定义服务继续显示；调整 AI 侧栏顶栏和标签胶囊间距，使减少服务后头部更紧凑协调。

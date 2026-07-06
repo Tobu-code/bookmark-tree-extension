@@ -1936,7 +1936,7 @@ body.ai-sidebar-open .ai-sidebar,
     flex: 0 1 auto;
     min-width: 0;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 7px;
     overflow: auto;
     padding-right: 2px;
 }
@@ -1964,8 +1964,8 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-tab {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 0 10px;
+    gap: 6px;
+    padding: 0 9px;
     font-size: 13px;
     font-weight: 760;
     white-space: nowrap;
