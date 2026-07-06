@@ -1084,6 +1084,11 @@ body.has-custom-bg #search-suggestions {
     transition: opacity 200ms ease;
 }
 
+.leaf-wrapper.card-pulse-enabled::before {
+    opacity: 1;
+    animation: cardPulse 2s ease-in-out infinite;
+}
+
 .leaf-wrapper:hover {
     border-color: color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 48%);
     background: var(--card-bg-hover);
@@ -1333,6 +1338,17 @@ body.has-custom-bg #search-suggestions {
     50% {
         transform: scale(1.05);
         filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.42));
+    }
+}
+
+@keyframes cardPulse {
+    0%, 100% {
+        opacity: 0.5;
+        box-shadow: inset 0 0 0 0 rgba(59, 130, 246, 0.28);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: inset 0 0 0 10px rgba(59, 130, 246, 0);
     }
 }
 
@@ -1604,6 +1620,32 @@ input[type="range"] {
 .ai-provider-form input:focus {
     border-color: var(--soft-indigo);
     box-shadow: var(--focus-ring);
+}
+
+.edit-bookmark-toggle-field {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+}
+
+.edit-bookmark-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--text-primary), transparent 95%);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 760;
+    cursor: pointer;
+}
+
+.edit-bookmark-toggle input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--soft-indigo);
 }
 
 .input-error {
@@ -2082,7 +2124,8 @@ body.ai-sidebar-open #settings-btn {
     }
 
     .search-greeting,
-    .ambient-time {
+    .ambient-time,
+    .leaf-wrapper.card-pulse-enabled::before {
         animation: none;
     }
 }

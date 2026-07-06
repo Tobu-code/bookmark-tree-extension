@@ -11,6 +11,7 @@ const STORAGE_KEY_HIDDEN_FOLDERS = 'hidden_folders';
 const STORAGE_KEY_FLAT_DIR_EXPANDED = 'settings_flat_dir_expanded';
 const STORAGE_KEY_TREE_EXPANDED = 'tree_expanded_folders';
 const STORAGE_KEY_CARD_SIZES = 'settings_bookmark_card_sizes';
+const STORAGE_KEY_CARD_PULSE = 'settings_bookmark_card_pulse';
 const STORAGE_KEY_AI = 'bookmark_tree_selected_ai';
 const STORAGE_KEY_AI_ORDER = 'bookmark_tree_ai_order';
 const STORAGE_KEY_AI_CONFIG = 'bookmark_tree_ai_config_v2';
@@ -108,6 +109,7 @@ let TREE_EXPANDED_FOLDERS = new Set(['1']);
 let DRAG_HIGHLIGHTED_ELEMENTS = new Set();
 let BOOKMARK_TREE_CACHE = null;
 let BOOKMARK_CARD_SIZES = {};
+let BOOKMARK_CARD_PULSE = {};
 let BOOKMARK_SEARCH_INDEX = [];
 let BOOKMARK_SEARCH_BUCKETS = new Map();
 let AI_SIDEBAR_CONTROLLER = null;
@@ -640,7 +642,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
-            STORAGE_KEY_CARD_SIZES
+            STORAGE_KEY_CARD_SIZES, STORAGE_KEY_CARD_PULSE
         ]),
         getBookmarks()
     ]);
@@ -692,6 +694,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         BOOKMARK_CARD_SIZES = settings[STORAGE_KEY_CARD_SIZES];
     } else {
         BOOKMARK_CARD_SIZES = {};
+    }
+
+    if (settings[STORAGE_KEY_CARD_PULSE]) {
+        BOOKMARK_CARD_PULSE = settings[STORAGE_KEY_CARD_PULSE];
+    } else {
+        BOOKMARK_CARD_PULSE = {};
     }
 
     // 4. Init Settings UI (Bindings)
@@ -984,6 +992,9 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             });
             let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : normalizeCardLayoutSize(size, 'folder');
             folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
+            if (BOOKMARK_CARD_PULSE[subFolder.id]) {
+                folderCard.classList.add('card-pulse-enabled');
+            }
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');
@@ -1283,6 +1294,9 @@ function renderFlatBookmarkItem(node) {
     });
     let activeSize = size === 'default' ? getStableDefaultFlatCardSize(node) : normalizeCardLayoutSize(size);
     wrapper.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
+    if (BOOKMARK_CARD_PULSE[node.id]) {
+        wrapper.classList.add('card-pulse-enabled');
+    }
 
     const a = document.createElement('a');
     a.className = 'leaf-node';
@@ -1522,6 +1536,7 @@ function editBookmark(node, wrapperEl) {
     const titleInput = document.getElementById('edit-bookmark-title');
     const urlInput = document.getElementById('edit-bookmark-url');
     const sizeSelect = document.getElementById('edit-bookmark-size');
+    const pulseInput = document.getElementById('edit-bookmark-pulse');
     const cancelBtn = document.getElementById('edit-bookmark-cancel');
     const saveBtn = document.getElementById('edit-bookmark-save');
     const closeBtn = document.getElementById('edit-bookmark-close');
@@ -1540,6 +1555,9 @@ function editBookmark(node, wrapperEl) {
     urlInput.value = node.url || '';
     if (sizeSelect) {
         sizeSelect.value = BOOKMARK_CARD_SIZES[node.id] || 'default';
+    }
+    if (pulseInput) {
+        pulseInput.checked = Boolean(BOOKMARK_CARD_PULSE[node.id]);
     }
     titleInput.classList.remove('input-error');
     urlInput.classList.remove('input-error');
@@ -1574,6 +1592,7 @@ function editBookmark(node, wrapperEl) {
         const newTitle = titleInput.value.trim();
         const newUrl = urlInput.value.trim();
         const newSize = sizeSelect ? sizeSelect.value : 'default';
+        const newPulseEnabled = pulseInput ? pulseInput.checked : false;
 
         if (!newTitle) {
             titleInput.focus();
@@ -1593,8 +1612,9 @@ function editBookmark(node, wrapperEl) {
         if (!isFolder && newUrl !== node.url) changes.url = newUrl;
 
         const sizeChanged = newSize !== (BOOKMARK_CARD_SIZES[node.id] || 'default');
+        const pulseChanged = newPulseEnabled !== Boolean(BOOKMARK_CARD_PULSE[node.id]);
 
-        if (Object.keys(changes).length === 0 && !sizeChanged) {
+        if (Object.keys(changes).length === 0 && !sizeChanged && !pulseChanged) {
             closeDialog();
             return;
         }
@@ -1606,7 +1626,16 @@ function editBookmark(node, wrapperEl) {
                 BOOKMARK_CARD_SIZES[node.id] = newSize;
             }
 
-            chrome.storage.local.set({ [STORAGE_KEY_CARD_SIZES]: BOOKMARK_CARD_SIZES }, () => {
+            if (newPulseEnabled) {
+                BOOKMARK_CARD_PULSE[node.id] = true;
+            } else {
+                delete BOOKMARK_CARD_PULSE[node.id];
+            }
+
+            chrome.storage.local.set({
+                [STORAGE_KEY_CARD_SIZES]: BOOKMARK_CARD_SIZES,
+                [STORAGE_KEY_CARD_PULSE]: BOOKMARK_CARD_PULSE
+            }, () => {
                 refreshBookmarkTreeCache((tree) => {
                     renderBookmarks(tree);
                 });

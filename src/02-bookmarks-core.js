@@ -230,6 +230,9 @@ function renderFlatBookmarks(bookmarkTreeNodes, container) {
             });
             let activeSize = size === 'default' ? getStableDefaultFlatCardSize(subFolder, 'folder') : normalizeCardLayoutSize(size, 'folder');
             folderCard.classList.add(`layout-size-${activeSize.replace('*', '-')}`);
+            if (BOOKMARK_CARD_PULSE[subFolder.id]) {
+                folderCard.classList.add('card-pulse-enabled');
+            }
             folderCard.dataset.id = subFolder.id;
             folderCard.setAttribute('role', 'button');
             folderCard.setAttribute('tabindex', '0');

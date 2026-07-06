@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 12:34:24 +0800
+- **Type**: Feature (Bookmark Card Pulse)
+- **Content**: 新增单个书签/目录卡片级心脏脉搏动效配置：编辑弹窗可为当前卡片单独开启或关闭，默认关闭；配置按卡片 ID 持久化保存，右侧书签卡片与子目录卡片渲染时按配置启用光晕脉搏，并在低动态偏好下自动关闭。
+- **Impact**: `newtab.html`、`src/01-constants.js`、`src/02-bookmarks-core.js`、`src/03-bookmarks-items.js`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 11:49:37 +0800
 - **Type**: Refactor (Ambient Time Visual)
 - **Content**: 默认背景下顶部时间区去除卡片外框、背景、阴影与毛玻璃容器感，统一为纯时间/日期文字展示；新增时间文字脉搏光晕动画，并在低动态偏好下自动关闭。
