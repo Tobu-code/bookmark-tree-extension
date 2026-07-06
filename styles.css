@@ -229,8 +229,8 @@ body.has-custom-bg::after {
     --line-strong: rgba(15, 23, 42, 0.26);
     --glass-bg: rgba(247, 250, 255, 0.84);
     --glass-bg-strong: rgba(252, 254, 255, 0.96);
-    --card-bg: rgba(248, 251, 255, 0.88);
-    --card-bg-hover: rgba(255, 255, 255, 0.98);
+    --card-bg: rgba(248, 251, 255, 0.62);
+    --card-bg-hover: rgba(255, 255, 255, 0.82);
     --card-border: rgba(15, 23, 42, 0.18);
 }
 
@@ -275,8 +275,8 @@ body.has-custom-bg::after {
 
 :root[data-theme="light"] body.has-custom-bg .leaf-wrapper {
     background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.62), transparent 44%),
-        linear-gradient(180deg, rgba(99, 102, 241, 0.045), transparent 68%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.24), transparent 44%),
+        linear-gradient(180deg, rgba(99, 102, 241, 0.025), transparent 68%),
         var(--card-bg);
 }
 
@@ -323,8 +323,8 @@ body.has-custom-bg::after {
         --line-strong: rgba(15, 23, 42, 0.26);
         --glass-bg: rgba(247, 250, 255, 0.84);
         --glass-bg-strong: rgba(252, 254, 255, 0.96);
-        --card-bg: rgba(248, 251, 255, 0.88);
-        --card-bg-hover: rgba(255, 255, 255, 0.98);
+        --card-bg: rgba(248, 251, 255, 0.62);
+        --card-bg-hover: rgba(255, 255, 255, 0.82);
         --card-border: rgba(15, 23, 42, 0.18);
     }
 
@@ -369,8 +369,8 @@ body.has-custom-bg::after {
 
     :root:not([data-theme]) body.has-custom-bg .leaf-wrapper {
         background:
-            linear-gradient(145deg, rgba(255, 255, 255, 0.62), transparent 44%),
-            linear-gradient(180deg, rgba(99, 102, 241, 0.045), transparent 68%),
+            linear-gradient(145deg, rgba(255, 255, 255, 0.24), transparent 44%),
+            linear-gradient(180deg, rgba(99, 102, 241, 0.025), transparent 68%),
             var(--card-bg);
     }
 
@@ -1069,8 +1069,8 @@ body.has-custom-bg #search-suggestions {
         var(--card-bg);
     box-shadow: var(--card-shadow);
     overflow: hidden;
-    backdrop-filter: blur(var(--container-blur)) saturate(150%);
-    -webkit-backdrop-filter: blur(var(--container-blur)) saturate(150%);
+    backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(150%);
     transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease, opacity 200ms ease;
 }
 
