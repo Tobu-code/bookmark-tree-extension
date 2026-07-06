@@ -254,7 +254,7 @@
             ]
         },
         "condition": {
-            "urlFilter": "*://*.z.ai/*",
+            "urlFilter": "*://chatglm.cn/*",
             "resourceTypes": [
                 "sub_frame",
                 "xmlhttprequest",
@@ -303,56 +303,7 @@
             ]
         },
         "condition": {
-            "urlFilter": "*://chat.z.ai/*",
-            "resourceTypes": [
-                "sub_frame",
-                "xmlhttprequest",
-                "script",
-                "image",
-                "font",
-                "stylesheet"
-            ]
-        }
-    },
-    {
-        "id": 16,
-        "priority": 1,
-        "action": {
-            "type": "modifyHeaders",
-            "responseHeaders": [
-                {
-                    "header": "X-Frame-Options",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Content-Security-Policy",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Content-Security-Policy-Report-Only",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Cross-Origin-Opener-Policy",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Cross-Origin-Embedder-Policy",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Cross-Origin-Resource-Policy",
-                    "operation": "remove"
-                },
-                {
-                    "header": "Access-Control-Allow-Origin",
-                    "operation": "set",
-                    "value": "*"
-                }
-            ]
-        },
-        "condition": {
-            "urlFilter": "*://z.ai/*",
+            "urlFilter": "*://*.chatglm.cn/*",
             "resourceTypes": [
                 "sub_frame",
                 "xmlhttprequest",

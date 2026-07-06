@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 23:51:38]
+- **Type**: Refactor (将 Z AI 替换为智谱清言 GLM)
+- **Content**: 移除 Z / z.ai 内置 AI、图标、host permission、DNR 规则和陈旧生成规则缓存；新增智谱清言 GLM，入口为 `https://chatglm.cn/`，并配置 `chatglm.cn` 及其子域的 iframe 嵌入响应头规则；同步将 GLM 使用本地 `glm.svg` 图标。
+- **Impact**: `manifest.json`, `rules.json`, `_metadata/generated_indexed_rulesets/_ruleset1`, `src/01-constants.js`, `script.js`, `icons/ai/z.svg`, `icons/ai/glm.svg`
+
 ## [2026-07-06 23:42:16]
 - **Type**: Fix (补充 DeepSeek 并修复 Z 嵌入规则)
 - **Content**: 新增 DeepSeek 内置 AI 服务并使用本地 `deepseek.svg` 图标；将通义千问显示名改为 Qwen；将 Z 的图标改为本地 `z.svg`，并为 `chat.z.ai`、`z.ai` 增加显式 DNR 与 host permission 覆盖，避免侧边栏 iframe 因 `X-Frame-Options: sameorigin` 被拒绝显示；同步收敛六个 AI 标签下的侧栏顶栏间距。

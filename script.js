@@ -60,12 +60,12 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         icon: createAiIconImage('icons/ai/chatgpt.svg', 'ChatGPT')
     },
     {
-        id: 'z',
-        name: 'Z',
-        url: 'https://chat.z.ai/',
+        id: 'glm',
+        name: 'GLM',
+        url: 'https://chatglm.cn/',
         enabled: true,
         builtIn: true,
-        icon: createAiIconImage('icons/ai/z.svg', 'Z')
+        icon: createAiIconImage('icons/ai/glm.svg', 'GLM')
     },
     {
         id: 'qwen',
