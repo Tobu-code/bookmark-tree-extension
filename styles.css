@@ -468,25 +468,42 @@ body.has-custom-bg::after {
     line-height: 0.95;
     letter-spacing: 0;
     color: var(--text-primary);
+    background: linear-gradient(
+        270deg,
+        #6366f1, #ec4899, #8b5cf6, #06b6d4, #6366f1
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-variant-numeric: tabular-nums;
+    animation: text-gradient-flow 3s linear infinite;
 }
 
 .ambient-time-info-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: flex-start;
-    gap: 8px 14px;
+    display: block;
     width: 100%;
+    margin-left: 0;
+    padding-left: 0;
     color: var(--text-secondary);
     font-weight: 650;
     text-align: left;
 }
 
 .ambient-time-date {
-    display: inline-block;
+    display: block;
+    margin-left: 0;
     font-size: clamp(14px, 1vw, 17px);
     line-height: 1.35;
+    background: linear-gradient(
+        270deg,
+        #6366f1, #ec4899, #8b5cf6, #06b6d4, #6366f1
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient-flow 3s linear infinite;
 }
 
 .search-stack {
@@ -1253,14 +1270,18 @@ body.has-custom-bg #search-suggestions {
     display: -webkit-box;
     max-width: 100%;
     overflow: hidden;
-    color: color-mix(in srgb, var(--text-primary), transparent 10%);
-    font-weight: 690;
+    color: color-mix(in srgb, var(--text-primary), transparent 18%);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 640;
     letter-spacing: 0;
-    line-height: 1.24;
+    line-height: 1.28;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow-wrap: anywhere;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }
 
 .layout-size-1-1 .leaf-node,
@@ -1281,6 +1302,7 @@ body.has-custom-bg #search-suggestions {
     display: block;
     width: 100%;
     font-size: 13px;
+    font-weight: 640;
     line-height: 1.18;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -2240,6 +2262,8 @@ body.ai-sidebar-open #settings-btn {
     }
 
     .search-greeting,
+    .ambient-time-clock,
+    .ambient-time-date,
     .ambient-time,
     .leaf-wrapper.card-pulse-enabled::before {
         animation: none;
