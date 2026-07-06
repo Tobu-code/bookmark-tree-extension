@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 18:36:49]
+- **Type**: Chore (替换 Nook 品牌图标与名称)
+- **Content**: 使用 `/Users/zanehao/Downloads/files` 中的新图标替换插件 16/48/128px 图标和根目录图标，并保留 SVG 源图标；同时将扩展名称与新标签页标题统一改为 Nook。
+- **Impact**: `manifest.json`, `newtab.html`, `icon.png`, `icons/icon16.png`, `icons/icon48.png`, `icons/icon128.png`, `icons/icon.svg`
+
 ## [2026-07-06 18:25:19]
 - **Type**: Fix (修正时间日期对齐与心跳动效)
 - **Content**: 将时间区改为按时间文本宽度收缩的两行列式布局，日期在同列内右对齐；同时把心脏脉搏动效从外层时间容器移到时间数字本身，并降低缩放与光晕强度，避免日期跟随跳动。

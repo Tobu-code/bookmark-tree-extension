@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "小飞猪的书签",
+  "name": "Nook",
   "version": "4.0.0",
   "description": "A beautiful tree view of your bookmarks on the new tab page with advanced customization and management.",
   "permissions": [
