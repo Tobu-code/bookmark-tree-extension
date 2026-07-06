@@ -3626,42 +3626,6 @@ document.addEventListener('click', (e) => {
 });
 
 // --- Dynamic mouse magnetic physics and 3D Tilt Hover effects (Apple/Notion style) ---
-function initCursorAura() {
-    if (!window.matchMedia('(pointer: fine)').matches) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (document.querySelector('.cursor-aura')) return;
-
-    const aura = document.createElement('div');
-    aura.className = 'cursor-aura';
-    aura.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(aura);
-
-    let pointerX = 0;
-    let pointerY = 0;
-    let frameId = null;
-
-    const render = () => {
-        aura.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0) translate3d(-50%, -50%, 0)`;
-        frameId = null;
-    };
-
-    const scheduleRender = () => {
-        if (frameId !== null) return;
-        frameId = requestAnimationFrame(render);
-    };
-
-    document.addEventListener('pointermove', (event) => {
-        pointerX = event.clientX;
-        pointerY = event.clientY;
-        document.body.classList.add('cursor-aura-active');
-        scheduleRender();
-    }, { passive: true });
-
-    document.addEventListener('pointerleave', () => {
-        document.body.classList.remove('cursor-aura-active');
-    });
-}
-
 function initMagneticHover() {
     let initialRect = null;
     let lastTarget = null;
@@ -3749,13 +3713,8 @@ function initMagneticHover() {
     });
 }
 
-function initUiMotionEffects() {
-    initCursorAura();
-    initMagneticHover();
-}
-
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initUiMotionEffects);
+    document.addEventListener('DOMContentLoaded', initMagneticHover);
 } else {
-    initUiMotionEffects();
+    initMagneticHover();
 }

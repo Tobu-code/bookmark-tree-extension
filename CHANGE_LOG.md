@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 16:15:40]
+- **Type**: Revert (回滚书签主页鼠标光晕指针)
+- **Content**: 按需求移除书签主页鼠标光晕指针样式与初始化逻辑，恢复为仅保留原有卡片磁吸和倾斜 hover 动效。
+- **Impact**: `styles.css`, `src/09-ui-widgets.js`, `script.js`
+
 ## [2026-07-06 16:10:38]
 - **Type**: Feature (新增书签主页鼠标光晕指针)
 - **Content**: 为书签主页增加跟随鼠标移动的柔和光晕指针层，使用 requestAnimationFrame 合并 pointermove 更新，并在粗指针设备和低动态偏好下自动关闭，避免影响点击和性能。

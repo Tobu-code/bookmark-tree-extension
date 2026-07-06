@@ -191,27 +191,6 @@ svg {
     display: block;
 }
 
-.cursor-aura {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 35;
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    pointer-events: none;
-    background: radial-gradient(circle, rgb(255 255 255 / 0.18), transparent 62%);
-    opacity: 0;
-    transform: translate3d(-50%, -50%, 0);
-    transition: opacity 160ms ease;
-    will-change: transform;
-    mix-blend-mode: screen;
-}
-
-body.cursor-aura-active .cursor-aura {
-    opacity: 1;
-}
-
 .hidden {
     display: none !important;
 }
@@ -2207,10 +2186,6 @@ body.ai-sidebar-open #settings-btn {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .cursor-aura {
-        display: none;
-    }
-
     *,
     *::before,
     *::after {
