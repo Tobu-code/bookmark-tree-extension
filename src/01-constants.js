@@ -365,21 +365,28 @@ function getAiOriginPattern(urlString) {
 
 function buildDynamicAiRule(ruleId, provider) {
     const url = new URL(provider.url);
+    const responseHeaders = [
+        { header: 'X-Frame-Options', operation: 'remove' },
+        { header: 'Content-Security-Policy', operation: 'remove' },
+        { header: 'Content-Security-Policy-Report-Only', operation: 'remove' },
+        { header: 'Cross-Origin-Opener-Policy', operation: 'remove' },
+        { header: 'Cross-Origin-Embedder-Policy', operation: 'remove' },
+        { header: 'Cross-Origin-Resource-Policy', operation: 'remove' }
+    ];
+
+    if (url.hostname === 'claude.ai' || url.hostname.endsWith('.claude.ai')) {
+        responseHeaders.push(
+            { header: 'Access-Control-Allow-Origin', operation: 'set', value: 'https://claude.ai' },
+            { header: 'Access-Control-Allow-Credentials', operation: 'set', value: 'true' }
+        );
+    }
 
     return {
         id: ruleId,
         priority: 1,
         action: {
             type: 'modifyHeaders',
-            responseHeaders: [
-                { header: 'X-Frame-Options', operation: 'remove' },
-                { header: 'Content-Security-Policy', operation: 'remove' },
-                { header: 'Content-Security-Policy-Report-Only', operation: 'remove' },
-                { header: 'Cross-Origin-Opener-Policy', operation: 'remove' },
-                { header: 'Cross-Origin-Embedder-Policy', operation: 'remove' },
-                { header: 'Cross-Origin-Resource-Policy', operation: 'remove' },
-                { header: 'Access-Control-Allow-Origin', operation: 'set', value: '*' }
-            ]
+            responseHeaders
         },
         condition: {
             urlFilter: `${url.origin}/*`,

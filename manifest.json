@@ -30,7 +30,9 @@
     "*://*.deepseek.com/*",
     "*://*.gemini.google.com/*",
     "*://claude.ai/*",
-    "*://*.claude.ai/*"
+    "*://*.claude.ai/*",
+    "*://anthropic.com/*",
+    "*://*.anthropic.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

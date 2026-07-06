@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 23:01:21]
+- **Type**: Fix (补强 Claude/Anthropic 侧边栏嵌入链路)
+- **Content**: 为 Claude 侧边栏嵌入补充 Anthropic 域名权限与 DNR 覆盖，处理 `www.anthropic.com/app-unavailable-in-region` 等跨域跳转链路；同时将 Claude/Anthropic 规则的 CORS 响应头从通配符收敛为 `https://claude.ai` 并启用 credentials，避免带登录态接口被通配 CORS 破坏；动态 AI 规则默认不再为所有站点设置通配 CORS，仅对 Claude 保留凭证型响应头。
+- **Impact**: `manifest.json`, `rules.json`, `src/01-constants.js`, `script.js`
+
 ## [2026-07-06 18:42:12]
 - **Type**: Fix (恢复插件名称并优化书签图标清晰度)
 - **Content**: 将扩展名称和新标签页标题从 Nook 改回“小飞猪的希冀”；同时将 favicon 请求尺寸固定为 128px，并为书签图标补充高清渲染属性与图片渲染样式，降低卡片图标被放大后的模糊感。
