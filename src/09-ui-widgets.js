@@ -58,16 +58,17 @@ function initAmbientTime() {
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
         const weekday = WEEKDAYS_SHORT[now.getDay()];
 
         // textContent-only update: no DOM rebuild, no layout thrash (Fix #5)
-        clockEl.textContent = `${hours}:${minutes}`;
+        clockEl.textContent = `${hours}:${minutes}:${seconds}`;
         dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
         if (searchGreeting) searchGreeting.textContent = getDailyGreeting();
 
-        // Precise next-minute scheduling (Fix #6 applied to ambient clock)
-        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-        setTimeout(updateAmbientTime, msUntilNextMinute);
+        // Precise next-second scheduling keeps the visible seconds in sync.
+        const msUntilNextSecond = 1000 - now.getMilliseconds();
+        setTimeout(updateAmbientTime, msUntilNextSecond);
     }
 
     function resetIdleTimer() {

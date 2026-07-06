@@ -366,6 +366,17 @@ function initAiSidebar() {
         window.open(provider.url, 'AI_Window', 'width=800,height=900,left=100,top=100,resizable=yes,scrollbars=yes');
     }
 
+    function handleCloseSidebar(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (typeof event.stopImmediatePropagation === 'function') {
+                event.stopImmediatePropagation();
+            }
+        }
+        closeSidebar();
+    }
+
     if (tabsContainer) {
         tabsContainer.addEventListener('click', (event) => {
             const tab = event.target.closest('.ai-tab');
@@ -375,7 +386,8 @@ function initAiSidebar() {
     }
 
     if (closeBtn) {
-        closeBtn.addEventListener('click', closeSidebar);
+        closeBtn.addEventListener('pointerdown', handleCloseSidebar, { capture: true });
+        closeBtn.addEventListener('click', handleCloseSidebar, { capture: true });
     }
 
     if (sidebarOverlay) {
@@ -408,4 +420,3 @@ function initAiSidebar() {
         }
     };
 }
-
