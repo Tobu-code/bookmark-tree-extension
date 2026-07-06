@@ -423,7 +423,7 @@ body.has-custom-bg::after {
     align-items: end;
     gap: var(--content-gap);
     width: 100%;
-    margin-bottom: clamp(68px, 8vh, 108px);
+    margin-bottom: clamp(102px, 12vh, 162px);
 }
 
 .ambient-time {
@@ -548,12 +548,13 @@ body.has-custom-bg::after {
 }
 
 #search-engine-label {
-    min-width: 72px;
-    height: 42px;
-    padding: 0 18px;
+    min-width: 62px;
+    height: 34px;
+    padding: 0 14px;
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--soft-indigo), transparent 88%);
     color: var(--text-secondary);
+    font-size: 14px;
     font-weight: 750;
     letter-spacing: 0.01em;
     transition: color 180ms ease, background 180ms ease, transform 180ms ease;
@@ -827,16 +828,32 @@ body.has-custom-bg #search-suggestions {
 #bookmarks-tree.layout-flat::before {
     content: "";
     position: absolute;
-    top: calc(clamp(28px, 3.4vh, 44px) * -1);
+    top: calc(clamp(42px, 5vh, 66px) * -1);
     left: 0;
+    height: 1px;
+    width: var(--flat-sidebar);
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--line-strong), transparent 54%) 18%,
+        color-mix(in srgb, var(--line-strong), transparent 68%) 82%,
+        transparent
+    );
+}
+
+#bookmarks-tree.layout-flat::after {
+    content: "";
+    position: absolute;
+    top: calc(clamp(42px, 5vh, 66px) * -1);
+    left: calc(var(--flat-sidebar) + var(--content-gap));
     right: 0;
     height: 1px;
     pointer-events: none;
     background: linear-gradient(
         90deg,
-        transparent,
-        color-mix(in srgb, var(--line-strong), transparent 42%) 14%,
-        color-mix(in srgb, var(--line-strong), transparent 64%) 50%,
+        color-mix(in srgb, var(--line-strong), transparent 58%),
+        color-mix(in srgb, var(--line-strong), transparent 72%) 72%,
         transparent
     );
 }
