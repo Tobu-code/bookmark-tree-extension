@@ -1309,6 +1309,12 @@ body.has-custom-bg #search-suggestions {
     box-shadow: 0 6px 14px rgba(15, 18, 32, 0.08);
 }
 
+img.bookmark-icon {
+    display: block;
+    image-rendering: auto;
+    transform: translateZ(0);
+}
+
 .bookmark-icon-fallback {
     display: grid;
     place-items: center;

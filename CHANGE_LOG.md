@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 18:42:12]
+- **Type**: Fix (恢复插件名称并优化书签图标清晰度)
+- **Content**: 将扩展名称和新标签页标题从 Nook 改回“小飞猪的希冀”；同时将 favicon 请求尺寸固定为 128px，并为书签图标补充高清渲染属性与图片渲染样式，降低卡片图标被放大后的模糊感。
+- **Impact**: `manifest.json`, `newtab.html`, `src/01-constants.js`, `src/03-bookmarks-items.js`, `styles.css`, `script.js`
+
 ## [2026-07-06 18:36:49]
 - **Type**: Chore (替换 Nook 品牌图标与名称)
 - **Content**: 使用 `/Users/zanehao/Downloads/files` 中的新图标替换插件 16/48/128px 图标和根目录图标，并保留 SVG 源图标；同时将扩展名称与新标签页标题统一改为 Nook。

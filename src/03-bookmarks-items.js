@@ -17,11 +17,15 @@ function normalizeCardLayoutSize(size, variant = 'bookmark') {
 // --- Helpers ---
 
 // Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
-function createBookmarkIcon(iconData, size = 16) {
+function createBookmarkIcon(iconData, size = 32) {
     if (iconData.type === 'img') {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
+        img.width = size;
+        img.height = size;
+        img.decoding = 'async';
+        img.loading = 'lazy';
         img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
@@ -90,7 +94,7 @@ function renderFlatBookmarkItem(node) {
     }
 
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 16);
+    const iconElement = createBookmarkIcon(iconData);
     a.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -147,7 +151,7 @@ function renderTreeNode(node, options = {}) {
         if (OPEN_IN_NEW_TAB) a.target = '_blank';
 
         const iconData = getIconForBookmark(node.url);
-        a.appendChild(createBookmarkIcon(iconData, 16));
+        a.appendChild(createBookmarkIcon(iconData));
 
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';

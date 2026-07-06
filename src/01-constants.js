@@ -23,8 +23,8 @@ const LEGACY_FREQUENCY_STORAGE_KEYS = [
 ];
 const AI_DYNAMIC_RULE_START = 1000;
 const AI_DYNAMIC_RULE_END = 1499;
-// HiDPI-aware favicon size: request 2× or 3× resolution for crisp rendering on Retina/4K screens
-const FAVICON_SIZE = Math.min(128, 32 * Math.ceil(window.devicePixelRatio || 1));
+// Request the largest Chrome favicon service size so card icons stay crisp when rendered at 24-32px.
+const FAVICON_SIZE = 128;
 
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
     const safeLabel = escapeHtml(String(label || 'AI').slice(0, 2).toUpperCase());

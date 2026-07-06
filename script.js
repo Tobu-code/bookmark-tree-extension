@@ -23,8 +23,8 @@ const LEGACY_FREQUENCY_STORAGE_KEYS = [
 ];
 const AI_DYNAMIC_RULE_START = 1000;
 const AI_DYNAMIC_RULE_END = 1499;
-// HiDPI-aware favicon size: request 2× or 3× resolution for crisp rendering on Retina/4K screens
-const FAVICON_SIZE = Math.min(128, 32 * Math.ceil(window.devicePixelRatio || 1));
+// Request the largest Chrome favicon service size so card icons stay crisp when rendered at 24-32px.
+const FAVICON_SIZE = 128;
 
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
     const safeLabel = escapeHtml(String(label || 'AI').slice(0, 2).toUpperCase());
@@ -1250,11 +1250,15 @@ function normalizeCardLayoutSize(size, variant = 'bookmark') {
 // --- Helpers ---
 
 // Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
-function createBookmarkIcon(iconData, size = 16) {
+function createBookmarkIcon(iconData, size = 32) {
     if (iconData.type === 'img') {
         const img = document.createElement('img');
         img.className = 'bookmark-icon';
         img.src = iconData.src;
+        img.width = size;
+        img.height = size;
+        img.decoding = 'async';
+        img.loading = 'lazy';
         img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
             // Generate a deterministic letter avatar when the favicon cannot be loaded
@@ -1323,7 +1327,7 @@ function renderFlatBookmarkItem(node) {
     }
 
     const iconData = getIconForBookmark(node.url);
-    const iconElement = createBookmarkIcon(iconData, 16);
+    const iconElement = createBookmarkIcon(iconData);
     a.appendChild(iconElement);
 
     const labelSpan = document.createElement('span');
@@ -1380,7 +1384,7 @@ function renderTreeNode(node, options = {}) {
         if (OPEN_IN_NEW_TAB) a.target = '_blank';
 
         const iconData = getIconForBookmark(node.url);
-        a.appendChild(createBookmarkIcon(iconData, 16));
+        a.appendChild(createBookmarkIcon(iconData));
 
         const labelSpan = document.createElement('span');
         labelSpan.className = 'bookmark-label';
