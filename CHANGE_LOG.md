@@ -1294,6 +1294,12 @@
 - **Content**: 将分支 `feature/feature-ui-anlaysis-0325` 合并至 `main`，同步纳入界面分析与样式调优相关变更，并完成主干收敛。
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
+## [2026-07-06]
+- **Time**: 2026-07-06 10:13:49 +0800
+- **Type**: Refactor (Custom Background Polish)
+- **Content**: 优化上传自定义背景图后的界面材质：加强全局背景遮罩，提高搜索区、时间区、书签卡片与左侧目录在浅色背景图场景下的承载层不透明度和边界稳定性，降低壁纸细节穿透造成的杂乱感。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
 ## [2026-04-21]
 - **Time**: 2026-04-21 21:42:38 +0800
 - **Type**: Fix (Theme / Auto Mode)
