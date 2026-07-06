@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 10:56:35 +0800
+- **Type**: Refactor (Custom Background Behavior)
+- **Content**: 恢复自定义背景图作为主视觉的呈现方式：移除上传背景图后的固定全局遮罩、网格纹理残留和左侧目录专属外框/玻璃面板效果，让背景清晰度主要由设置中的模糊参数控制。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 10:27:28 +0800
 - **Type**: Refactor (Bookmark Typography)
 - **Content**: 调整右侧书签卡片标题字体层级：降低标题字重、柔化文字颜色并取消负字距，减轻卡片文字过强造成的压迫感，使书签区与搜索区、目录区层级更协调。

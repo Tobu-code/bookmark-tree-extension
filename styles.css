@@ -161,7 +161,7 @@ body::before {
 
 body.has-custom-bg::before {
     z-index: -2;
-    opacity: 0.06;
+    opacity: 0;
     mask-image: none;
 }
 
@@ -213,16 +213,11 @@ body.has-custom-bg::after {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-        linear-gradient(180deg, rgba(249, 251, 255, 0.42), rgba(238, 243, 252, 0.54)),
-        linear-gradient(135deg, rgba(246, 248, 252, 0.36), rgba(232, 237, 247, 0.3)),
-        radial-gradient(circle at 72% 20%, rgba(236, 72, 153, 0.08), transparent 30vw);
+    background: transparent;
 }
 
 :root[data-theme="dark"] body.has-custom-bg::after {
-    background:
-        linear-gradient(135deg, rgba(10, 10, 18, 0.34), rgba(17, 16, 28, 0.42)),
-        radial-gradient(circle at 72% 20%, rgba(99, 102, 241, 0.1), transparent 28vw);
+    background: transparent;
 }
 
 :root[data-theme="light"] body.has-custom-bg {
@@ -246,16 +241,11 @@ body.has-custom-bg::after {
 }
 
 :root[data-theme="light"] body.has-custom-bg .directory-pane-scroll {
-    border: 1px solid rgba(255, 255, 255, 0.48);
-    background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(247, 250, 255, 0.34) 42%, rgba(232, 238, 248, 0.26)),
-        rgba(247, 250, 255, 0.42);
-    box-shadow:
-        0 24px 70px rgba(15, 23, 42, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.76),
-        inset 0 -1px 0 rgba(15, 23, 42, 0.04);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 :root[data-theme="light"] body.has-custom-bg .ambient-time {
@@ -345,16 +335,11 @@ body.has-custom-bg::after {
     }
 
     :root:not([data-theme]) body.has-custom-bg .directory-pane-scroll {
-        border: 1px solid rgba(255, 255, 255, 0.48);
-        background:
-            linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(247, 250, 255, 0.34) 42%, rgba(232, 238, 248, 0.26)),
-            rgba(247, 250, 255, 0.42);
-        box-shadow:
-            0 24px 70px rgba(15, 23, 42, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.76),
-            inset 0 -1px 0 rgba(15, 23, 42, 0.04);
-        backdrop-filter: blur(20px) saturate(150%);
-        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     :root:not([data-theme]) body.has-custom-bg .ambient-time {
