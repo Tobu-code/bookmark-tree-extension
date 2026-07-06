@@ -56,7 +56,12 @@
     --flat-grid-cell: clamp(84px, 5vw, 101px);
     --flat-grid-row: var(--flat-grid-cell);
     --flat-grid-gap: clamp(16px, 1.1vw, 22px);
-    --flat-content-width: clamp(980px, 72vw, 1320px);
+    --flat-content-width: calc(
+        var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) +
+        var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) + var(--flat-grid-cell) +
+        var(--flat-grid-gap) + var(--flat-grid-gap) + var(--flat-grid-gap) + var(--flat-grid-gap) + var(--flat-grid-gap) +
+        var(--flat-grid-gap) + var(--flat-grid-gap) + var(--flat-grid-gap) + var(--flat-grid-gap)
+    );
     --tree-grid-cell: clamp(246px, 18vw, 340px);
     --tree-grid-row: 88px;
 
@@ -1798,7 +1803,7 @@ body.ai-sidebar-open .ai-sidebar,
     justify-content: flex-start;
     gap: 8px;
     min-height: 42px;
-    padding: 6px 10px;
+    padding: 6px 14px 6px 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     background: #171424;
 }
@@ -1813,7 +1818,11 @@ body.ai-sidebar-open .ai-sidebar,
 }
 
 .ai-sidebar-actions {
+    position: relative;
+    z-index: 2;
     margin-left: auto;
+    gap: 10px;
+    pointer-events: auto;
 }
 
 .ai-tab,
@@ -1861,7 +1870,15 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-action-btn {
     display: grid;
     place-items: center;
-    width: 30px;
+    width: 38px;
+    min-height: 38px;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ai-action-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
 }
 
 .ai-sidebar-content {
