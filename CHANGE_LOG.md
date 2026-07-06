@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 11:49:37 +0800
+- **Type**: Refactor (Ambient Time Visual)
+- **Content**: 默认背景下顶部时间区去除卡片外框、背景、阴影与毛玻璃容器感，统一为纯时间/日期文字展示；新增时间文字脉搏光晕动画，并在低动态偏好下自动关闭。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 11:32:57 +0800
 - **Type**: Fix (Settings Frosted Effect)
 - **Content**: 修复“毛玻璃及卡片磨砂感”设置项效果不明显的问题：将滑块写入的磨砂变量同步到真实使用的 `--container-blur`，并同时写入 `body` 避免自定义背景分支覆盖；为书签卡片接入 `backdrop-filter`，使卡片磨砂感随设置值变化真实生效。
