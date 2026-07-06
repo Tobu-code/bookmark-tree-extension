@@ -445,7 +445,7 @@ body.has-custom-bg::after {
 .search-stack {
     display: grid;
     align-self: end;
-    width: min(100%, 1280px);
+    width: min(100%, 1160px);
     gap: 12px;
     min-width: 0;
 }
@@ -1654,11 +1654,15 @@ body.ai-sidebar-open .ai-sidebar,
 
 .ai-tabs {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
     justify-content: flex-start;
     gap: 9px;
     overflow: auto;
+}
+
+.ai-sidebar-actions {
+    margin-left: auto;
 }
 
 .ai-tab,
