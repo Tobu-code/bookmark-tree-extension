@@ -25,6 +25,18 @@ const AI_DYNAMIC_RULE_START = 1000;
 const AI_DYNAMIC_RULE_END = 1499;
 // HiDPI-aware favicon size: request 2× or 3× resolution for crisp rendering on Retina/4K screens
 const FAVICON_SIZE = Math.min(128, 32 * Math.ceil(window.devicePixelRatio || 1));
+
+function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
+    const safeLabel = escapeHtml(String(label || 'AI').slice(0, 2).toUpperCase());
+    return `<svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="24" height="24" rx="8" fill="${bg}"></rect><text x="12" y="15.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9" font-weight="800">${safeLabel}</text></svg>`;
+}
+
+function normalizeAiProviderIcon(icon, fallbackName) {
+    const value = String(icon || '').trim();
+    if (value && !/<img\b/i.test(value)) return value;
+    return createLocalAiIcon(fallbackName);
+}
+
 const BUILTIN_AI_PROVIDERS = Object.freeze([
     {
         id: 'google',
@@ -32,7 +44,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.google.com/search?udm=50&aep=11',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Google" draggable="false">`
+        icon: createLocalAiIcon('G', '#ffffff', '#4285f4')
     },
     {
         id: 'chatgpt',
@@ -40,7 +52,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chatgpt.com/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="ChatGPT" draggable="false">`
+        icon: createLocalAiIcon('GPT', '#f7f7f2', '#111827')
     },
     {
         id: 'gemini',
@@ -48,7 +60,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://gemini.google.com/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="Gemini" draggable="false">`
+        icon: createLocalAiIcon('Ge', '#eef2ff', '#6366f1')
     },
     {
         id: 'claude',
@@ -56,7 +68,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://claude.ai/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="Claude" draggable="false">`
+        icon: createLocalAiIcon('Cl', '#fff7ed', '#c2410c')
     },
     {
         id: 'qwen',
@@ -64,7 +76,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.qwen.ai/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=chat.qwen.ai&sz=${FAVICON_SIZE}" width="24" height="24" alt="通义千问" draggable="false">`
+        icon: createLocalAiIcon('Q', '#eff6ff', '#2563eb')
     },
     {
         id: 'doubao',
@@ -72,7 +84,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.doubao.com/chat/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=doubao.com&sz=${FAVICON_SIZE}" width="24" height="24" alt="豆包" draggable="false">`
+        icon: createLocalAiIcon('豆', '#fff1f2', '#e11d48')
     },
     {
         id: 'kimi',
@@ -80,7 +92,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://kimi.moonshot.cn/',
         enabled: true,
         builtIn: true,
-        icon: `<img src="https://www.google.com/s2/favicons?domain=kimi.moonshot.cn&sz=${FAVICON_SIZE}" width="24" height="24" alt="Kimi" draggable="false">`
+        icon: createLocalAiIcon('K', '#111827', '#ffffff')
     },
     {
         id: 'deepseek',
@@ -259,7 +271,7 @@ function sanitizeCustomAiProvider(rawProvider) {
         url,
         enabled: rawProvider.enabled !== false,
         builtIn: false,
-        icon: rawProvider.icon || '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.22"></circle><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>'
+        icon: normalizeAiProviderIcon(rawProvider.icon, name)
     };
 }
 

@@ -391,7 +391,7 @@ function initSettingsUI(settings) {
                         </svg>
                     </div>
                     <div class="ai-provider-identity">
-                        <span class="ai-provider-icon">${provider.icon || (() => { try { const d = new URL(provider.url).hostname; return `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=${FAVICON_SIZE}" width="24" height="24" alt="${escapeHtml(provider.name)}" draggable="false">`; } catch { return ''; } })()}</span>
+                        <span class="ai-provider-icon">${normalizeAiProviderIcon(provider.icon, provider.name)}</span>
                         <div class="ai-provider-meta">
                             <div class="ai-provider-title-row">
                                 <span class="ai-provider-name">${escapeHtml(provider.name)}</span>
