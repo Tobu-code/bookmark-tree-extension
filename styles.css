@@ -1922,9 +1922,9 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    min-height: 42px;
-    padding: 6px 14px 6px 10px;
+    gap: 10px;
+    min-height: 40px;
+    padding: 5px 12px 5px 8px;
     border-bottom: 1px solid var(--line-soft);
     background: var(--glass-bg-strong);
     backdrop-filter: blur(var(--container-blur)) saturate(150%);
@@ -1936,8 +1936,9 @@ body.ai-sidebar-open .ai-sidebar,
     flex: 0 1 auto;
     min-width: 0;
     justify-content: flex-start;
-    gap: 9px;
+    gap: 8px;
     overflow: auto;
+    padding-right: 2px;
 }
 
 .ai-sidebar-actions {
@@ -1946,7 +1947,7 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     flex: 0 0 auto;
     margin-left: auto;
-    gap: 10px;
+    gap: 8px;
     pointer-events: auto;
 }
 
@@ -1963,8 +1964,8 @@ body.ai-sidebar-open .ai-sidebar,
 .ai-tab {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 11px;
+    gap: 7px;
+    padding: 0 10px;
     font-size: 13px;
     font-weight: 760;
     white-space: nowrap;

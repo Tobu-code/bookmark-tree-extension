@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-06 23:34:25]
+- **Type**: Refactor (精简内置 AI 服务与侧栏顶栏间距)
+- **Content**: 将内置 AI 服务精简为 Google、ChatGPT、Z、通义千问、Kimi 五项，新增 Z 入口 `https://chat.z.ai/`，并移除 Claude、Gemini、豆包、DeepSeek 等旧内置服务残留；同步收敛 host permissions 与 DNR 规则，只保留目标服务相关域名；过滤旧本地存储中的已删除内置服务，避免其作为自定义服务继续显示；调整 AI 侧栏顶栏和标签胶囊间距，使减少服务后头部更紧凑协调。
+- **Impact**: `manifest.json`, `rules.json`, `_metadata/generated_indexed_rulesets/_ruleset1`, `src/01-constants.js`, `script.js`, `styles.css`
+
 ## [2026-07-06 23:01:21]
 - **Type**: Fix (补强 Claude/Anthropic 侧边栏嵌入链路)
 - **Content**: 为 Claude 侧边栏嵌入补充 Anthropic 域名权限与 DNR 覆盖，处理 `www.anthropic.com/app-unavailable-in-region` 等跨域跳转链路；同时将 Claude/Anthropic 规则的 CORS 响应头从通配符收敛为 `https://claude.ai` 并启用 credentials，避免带登录态接口被通配 CORS 破坏；动态 AI 规则默认不再为所有站点设置通配 CORS，仅对 Claude 保留凭证型响应头。

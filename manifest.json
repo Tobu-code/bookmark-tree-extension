@@ -24,15 +24,12 @@
     "*://*.openai.com/*",
     "*://chat.qwen.ai/*",
     "*://*.chat.qwen.ai/*",
-    "*://*.doubao.com/*",
+    "*://qwen.ai/*",
+    "*://*.qwen.ai/*",
+    "*://chat.z.ai/*",
+    "*://*.z.ai/*",
     "*://kimi.moonshot.cn/*",
-    "*://*.kimi.moonshot.cn/*",
-    "*://*.deepseek.com/*",
-    "*://*.gemini.google.com/*",
-    "*://claude.ai/*",
-    "*://*.claude.ai/*",
-    "*://anthropic.com/*",
-    "*://*.anthropic.com/*"
+    "*://*.kimi.moonshot.cn/*"
   ],
   "optional_host_permissions": [
     "https://*/*",
