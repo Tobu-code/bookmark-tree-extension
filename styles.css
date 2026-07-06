@@ -421,9 +421,9 @@ body.has-custom-bg::after {
     display: grid;
     grid-template-columns: var(--flat-sidebar) minmax(0, 1fr);
     align-items: end;
-    gap: var(--header-gap);
+    gap: var(--content-gap);
     width: 100%;
-    margin-bottom: clamp(42px, 6vh, 72px);
+    margin-bottom: clamp(68px, 8vh, 108px);
 }
 
 .ambient-time {
@@ -822,6 +822,23 @@ body.has-custom-bg #search-suggestions {
     grid-template-columns: var(--flat-sidebar) minmax(0, 1fr);
     align-items: start;
     gap: var(--content-gap);
+}
+
+#bookmarks-tree.layout-flat::before {
+    content: "";
+    position: absolute;
+    top: calc(clamp(28px, 3.4vh, 44px) * -1);
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--line-strong), transparent 42%) 14%,
+        color-mix(in srgb, var(--line-strong), transparent 64%) 50%,
+        transparent
+    );
 }
 
 .directory-pane {
