@@ -31,9 +31,14 @@ function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
     return `<svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="24" height="24" rx="8" fill="${bg}"></rect><text x="12" y="15.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9" font-weight="800">${safeLabel}</text></svg>`;
 }
 
+function createAiIconImage(src, alt) {
+    return `<img src="${src}" width="24" height="24" alt="${escapeHtml(alt)}" draggable="false">`;
+}
+
 function normalizeAiProviderIcon(icon, fallbackName) {
     const value = String(icon || '').trim();
     if (value && !/<img\b/i.test(value)) return value;
+    if (/<img\b/i.test(value) && /\bsrc=(["'])icons\/ai\/[^"']+\1/i.test(value)) return value;
     return createLocalAiIcon(fallbackName);
 }
 
@@ -44,7 +49,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.google.com/search?udm=50&aep=11',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('G', '#ffffff', '#4285f4')
+        icon: createAiIconImage('icons/ai/google.ico', 'Google')
     },
     {
         id: 'chatgpt',
@@ -52,7 +57,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chatgpt.com/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('GPT', '#f7f7f2', '#111827')
+        icon: createAiIconImage('icons/ai/chatgpt.svg', 'ChatGPT')
     },
     {
         id: 'gemini',
@@ -60,7 +65,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://gemini.google.com/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('Ge', '#eef2ff', '#6366f1')
+        icon: createAiIconImage('icons/ai/gemini.svg', 'Gemini')
     },
     {
         id: 'claude',
@@ -68,7 +73,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://claude.ai/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('Cl', '#fff7ed', '#c2410c')
+        icon: createAiIconImage('icons/ai/anthropic.ico', 'Claude')
     },
     {
         id: 'qwen',
@@ -76,7 +81,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chat.qwen.ai/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('Q', '#eff6ff', '#2563eb')
+        icon: createAiIconImage('icons/ai/qwen.png', '通义千问')
     },
     {
         id: 'doubao',
@@ -84,7 +89,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://www.doubao.com/chat/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('豆', '#fff1f2', '#e11d48')
+        icon: createAiIconImage('icons/ai/doubao.png', '豆包')
     },
     {
         id: 'kimi',
@@ -92,7 +97,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://kimi.moonshot.cn/',
         enabled: true,
         builtIn: true,
-        icon: createLocalAiIcon('K', '#111827', '#ffffff')
+        icon: createAiIconImage('icons/ai/kimi.ico', 'Kimi')
     },
     {
         id: 'deepseek',
