@@ -1556,11 +1556,26 @@ body.has-custom-bg #search-suggestions {
     letter-spacing: -0.04em;
 }
 
+#settings-modal .modal-content {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+    isolation: isolate;
+}
+
 .settings-body,
 .settings-stack,
 .edit-bookmark-body {
     display: grid;
     gap: 18px;
+}
+
+#settings-modal .settings-body {
+    max-height: min(68vh, 760px);
+    overflow: auto;
+    padding-right: 2px;
+    overscroll-behavior: contain;
+    contain: layout paint;
 }
 
 .setting-item {
@@ -1941,6 +1956,8 @@ body.ai-sidebar-open #settings-btn {
     grid-template-columns: 1fr;
     max-height: none;
     overflow: visible;
+    isolation: isolate;
+    contain: layout paint;
 }
 
 #settings-modal .ai-provider-item {
@@ -1956,6 +1973,7 @@ body.ai-sidebar-open #settings-btn {
         linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 52%),
         color-mix(in srgb, var(--text-primary), transparent 95%);
     box-shadow: none;
+    contain: layout paint;
 }
 
 #settings-modal .ai-provider-item.is-disabled {
@@ -2000,6 +2018,7 @@ body.ai-sidebar-open #settings-btn {
 
 #settings-modal .ai-provider-icon img,
 #settings-modal .ai-provider-icon svg {
+    display: block;
     width: 18px !important;
     height: 18px !important;
     max-width: 18px;
@@ -2009,6 +2028,7 @@ body.ai-sidebar-open #settings-btn {
     object-fit: contain;
     background: transparent !important;
     box-shadow: none !important;
+    backface-visibility: hidden;
 }
 
 #settings-modal .ai-provider-meta,
