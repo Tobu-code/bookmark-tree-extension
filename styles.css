@@ -488,16 +488,17 @@ body.has-custom-bg::after {
 
 .ambient-time-info-group {
     display: block;
-    width: 100%;
+    width: auto;
     margin-left: 0;
     padding-left: 0;
     color: var(--text-secondary);
     font-weight: 650;
-    text-align: left;
+    text-align: right;
 }
 
 .ambient-time-date {
     display: block;
+    width: 100%;
     margin-left: 0;
     font-size: clamp(14px, 1vw, 17px);
     line-height: 1.35;
