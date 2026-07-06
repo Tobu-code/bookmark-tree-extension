@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 11:32:57 +0800
+- **Type**: Fix (Settings Frosted Effect)
+- **Content**: 修复“毛玻璃及卡片磨砂感”设置项效果不明显的问题：将滑块写入的磨砂变量同步到真实使用的 `--container-blur`，并同时写入 `body` 避免自定义背景分支覆盖；为书签卡片接入 `backdrop-filter`，使卡片磨砂感随设置值变化真实生效。
+- **Impact**: `src/06-settings.js`、`script.js`、`styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 11:17:09 +0800
 - **Type**: Refactor (Custom Background Sidebar)
 - **Content**: 修正自定义背景图场景下左侧目录普通项仍呈现胶囊底色的问题：普通目录项改为透明，仅 hover 保留极轻反馈，选中项保留高亮胶囊以匹配无边框目录预期。

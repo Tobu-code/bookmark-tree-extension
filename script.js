@@ -2833,6 +2833,7 @@ function applyBackground() {
 function applyContainerOpacity() {
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
     const root = document.documentElement;
+    const body = document.body;
     const isDark = root.getAttribute('data-theme') === 'dark';
 
     const r = isDark ? 30 : 255;
@@ -2847,13 +2848,21 @@ function applyContainerOpacity() {
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
     const strongAlpha = Math.max(0.08, baseAlphaStrong - (level / 10) * (baseAlphaStrong - 0.08));
 
-    // Blur px mapping: level 0 maps to 24px, level 10 maps to 0px
-    const blurPx = Math.max(0, Math.round(24 - (level / 10) * 24));
+    // Frosted strength mapping: level 0 maps to no blur, level 10 maps to 24px.
+    const blurPx = Math.max(0, Math.round((level / 10) * 24));
 
-    root.style.setProperty('--card-bg', `rgba(${r}, ${g}, ${b}, ${cardAlpha})`);
-    root.style.setProperty('--glass-bg', `rgba(${r}, ${g}, ${b}, ${glassAlpha})`);
-    root.style.setProperty('--glass-bg-strong', `rgba(${r}, ${g}, ${b}, ${strongAlpha})`);
-    root.style.setProperty('--glass-blur', `${blurPx}px`);
+    const surfaceVars = {
+        '--card-bg': `rgba(${r}, ${g}, ${b}, ${cardAlpha})`,
+        '--glass-bg': `rgba(${r}, ${g}, ${b}, ${glassAlpha})`,
+        '--glass-bg-strong': `rgba(${r}, ${g}, ${b}, ${strongAlpha})`,
+        '--glass-blur': `${blurPx}px`,
+        '--container-blur': `${blurPx}px`
+    };
+
+    Object.entries(surfaceVars).forEach(([name, value]) => {
+        root.style.setProperty(name, value);
+        if (body) body.style.setProperty(name, value);
+    });
 
     // Reset container's styling to ensure full transparent fullscreen shell
     const container = document.querySelector('.container');
