@@ -1205,9 +1205,9 @@ body.has-custom-bg #search-suggestions {
     display: -webkit-box;
     max-width: 100%;
     overflow: hidden;
-    color: var(--text-primary);
-    font-weight: 760;
-    letter-spacing: -0.02em;
+    color: color-mix(in srgb, var(--text-primary), transparent 10%);
+    font-weight: 690;
+    letter-spacing: 0;
     line-height: 1.24;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;

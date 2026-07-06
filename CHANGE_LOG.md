@@ -1295,6 +1295,12 @@
 - **Impact**: `styles.css`、`script.js`、`newtab.html`、`CHANGE_LOG.md`
 
 ## [2026-07-06]
+- **Time**: 2026-07-06 10:27:28 +0800
+- **Type**: Refactor (Bookmark Typography)
+- **Content**: 调整右侧书签卡片标题字体层级：降低标题字重、柔化文字颜色并取消负字距，减轻卡片文字过强造成的压迫感，使书签区与搜索区、目录区层级更协调。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-06]
 - **Time**: 2026-07-06 10:20:52 +0800
 - **Type**: Refactor (New Tab Visual Polish)
 - **Content**: 继续优化自定义背景图下的新标签页视觉比例：书签卡片基础单元整体缩小约 10%，搜索框宽度收短，时间区在背景图场景下去除卡片外框与阴影，仅保留时间日期文字；左侧目录增强玻璃面板材质、内高光与阴影层级。
