@@ -259,7 +259,7 @@ body.has-custom-bg::after {
 
 :root[data-theme="light"] body.has-custom-bg .ambient-time {
     min-height: 0;
-    padding: 0 18px;
+    padding: 0;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -363,7 +363,7 @@ body.has-custom-bg::after {
 
     :root:not([data-theme]) body.has-custom-bg .ambient-time {
         min-height: 0;
-        padding: 0 18px;
+        padding: 0;
         border: 0;
         border-radius: 0;
         background: transparent;
@@ -462,10 +462,10 @@ body.has-custom-bg::after {
 /* Poetry container - repurposed from ambient-time */
 .ambient-time {
     display: block;
-    width: max-content;
-    max-width: none;
+    width: var(--flat-sidebar);
+    max-width: var(--flat-sidebar);
     min-height: auto;
-    padding: 0 18px;
+    padding: 0;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -490,8 +490,8 @@ body.has-custom-bg::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
-    width: max-content;
+    gap: 16px;
+    width: 100%;
     font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", SimSun, serif;
 }
 
@@ -507,7 +507,7 @@ body.has-custom-bg::after {
 }
 
 .poetry-title {
-    font-size: clamp(24px, 1.9vw, 34px);
+    font-size: clamp(23px, 1.7vw, 30px);
     font-weight: 800;
     color: color-mix(in srgb, var(--text-primary), #1c1712 18%);
     line-height: 1.08;
@@ -528,16 +528,18 @@ body.has-custom-bg::after {
     order: 2;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: max-content;
+    gap: 8px;
+    width: 100%;
 }
 
 .poetry-line {
     display: block;
-    font-size: clamp(20px, 1.55vw, 28px);
+    max-width: 100%;
+    overflow: hidden;
     color: color-mix(in srgb, var(--text-primary), #241f18 16%);
-    line-height: 1.72;
-    letter-spacing: 0.16em;
+    font-size: clamp(16px, 0.9vw, 18px);
+    line-height: 1.68;
+    letter-spacing: 0.08em;
     font-weight: 500;
     white-space: nowrap;
 }
