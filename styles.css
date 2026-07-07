@@ -554,9 +554,9 @@ body.has-custom-bg::after {
 
 /* Time/date display - repurposed from search-greeting */
 .search-greeting {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
+    display: grid;
+    justify-items: start;
+    gap: 6px;
     min-height: 32px;
     padding-left: 18px;
     color: var(--text-primary);
@@ -577,10 +577,10 @@ body.has-custom-bg::after {
     animation: timePulse 2s ease-in-out infinite;
 }
 
-.search-greeting-separator,
 .search-greeting-date {
     display: inline-block;
     font-size: 92%;
+    line-height: 1.2;
 }
 
 .search-wrapper {

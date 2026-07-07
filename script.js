@@ -3626,7 +3626,6 @@ async function initAmbientTime() {
         const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
         timeDateDisplay.innerHTML = `
             <span class="search-greeting-time"></span>
-            <span class="search-greeting-separator"> </span>
             <span class="search-greeting-date"></span>
         `;
         const timeEl = timeDateDisplay.querySelector('.search-greeting-time');
