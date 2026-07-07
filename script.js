@@ -3626,7 +3626,7 @@ async function initAmbientTime() {
         const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
         timeDateDisplay.innerHTML = `
             <span class="search-greeting-time"></span>
-            <span class="search-greeting-separator">·</span>
+            <span class="search-greeting-separator"> </span>
             <span class="search-greeting-date"></span>
         `;
         const timeEl = timeDateDisplay.querySelector('.search-greeting-time');
@@ -3639,14 +3639,15 @@ async function initAmbientTime() {
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
             const weekday = WEEKDAYS_SHORT[now.getDay()];
 
-            timeEl.textContent = `${hours}:${minutes}`;
+            timeEl.textContent = `${hours}:${minutes}:${seconds}`;
             dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
 
-            // Schedule next update at the start of the next minute
-            const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-            setTimeout(updateTimeDate, msUntilNextMinute);
+            // Schedule next update at the start of the next second.
+            const msUntilNextSecond = 1000 - now.getMilliseconds();
+            setTimeout(updateTimeDate, msUntilNextSecond);
         }
 
         updateTimeDate();
