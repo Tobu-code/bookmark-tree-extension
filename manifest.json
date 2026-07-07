@@ -31,7 +31,8 @@
     "*://kimi.moonshot.cn/*",
     "*://*.kimi.moonshot.cn/*",
     "*://chat.deepseek.com/*",
-    "*://*.deepseek.com/*"
+    "*://*.deepseek.com/*",
+    "*://poetry.palemoky.com/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

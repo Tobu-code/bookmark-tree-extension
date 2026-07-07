@@ -2873,8 +2873,9 @@ function applyContainerOpacity() {
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
     const strongAlpha = Math.max(0.08, baseAlphaStrong - (level / 10) * (baseAlphaStrong - 0.08));
 
-    // Frosted strength mapping: level 0 maps to no blur, level 10 maps to 24px.
-    const blurPx = Math.max(0, Math.round((level / 10) * 24));
+    // Frosted strength mapping: 使用指数曲线让低档位（1-3）更明显
+    // level 1 → 8px, level 5 → 18px, level 10 → 28px
+    const blurPx = Math.max(0, Math.round(Math.pow(level / 10, 0.7) * 28));
 
     const surfaceVars = {
         '--card-bg': `rgba(${r}, ${g}, ${b}, ${cardAlpha})`,
@@ -3453,100 +3454,205 @@ function initAiSidebar() {
     };
 }
 
-// --- Shared time/greeting utilities (Fix #3: dedup GREETINGS/QUOTES) ---
-const DAILY_QUOTES = Object.freeze([
-    '慢慢来，比较快',
-    '保持好奇心，探索未知',
-    '做喜欢的事，见想见的人',
-    '用心感受每一个当下',
-    '简单生活，认真做事',
-    '把每一天过成想要的样子',
-    '保持热爱，奔赴山海',
-    '今日事，今日毕'
-]);
-
-function getTimePrefix(hour = new Date().getHours()) {
-    if (hour < 5) return '夜深了';
-    if (hour < 9) return '早上好';
-    if (hour < 12) return '上午好';
-    if (hour < 14) return '中午好';
-    if (hour < 18) return '下午好';
-    if (hour < 22) return '晚上好';
-    return '夜深了';
-}
-
-function getDailyGreeting() {
-    const dayOfYear = Math.floor(
-        (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-    );
-    return `${getTimePrefix()}，${DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length]}`;
+/**
+ * Get cached poetry synchronously
+ */
+function getCachedPoetry() {
+    const CACHE_KEY = 'poetry_cache';
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+        try {
+            const { data, cacheDate } = JSON.parse(cached);
+            const today = new Date().toDateString();
+            if (cacheDate === today) {
+                return data;
+            }
+        } catch (e) {
+            console.warn('Poetry cache parse error:', e);
+        }
+    }
+    return null;
 }
 
 /**
- * Initialize ambient time display and idle detection
+ * Fetch and cache new poetry
  */
-function initAmbientTime() {
-    const timeContainer = document.getElementById('ambient-time-container');
-    const searchGreeting = document.getElementById('search-greeting');
-    if (!timeContainer) return;
+async function fetchPoetry() {
+    const CACHE_KEY = 'poetry_cache';
 
-    let idleTimer;
-    const idleDelay = 3000;
+    // Fetch new poetry
+    try {
+        const response = await fetch('https://poetry.palemoky.com/api/poems/random?lang=zh-Hans', {
+            headers: { accept: 'application/json' }
+        });
+        const result = await response.json();
 
-    // Build static DOM once — only update textContent on tick (Fix #5)
-    const clockEl = document.createElement('span');
-    clockEl.className = 'ambient-time-clock';
-    const infoGroup = document.createElement('div');
-    infoGroup.className = 'ambient-time-info-group';
-    const dateEl = document.createElement('span');
-    dateEl.className = 'ambient-time-date';
-    infoGroup.appendChild(dateEl);
-    timeContainer.appendChild(clockEl);
-    timeContainer.appendChild(infoGroup);
+        // Cache the result with today's date
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+            data: result.data,
+            cacheDate: new Date().toDateString()
+        }));
 
-    const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
+        return result.data;
+    } catch (error) {
+        console.error('Failed to fetch poetry:', error);
+        // Return fallback poetry
+        const fallback = {
+            title: '静夜思',
+            content: ['床前明月光，疑是地上霜。', '举头望明月，低头思故乡。'],
+            author: { name: '李白' },
+            dynasty: { name: '唐' },
+            type: { name: '五言绝句' }
+        };
 
-    function updateAmbientTime() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const weekday = WEEKDAYS_SHORT[now.getDay()];
+        // Also cache the fallback to avoid repeated failed requests
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+            data: fallback,
+            cacheDate: new Date().toDateString()
+        }));
 
-        // textContent-only update: no DOM rebuild, no layout thrash (Fix #5)
-        clockEl.textContent = `${hours}:${minutes}:${seconds}`;
-        dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
-        if (searchGreeting) searchGreeting.textContent = getDailyGreeting();
+        return fallback;
+    }
+}
 
-        // Precise next-second scheduling keeps the visible seconds in sync.
-        const msUntilNextSecond = 1000 - now.getMilliseconds();
-        setTimeout(updateAmbientTime, msUntilNextSecond);
+/**
+ * Render poetry in the container
+ */
+function renderPoetry(container, poetryData) {
+    if (!poetryData) return;
+
+    const poetryContainer = document.createElement('div');
+    poetryContainer.className = 'poetry-container';
+
+    // Poetry content (right column in vertical layout)
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'poetry-content';
+
+    // Add each line as a separate element
+    if (poetryData.content && Array.isArray(poetryData.content)) {
+        poetryData.content.forEach(line => {
+            const lineSpan = document.createElement('span');
+            lineSpan.className = 'poetry-line';
+            lineSpan.textContent = line;
+            contentDiv.appendChild(lineSpan);
+        });
     }
 
-    function resetIdleTimer() {
-        timeContainer.classList.remove('visible');
-        timeContainer.classList.add('dimmed');
-        clearTimeout(idleTimer);
+    // Poetry metadata (left column in vertical layout)
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'poetry-meta-column';
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'poetry-title';
+    titleDiv.textContent = poetryData.title || '';
+
+    const metaInfo = document.createElement('div');
+    metaInfo.className = 'poetry-meta';
+    const dynasty = poetryData.dynasty?.name || '';
+    const author = poetryData.author?.name || '';
+    metaInfo.textContent = dynasty && author ? `${dynasty} · ${author}` : (author || dynasty);
+
+    metaDiv.appendChild(titleDiv);
+    metaDiv.appendChild(metaInfo);
+
+    poetryContainer.appendChild(contentDiv);
+    poetryContainer.appendChild(metaDiv);
+
+    container.innerHTML = '';
+    container.appendChild(poetryContainer);
+}
+
+/**
+ * Initialize poetry display and time/date display
+ */
+async function initAmbientTime() {
+    const poetryContainer = document.getElementById('ambient-time-container');
+    const timeDateDisplay = document.getElementById('time-date-display');
+
+    // Initialize poetry display
+    if (poetryContainer) {
+        // Try to get cached poetry first (synchronous, no flicker)
+        const cachedPoetry = getCachedPoetry();
+
+        if (cachedPoetry) {
+            // Render immediately from cache
+            renderPoetry(poetryContainer, cachedPoetry);
+        } else {
+            // Show placeholder only if no cache
+            poetryContainer.innerHTML = `
+                <div class="poetry-container">
+                    <div class="poetry-meta-column">
+                        <div class="poetry-title">加载中...</div>
+                        <div class="poetry-meta">每日一诗</div>
+                    </div>
+                    <div class="poetry-content">
+                        <span class="poetry-line">　</span>
+                        <span class="poetry-line">　</span>
+                    </div>
+                </div>
+            `;
+
+            // Fetch and render new poetry
+            const poetryData = await fetchPoetry();
+            renderPoetry(poetryContainer, poetryData);
+        }
+
+        // Add idle detection for poetry container
+        let idleTimer;
+        const idleDelay = 3000;
+
+        function resetIdleTimer() {
+            poetryContainer.classList.remove('visible');
+            poetryContainer.classList.add('dimmed');
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => {
+                poetryContainer.classList.remove('dimmed');
+                poetryContainer.classList.add('visible');
+            }, idleDelay);
+        }
+
+        window.addEventListener('mousemove', resetIdleTimer);
+        window.addEventListener('keydown', resetIdleTimer);
+        window.addEventListener('click', resetIdleTimer);
+        window.addEventListener('scroll', resetIdleTimer);
+
         idleTimer = setTimeout(() => {
-            timeContainer.classList.remove('dimmed');
-            timeContainer.classList.add('visible');
+            poetryContainer.classList.add('visible');
         }, idleDelay);
     }
 
-    window.addEventListener('mousemove', resetIdleTimer);
-    window.addEventListener('keydown', resetIdleTimer);
-    window.addEventListener('click', resetIdleTimer);
-    window.addEventListener('scroll', resetIdleTimer);
+    // Initialize time/date display above search box
+    if (timeDateDisplay) {
+        const WEEKDAYS_SHORT = ['日', '一', '二', '三', '四', '五', '六'];
+        timeDateDisplay.innerHTML = `
+            <span class="search-greeting-time"></span>
+            <span class="search-greeting-separator">·</span>
+            <span class="search-greeting-date"></span>
+        `;
+        const timeEl = timeDateDisplay.querySelector('.search-greeting-time');
+        const dateEl = timeDateDisplay.querySelector('.search-greeting-date');
 
-    updateAmbientTime();
+        function updateTimeDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const weekday = WEEKDAYS_SHORT[now.getDay()];
 
-    idleTimer = setTimeout(() => {
-        timeContainer.classList.add('visible');
-    }, idleDelay);
+            timeEl.textContent = `${hours}:${minutes}`;
+            dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
+
+            // Schedule next update at the start of the next minute
+            const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+            setTimeout(updateTimeDate, msUntilNextMinute);
+        }
+
+        updateTimeDate();
+    }
 }
+
 
 
 

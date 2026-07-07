@@ -774,8 +774,9 @@ function applyContainerOpacity() {
     const glassAlpha = Math.max(0.02, baseAlphaGlass - (level / 10) * (baseAlphaGlass - 0.02));
     const strongAlpha = Math.max(0.08, baseAlphaStrong - (level / 10) * (baseAlphaStrong - 0.08));
 
-    // Frosted strength mapping: level 0 maps to no blur, level 10 maps to 24px.
-    const blurPx = Math.max(0, Math.round((level / 10) * 24));
+    // Frosted strength mapping: 使用指数曲线让低档位（1-3）更明显
+    // level 1 → 8px, level 5 → 18px, level 10 → 28px
+    const blurPx = Math.max(0, Math.round(Math.pow(level / 10, 0.7) * 28));
 
     const surfaceVars = {
         '--card-bg': `rgba(${r}, ${g}, ${b}, ${cardAlpha})`,

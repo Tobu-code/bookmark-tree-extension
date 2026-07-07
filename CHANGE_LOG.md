@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-07 16:47:22]
+- **Type**: Fix (优化诗词卡片与时间日期层级)
+- **Content**: 移除诗词卡片外边框，允许诗句按内容撑宽且单行展示，并将诗词卡片整体上移；时间日期拆分为独立时间与日期节点，使时间字号约为日期的 200%，同时保留时间数字的心脏脉动效果；同步保持诗词接口权限、时间容器 DOM 和合并脚本一致。
+- **Impact**: `manifest.json`, `newtab.html`, `styles.css`, `src/06-settings.js`, `src/09-ui-widgets.js`, `script.js`
+
 ## [2026-07-06 23:51:38]
 - **Type**: Refactor (将 Z AI 替换为智谱清言 GLM)
 - **Content**: 移除 Z / z.ai 内置 AI、图标、host permission、DNR 规则和陈旧生成规则缓存；新增智谱清言 GLM，入口为 `https://chatglm.cn/`，并配置 `chatglm.cn` 及其子域的 iframe 嵌入响应头规则；同步将 GLM 使用本地 `glm.svg` 图标。
