@@ -186,7 +186,7 @@ async function initAmbientTime() {
             const weekday = WEEKDAYS_SHORT[now.getDay()];
 
             timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-            dateEl.textContent = `${year}年${month}月${day}日 · 星期${weekday}`;
+            dateEl.textContent = `${year}/${month}/${day}·星期${weekday}`;
 
             // Schedule next update at the start of the next second.
             const msUntilNextSecond = 1000 - now.getMilliseconds();

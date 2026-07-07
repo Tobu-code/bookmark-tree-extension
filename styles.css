@@ -554,12 +554,9 @@ body.has-custom-bg::after {
 
 /* Time/date display - repurposed from search-greeting */
 .search-greeting {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    grid-template-rows: auto auto;
-    column-gap: 0;
-    row-gap: 6px;
-    justify-items: start;
+    display: flex;
+    align-items: baseline;
+    gap: 1em;
     min-height: 32px;
     padding-left: 18px;
     color: var(--text-primary);
@@ -574,19 +571,16 @@ body.has-custom-bg::after {
 
 .search-greeting-time {
     display: inline-block;
-    grid-column: 1;
-    grid-row: 1;
-    font-size: 260%;
+    font-size: 300%;
     line-height: 1;
-    transform-origin: right center;
+    transform-origin: center;
     animation: timePulse 2s ease-in-out infinite;
 }
 
 .search-greeting-date {
     display: inline-block;
-    grid-column: 2;
-    grid-row: 2;
-    font-size: 92%;
+    font-size: 100%;
+    font-style: italic;
     line-height: 1.2;
 }
 
