@@ -1564,3 +1564,9 @@
 - **变更类型**: Chore / Design
 - **变更内容**: 替换扩展图标为精致小飞猪+书签风格新图标（粉色渐变玻璃态风格），覆盖 16/48/128px 三种尺寸及根目录 icon.png
 - **影响范围**: icons/icon16.png, icons/icon48.png, icons/icon128.png, icon.png
+
+## [2026-07-09]
+- **Time**: 2026-07-09 17:27:49 +0800
+- **Type**: Refactor (Liquid Glass UI)
+- **Content**: 使用液态玻璃风格重构新标签页视觉系统：更新浅深色 token、背景折射层、搜索框、书签卡片、目录项、弹窗、设置面板与 AI 侧栏的玻璃高光、边框、阴影和交互动效；同步磨砂感滑杆的玻璃色值映射，并修正设置 toast 显示类兼容。
+- **Impact**: `styles.css`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`
