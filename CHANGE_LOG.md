@@ -1570,3 +1570,9 @@
 - **Type**: Refactor (Liquid Glass UI)
 - **Content**: 使用液态玻璃风格重构新标签页视觉系统：更新浅深色 token、背景折射层、搜索框、书签卡片、目录项、弹窗、设置面板与 AI 侧栏的玻璃高光、边框、阴影和交互动效；同步磨砂感滑杆的玻璃色值映射，并修正设置 toast 显示类兼容。
 - **Impact**: `styles.css`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-07-09]
+- **Time**: 2026-07-09 17:52:36 +0800
+- **Type**: Refactor (Calm Glass Bento UI Polish)
+- **Content**: 基于截图评估收敛液态玻璃视觉为 Calm Glass Bento：提高文字与书签标题对比度，减弱搜索框与卡片炫光，统一图标底板和卡片悬浮反馈，优化左侧目录深浅色 active 状态，修正小窗口下 900px 强制宽度导致的横向溢出，并同步磨砂感滑杆透明度映射。
+- **Impact**: `styles.css`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`

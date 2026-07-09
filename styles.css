@@ -6,6 +6,7 @@
     --font-body: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
     --font-display: "Avenir Next", "SF Pro Display", "PingFang SC", "Noto Sans SC", sans-serif;
     --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", ui-monospace, monospace;
+    --font-sans: var(--font-body);
 
     --masonry-navy: #111827;
     --soft-indigo: #4f7cff;
@@ -25,26 +26,26 @@
     --page-bg: #edf4fb;
     --page-bg-2: #f9fbff;
     --text-primary: #111827;
-    --text-secondary: #4c5b70;
-    --text-subtle: #778397;
+    --text-secondary: #3f4d61;
+    --text-subtle: #687589;
     --text-inverse: #f8fbff;
     --line-soft: rgba(17, 24, 39, 0.11);
     --line-strong: rgba(17, 24, 39, 0.2);
-    --glass-bg: rgba(249, 252, 255, 0.58);
-    --glass-bg-strong: rgba(255, 255, 255, 0.78);
-    --card-bg: rgba(255, 255, 255, 0.52);
-    --card-bg-hover: rgba(255, 255, 255, 0.76);
+    --glass-bg: rgba(249, 252, 255, 0.64);
+    --glass-bg-strong: rgba(255, 255, 255, 0.82);
+    --card-bg: rgba(255, 255, 255, 0.62);
+    --card-bg-hover: rgba(255, 255, 255, 0.82);
     --card-border: rgba(255, 255, 255, 0.54);
     --glass-edge: rgba(255, 255, 255, 0.8);
     --glass-edge-dark: rgba(45, 64, 92, 0.18);
-    --liquid-highlight: rgba(255, 255, 255, 0.62);
-    --liquid-sheen: rgba(120, 192, 255, 0.2);
+    --liquid-highlight: rgba(255, 255, 255, 0.52);
+    --liquid-sheen: rgba(120, 192, 255, 0.14);
     --liquid-caustic: rgba(19, 184, 166, 0.12);
     --liquid-depth: rgba(17, 24, 39, 0.12);
-    --panel-shadow: 0 28px 70px rgba(38, 52, 83, 0.16), 0 2px 8px rgba(255, 255, 255, 0.65) inset;
-    --card-shadow: 0 16px 38px rgba(38, 52, 83, 0.12), 0 1px 0 rgba(255, 255, 255, 0.72) inset;
-    --card-shadow-hover: 0 24px 58px rgba(38, 52, 83, 0.2), 0 1px 0 rgba(255, 255, 255, 0.86) inset;
-    --accent-shadow: 0 18px 48px rgba(79, 124, 255, 0.22);
+    --panel-shadow: 0 24px 58px rgba(38, 52, 83, 0.13), 0 1px 6px rgba(255, 255, 255, 0.58) inset;
+    --card-shadow: 0 12px 30px rgba(38, 52, 83, 0.1), 0 1px 0 rgba(255, 255, 255, 0.72) inset;
+    --card-shadow-hover: 0 18px 42px rgba(38, 52, 83, 0.16), 0 1px 0 rgba(255, 255, 255, 0.86) inset;
+    --accent-shadow: 0 14px 34px rgba(79, 124, 255, 0.18);
     --focus-ring: 0 0 0 4px rgba(79, 124, 255, 0.22);
 
     --radius-xs: 10px;
@@ -90,10 +91,10 @@
     --text-inverse: #0f1220;
     --line-soft: rgba(255, 255, 255, 0.09);
     --line-strong: rgba(255, 255, 255, 0.16);
-    --glass-bg: rgba(13, 18, 31, 0.58);
-    --glass-bg-strong: rgba(18, 25, 42, 0.78);
-    --card-bg: rgba(18, 25, 42, 0.54);
-    --card-bg-hover: rgba(29, 39, 64, 0.78);
+    --glass-bg: rgba(13, 18, 31, 0.66);
+    --glass-bg-strong: rgba(18, 25, 42, 0.84);
+    --card-bg: rgba(18, 25, 42, 0.62);
+    --card-bg-hover: rgba(29, 39, 64, 0.84);
     --card-border: rgba(255, 255, 255, 0.12);
     --glass-edge: rgba(255, 255, 255, 0.18);
     --glass-edge-dark: rgba(2, 8, 23, 0.6);
@@ -102,8 +103,8 @@
     --liquid-caustic: rgba(19, 184, 166, 0.16);
     --liquid-depth: rgba(0, 0, 0, 0.42);
     --panel-shadow: 0 28px 82px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.12) inset;
-    --card-shadow: 0 18px 44px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
-    --card-shadow-hover: 0 26px 68px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.16) inset;
+    --card-shadow: 0 14px 36px rgba(0, 0, 0, 0.24), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+    --card-shadow-hover: 0 22px 54px rgba(0, 0, 0, 0.36), 0 1px 0 rgba(255, 255, 255, 0.16) inset;
     --accent-shadow: 0 18px 56px rgba(79, 124, 255, 0.34);
     --focus-ring: 0 0 0 4px rgba(97, 179, 255, 0.28);
 }
@@ -120,10 +121,10 @@
         --text-inverse: #0f1220;
         --line-soft: rgba(255, 255, 255, 0.09);
         --line-strong: rgba(255, 255, 255, 0.16);
-        --glass-bg: rgba(13, 18, 31, 0.58);
-        --glass-bg-strong: rgba(18, 25, 42, 0.78);
-        --card-bg: rgba(18, 25, 42, 0.54);
-        --card-bg-hover: rgba(29, 39, 64, 0.78);
+        --glass-bg: rgba(13, 18, 31, 0.66);
+        --glass-bg-strong: rgba(18, 25, 42, 0.84);
+        --card-bg: rgba(18, 25, 42, 0.62);
+        --card-bg-hover: rgba(29, 39, 64, 0.84);
         --card-border: rgba(255, 255, 255, 0.12);
         --glass-edge: rgba(255, 255, 255, 0.18);
         --glass-edge-dark: rgba(2, 8, 23, 0.6);
@@ -132,8 +133,8 @@
         --liquid-caustic: rgba(19, 184, 166, 0.16);
         --liquid-depth: rgba(0, 0, 0, 0.42);
         --panel-shadow: 0 28px 82px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.12) inset;
-        --card-shadow: 0 18px 44px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
-        --card-shadow-hover: 0 26px 68px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255, 255, 255, 0.16) inset;
+        --card-shadow: 0 14px 36px rgba(0, 0, 0, 0.24), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+        --card-shadow-hover: 0 22px 54px rgba(0, 0, 0, 0.36), 0 1px 0 rgba(255, 255, 255, 0.16) inset;
         --accent-shadow: 0 18px 56px rgba(79, 124, 255, 0.34);
         --focus-ring: 0 0 0 4px rgba(97, 179, 255, 0.28);
     }
@@ -529,8 +530,8 @@ body.has-custom-bg::after {
 
 .poetry-title {
     font-size: clamp(23px, 1.7vw, 30px);
-    font-weight: 800;
-    color: color-mix(in srgb, var(--text-primary), #1c1712 18%);
+    font-weight: 760;
+    color: var(--text-primary);
     line-height: 1.08;
     letter-spacing: 0.12em;
     white-space: nowrap;
@@ -538,7 +539,7 @@ body.has-custom-bg::after {
 
 .poetry-meta {
     font-size: clamp(13px, 0.95vw, 16px);
-    color: var(--text-secondary);
+    color: color-mix(in srgb, var(--text-secondary), transparent 8%);
     font-weight: 500;
     line-height: 1.2;
     letter-spacing: 0.18em;
@@ -557,7 +558,7 @@ body.has-custom-bg::after {
     display: block;
     max-width: 100%;
     overflow: hidden;
-    color: color-mix(in srgb, var(--text-primary), #241f18 16%);
+    color: color-mix(in srgb, var(--text-primary), transparent 12%);
     font-size: clamp(16px, 0.9vw, 18px);
     line-height: 1.68;
     letter-spacing: 0.08em;
@@ -580,7 +581,7 @@ body.has-custom-bg::after {
     gap: 1em;
     min-height: 32px;
     padding-left: 18px;
-    color: var(--text-primary);
+    color: color-mix(in srgb, var(--text-primary), transparent 4%);
     font-family: var(--font-mono);
     font-size: clamp(16px, 1.2vw, 19px);
     font-style: normal;
@@ -615,9 +616,9 @@ body.has-custom-bg::after {
         linear-gradient(115deg, var(--liquid-highlight), transparent 34% 62%, var(--liquid-sheen)),
         linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 54%),
         var(--glass-bg-strong);
-    box-shadow: var(--panel-shadow);
-    backdrop-filter: blur(var(--container-blur)) saturate(180%) contrast(104%);
-    -webkit-backdrop-filter: blur(var(--container-blur)) saturate(180%) contrast(104%);
+    box-shadow: 0 18px 42px rgba(38, 52, 83, 0.1), 0 1px 0 rgba(255, 255, 255, 0.76) inset;
+    backdrop-filter: blur(min(var(--container-blur), 20px)) saturate(165%) contrast(102%);
+    -webkit-backdrop-filter: blur(min(var(--container-blur), 20px)) saturate(165%) contrast(102%);
     isolation: isolate;
     overflow: hidden;
     transition: transform var(--liquid-medium) var(--liquid-ease), border-color var(--liquid-medium) ease, box-shadow var(--liquid-medium) ease, background var(--liquid-medium) ease;
@@ -632,13 +633,13 @@ body.has-custom-bg::after {
     background:
         linear-gradient(95deg, transparent 0 18%, rgba(255, 255, 255, 0.44) 28%, transparent 40% 100%),
         radial-gradient(ellipse at 72% 0%, color-mix(in srgb, var(--soft-indigo), transparent 76%), transparent 54%);
-    opacity: 0.72;
+    opacity: 0.42;
     pointer-events: none;
 }
 
 .search-wrapper:focus-within {
     border-color: color-mix(in srgb, var(--soft-indigo), var(--glass-edge) 44%);
-    box-shadow: var(--accent-shadow), 0 0 0 3px rgba(79, 124, 255, 0.14), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    box-shadow: 0 18px 44px rgba(79, 124, 255, 0.16), 0 0 0 3px rgba(79, 124, 255, 0.13), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
     transform: translateY(-1px) scale(1.002);
 }
 
@@ -700,16 +701,20 @@ body.has-custom-bg::after {
     border: 0;
     outline: none;
     background: transparent;
-    color: var(--text-primary);
+    color: #0f172a;
     font-size: clamp(16px, 1.2vw, 19px);
-    font-weight: 650;
+    font-weight: 680;
     box-shadow: none !important;
     appearance: none;
     -webkit-appearance: none;
 }
 
 #search-input::placeholder {
-    color: var(--text-subtle);
+    color: color-mix(in srgb, var(--text-secondary), transparent 18%);
+}
+
+:root[data-theme="dark"] #search-input {
+    color: var(--text-primary);
 }
 
 #search-input:focus,
@@ -728,13 +733,13 @@ body.has-custom-bg::after {
     background:
         radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.72), transparent 28%),
         linear-gradient(135deg, #61b3ff, var(--soft-indigo) 52%, #13b8a6);
-    box-shadow: 0 18px 42px rgba(79, 124, 255, 0.38), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    box-shadow: 0 14px 30px rgba(79, 124, 255, 0.3), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
     transition: transform var(--liquid-fast) var(--liquid-ease), box-shadow var(--liquid-fast) ease, filter var(--liquid-fast) ease;
 }
 
 #ai-sidebar-btn:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 22px 48px rgba(53, 119, 240, 0.42);
+    box-shadow: 0 18px 38px rgba(53, 119, 240, 0.34);
 }
 
 #ai-sidebar-btn:active {
@@ -1052,8 +1057,8 @@ body.has-custom-bg #search-suggestions {
     padding: 8px 12px !important;
     border: 1px solid transparent;
     border-radius: 16px;
-    color: var(--text-secondary);
-    font-weight: 730;
+    color: color-mix(in srgb, var(--text-secondary), #0f172a 8%);
+    font-weight: 700;
     letter-spacing: -0.01em;
     cursor: pointer;
     transition: color var(--liquid-fast) ease, background var(--liquid-fast) ease, border-color var(--liquid-fast) ease, transform var(--liquid-fast) var(--liquid-ease), box-shadow var(--liquid-fast) ease;
@@ -1066,17 +1071,25 @@ body.has-custom-bg #search-suggestions {
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.26), transparent 46%),
         color-mix(in srgb, var(--soft-indigo), transparent 91%);
-    box-shadow: 0 10px 24px rgba(38, 52, 83, 0.1), 0 1px 0 rgba(255, 255, 255, 0.54) inset;
-    transform: translateX(2px);
+    box-shadow: 0 8px 18px rgba(38, 52, 83, 0.08), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    transform: translateX(1px);
 }
 
 .tree-folder-item.active {
-    color: color-mix(in srgb, var(--soft-indigo), var(--text-primary) 16%);
+    color: color-mix(in srgb, var(--soft-indigo), #0f172a 26%);
     background:
         linear-gradient(100deg, rgba(79, 124, 255, 0.22), rgba(19, 184, 166, 0.11) 56%, rgba(224, 92, 159, 0.1)),
         color-mix(in srgb, var(--glass-bg-strong), transparent 18%);
     border-color: color-mix(in srgb, var(--soft-indigo), var(--glass-edge) 32%);
-    box-shadow: 0 12px 28px rgba(79, 124, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    box-shadow: 0 10px 22px rgba(79, 124, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.56);
+}
+
+:root[data-theme="dark"] .tree-folder-item {
+    color: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .tree-folder-item.active {
+    color: color-mix(in srgb, #9db8ff, var(--text-primary) 24%);
 }
 
 .tree-folder-item.active::before {
@@ -1241,8 +1254,8 @@ body.has-custom-bg #search-suggestions {
     position: relative;
     min-width: 0;
     min-height: 0;
-    border: 1px solid color-mix(in srgb, var(--card-border), var(--glass-edge-dark) 22%);
-    border-radius: 22px;
+    border: 1px solid color-mix(in srgb, var(--card-border), var(--glass-edge-dark) 28%);
+    border-radius: 20px;
     background:
         linear-gradient(128deg, var(--liquid-highlight), transparent 35% 66%, var(--liquid-sheen)),
         linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 58%),
@@ -1250,8 +1263,8 @@ body.has-custom-bg #search-suggestions {
         var(--card-bg);
     box-shadow: var(--card-shadow);
     overflow: hidden;
-    backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(185%) contrast(104%);
-    -webkit-backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(185%) contrast(104%);
+    backdrop-filter: blur(min(var(--glass-blur, var(--container-blur)), 16px)) saturate(155%) contrast(102%);
+    -webkit-backdrop-filter: blur(min(var(--glass-blur, var(--container-blur)), 16px)) saturate(155%) contrast(102%);
     transition: transform var(--liquid-medium) var(--liquid-ease), box-shadow var(--liquid-medium) ease, border-color var(--liquid-medium) ease, background var(--liquid-medium) ease, opacity var(--liquid-medium) ease;
 }
 
@@ -1266,7 +1279,7 @@ body.has-custom-bg #search-suggestions {
         linear-gradient(90deg, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 58%) 0 0) top left / 100% 2px no-repeat,
         linear-gradient(180deg, transparent, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 92%));
     mix-blend-mode: screen;
-    opacity: 0.52;
+    opacity: 0.34;
 }
 
 .bookmarks-pane-grid .leaf-wrapper:nth-child(6n + 1) {
@@ -1307,7 +1320,7 @@ body.has-custom-bg #search-suggestions {
     pointer-events: none;
     border-radius: inherit;
     background:
-        linear-gradient(115deg, transparent 0 22%, rgba(255, 255, 255, 0.48) 34%, transparent 48% 100%),
+        linear-gradient(115deg, transparent 0 22%, rgba(255, 255, 255, 0.34) 34%, transparent 48% 100%),
         linear-gradient(65deg, transparent 0 52%, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 74%) 60%, transparent 74% 100%);
     transform: translateX(-18%);
     transition: opacity var(--liquid-medium) ease, transform var(--liquid-medium) var(--liquid-ease);
@@ -1322,7 +1335,7 @@ body.has-custom-bg #search-suggestions {
     border-color: color-mix(in srgb, var(--card-accent, var(--soft-indigo)), var(--glass-edge) 46%);
     background: var(--card-bg-hover);
     box-shadow: var(--card-shadow-hover);
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-2px) scale(1.006);
 }
 
 .leaf-wrapper:hover::before,
@@ -1405,15 +1418,15 @@ body.has-custom-bg #search-suggestions {
 .bookmark-icon-fallback,
 .bookmark-icon-wrap {
     flex: 0 0 auto;
-    width: clamp(24px, 1.8vw, 32px);
-    height: clamp(24px, 1.8vw, 32px);
+    width: clamp(28px, 1.9vw, 34px);
+    height: clamp(28px, 1.9vw, 34px);
     margin: 0 !important;
-    border-radius: 10px;
+    border-radius: 12px;
     object-fit: contain;
     background:
         radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.65), transparent 34%),
         color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 88%);
-    box-shadow: 0 6px 14px rgba(15, 18, 32, 0.08);
+    box-shadow: 0 6px 14px rgba(15, 18, 32, 0.08), 0 1px 0 rgba(255, 255, 255, 0.58) inset;
 }
 
 img.bookmark-icon {
@@ -1433,10 +1446,10 @@ img.bookmark-icon {
     display: -webkit-box;
     max-width: 100%;
     overflow: hidden;
-    color: color-mix(in srgb, var(--text-primary), transparent 18%);
+    color: color-mix(in srgb, var(--text-primary), transparent 8%);
     font-family: var(--font-sans);
     font-size: 15px;
-    font-weight: 640;
+    font-weight: 700;
     letter-spacing: 0;
     line-height: 1.28;
     text-overflow: ellipsis;
@@ -1465,7 +1478,7 @@ img.bookmark-icon {
     display: block;
     width: 100%;
     font-size: 13px;
-    font-weight: 640;
+    font-weight: 700;
     line-height: 1.18;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -2468,8 +2481,89 @@ body.ai-sidebar-open #settings-btn {
 }
 
 @media (max-width: 899px) {
+    body {
+        overflow-y: auto;
+    }
+
+    :root {
+        --page-pad-x: 18px;
+        --content-gap: 24px;
+        --flat-grid-gap: 14px;
+    }
+
     .app-shell {
-        min-width: 900px;
+        width: calc(100vw - 36px);
+        height: auto;
+        min-height: 100vh;
+        min-width: 0;
+        padding: 28px 0 42px;
+    }
+
+    .app-header {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 24px;
+        margin-top: 0;
+        margin-bottom: 28px;
+    }
+
+    .ambient-time {
+        width: 100%;
+        max-width: none;
+    }
+
+    .poetry-container,
+    .poetry-meta-column {
+        align-items: flex-start;
+        justify-items: start;
+    }
+
+    .poetry-title,
+    .poetry-meta,
+    .poetry-line {
+        white-space: normal;
+    }
+
+    .search-stack {
+        width: 100%;
+    }
+
+    .search-greeting {
+        padding-left: 4px;
+    }
+
+    #bookmarks-tree.layout-flat {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 24px;
+    }
+
+    #bookmarks-tree.layout-flat::before,
+    #bookmarks-tree.layout-flat::after {
+        display: none;
+    }
+
+    .directory-pane,
+    .bookmarks-pane {
+        height: auto;
+    }
+
+    .directory-pane-scroll {
+        max-height: 34vh;
+        padding: 4px;
+    }
+
+    .bookmarks-pane-scroll {
+        height: auto;
+        overflow: visible;
+        padding: 0 0 36px;
+    }
+
+    .bookmarks-pane-grid {
+        width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+        gap: var(--flat-grid-gap);
+        padding-top: 0;
     }
 }
 
