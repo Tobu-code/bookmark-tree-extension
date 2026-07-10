@@ -1582,3 +1582,9 @@
 - **Type**: Refactor (Bookmark Icon Clarity)
 - **Content**: 优化书签卡片图标清晰度：分离图标玻璃外壳与真实 favicon 渲染层，固定整数图标尺寸，移除小位图 GPU 采样处理，并为常用 AI/开发站点增加本地高清图标或 SVG 字母覆盖，降低 favicon 被放大和玻璃效果叠加造成的发糊感。
 - **Impact**: `styles.css`、`src/01-constants.js`、`src/03-bookmarks-items.js`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-07-10]
+- **Time**: 2026-07-10 10:00:15 +0800
+- **Type**: Fix (Custom Background Sidebar Border)
+- **Content**: 修复上传自定义背景后左侧书签目录出现外框线的问题：在 `body.has-custom-bg` 场景下移除目录滚动区、目录项普通/悬停/聚焦/选中状态的边框与阴影，并隐藏平铺布局分割线，让左侧目录融入背景。
+- **Impact**: `styles.css`、`CHANGE_LOG.md`

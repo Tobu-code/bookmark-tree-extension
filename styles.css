@@ -247,6 +247,27 @@ body.has-custom-bg::after {
     background: transparent;
 }
 
+body.has-custom-bg .directory-pane-scroll {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.has-custom-bg .tree-folder-item,
+body.has-custom-bg .tree-folder-item:hover,
+body.has-custom-bg .tree-folder-item:focus-within,
+body.has-custom-bg .tree-folder-item.active {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+body.has-custom-bg #bookmarks-tree.layout-flat::before,
+body.has-custom-bg #bookmarks-tree.layout-flat::after {
+    display: none;
+}
+
 :root[data-theme="dark"] body.has-custom-bg::after {
     background: transparent;
 }
@@ -327,6 +348,7 @@ body.has-custom-bg::after {
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item {
+    border-color: transparent;
     background: rgba(255, 255, 255, 0.12);
     color: #0f1419;
     font-weight: 750;
@@ -338,16 +360,19 @@ body.has-custom-bg::after {
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:hover,
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:focus-within {
+    border-color: transparent;
     color: #0a0d10;
     background: rgba(255, 255, 255, 0.28);
+    box-shadow: none;
 }
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item.active {
+    border-color: transparent;
     color: color-mix(in srgb, var(--soft-indigo), #0a0d10 18%);
     background:
         linear-gradient(90deg, rgba(99, 102, 241, 0.24), rgba(236, 72, 153, 0.12)),
         rgba(255, 255, 255, 0.92);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: none;
 }
 
 :root[data-theme="light"] body.has-custom-bg #search-input::placeholder {
@@ -431,6 +456,7 @@ body.has-custom-bg::after {
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item {
+        border-color: transparent;
         background: rgba(255, 255, 255, 0.12);
         color: #0f1419;
         font-weight: 750;
@@ -442,16 +468,19 @@ body.has-custom-bg::after {
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:hover,
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:focus-within {
+        border-color: transparent;
         color: #0a0d10;
         background: rgba(255, 255, 255, 0.28);
+        box-shadow: none;
     }
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item.active {
+        border-color: transparent;
         color: color-mix(in srgb, var(--soft-indigo), #0a0d10 18%);
         background:
             linear-gradient(90deg, rgba(99, 102, 241, 0.24), rgba(236, 72, 153, 0.12)),
             rgba(255, 255, 255, 0.92);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: none;
     }
 
     :root:not([data-theme]) body.has-custom-bg #search-input::placeholder {
