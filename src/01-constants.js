@@ -26,6 +26,26 @@ const AI_DYNAMIC_RULE_END = 1499;
 // Request the largest Chrome favicon service size so card icons stay crisp when rendered at 24-32px.
 const FAVICON_SIZE = 128;
 
+function createBookmarkGlyph(label, bg = '#eef2ff', fg = '#3157d5') {
+    const safeLabel = String(label || '?').slice(0, 3).toUpperCase();
+    return `<svg width="28" height="28" viewBox="0 0 28 28" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="28" height="28" rx="9" fill="${bg}"></rect><text x="14" y="17.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9.5" font-weight="850">${safeLabel}</text></svg>`;
+}
+
+const BOOKMARK_ICON_OVERRIDES = Object.freeze([
+    { hosts: ['chatgpt.com', 'openai.com'], path: 'icons/ai/chatgpt.svg' },
+    { hosts: ['claude.ai', 'anthropic.com'], path: 'icons/ai/anthropic.ico' },
+    { hosts: ['gemini.google.com', 'aistudio.google.com', 'ai.google.dev'], path: 'icons/ai/gemini.svg' },
+    { hosts: ['deepseek.com', 'chat.deepseek.com'], path: 'icons/ai/deepseek.svg' },
+    { hosts: ['kimi.moonshot.cn'], path: 'icons/ai/kimi.ico' },
+    { hosts: ['doubao.com'], path: 'icons/ai/doubao.png' },
+    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.svg' },
+    { hosts: ['github.com'], svg: createBookmarkGlyph('GH', '#0f172a', '#ffffff') },
+    { hosts: ['perplexity.ai'], svg: createBookmarkGlyph('PX', '#0f172a', '#ffffff') },
+    { hosts: ['linux.do'], svg: createBookmarkGlyph('LD', '#111827', '#f8fafc') },
+    { hosts: ['v2ex.com'], svg: createBookmarkGlyph('V2', '#f3f4f6', '#374151') },
+    { hosts: ['z-lib.io', 'z-library.sk', 'z-library.se', 'singlelogin.re'], svg: createBookmarkGlyph('Z', '#f8fafc', '#475569') }
+]);
+
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
     const safeLabel = escapeHtml(String(label || 'AI').slice(0, 2).toUpperCase());
     return `<svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="24" height="24" rx="8" fill="${bg}"></rect><text x="12" y="15.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9" font-weight="800">${safeLabel}</text></svg>`;

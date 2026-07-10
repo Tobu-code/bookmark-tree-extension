@@ -1140,8 +1140,7 @@ body.has-custom-bg #search-suggestions {
 }
 
 .tree-folder-icon svg,
-.folder-icon-inline svg,
-.bookmark-icon-wrap svg {
+.folder-icon-inline svg {
     width: 20px;
     height: 20px;
 }
@@ -1414,32 +1413,60 @@ body.has-custom-bg #search-suggestions {
     text-align: center;
 }
 
-.bookmark-icon,
-.bookmark-icon-fallback,
+.bookmark-icon-shell,
 .bookmark-icon-wrap {
     flex: 0 0 auto;
-    width: clamp(28px, 1.9vw, 34px);
-    height: clamp(28px, 1.9vw, 34px);
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
     margin: 0 !important;
-    border-radius: 12px;
-    object-fit: contain;
+    border: 1px solid color-mix(in srgb, var(--glass-edge), transparent 44%);
+    border-radius: 14px;
     background:
-        radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.65), transparent 34%),
-        color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 88%);
+        linear-gradient(135deg, rgba(255, 255, 255, 0.58), transparent 48%),
+        color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 90%);
     box-shadow: 0 6px 14px rgba(15, 18, 32, 0.08), 0 1px 0 rgba(255, 255, 255, 0.58) inset;
+    overflow: hidden;
+}
+
+.bookmark-icon,
+.bookmark-icon-fallback {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: 0 !important;
+    border-radius: 9px;
+    overflow: hidden;
 }
 
 img.bookmark-icon {
     display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: transparent;
     image-rendering: auto;
-    transform: translateZ(0);
+    object-fit: contain;
 }
 
 .bookmark-icon-fallback {
-    display: grid;
-    place-items: center;
     color: #fff;
     font-weight: 800;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.bookmark-icon-svg,
+.bookmark-icon-svg svg {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+.bookmark-icon-wrap svg {
+    width: 24px;
+    height: 24px;
 }
 
 .bookmark-label {
@@ -1467,11 +1494,20 @@ img.bookmark-icon {
     padding: 12px 14px;
 }
 
+.layout-size-1-1 .bookmark-icon-shell,
+.layout-size-1-1 .bookmark-icon-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+}
+
 .layout-size-1-1 .bookmark-icon,
 .layout-size-1-1 .bookmark-icon-fallback,
-.layout-size-1-1 .bookmark-icon-wrap {
-    width: 24px;
-    height: 24px;
+.layout-size-1-1 .bookmark-icon-svg,
+.layout-size-1-1 .bookmark-icon-svg svg {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 7px;
 }
 
 .layout-size-1-1 .bookmark-label {

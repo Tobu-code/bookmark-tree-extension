@@ -17,52 +17,54 @@ function normalizeCardLayoutSize(size, variant = 'bookmark') {
 // --- Helpers ---
 
 // Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
-function createBookmarkIcon(iconData, size = 32) {
+function createBookmarkIcon(iconData, size = 28) {
+    const shell = document.createElement('span');
+    shell.className = 'bookmark-icon-shell';
+    shell.setAttribute('aria-hidden', 'true');
+
+    const renderFallback = (url = '', labelOverride = '') => {
+        let letter = labelOverride || '?';
+        let bgColor = '#64748b';
+        try {
+            const hostname = new URL(url).hostname.replace('www.', '');
+            letter = labelOverride || hostname.charAt(0).toUpperCase();
+            let hash = 0;
+            for (let i = 0; i < hostname.length; i++) {
+                hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const h = Math.abs(hash) % 360;
+            bgColor = `hsl(${h}, 58%, 46%)`;
+        } catch (e) {}
+        const avatar = document.createElement('span');
+        avatar.className = 'bookmark-icon-fallback';
+        avatar.style.backgroundColor = bgColor;
+        avatar.textContent = String(letter || '?').slice(0, 2).toUpperCase();
+        return avatar;
+    };
+
     if (iconData.type === 'img') {
         const img = document.createElement('img');
-        img.className = 'bookmark-icon';
+        img.className = 'bookmark-icon bookmark-icon-img';
         img.src = iconData.src;
         img.width = size;
         img.height = size;
         img.decoding = 'async';
         img.loading = 'lazy';
-        img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
-            // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
-            let letter = '?';
-            let bgColor = '#888';
-            try {
-                const hostname = new URL(url).hostname.replace('www.', '');
-                letter = hostname.charAt(0).toUpperCase();
-                // Generate a consistent color from the hostname
-                let hash = 0;
-                for (let i = 0; i < hostname.length; i++) {
-                    hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
-                }
-                const h = Math.abs(hash) % 360;
-                bgColor = `hsl(${h}, 55%, 55%)`;
-            } catch (e) {}
-            const avatar = document.createElement('span');
-            avatar.className = 'bookmark-icon-fallback';
-            avatar.style.backgroundColor = bgColor;
-            avatar.textContent = letter;
-            avatar.style.marginRight = '8px';
-            this.replaceWith(avatar);
+            shell.replaceChildren(renderFallback(url, iconData.fallbackLabel));
         });
-        return img;
+        shell.appendChild(img);
+        return shell;
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
-        span.className = 'bookmark-icon';
-        span.style.cssText = `margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.className = 'bookmark-icon bookmark-icon-svg';
         span.innerHTML = iconData.value;
-        return span;
+        shell.appendChild(span);
+        return shell;
     } else {
-        const span = document.createElement('span');
-        span.className = 'bookmark-icon';
-        span.style.cssText = `margin-right:8px;`;
-        span.textContent = iconData.value;
-        return span;
+        shell.appendChild(renderFallback('', iconData.value));
+        return shell;
     }
 }
 

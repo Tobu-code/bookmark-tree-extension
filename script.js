@@ -26,6 +26,26 @@ const AI_DYNAMIC_RULE_END = 1499;
 // Request the largest Chrome favicon service size so card icons stay crisp when rendered at 24-32px.
 const FAVICON_SIZE = 128;
 
+function createBookmarkGlyph(label, bg = '#eef2ff', fg = '#3157d5') {
+    const safeLabel = String(label || '?').slice(0, 3).toUpperCase();
+    return `<svg width="28" height="28" viewBox="0 0 28 28" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="28" height="28" rx="9" fill="${bg}"></rect><text x="14" y="17.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9.5" font-weight="850">${safeLabel}</text></svg>`;
+}
+
+const BOOKMARK_ICON_OVERRIDES = Object.freeze([
+    { hosts: ['chatgpt.com', 'openai.com'], path: 'icons/ai/chatgpt.svg' },
+    { hosts: ['claude.ai', 'anthropic.com'], path: 'icons/ai/anthropic.ico' },
+    { hosts: ['gemini.google.com', 'aistudio.google.com', 'ai.google.dev'], path: 'icons/ai/gemini.svg' },
+    { hosts: ['deepseek.com', 'chat.deepseek.com'], path: 'icons/ai/deepseek.svg' },
+    { hosts: ['kimi.moonshot.cn'], path: 'icons/ai/kimi.ico' },
+    { hosts: ['doubao.com'], path: 'icons/ai/doubao.png' },
+    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.svg' },
+    { hosts: ['github.com'], svg: createBookmarkGlyph('GH', '#0f172a', '#ffffff') },
+    { hosts: ['perplexity.ai'], svg: createBookmarkGlyph('PX', '#0f172a', '#ffffff') },
+    { hosts: ['linux.do'], svg: createBookmarkGlyph('LD', '#111827', '#f8fafc') },
+    { hosts: ['v2ex.com'], svg: createBookmarkGlyph('V2', '#f3f4f6', '#374151') },
+    { hosts: ['z-lib.io', 'z-library.sk', 'z-library.se', 'singlelogin.re'], svg: createBookmarkGlyph('Z', '#f8fafc', '#475569') }
+]);
+
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
     const safeLabel = escapeHtml(String(label || 'AI').slice(0, 2).toUpperCase());
     return `<svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="24" height="24" rx="8" fill="${bg}"></rect><text x="12" y="15.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9" font-weight="800">${safeLabel}</text></svg>`;
@@ -1235,52 +1255,54 @@ function normalizeCardLayoutSize(size, variant = 'bookmark') {
 // --- Helpers ---
 
 // Helper function to create bookmark icon element (CSP-compliant, no inline handlers)
-function createBookmarkIcon(iconData, size = 32) {
+function createBookmarkIcon(iconData, size = 28) {
+    const shell = document.createElement('span');
+    shell.className = 'bookmark-icon-shell';
+    shell.setAttribute('aria-hidden', 'true');
+
+    const renderFallback = (url = '', labelOverride = '') => {
+        let letter = labelOverride || '?';
+        let bgColor = '#64748b';
+        try {
+            const hostname = new URL(url).hostname.replace('www.', '');
+            letter = labelOverride || hostname.charAt(0).toUpperCase();
+            let hash = 0;
+            for (let i = 0; i < hostname.length; i++) {
+                hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const h = Math.abs(hash) % 360;
+            bgColor = `hsl(${h}, 58%, 46%)`;
+        } catch (e) {}
+        const avatar = document.createElement('span');
+        avatar.className = 'bookmark-icon-fallback';
+        avatar.style.backgroundColor = bgColor;
+        avatar.textContent = String(letter || '?').slice(0, 2).toUpperCase();
+        return avatar;
+    };
+
     if (iconData.type === 'img') {
         const img = document.createElement('img');
-        img.className = 'bookmark-icon';
+        img.className = 'bookmark-icon bookmark-icon-img';
         img.src = iconData.src;
         img.width = size;
         img.height = size;
         img.decoding = 'async';
         img.loading = 'lazy';
-        img.style.cssText = `margin-right:8px;`;
         img.addEventListener('error', function () {
-            // Generate a deterministic letter avatar when the favicon cannot be loaded
             const url = this.closest('a')?.href || '';
-            let letter = '?';
-            let bgColor = '#888';
-            try {
-                const hostname = new URL(url).hostname.replace('www.', '');
-                letter = hostname.charAt(0).toUpperCase();
-                // Generate a consistent color from the hostname
-                let hash = 0;
-                for (let i = 0; i < hostname.length; i++) {
-                    hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
-                }
-                const h = Math.abs(hash) % 360;
-                bgColor = `hsl(${h}, 55%, 55%)`;
-            } catch (e) {}
-            const avatar = document.createElement('span');
-            avatar.className = 'bookmark-icon-fallback';
-            avatar.style.backgroundColor = bgColor;
-            avatar.textContent = letter;
-            avatar.style.marginRight = '8px';
-            this.replaceWith(avatar);
+            shell.replaceChildren(renderFallback(url, iconData.fallbackLabel));
         });
-        return img;
+        shell.appendChild(img);
+        return shell;
     } else if (iconData.type === 'svg') {
         const span = document.createElement('span');
-        span.className = 'bookmark-icon';
-        span.style.cssText = `margin-right:8px;display:flex;align-items:center;justify-content:center;`;
+        span.className = 'bookmark-icon bookmark-icon-svg';
         span.innerHTML = iconData.value;
-        return span;
+        shell.appendChild(span);
+        return shell;
     } else {
-        const span = document.createElement('span');
-        span.className = 'bookmark-icon';
-        span.style.cssText = `margin-right:8px;`;
-        span.textContent = iconData.value;
-        return span;
+        shell.appendChild(renderFallback('', iconData.value));
+        return shell;
     }
 }
 
@@ -2109,6 +2131,9 @@ function getIconForBookmark(url) {
     } else {
         // Native (Default)
         try {
+            const override = getBookmarkIconOverride(url);
+            if (override) return override;
+
             return {
                 type: 'img',
                 src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${FAVICON_SIZE}`
@@ -2117,6 +2142,36 @@ function getIconForBookmark(url) {
             return { type: 'svg', value: BOOKMARK_ICON_SVG };
         }
     }
+}
+
+function getBookmarkIconOverride(url) {
+    if (!url || !Array.isArray(BOOKMARK_ICON_OVERRIDES)) return null;
+
+    let hostname = '';
+    try {
+        hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    } catch {
+        return null;
+    }
+
+    const match = BOOKMARK_ICON_OVERRIDES.find((item) => {
+        return item.hosts.some((host) => hostname === host || hostname.endsWith(`.${host}`));
+    });
+    if (!match) return null;
+
+    if (match.path && typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+        return {
+            type: 'img',
+            src: chrome.runtime.getURL(match.path),
+            fallbackLabel: match.hosts[0]?.slice(0, 2).toUpperCase()
+        };
+    }
+
+    if (match.svg) {
+        return { type: 'svg', value: match.svg };
+    }
+
+    return null;
 }
 
 function initSettingsUI(settings) {

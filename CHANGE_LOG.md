@@ -1576,3 +1576,9 @@
 - **Type**: Refactor (Calm Glass Bento UI Polish)
 - **Content**: 基于截图评估收敛液态玻璃视觉为 Calm Glass Bento：提高文字与书签标题对比度，减弱搜索框与卡片炫光，统一图标底板和卡片悬浮反馈，优化左侧目录深浅色 active 状态，修正小窗口下 900px 强制宽度导致的横向溢出，并同步磨砂感滑杆透明度映射。
 - **Impact**: `styles.css`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`
+
+## [2026-07-10]
+- **Time**: 2026-07-10 09:23:26 +0800
+- **Type**: Refactor (Bookmark Icon Clarity)
+- **Content**: 优化书签卡片图标清晰度：分离图标玻璃外壳与真实 favicon 渲染层，固定整数图标尺寸，移除小位图 GPU 采样处理，并为常用 AI/开发站点增加本地高清图标或 SVG 字母覆盖，降低 favicon 被放大和玻璃效果叠加造成的发糊感。
+- **Impact**: `styles.css`、`src/01-constants.js`、`src/03-bookmarks-items.js`、`src/06-settings.js`、`script.js`、`CHANGE_LOG.md`

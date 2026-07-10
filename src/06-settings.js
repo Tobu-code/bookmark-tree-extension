@@ -10,6 +10,9 @@ function getIconForBookmark(url) {
     } else {
         // Native (Default)
         try {
+            const override = getBookmarkIconOverride(url);
+            if (override) return override;
+
             return {
                 type: 'img',
                 src: `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=${FAVICON_SIZE}`
@@ -18,6 +21,36 @@ function getIconForBookmark(url) {
             return { type: 'svg', value: BOOKMARK_ICON_SVG };
         }
     }
+}
+
+function getBookmarkIconOverride(url) {
+    if (!url || !Array.isArray(BOOKMARK_ICON_OVERRIDES)) return null;
+
+    let hostname = '';
+    try {
+        hostname = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+    } catch {
+        return null;
+    }
+
+    const match = BOOKMARK_ICON_OVERRIDES.find((item) => {
+        return item.hosts.some((host) => hostname === host || hostname.endsWith(`.${host}`));
+    });
+    if (!match) return null;
+
+    if (match.path && typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+        return {
+            type: 'img',
+            src: chrome.runtime.getURL(match.path),
+            fallbackLabel: match.hosts[0]?.slice(0, 2).toUpperCase()
+        };
+    }
+
+    if (match.svg) {
+        return { type: 'svg', value: match.svg };
+    }
+
+    return null;
 }
 
 function initSettingsUI(settings) {
