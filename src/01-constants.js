@@ -33,7 +33,7 @@ const BOOKMARK_ICON_OVERRIDES = Object.freeze([
     { hosts: ['deepseek.com', 'chat.deepseek.com'], path: 'icons/ai/deepseek.svg' },
     { hosts: ['kimi.moonshot.cn'], path: 'icons/ai/kimi.ico' },
     { hosts: ['doubao.com'], path: 'icons/ai/doubao.png' },
-    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.svg' }
+    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.ico' }
 ]);
 
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
@@ -75,7 +75,7 @@ const BUILTIN_AI_PROVIDERS = Object.freeze([
         url: 'https://chatglm.cn/',
         enabled: true,
         builtIn: true,
-        icon: createAiIconImage('icons/ai/glm.svg', 'GLM')
+        icon: createAiIconImage('icons/ai/glm.ico', 'GLM')
     },
     {
         id: 'qwen',

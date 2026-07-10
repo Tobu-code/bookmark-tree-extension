@@ -140,8 +140,7 @@ function initSettingsUI(settings) {
 
     // 更新模糊控制的启用/禁用状态
     function updateBlurControlsState() {
-        const hasImage = CURRENT_BG_IMAGE !== null;
-        blurInput.disabled = !hasImage;
+        blurInput.disabled = false;
         containerBlurInput.disabled = false;
         blurControls.style.opacity = '1';
     }

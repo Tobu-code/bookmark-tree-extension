@@ -386,7 +386,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 }
 
 :root[data-theme="light"] body.has-custom-bg #search-input::placeholder {
-    color: rgba(51, 65, 85, 0.72);
+    color: rgba(51, 65, 85, 0.45);
 }
 
 @media (prefers-color-scheme: light) {
@@ -494,7 +494,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     }
 
     :root:not([data-theme]) body.has-custom-bg #search-input::placeholder {
-        color: rgba(51, 65, 85, 0.72);
+        color: rgba(51, 65, 85, 0.45);
     }
 }
 
@@ -536,7 +536,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 }
 
 :root body.has-custom-bg[data-background-tone="dark"] #search-input::placeholder {
-    color: color-mix(in srgb, var(--text-secondary), transparent 22%);
+    color: color-mix(in srgb, var(--text-secondary), transparent 45%);
 }
 
 .app-shell {
@@ -649,7 +649,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 .search-stack {
     display: grid;
     align-self: end;
-    width: min(100%, var(--flat-content-width));
+    width: min(100%, calc(8 * var(--flat-grid-cell) + 7 * var(--flat-grid-gap)));
     gap: 12px;
     min-width: 0;
 }
@@ -790,7 +790,8 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 }
 
 #search-input::placeholder {
-    color: color-mix(in srgb, var(--text-secondary), transparent 18%);
+    color: color-mix(in srgb, var(--text-secondary), transparent 45%);
+    font-weight: 400;
 }
 
 :root[data-theme="dark"] #search-input {
@@ -1717,11 +1718,11 @@ img.bookmark-icon {
 
 @keyframes timePulse {
     0%, 100% {
-        transform: scale(1);
+        transform: none;
         filter: drop-shadow(0 0 0 rgba(59, 130, 246, 0));
     }
     50% {
-        transform: scale(1.02);
+        transform: none;
         filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.22));
     }
 }
@@ -1920,7 +1921,6 @@ img.bookmark-icon {
     overflow: auto;
     padding-right: 2px;
     overscroll-behavior: contain;
-    contain: layout paint;
 }
 
 .setting-item {
@@ -2204,9 +2204,9 @@ body.ai-sidebar-open .ai-sidebar,
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
-    min-height: 40px;
-    padding: 5px 12px 5px 8px;
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 16px;
     border-bottom: 1px solid var(--line-soft);
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 46%),
@@ -2217,12 +2217,15 @@ body.ai-sidebar-open .ai-sidebar,
 
 .ai-tabs {
     display: flex;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
     justify-content: flex-start;
-    gap: 7px;
-    overflow: auto;
-    padding-right: 2px;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px;
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
 }
 
 .ai-sidebar-actions {
@@ -2250,24 +2253,27 @@ body.ai-sidebar-open .ai-sidebar,
 
 .ai-tab {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
-    gap: 6px;
-    padding: 0 9px;
-    font-size: 13px;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 13px;
+    font-size: 14px;
     font-weight: 760;
     white-space: nowrap;
+    scroll-snap-align: start;
 }
 
 .ai-tab-icon,
 .ai-tab-icon img,
 .ai-tab-icon svg {
-    width: 22px !important;
-    height: 22px !important;
+    width: 24px !important;
+    height: 24px !important;
 }
 
 .ai-tab-icon {
     display: grid;
-    flex: 0 0 22px;
+    flex: 0 0 24px;
     place-items: center;
 }
 
@@ -2321,13 +2327,6 @@ body.ai-sidebar-open .ai-sidebar,
     box-shadow: -18px 0 48px rgba(0, 0, 0, 0.42);
 }
 
-body.ai-sidebar-open #search-container,
-body.ai-sidebar-open #bookmarks-tree,
-body.ai-sidebar-open #settings-btn {
-    opacity: 0.34;
-    filter: saturate(70%) blur(1px);
-}
-
 .ai-sidebar-placeholder,
 .ai-sidebar-loading {
     position: absolute;
@@ -2363,7 +2362,6 @@ body.ai-sidebar-open #settings-btn {
     max-height: none;
     overflow: visible;
     isolation: isolate;
-    contain: layout paint;
 }
 
 #settings-modal .ai-provider-item {
@@ -2379,7 +2377,6 @@ body.ai-sidebar-open #settings-btn {
         linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 52%),
         color-mix(in srgb, var(--text-primary), transparent 95%);
     box-shadow: none;
-    contain: layout paint;
 }
 
 #settings-modal .ai-provider-item.is-disabled {
@@ -2714,4 +2711,203 @@ body.ai-sidebar-open #settings-btn {
     .leaf-wrapper.card-pulse-enabled::before {
         animation: none;
     }
+}
+
+/* Bookmark icon and list typography refinement. */
+.bookmark-icon-shell,
+.bookmark-icon-wrap {
+    width: 28px !important;
+    height: 28px !important;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.tree-folder-item,
+.bookmark-label {
+    font-size: 14px;
+}
+
+/* Global typography uses PingFang SC with the requested reading scale. */
+body,
+body * {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+}
+
+#search-input {
+    font-size: 15px;
+}
+
+.poetry-line {
+    font-size: 15px;
+}
+
+.search-greeting {
+    font-size: 14px;
+}
+
+.poetry-title {
+    font-size: 24px;
+}
+
+.search-greeting-time {
+    font-size: 42px;
+}
+
+.poetry-meta-column,
+.poetry-title,
+.poetry-meta {
+    text-align: center;
+}
+
+.poetry-container {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    align-items: stretch;
+}
+
+.poetry-content {
+    width: max-content;
+    max-width: 100%;
+}
+
+.poetry-meta-column {
+    width: 100%;
+}
+
+@media (min-width: 761px) {
+    .directory-pane-scroll {
+        padding-left: clamp(32px, 2vw, 44px);
+    }
+}
+
+@media (max-width: 760px) {
+    .directory-pane-scroll {
+        padding-left: 16px;
+    }
+}
+
+.search-greeting-date {
+    font-style: normal;
+}
+
+#bookmarks-tree.layout-flat::before,
+#bookmarks-tree.layout-flat::after {
+    display: none;
+}
+
+.bookmarks-pane,
+.bookmarks-pane-scroll {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Frosted cards replace liquid highlights with a stable translucent surface. */
+.leaf-wrapper {
+    border: 1px solid color-mix(in srgb, var(--glass-edge), var(--card-border) 42%);
+    border-radius: 14px;
+    background: var(--card-bg) !important;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(120%);
+    -webkit-backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(120%);
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+:root[data-theme="dark"] .leaf-wrapper {
+    border-color: color-mix(in srgb, var(--glass-edge), var(--card-border) 42%);
+}
+
+.leaf-wrapper::before,
+.leaf-wrapper::after,
+.leaf-wrapper.card-pulse-enabled::before {
+    display: none;
+    animation: none;
+}
+
+.leaf-wrapper:hover,
+.leaf-wrapper:focus-within {
+    border-color: color-mix(in srgb, var(--glass-edge), #ffffff 26%);
+    background: var(--card-bg) !important;
+    box-shadow: var(--card-shadow-hover);
+    transform: none;
+}
+
+:root[data-theme="dark"] .leaf-wrapper:hover,
+:root[data-theme="dark"] .leaf-wrapper:focus-within {
+    border-color: color-mix(in srgb, var(--glass-edge), #ffffff 18%);
+}
+
+/* Softer reading hierarchy for the homepage header. */
+.poetry-title {
+    color: color-mix(in srgb, var(--text-primary), transparent 18%);
+}
+
+.poetry-meta {
+    color: color-mix(in srgb, var(--text-secondary), transparent 26%);
+}
+
+.poetry-line {
+    color: color-mix(in srgb, var(--text-primary), transparent 22%);
+}
+
+.search-greeting {
+    color: color-mix(in srgb, var(--text-primary), transparent 16%);
+}
+
+.search-greeting-date {
+    color: color-mix(in srgb, var(--text-primary), transparent 30%);
+}
+
+@media (min-width: 900px) {
+    .search-stack {
+        width: calc(8 * var(--flat-grid-cell) + 7 * var(--flat-grid-gap));
+        gap: 24px;
+    }
+
+    .search-wrapper,
+    .search-top-row {
+        min-height: 54px;
+    }
+}
+
+/* Keep the search action primary and quiet the supporting context. */
+.poetry-title {
+    color: color-mix(in srgb, var(--text-primary), transparent 42%);
+}
+
+.poetry-meta {
+    color: color-mix(in srgb, var(--text-secondary), transparent 46%);
+}
+
+.poetry-line {
+    color: color-mix(in srgb, var(--text-primary), transparent 44%);
+}
+
+.search-greeting {
+    color: color-mix(in srgb, var(--text-primary), transparent 40%);
+}
+
+.search-greeting-date {
+    color: color-mix(in srgb, var(--text-primary), transparent 52%);
+}
+
+#search-engine-label {
+    background: transparent;
+    color: var(--text-subtle);
+    font-size: 13px;
+    font-weight: 560;
+    box-shadow: none;
+    opacity: 0.72;
+}
+
+#search-engine-label:hover,
+#search-engine-label[aria-expanded="true"] {
+    background: color-mix(in srgb, var(--text-primary), transparent 94%);
+    color: var(--text-secondary);
+    opacity: 1;
+    transform: none;
 }

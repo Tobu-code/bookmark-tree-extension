@@ -182,10 +182,9 @@ async function initAmbientTime() {
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
             const weekday = WEEKDAYS_SHORT[now.getDay()];
 
-            timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+            timeEl.textContent = `${hours}:${minutes}`;
             dateEl.textContent = `${year}/${month}/${day}·星期${weekday}`;
 
             // Schedule next update at the start of the next second.
