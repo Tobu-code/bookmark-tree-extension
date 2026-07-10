@@ -2908,6 +2908,12 @@ function applyBackground() {
         bgLayer.style.filter = 'none';
         bgLayer.style.transform = 'scale(1)';
     }
+
+    requestAnimationFrame(() => {
+        if (typeof syncSidebarActiveIndicator === 'function') {
+            syncSidebarActiveIndicator();
+        }
+    });
 }
 
 function applyContainerOpacity() {
@@ -3713,6 +3719,11 @@ async function initAmbientTime() {
 
 // --- Dynamic indicator and card hover flow animations ---
 function syncSidebarActiveIndicator() {
+    if (document.body?.classList.contains('has-custom-bg')) {
+        document.querySelectorAll('.sidebar-active-indicator').forEach((indicator) => indicator.remove());
+        return;
+    }
+
     updateActiveIndicator('.directory-pane-scroll', '.tree-folder-item.active');
     updateActiveIndicator('#bookmarks-tree', '.tree-folder-item.active');
 }

@@ -263,6 +263,16 @@ body.has-custom-bg .tree-folder-item.active {
     box-shadow: none;
 }
 
+body.has-custom-bg .tree-folder-item:focus-visible {
+    outline: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+body.has-custom-bg .directory-pane-scroll .sidebar-active-indicator {
+    display: none !important;
+}
+
 body.has-custom-bg #bookmarks-tree.layout-flat::before,
 body.has-custom-bg #bookmarks-tree.layout-flat::after {
     display: none;

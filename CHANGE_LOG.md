@@ -1588,3 +1588,9 @@
 - **Type**: Fix (Custom Background Sidebar Border)
 - **Content**: 修复上传自定义背景后左侧书签目录出现外框线的问题：在 `body.has-custom-bg` 场景下移除目录滚动区、目录项普通/悬停/聚焦/选中状态的边框与阴影，并隐藏平铺布局分割线，让左侧目录融入背景。
 - **Impact**: `styles.css`、`CHANGE_LOG.md`
+
+## [2026-07-10]
+- **Time**: 2026-07-10 10:29:05 +0800
+- **Type**: Fix (Custom Background Active Indicator)
+- **Content**: 进一步修复自定义背景下左侧目录残留光边：识别并移除 JS 动态生成的 `.sidebar-active-indicator`，禁用自定义背景场景下的目录焦点外框，并在上传或清除背景后重新同步目录指示器状态，避免双层高亮形成边框感。
+- **Impact**: `styles.css`、`src/06-settings.js`、`src/09-ui-widgets.js`、`script.js`、`CHANGE_LOG.md`

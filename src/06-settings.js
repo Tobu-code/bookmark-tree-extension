@@ -787,6 +787,12 @@ function applyBackground() {
         bgLayer.style.filter = 'none';
         bgLayer.style.transform = 'scale(1)';
     }
+
+    requestAnimationFrame(() => {
+        if (typeof syncSidebarActiveIndicator === 'function') {
+            syncSidebarActiveIndicator();
+        }
+    });
 }
 
 function applyContainerOpacity() {
