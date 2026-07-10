@@ -700,7 +700,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     backdrop-filter: blur(min(var(--container-blur), 20px)) saturate(165%) contrast(102%);
     -webkit-backdrop-filter: blur(min(var(--container-blur), 20px)) saturate(165%) contrast(102%);
     isolation: isolate;
-    overflow: hidden;
+    overflow: visible;
     transition: transform var(--liquid-medium) var(--liquid-ease), border-color var(--liquid-medium) ease, box-shadow var(--liquid-medium) ease, background var(--liquid-medium) ease;
 }
 
