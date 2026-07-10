@@ -653,37 +653,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     initAmbientTime();
 
 
+    // Background storage is optional. Never make bookmark rendering wait for it.
+    const backgroundLoad = bgIdbGet();
+
     // 2. Data Loading (Async)
     const getStorage = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
-    const getBookmarks = () => new Promise(resolve => chrome.bookmarks.getTree(resolve));
+    const getBookmarks = () => new Promise((resolve, reject) => {
+        chrome.bookmarks.getTree((tree) => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError.message));
+                return;
+            }
+            resolve(tree);
+        });
+    });
 
-    const [settings, bookmarkTree] = await Promise.all([
-        getStorage([
+    try {
+        const [settings, bookmarkTree] = await Promise.all([
+            Promise.race([
+                getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
             STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
             STORAGE_KEY_CARD_SIZES, STORAGE_KEY_CARD_PULSE
-        ]),
-        getBookmarks()
-    ]);
-    setBookmarkTreeCache(bookmarkTree);
+                ]),
+                new Promise(resolve => setTimeout(() => resolve({}), 5000))
+            ]),
+            Promise.race([
+                getBookmarks(),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('读取书签超时')), 8000))
+            ])
+        ]);
+        setBookmarkTreeCache(bookmarkTree);
 
     // 3. Apply Settings Global State
     if (settings[STORAGE_KEY_NEW_TAB] !== undefined) OPEN_IN_NEW_TAB = settings[STORAGE_KEY_NEW_TAB];
     else OPEN_IN_NEW_TAB = true; // Default
 
     if (settings[STORAGE_KEY_ICON_STYLE]) CURRENT_ICON_STYLE = settings[STORAGE_KEY_ICON_STYLE];
-
-    // Fix #16: Load background image from IndexedDB (with legacy migration from chrome.storage.local)
-    let bgFromIdb = await bgIdbGet();
-    if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
-        // Migrate from legacy chrome.storage.local → IndexedDB
-        bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
-        bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
-    }
-    if (bgFromIdb) CURRENT_BG_IMAGE = bgFromIdb;
 
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
@@ -731,10 +740,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const theme = settings[STORAGE_KEY_THEME] || 'system';
     applyTheme(theme);
 
-    // 6. Background Preload
-    if (CURRENT_BG_IMAGE) {
-        await preloadImage(CURRENT_BG_IMAGE);
-    }
+    // 6. Render bookmarks before optional background restoration.
     applyBackground();
     applyContainerOpacity();
 
@@ -747,6 +753,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.body.classList.add('loaded');
         });
     });
+
+        // Finish background restoration after the first usable bookmark view.
+        void backgroundLoad.then(async (bgFromIdb) => {
+            if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
+                bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
+                void bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
+            }
+            if (!bgFromIdb) return;
+            CURRENT_BG_IMAGE = bgFromIdb;
+            await preloadImage(CURRENT_BG_IMAGE);
+            applyBackground();
+            applyContainerOpacity();
+        }).catch((error) => console.warn('Failed to restore background image:', error));
+    } catch (error) {
+        console.error('Failed to initialize bookmark page:', error);
+        renderBookmarkState('error', error.message || '读取书签失败，请刷新页面后重试。');
+        document.body.classList.add('loaded');
+    }
 });
 
 // Fix #12: Preload with timeout protection — prevents blocking init on slow/broken images
