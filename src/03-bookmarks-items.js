@@ -22,23 +22,10 @@ function createBookmarkIcon(iconData, size = 28) {
     shell.className = 'bookmark-icon-shell';
     shell.setAttribute('aria-hidden', 'true');
 
-    const renderFallback = (url = '', labelOverride = '') => {
-        let letter = labelOverride || '?';
-        let bgColor = '#64748b';
-        try {
-            const hostname = new URL(url).hostname.replace('www.', '');
-            letter = labelOverride || hostname.charAt(0).toUpperCase();
-            let hash = 0;
-            for (let i = 0; i < hostname.length; i++) {
-                hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const h = Math.abs(hash) % 360;
-            bgColor = `hsl(${h}, 58%, 46%)`;
-        } catch (e) {}
+    const renderFallback = () => {
         const avatar = document.createElement('span');
-        avatar.className = 'bookmark-icon-fallback';
-        avatar.style.backgroundColor = bgColor;
-        avatar.textContent = String(letter || '?').slice(0, 2).toUpperCase();
+        avatar.className = 'bookmark-icon-fallback bookmark-icon-fallback-svg';
+        avatar.innerHTML = BOOKMARK_ICON_SVG;
         return avatar;
     };
 
@@ -51,8 +38,7 @@ function createBookmarkIcon(iconData, size = 28) {
         img.decoding = 'async';
         img.loading = 'lazy';
         img.addEventListener('error', function () {
-            const url = this.closest('a')?.href || '';
-            shell.replaceChildren(renderFallback(url, iconData.fallbackLabel));
+            shell.replaceChildren(renderFallback());
         });
         shell.appendChild(img);
         return shell;
@@ -63,7 +49,7 @@ function createBookmarkIcon(iconData, size = 28) {
         shell.appendChild(span);
         return shell;
     } else {
-        shell.appendChild(renderFallback('', iconData.value));
+        shell.appendChild(renderFallback());
         return shell;
     }
 }

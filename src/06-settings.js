@@ -151,6 +151,7 @@ function initSettingsUI(settings) {
         CURRENT_BG_IMAGE = dataUrl;
         updateBlurControlsState();
         applyBackground();
+        void applyBackgroundContrast(dataUrl);
         try {
             await bgIdbSet(dataUrl);
             return true;
@@ -243,6 +244,7 @@ function initSettingsUI(settings) {
         bgUpload.value = ''; // Reset input
         updateBlurControlsState();
         applyBackground();
+        applyContainerOpacity();
         await bgIdbRemove();
         chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE); // clean up legacy
     });
@@ -778,6 +780,7 @@ function applyBackground() {
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
         document.body.classList.remove('has-custom-bg');
+        delete document.body.dataset.backgroundTone;
     }
 
     if (CURRENT_BG_BLUR > 0) {
@@ -795,11 +798,53 @@ function applyBackground() {
     });
 }
 
+function detectBackgroundTone(dataUrl) {
+    return new Promise((resolve) => {
+        const image = new Image();
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const size = 40;
+            canvas.width = size;
+            canvas.height = size;
+            const context = canvas.getContext('2d', { willReadFrequently: true });
+            if (!context) {
+                resolve('light');
+                return;
+            }
+
+            try {
+                context.drawImage(image, 0, 0, size, size);
+                const pixels = context.getImageData(0, 0, size, size).data;
+                let luminance = 0;
+                let samples = 0;
+                for (let index = 0; index < pixels.length; index += 4) {
+                    if (pixels[index + 3] < 32) continue;
+                    luminance += pixels[index] * 0.2126 + pixels[index + 1] * 0.7152 + pixels[index + 2] * 0.0722;
+                    samples += 1;
+                }
+                resolve(samples && luminance / samples < 150 ? 'dark' : 'light');
+            } catch (error) {
+                resolve('light');
+            }
+        };
+        image.onerror = () => resolve('light');
+        image.src = dataUrl;
+    });
+}
+
+async function applyBackgroundContrast(dataUrl) {
+    const tone = await detectBackgroundTone(dataUrl);
+    if (CURRENT_BG_IMAGE !== dataUrl) return;
+    document.body.dataset.backgroundTone = tone;
+    applyContainerOpacity();
+}
+
 function applyContainerOpacity() {
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
     const root = document.documentElement;
     const body = document.body;
-    const isDark = root.getAttribute('data-theme') === 'dark';
+    const backgroundTone = body?.dataset.backgroundTone;
+    const isDark = backgroundTone ? backgroundTone === 'dark' : root.getAttribute('data-theme') === 'dark';
 
     const r = isDark ? 18 : 255;
     const g = isDark ? 25 : 255;

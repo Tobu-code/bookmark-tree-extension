@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-10 11:11:21]
+- **Type**: Fix (统一书签图标与壁纸对比度)
+- **Content**: 移除文字缩写式书签图标兜底，favicon 失败时改用无文字书签符号；上传或恢复壁纸时自动分析亮度，并为深浅壁纸切换遮罩、文字与玻璃面板对比度。
+- **Impact**: `src/01-constants.js`, `src/03-bookmarks-items.js`, `src/06-settings.js`, `styles.css`, `script.js`
+
 ## [2026-07-10 10:56:57]
 - **Type**: Fix (修复刷新后书签页停留在加载态)
 - **Content**: 将背景图 IndexedDB 恢复移出书签首屏初始化链路；为书签与设置读取补充超时和错误态，避免异步请求挂起时永久保留加载骨架。

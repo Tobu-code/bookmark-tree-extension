@@ -244,7 +244,7 @@ body.has-custom-bg::after {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: transparent;
+    background: var(--custom-bg-scrim, transparent);
 }
 
 body.has-custom-bg .directory-pane-scroll {
@@ -359,7 +359,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item {
     border-color: transparent;
-    background: rgba(255, 255, 255, 0.12);
+    background: transparent;
     color: #0f1419;
     font-weight: 750;
     text-shadow:
@@ -372,7 +372,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 :root[data-theme="light"] body.has-custom-bg .tree-folder-item:focus-within {
     border-color: transparent;
     color: #0a0d10;
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.14);
     box-shadow: none;
 }
 
@@ -467,7 +467,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item {
         border-color: transparent;
-        background: rgba(255, 255, 255, 0.12);
+        background: transparent;
         color: #0f1419;
         font-weight: 750;
         text-shadow:
@@ -480,7 +480,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     :root:not([data-theme]) body.has-custom-bg .tree-folder-item:focus-within {
         border-color: transparent;
         color: #0a0d10;
-        background: rgba(255, 255, 255, 0.28);
+        background: rgba(255, 255, 255, 0.14);
         box-shadow: none;
     }
 
@@ -496,6 +496,47 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     :root:not([data-theme]) body.has-custom-bg #search-input::placeholder {
         color: rgba(51, 65, 85, 0.72);
     }
+}
+
+/* Image-derived tone keeps custom wallpapers readable without changing the selected theme. */
+:root body.has-custom-bg[data-background-tone="dark"] {
+    --custom-bg-scrim: rgba(2, 6, 23, 0.48);
+    --text-primary: #f8fafc;
+    --text-secondary: #dbe6f6;
+    --text-subtle: #bdc9d9;
+    --line-soft: rgba(255, 255, 255, 0.2);
+    --line-strong: rgba(255, 255, 255, 0.34);
+    --glass-edge: rgba(255, 255, 255, 0.34);
+}
+
+:root body.has-custom-bg[data-background-tone="light"] {
+    --custom-bg-scrim: rgba(255, 255, 255, 0.26);
+    --text-primary: #101827;
+    --text-secondary: #334155;
+    --text-subtle: #647084;
+    --line-soft: rgba(15, 23, 42, 0.18);
+    --line-strong: rgba(15, 23, 42, 0.28);
+    --glass-edge: rgba(15, 23, 42, 0.24);
+}
+
+:root body.has-custom-bg[data-background-tone="dark"] .tree-folder-item {
+    color: var(--text-secondary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.54);
+}
+
+:root body.has-custom-bg[data-background-tone="dark"] .tree-folder-item:hover,
+:root body.has-custom-bg[data-background-tone="dark"] .tree-folder-item:focus-within,
+:root body.has-custom-bg[data-background-tone="dark"] .tree-folder-item.active {
+    color: var(--text-primary);
+    background: rgba(15, 23, 42, 0.6);
+}
+
+:root body.has-custom-bg[data-background-tone="dark"] #search-input {
+    color: var(--text-primary);
+}
+
+:root body.has-custom-bg[data-background-tone="dark"] #search-input::placeholder {
+    color: color-mix(in srgb, var(--text-secondary), transparent 22%);
 }
 
 .app-shell {
@@ -1491,10 +1532,13 @@ img.bookmark-icon {
 }
 
 .bookmark-icon-fallback {
-    color: #fff;
-    font-weight: 800;
-    font-size: 12px;
-    line-height: 1;
+    color: var(--soft-indigo);
+    background: color-mix(in srgb, var(--soft-indigo), transparent 88%);
+}
+
+.bookmark-icon-fallback-svg svg {
+    width: 18px;
+    height: 18px;
 }
 
 .bookmark-icon-svg,

@@ -26,11 +26,6 @@ const AI_DYNAMIC_RULE_END = 1499;
 // Request the largest Chrome favicon service size so card icons stay crisp when rendered at 24-32px.
 const FAVICON_SIZE = 128;
 
-function createBookmarkGlyph(label, bg = '#eef2ff', fg = '#3157d5') {
-    const safeLabel = String(label || '?').slice(0, 3).toUpperCase();
-    return `<svg width="28" height="28" viewBox="0 0 28 28" role="img" aria-label="${safeLabel}" xmlns="http://www.w3.org/2000/svg" draggable="false"><rect width="28" height="28" rx="9" fill="${bg}"></rect><text x="14" y="17.5" text-anchor="middle" fill="${fg}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="9.5" font-weight="850">${safeLabel}</text></svg>`;
-}
-
 const BOOKMARK_ICON_OVERRIDES = Object.freeze([
     { hosts: ['chatgpt.com', 'openai.com'], path: 'icons/ai/chatgpt.svg' },
     { hosts: ['claude.ai', 'anthropic.com'], path: 'icons/ai/anthropic.ico' },
@@ -38,12 +33,7 @@ const BOOKMARK_ICON_OVERRIDES = Object.freeze([
     { hosts: ['deepseek.com', 'chat.deepseek.com'], path: 'icons/ai/deepseek.svg' },
     { hosts: ['kimi.moonshot.cn'], path: 'icons/ai/kimi.ico' },
     { hosts: ['doubao.com'], path: 'icons/ai/doubao.png' },
-    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.svg' },
-    { hosts: ['github.com'], svg: createBookmarkGlyph('GH', '#0f172a', '#ffffff') },
-    { hosts: ['perplexity.ai'], svg: createBookmarkGlyph('PX', '#0f172a', '#ffffff') },
-    { hosts: ['linux.do'], svg: createBookmarkGlyph('LD', '#111827', '#f8fafc') },
-    { hosts: ['v2ex.com'], svg: createBookmarkGlyph('V2', '#f3f4f6', '#374151') },
-    { hosts: ['z-lib.io', 'z-library.sk', 'z-library.se', 'singlelogin.re'], svg: createBookmarkGlyph('Z', '#f8fafc', '#475569') }
+    { hosts: ['chatglm.cn', 'z.ai'], path: 'icons/ai/glm.svg' }
 ]);
 
 function createLocalAiIcon(label, bg = '#eef2ff', fg = '#4f46e5') {
@@ -765,6 +755,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await preloadImage(CURRENT_BG_IMAGE);
             applyBackground();
             applyContainerOpacity();
+            void applyBackgroundContrast(CURRENT_BG_IMAGE);
         }).catch((error) => console.warn('Failed to restore background image:', error));
     } catch (error) {
         console.error('Failed to initialize bookmark page:', error);
@@ -1284,23 +1275,10 @@ function createBookmarkIcon(iconData, size = 28) {
     shell.className = 'bookmark-icon-shell';
     shell.setAttribute('aria-hidden', 'true');
 
-    const renderFallback = (url = '', labelOverride = '') => {
-        let letter = labelOverride || '?';
-        let bgColor = '#64748b';
-        try {
-            const hostname = new URL(url).hostname.replace('www.', '');
-            letter = labelOverride || hostname.charAt(0).toUpperCase();
-            let hash = 0;
-            for (let i = 0; i < hostname.length; i++) {
-                hash = hostname.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const h = Math.abs(hash) % 360;
-            bgColor = `hsl(${h}, 58%, 46%)`;
-        } catch (e) {}
+    const renderFallback = () => {
         const avatar = document.createElement('span');
-        avatar.className = 'bookmark-icon-fallback';
-        avatar.style.backgroundColor = bgColor;
-        avatar.textContent = String(letter || '?').slice(0, 2).toUpperCase();
+        avatar.className = 'bookmark-icon-fallback bookmark-icon-fallback-svg';
+        avatar.innerHTML = BOOKMARK_ICON_SVG;
         return avatar;
     };
 
@@ -1313,8 +1291,7 @@ function createBookmarkIcon(iconData, size = 28) {
         img.decoding = 'async';
         img.loading = 'lazy';
         img.addEventListener('error', function () {
-            const url = this.closest('a')?.href || '';
-            shell.replaceChildren(renderFallback(url, iconData.fallbackLabel));
+            shell.replaceChildren(renderFallback());
         });
         shell.appendChild(img);
         return shell;
@@ -1325,7 +1302,7 @@ function createBookmarkIcon(iconData, size = 28) {
         shell.appendChild(span);
         return shell;
     } else {
-        shell.appendChild(renderFallback('', iconData.value));
+        shell.appendChild(renderFallback());
         return shell;
     }
 }
@@ -2296,6 +2273,7 @@ function initSettingsUI(settings) {
         CURRENT_BG_IMAGE = dataUrl;
         updateBlurControlsState();
         applyBackground();
+        void applyBackgroundContrast(dataUrl);
         try {
             await bgIdbSet(dataUrl);
             return true;
@@ -2388,6 +2366,7 @@ function initSettingsUI(settings) {
         bgUpload.value = ''; // Reset input
         updateBlurControlsState();
         applyBackground();
+        applyContainerOpacity();
         await bgIdbRemove();
         chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE); // clean up legacy
     });
@@ -2923,6 +2902,7 @@ function applyBackground() {
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
         document.body.classList.remove('has-custom-bg');
+        delete document.body.dataset.backgroundTone;
     }
 
     if (CURRENT_BG_BLUR > 0) {
@@ -2940,11 +2920,53 @@ function applyBackground() {
     });
 }
 
+function detectBackgroundTone(dataUrl) {
+    return new Promise((resolve) => {
+        const image = new Image();
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const size = 40;
+            canvas.width = size;
+            canvas.height = size;
+            const context = canvas.getContext('2d', { willReadFrequently: true });
+            if (!context) {
+                resolve('light');
+                return;
+            }
+
+            try {
+                context.drawImage(image, 0, 0, size, size);
+                const pixels = context.getImageData(0, 0, size, size).data;
+                let luminance = 0;
+                let samples = 0;
+                for (let index = 0; index < pixels.length; index += 4) {
+                    if (pixels[index + 3] < 32) continue;
+                    luminance += pixels[index] * 0.2126 + pixels[index + 1] * 0.7152 + pixels[index + 2] * 0.0722;
+                    samples += 1;
+                }
+                resolve(samples && luminance / samples < 150 ? 'dark' : 'light');
+            } catch (error) {
+                resolve('light');
+            }
+        };
+        image.onerror = () => resolve('light');
+        image.src = dataUrl;
+    });
+}
+
+async function applyBackgroundContrast(dataUrl) {
+    const tone = await detectBackgroundTone(dataUrl);
+    if (CURRENT_BG_IMAGE !== dataUrl) return;
+    document.body.dataset.backgroundTone = tone;
+    applyContainerOpacity();
+}
+
 function applyContainerOpacity() {
     const level = Math.max(0, Math.min(10, CURRENT_CONTAINER_BLUR));
     const root = document.documentElement;
     const body = document.body;
-    const isDark = root.getAttribute('data-theme') === 'dark';
+    const backgroundTone = body?.dataset.backgroundTone;
+    const isDark = backgroundTone ? backgroundTone === 'dark' : root.getAttribute('data-theme') === 'dark';
 
     const r = isDark ? 18 : 255;
     const g = isDark ? 25 : 255;
