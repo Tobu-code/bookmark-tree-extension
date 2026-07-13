@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 18:14:00]
+- **Type**: Fix (消除 AI 侧边栏关闭时主容器延迟，并启用 iframe 保活热启动缓存)
+- **Content**: 1) 将 `document.body.classList.remove('ai-sidebar-open')` 从 `closeSidebar` 的 400ms 延时回调移至动作触发瞬间执行，使主容器 3D 还原与侧栏滑回完美同步；2) 注释掉关闭时的 `unloadIframe` 逻辑，通过让当前 iframe 实例在内存中保活，提供后续点击侧边栏时的“热启动秒开”体验，规避了冷启动白屏等待；3) 重新打包并生成根目录 `script.js`。
+- **Impact**: `src/08-ai-sidebar.js`, `script.js`
+
 ## [2026-07-13 16:57:00]
 - **Type**: Fix (修复 AI 侧边栏在主容器模糊/缩放状态下的黑屏层级遮挡问题)
 - **Content**: 将 HTML 结构中包裹在主容器 `.app-shell` 内的 `#ai-sidebar` 移出，挂载为 `body` 的直接子节点。这确保了当主容器受 3D 景深（`scale`、`blur`、`brightness`）过渡滤镜影响时，侧边栏不会继承模糊滤镜，且侧边栏的局部堆叠上下文（Stacking Context）不会掉落到遮罩层下方，彻底解决遮罩全黑遮挡侧栏的渲染缺陷。

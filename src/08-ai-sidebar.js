@@ -344,15 +344,19 @@ function initAiSidebar() {
     function closeSidebar() {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
+        // 立即移除 body 类名，让主容器的 3D 还原动画与侧栏滑回完美同步，消除关闭割裂延迟
+        document.body.classList.remove('ai-sidebar-open');
         setTimeout(() => {
             if (!sidebar.classList.contains('active')) {
-                document.body.classList.remove('ai-sidebar-open');
                 sidebar.classList.add('hidden');
                 sidebarOverlay.classList.add('hidden');
                 
+                // 保活策略：关闭时不卸载 iframe，提供下次点击的“热启动秒开”体验，避免冷启动网络重载
+                /*
                 iframes.forEach((iframe, id) => {
                     unloadIframe(id);
                 });
+                */
                 
                 const loader = document.getElementById('ai-sidebar-loading');
                 if (loader) loader.classList.add('hidden');
