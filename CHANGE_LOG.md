@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 22:13:00]
+- **Type**: Design (实现画廊相框模式的自适应模糊霓虹底墙)
+- **Content**: 1) 在 `src/06-settings.js` 与 `script.js` 的 `applyBackground` 里，通过全局变量 `--custom-bg-url` 绑定并桥接当前壁纸 URL；2) 在 `styles.css` 中为 `body::before` 新增 `z-index: -4` 的全屏氛围底墙，直接应用该变量并施加 `blur(60px)` 深度模糊以及亮暗自适应因子；这让相框外部呈现基于壁纸色彩动态晕染的氛围霓虹底墙，彻底淘汰死黑底色；3) 重新运行 build.js 构建更新 script.js。
+- **Impact**: `src/06-settings.js`, `script.js`, `styles.css`
+
 ## [2026-07-13 21:58:00]
 - **Type**: Feature (全新画廊相框布局模式，重构背景层级与立体投影)
 - **Content**: 1) 将 `#background-layer` 从全屏拉伸（`inset: 0`）重构为四周预留 `4.5vw`/`4.5vh` 间距的居中画布，为其施加 `5px solid #0c111d` 的黑色相框与超大羽化双重 3D 浮空阴影，移除其 `scale(1.02)` 的过量缩放；2) 同步调整 `.app-shell` 容器，将其最大显示高度设定为与画布对齐的 `91vh`，外边距修改为 `4.5vh auto`，使其在画框内完美嵌入；3) 为 `body` 增加在亮色、暗色及自适应壁纸下自动契合环境的 `--body-bg` 纯色底墙。

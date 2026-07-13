@@ -775,9 +775,11 @@ function applyBackground() {
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
+        document.documentElement.style.setProperty('--custom-bg-url', `url('${CURRENT_BG_IMAGE}')`);
         document.body.classList.add('has-custom-bg');
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
+        document.documentElement.style.setProperty('--custom-bg-url', 'none');
         document.body.classList.remove('has-custom-bg');
         delete document.body.dataset.backgroundTone;
     }

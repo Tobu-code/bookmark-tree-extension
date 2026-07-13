@@ -225,6 +225,33 @@ body {
     transition: background-color 260ms ease;
 }
 
+body::before {
+    content: "";
+    position: fixed;
+    inset: -40px; /* 扩展边缘防止漏边 */
+    z-index: -4; /* 处于背景层下方 */
+    background-image: var(--custom-bg-url, none);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(60px) brightness(var(--ambient-brightness, 0.45));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease, filter 260ms ease;
+}
+
+body.has-custom-bg::before {
+    opacity: 1;
+}
+
+body.has-custom-bg[data-background-tone="dark"]::before {
+    --ambient-brightness: 0.36;
+}
+
+body.has-custom-bg[data-background-tone="light"]::before {
+    --ambient-brightness: 0.72;
+}
+
 :root[data-theme="light"] body {
     --body-bg: #eceef2;
 }
