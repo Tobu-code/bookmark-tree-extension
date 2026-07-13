@@ -225,12 +225,10 @@ body {
     transition: background-color 260ms ease;
 }
 
-body::before {
-    content: "";
+#ambient-layer {
     position: fixed;
     inset: -40px; /* 扩展边缘防止漏边 */
-    z-index: -4; /* 处于背景层下方 */
-    background-image: var(--custom-bg-url, none);
+    z-index: -4; /* 处于背景层下方，高于 body 的基础背景色 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -240,15 +238,15 @@ body::before {
     transition: opacity 260ms ease, filter 260ms ease;
 }
 
-body.has-custom-bg::before {
+body.has-custom-bg #ambient-layer {
     opacity: 1;
 }
 
-body.has-custom-bg[data-background-tone="dark"]::before {
+body.has-custom-bg[data-background-tone="dark"] #ambient-layer {
     --ambient-brightness: 0.36;
 }
 
-body.has-custom-bg[data-background-tone="light"]::before {
+body.has-custom-bg[data-background-tone="light"] #ambient-layer {
     --ambient-brightness: 0.72;
 }
 

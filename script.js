@@ -2893,15 +2893,16 @@ function escapeHtmlForExport(str) {
 
 function applyBackground() {
     const bgLayer = document.getElementById('background-layer');
+    const ambientLayer = document.getElementById('ambient-layer');
     if (!bgLayer) return;
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
-        document.documentElement.style.setProperty('--custom-bg-url', `url('${CURRENT_BG_IMAGE}')`);
+        if (ambientLayer) ambientLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;
         document.body.classList.add('has-custom-bg');
     } else {
         bgLayer.style.backgroundImage = ''; // Fallback to CSS default
-        document.documentElement.style.setProperty('--custom-bg-url', 'none');
+        if (ambientLayer) ambientLayer.style.backgroundImage = '';
         document.body.classList.remove('has-custom-bg');
         delete document.body.dataset.backgroundTone;
     }

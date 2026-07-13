@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 22:37:00]
+- **Type**: Design (修复画廊相框模式下负 z-index 伪元素被父级背景色遮挡的黑屏缺陷)
+- **Content**: 1) 在 `newtab.html` 的 `body` 头部新增 `#ambient-layer` 独立 HTML 节点，彻底规避了 `body::before` 的负 `z-index` 会被 `body` 自身不透明背景色无情遮掩的 CSS 层级限制；2) 重建 `styles.css`，将 60px 深度环境模糊自适应底图样式应用到 `#ambient-layer` 上；3) 更新 `src/06-settings.js` 与 `script.js`，改为直驱方式让 JS 对 `#ambient-layer` 的行内 `backgroundImage` 进行同步设置，抛弃容易引起层叠穿透的 CSS 变量方案；4) 重新打包并生成根目录 `script.js`。
+- **Impact**: `newtab.html`, `src/06-settings.js`, `script.js`, `styles.css`
+
 ## [2026-07-13 22:13:00]
 - **Type**: Design (实现画廊相框模式的自适应模糊霓虹底墙)
 - **Content**: 1) 在 `src/06-settings.js` 与 `script.js` 的 `applyBackground` 里，通过全局变量 `--custom-bg-url` 绑定并桥接当前壁纸 URL；2) 在 `styles.css` 中为 `body::before` 新增 `z-index: -4` 的全屏氛围底墙，直接应用该变量并施加 `blur(60px)` 深度模糊以及亮暗自适应因子；这让相框外部呈现基于壁纸色彩动态晕染的氛围霓虹底墙，彻底淘汰死黑底色；3) 重新运行 build.js 构建更新 script.js。
