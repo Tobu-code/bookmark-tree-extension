@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 16:57:00]
+- **Type**: Fix (修复 AI 侧边栏在主容器模糊/缩放状态下的黑屏层级遮挡问题)
+- **Content**: 将 HTML 结构中包裹在主容器 `.app-shell` 内的 `#ai-sidebar` 移出，挂载为 `body` 的直接子节点。这确保了当主容器受 3D 景深（`scale`、`blur`、`brightness`）过渡滤镜影响时，侧边栏不会继承模糊滤镜，且侧边栏的局部堆叠上下文（Stacking Context）不会掉落到遮罩层下方，彻底解决遮罩全黑遮挡侧栏的渲染缺陷。
+- **Impact**: `newtab.html`
+
 ## [2026-07-13 16:40:00]
 - **Type**: Design (优化 AI 侧边栏弹出视觉动效与主容器 3D 景深联动)
 - **Content**: 1) 为 `.app-shell` 引入过渡动画，并在 `body.ai-sidebar-open` 状态下对其缩放（scale(0.965)）、平移（translateX(-24px)）、虚化（blur(5px)）和暗化，实现 3D 空间的前后纵深视差联动；2) 将 `.ai-sidebar` 的过渡曲线改为弹性空气感的 `cubic-bezier(0.25, 1.1, 0.5, 1.02)`，过渡时长调整为 380ms，并融入初始缩放与淡入，彻底消除拉开侧边栏时的生硬滑移。

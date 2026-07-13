@@ -181,50 +181,7 @@
             </div>
         </div>
 
-        <div id="ai-sidebar" class="ai-sidebar hidden">
-            <div class="ai-sidebar-header">
-                <div id="ai-tabs" class="ai-tabs" aria-label="AI 服务列表"></div>
-                <div class="ai-sidebar-actions">
-                    <button id="ai-open-new-window" class="ai-action-btn" type="button" title="在新窗口打开">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <path
-                                d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
-                        </svg>
-                    </button>
-                    <button id="ai-sidebar-close" class="ai-action-btn" type="button" title="关闭">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <path
-                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div id="ai-sidebar-content" class="ai-sidebar-content">
-                <!-- 极光幻彩加载占位屏 -->
-                <div id="ai-sidebar-loading" class="ai-sidebar-loading hidden">
-                    <div class="aurora-glow"></div>
-                    <div class="shimmer-lines">
-                        <div class="shimmer-line"></div>
-                        <div class="shimmer-line short"></div>
-                        <div class="shimmer-line"></div>
-                    </div>
-                </div>
-                <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
-                    <div class="ai-placeholder-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.9"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="m12 3-1.7 5.18a1.8 1.8 0 0 1-1.14 1.14L4 11l5.16 1.68a1.8 1.8 0 0 1 1.14 1.14L12 19l1.7-5.18a1.8 1.8 0 0 1 1.14-1.14L20 11l-5.16-1.68a1.8 1.8 0 0 1-1.14-1.14Z" />
-                            <path d="M6 4v3" />
-                            <path d="M7.5 5.5h-3" />
-                        </svg>
-                    </div>
-                    <p>无法直接嵌入 AI 搜索</p>
-                    <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
-                    <button id="ai-open-ai" class="ai-open-btn">在弹窗中打开</button>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <div id="settings-toast" class="settings-toast"></div>
@@ -298,6 +255,51 @@
     </div>
 
     <div id="ai-sidebar-overlay" class="ai-sidebar-overlay hidden"></div>
+
+    <div id="ai-sidebar" class="ai-sidebar hidden">
+        <div class="ai-sidebar-header">
+            <div id="ai-tabs" class="ai-tabs" aria-label="AI 服务列表"></div>
+            <div class="ai-sidebar-actions">
+                <button id="ai-open-new-window" class="ai-action-btn" type="button" title="在新窗口打开">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path
+                            d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                    </svg>
+                </button>
+                <button id="ai-sidebar-close" class="ai-action-btn" type="button" title="关闭">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="ai-sidebar-content" class="ai-sidebar-content">
+            <!-- 极光幻彩加载占位屏 -->
+            <div id="ai-sidebar-loading" class="ai-sidebar-loading hidden">
+                <div class="aurora-glow"></div>
+                <div class="shimmer-lines">
+                    <div class="shimmer-line"></div>
+                    <div class="shimmer-line short"></div>
+                    <div class="shimmer-line"></div>
+                </div>
+            </div>
+            <div id="ai-iframe-fallback" class="ai-sidebar-placeholder hidden">
+                <div class="ai-placeholder-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.9"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="m12 3-1.7 5.18a1.8 1.8 0 0 1-1.14 1.14L4 11l5.16 1.68a1.8 1.8 0 0 1 1.14 1.14L12 19l1.7-5.18a1.8 1.8 0 0 1 1.14-1.14L20 11l-5.16-1.68a1.8 1.8 0 0 1-1.14-1.14Z" />
+                        <path d="M6 4v3" />
+                        <path d="M7.5 5.5h-3" />
+                    </svg>
+                </div>
+                <p>无法直接嵌入 AI 搜索</p>
+                <p class="ai-placeholder-hint">安全策略阻止了嵌入</p>
+                <button id="ai-open-ai" class="ai-open-btn">在弹窗中打开</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
