@@ -547,6 +547,16 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     min-height: 0;
     margin: 0 auto;
     padding: clamp(30px, 5.2vh, 72px) 0 clamp(34px, 7vh, 92px);
+    transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1),
+                filter 380ms ease,
+                opacity 380ms ease;
+    transform-origin: center left;
+}
+
+body.ai-sidebar-open .app-shell {
+    transform: scale(0.965) translateX(-24px);
+    filter: blur(5px) brightness(0.85);
+    opacity: 0.85;
 }
 
 .app-header {
@@ -2186,15 +2196,18 @@ input[type="range"] {
         var(--glass-bg);
     box-shadow: -24px 0 72px rgba(0, 0, 0, 0.36), 1px 0 0 rgba(255, 255, 255, 0.12) inset;
     overflow: hidden;
-    transform: translateX(calc(100% + 42px));
-    transition: transform 300ms var(--liquid-ease);
+    transform: translateX(calc(100% + 42px)) scale(0.99);
+    opacity: 0;
+    transition: transform 380ms cubic-bezier(0.25, 1.1, 0.5, 1.02),
+                opacity 380ms cubic-bezier(0.25, 1.1, 0.5, 1.02);
     backdrop-filter: blur(var(--container-blur)) saturate(185%) contrast(104%);
     -webkit-backdrop-filter: blur(var(--container-blur)) saturate(185%) contrast(104%);
 }
 
 body.ai-sidebar-open .ai-sidebar,
 .ai-sidebar.active {
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
+    opacity: 1;
 }
 
 .ai-sidebar-header {
