@@ -2822,11 +2822,15 @@ body * {
 /* Frosted cards replace liquid highlights with a stable translucent surface. */
 .leaf-wrapper {
     border: 1px solid color-mix(in srgb, var(--glass-edge), var(--card-border) 42%);
-    border-radius: 14px;
-    background: var(--card-bg) !important;
+    border-radius: 16px;
+    background: 
+        linear-gradient(128deg, var(--liquid-highlight), transparent 35% 66%, var(--liquid-sheen)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 58%),
+        linear-gradient(90deg, color-mix(in srgb, var(--card-accent, var(--soft-indigo)), transparent 90%), transparent 42%),
+        var(--card-bg);
     box-shadow: var(--card-shadow);
-    backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(120%);
-    -webkit-backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(120%);
+    backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(145%) contrast(102%);
+    -webkit-backdrop-filter: blur(var(--glass-blur, var(--container-blur))) saturate(145%) contrast(102%);
     transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
@@ -2835,7 +2839,6 @@ body * {
 }
 
 .leaf-wrapper::before,
-.leaf-wrapper::after,
 .leaf-wrapper.card-pulse-enabled::before {
     display: none;
     animation: none;
