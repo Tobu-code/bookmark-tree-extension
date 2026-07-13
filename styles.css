@@ -500,7 +500,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 
 /* Image-derived tone keeps custom wallpapers readable without changing the selected theme. */
 :root body.has-custom-bg[data-background-tone="dark"] {
-    --custom-bg-scrim: rgba(2, 6, 23, 0.48);
+    --custom-bg-scrim: rgba(2, 6, 23, 0.22);
     --text-primary: #f8fafc;
     --text-secondary: #dbe6f6;
     --text-subtle: #bdc9d9;
@@ -510,7 +510,7 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 }
 
 :root body.has-custom-bg[data-background-tone="light"] {
-    --custom-bg-scrim: rgba(255, 255, 255, 0.26);
+    --custom-bg-scrim: rgba(255, 255, 255, 0.15);
     --text-primary: #101827;
     --text-secondary: #334155;
     --text-subtle: #647084;
