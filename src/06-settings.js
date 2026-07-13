@@ -786,11 +786,11 @@ function applyBackground() {
     }
 
     if (CURRENT_BG_BLUR > 0) {
-        bgLayer.style.filter = `blur(${CURRENT_BG_BLUR}px)`;
-        bgLayer.style.transform = 'scale(1.05)';
+        bgLayer.style.setProperty('--applied-blur', `blur(${CURRENT_BG_BLUR}px)`);
+        bgLayer.style.setProperty('--applied-scale', 'scale(1.05)');
     } else {
-        bgLayer.style.filter = 'none';
-        bgLayer.style.transform = 'scale(1)';
+        bgLayer.style.setProperty('--applied-blur', 'none');
+        bgLayer.style.setProperty('--applied-scale', 'scale(1)');
     }
 
     requestAnimationFrame(() => {

@@ -232,8 +232,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* 采用适度 16px 高斯模糊，保留原背景图的构图、色彩与图案呼应 */
-    filter: blur(16px) brightness(var(--ambient-brightness, 0.85));
+    /* 采用适度 8px 高斯模糊，保留原背景图的色彩与轮廓 */
+    filter: blur(8px) brightness(var(--ambient-brightness, 0.85));
     opacity: 0;
     pointer-events: none;
     transition: opacity 260ms ease, filter 260ms ease;
@@ -274,18 +274,29 @@ body.has-custom-bg[data-background-tone="light"] {
     right: 4.5vw;
     bottom: 4.5vh;
     z-index: 2; /* 正数层级：高于氛围模糊底墙(z-index: 1)，但低于页面内容(z-index: 10) */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(var(--bg-blur));
-    transform: none;
+    overflow: hidden; /* 核心：裁剪伪元素的高斯模糊外溢，确保硬朗黑色相框不受模糊影响 */
     opacity: 0.72;
     border: 5px solid #0c111d;
     border-radius: 8px;
     box-shadow: 
         0 24px 64px rgba(0, 0, 0, 0.48), 
         0 6px 20px rgba(0, 0, 0, 0.3);
-    transition: filter 260ms ease, opacity 260ms ease;
+    transition: opacity 260ms ease;
+}
+
+/* 解耦的背景图片子图层：仅对其应用模糊与缩放滤镜，物理边框和投影完全不受影响 */
+#background-layer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: inherit; /* 继承父级的 style.backgroundImage */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: var(--applied-blur, none);
+    transform: var(--applied-scale, scale(1));
+    transition: filter 260ms ease, transform 260ms ease;
 }
 
 body.has-custom-bg #background-layer {
