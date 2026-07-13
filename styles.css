@@ -220,16 +220,45 @@ svg {
     display: none !important;
 }
 
+body {
+    background-color: var(--body-bg, #090d16);
+    transition: background-color 260ms ease;
+}
+
+:root[data-theme="light"] body {
+    --body-bg: #eceef2;
+}
+
+:root[data-theme="dark"] body {
+    --body-bg: #070a12;
+}
+
+body.has-custom-bg[data-background-tone="dark"] {
+    --body-bg: #090b11;
+}
+
+body.has-custom-bg[data-background-tone="light"] {
+    --body-bg: #f4f6fa;
+}
+
 #background-layer {
     position: fixed;
-    inset: 0;
+    top: 4.5vh;
+    left: 4.5vw;
+    right: 4.5vw;
+    bottom: 4.5vh;
     z-index: -3;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     filter: blur(var(--bg-blur));
-    transform: scale(1.02);
+    transform: none;
     opacity: 0.72;
+    border: 5px solid #0c111d;
+    border-radius: 8px;
+    box-shadow: 
+        0 24px 64px rgba(0, 0, 0, 0.48), 
+        0 6px 20px rgba(0, 0, 0, 0.3);
     transition: filter 260ms ease, opacity 260ms ease;
 }
 
@@ -542,11 +571,11 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 .app-shell {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    width: min(var(--shell-max), calc(100vw - (var(--page-pad-x) * 2)));
-    height: 100vh;
+    width: min(var(--shell-max), 90vw);
+    height: 91vh;
     min-height: 0;
-    margin: 0 auto;
-    padding: clamp(30px, 5.2vh, 72px) 0 clamp(34px, 7vh, 92px);
+    margin: 4.5vh auto;
+    padding: clamp(24px, 4.5vh, 60px) 0 clamp(24px, 6vh, 80px);
     transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1),
                 filter 380ms ease,
                 opacity 380ms ease;
