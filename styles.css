@@ -232,7 +232,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(60px) brightness(var(--ambient-brightness, 0.45));
+    /* 采用适度 16px 高斯模糊，保留原背景图的构图、色彩与图案呼应 */
+    filter: blur(16px) brightness(var(--ambient-brightness, 0.85));
     opacity: 0;
     pointer-events: none;
     transition: opacity 260ms ease, filter 260ms ease;
@@ -243,11 +244,11 @@ body.has-custom-bg #ambient-layer {
 }
 
 body.has-custom-bg[data-background-tone="dark"] #ambient-layer {
-    --ambient-brightness: 0.36;
+    --ambient-brightness: 0.8;
 }
 
 body.has-custom-bg[data-background-tone="light"] #ambient-layer {
-    --ambient-brightness: 0.72;
+    --ambient-brightness: 0.9;
 }
 
 :root[data-theme="light"] body {
