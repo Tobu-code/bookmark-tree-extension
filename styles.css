@@ -228,7 +228,7 @@ body {
 #ambient-layer {
     position: fixed;
     inset: -40px; /* 扩展边缘防止漏边 */
-    z-index: -4; /* 处于背景层下方，高于 body 的基础背景色 */
+    z-index: 1; /* 正数层级：在 body 背景色之上，但在清晰画布和 app-shell 之下 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -272,7 +272,7 @@ body.has-custom-bg[data-background-tone="light"] {
     left: 4.5vw;
     right: 4.5vw;
     bottom: 4.5vh;
-    z-index: -3;
+    z-index: 2; /* 正数层级：高于氛围模糊底墙(z-index: 1)，但低于页面内容(z-index: 10) */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -289,7 +289,7 @@ body.has-custom-bg[data-background-tone="light"] {
 
 body.has-custom-bg #background-layer {
     opacity: 1;
-    z-index: -3;
+    z-index: 2;
 }
 
 body.has-custom-bg::after {
@@ -594,6 +594,8 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
 }
 
 .app-shell {
+    position: relative;
+    z-index: 10; /* 正数层叠上下文，确保内容浮于背景画布 (z-index: 2) 之上 */
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     width: min(var(--shell-max), 90vw);

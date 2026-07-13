@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 23:07:00]
+- **Type**: Design (全局正数 z-index 体系重塑，彻底解决负层级掉落 body 背景下方的显示障碍)
+- **Content**: 在 `styles.css` 中，将氛围背景层 `#ambient-layer` 由 `z-index: -4` 升级为正数 `1`；将清晰画布层 `#background-layer` 的多处 `z-index: -3` 统一升级为正数 `2`；同时为主容器 `.app-shell` 补充定义 `position: relative` 和 `z-index: 10`。此举让所有图层从负层数限制中挣脱，彻底暴露在 `body` 自身的 `background-color` 上方，100% 呈现了高斯模糊的氛围感外背景，解决了全黑大边框的残留顽疾。
+- **Impact**: `styles.css`
+
 ## [2026-07-13 22:37:00]
 - **Type**: Design (修复画廊相框模式下负 z-index 伪元素被父级背景色遮挡的黑屏缺陷)
 - **Content**: 1) 在 `newtab.html` 的 `body` 头部新增 `#ambient-layer` 独立 HTML 节点，彻底规避了 `body::before` 的负 `z-index` 会被 `body` 自身不透明背景色无情遮掩的 CSS 层级限制；2) 重建 `styles.css`，将 60px 深度环境模糊自适应底图样式应用到 `#ambient-layer` 上；3) 更新 `src/06-settings.js` 与 `script.js`，改为直驱方式让 JS 对 `#ambient-layer` 的行内 `backgroundImage` 进行同步设置，抛弃容易引起层叠穿透的 CSS 变量方案；4) 重新打包并生成根目录 `script.js`。
