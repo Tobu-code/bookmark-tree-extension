@@ -111,7 +111,7 @@ let OPEN_IN_NEW_TAB = true;
 let CURRENT_ICON_STYLE = 'default';
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
-let CURRENT_AMBIENT_BLUR = 8;
+let CURRENT_AMBIENT_BLUR_LEVEL = 2;
 let CURRENT_CONTAINER_BLUR = 0;
 let LAYOUT_MODE = 'tree';
 
@@ -692,7 +692,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
-        CURRENT_AMBIENT_BLUR = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
+        CURRENT_AMBIENT_BLUR_LEVEL = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
@@ -2405,15 +2405,15 @@ function initSettingsUI(settings) {
     // 底图模糊滑块
     if (ambientBlurInput) {
         ambientBlurInput.addEventListener('input', (e) => {
-            const value = parseInt(e.target.value);
-            CURRENT_AMBIENT_BLUR = value;
-            ambientBlurValueDisplay.textContent = `${value}px`;
+            const level = parseInt(e.target.value);
+            CURRENT_AMBIENT_BLUR_LEVEL = level;
+            ambientBlurValueDisplay.textContent = getBlurLabel(level);
             applyBackground();
         });
 
         ambientBlurInput.addEventListener('change', (e) => {
-            const value = parseInt(e.target.value);
-            saveSetting(STORAGE_KEY_AMBIENT_BLUR, value);
+            const level = parseInt(e.target.value);
+            saveSetting(STORAGE_KEY_AMBIENT_BLUR, level);
         });
     }
 
@@ -2439,14 +2439,14 @@ function initSettingsUI(settings) {
     }
 
     if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
-        const value = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
-        if (ambientBlurInput) ambientBlurInput.value = value;
-        CURRENT_AMBIENT_BLUR = value;
-        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = `${value}px`;
+        const level = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
+        if (ambientBlurInput) ambientBlurInput.value = level;
+        CURRENT_AMBIENT_BLUR_LEVEL = level;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = getBlurLabel(level);
     } else {
-        if (ambientBlurInput) ambientBlurInput.value = 8;
-        CURRENT_AMBIENT_BLUR = 8;
-        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = '8px';
+        if (ambientBlurInput) ambientBlurInput.value = 2;
+        CURRENT_AMBIENT_BLUR_LEVEL = 2;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = '20%';
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
@@ -2932,7 +2932,7 @@ function applyBackground() {
     if (!bgLayer) return;
 
     if (ambientLayer) {
-        ambientLayer.style.setProperty('--ambient-blur', `${CURRENT_AMBIENT_BLUR}px`);
+        ambientLayer.style.setProperty('--ambient-blur', `${CURRENT_AMBIENT_BLUR_LEVEL * 4}px`);
     }
 
     if (CURRENT_BG_IMAGE) {

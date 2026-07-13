@@ -111,7 +111,7 @@ let OPEN_IN_NEW_TAB = true;
 let CURRENT_ICON_STYLE = 'default';
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
-let CURRENT_AMBIENT_BLUR = 8;
+let CURRENT_AMBIENT_BLUR_LEVEL = 2;
 let CURRENT_CONTAINER_BLUR = 0;
 let LAYOUT_MODE = 'tree';
 
@@ -692,7 +692,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
-        CURRENT_AMBIENT_BLUR = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
+        CURRENT_AMBIENT_BLUR_LEVEL = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {

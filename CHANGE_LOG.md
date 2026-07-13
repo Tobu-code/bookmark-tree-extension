@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 23:53:00]
+- **Type**: Design (统合底图模糊度滑块为百分比显示格式，并重置默认值)
+- **Content**: 1) 在 `newtab.html` 中，将底图模糊度滑块 `ambient-blur` 的属性变更为 10 档划分（`min="0" max="10"`），默认 value 设为 `2`，初始文本更新为与其它模糊选项高度一致的百分比格式 `20%`；2) 在 `src/01-constants.js` 中将全局变量调整为档位格式 `CURRENT_AMBIENT_BLUR_LEVEL = 2`；3) 在 `src/06-settings.js` 和 `script.js` 中，使滑动时的像素传参映射为 `level * 4px`（默认 2 档对应 `8px` 极佳模糊度），重构滑块更新事件以复用百分比计算函数。
+- **Impact**: `newtab.html`, `src/01-constants.js`, `src/06-settings.js`, `script.js`
+
 ## [2026-07-13 23:43:00]
 - **Type**: Feature (将底图模糊度转化为可供用户自由调节的设置滑块配置)
 - **Content**: 1) 在 `newtab.html` 的设置面板中，在背景模糊与毛玻璃模糊滑块之间，新增一个“底图模糊程度”滑块，最大调控范围设为 `32px`，默认值为调优的 `8px`；2) 在 `src/01-constants.js` 中声明了 `STORAGE_KEY_AMBIENT_BLUR` 并在配置初始化阶段自动拉取；3) 在 `src/06-settings.js` 和 `script.js` 中捕获新滑块的 `input` 与 `change` 动作完成持久化，并在 `applyBackground` 中动态刷新全局 CSS 变量 `--ambient-blur`；4) 修改 `styles.css` 让氛围层 `#ambient-layer` 从硬编码模糊全面转为动态接收该变量。
