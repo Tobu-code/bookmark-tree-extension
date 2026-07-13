@@ -72,6 +72,8 @@ function initSettingsUI(settings) {
     const clearBgBtn = document.getElementById('clear-bg');
     const blurInput = document.getElementById('bg-blur');
     const blurValueDisplay = document.getElementById('bg-blur-value');
+    const ambientBlurInput = document.getElementById('ambient-blur');
+    const ambientBlurValueDisplay = document.getElementById('ambient-blur-value');
     const containerBlurInput = document.getElementById('container-blur');
     const containerBlurValueDisplay = document.getElementById('container-blur-value');
     const blurControls = document.getElementById('blur-controls');
@@ -141,6 +143,7 @@ function initSettingsUI(settings) {
     // 更新模糊控制的启用/禁用状态
     function updateBlurControlsState() {
         blurInput.disabled = false;
+        if (ambientBlurInput) ambientBlurInput.disabled = false;
         containerBlurInput.disabled = false;
         blurControls.style.opacity = '1';
     }
@@ -271,6 +274,21 @@ function initSettingsUI(settings) {
         saveSetting(STORAGE_KEY_BG_BLUR, level); // 存储档位值
     });
 
+    // 底图模糊滑块
+    if (ambientBlurInput) {
+        ambientBlurInput.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            CURRENT_AMBIENT_BLUR = value;
+            ambientBlurValueDisplay.textContent = `${value}px`;
+            applyBackground();
+        });
+
+        ambientBlurInput.addEventListener('change', (e) => {
+            const value = parseInt(e.target.value);
+            saveSetting(STORAGE_KEY_AMBIENT_BLUR, value);
+        });
+    }
+
     // 主容器透明度滑块
     containerBlurInput.addEventListener('input', (e) => {
         const level = parseInt(e.target.value);
@@ -290,6 +308,17 @@ function initSettingsUI(settings) {
         blurInput.value = level;
         CURRENT_BG_BLUR = level * 5;
         blurValueDisplay.textContent = getBlurLabel(level);
+    }
+
+    if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
+        const value = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
+        if (ambientBlurInput) ambientBlurInput.value = value;
+        CURRENT_AMBIENT_BLUR = value;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = `${value}px`;
+    } else {
+        if (ambientBlurInput) ambientBlurInput.value = 8;
+        CURRENT_AMBIENT_BLUR = 8;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = '8px';
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
@@ -773,6 +802,10 @@ function applyBackground() {
     const bgLayer = document.getElementById('background-layer');
     const ambientLayer = document.getElementById('ambient-layer');
     if (!bgLayer) return;
+
+    if (ambientLayer) {
+        ambientLayer.style.setProperty('--ambient-blur', `${CURRENT_AMBIENT_BLUR}px`);
+    }
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;

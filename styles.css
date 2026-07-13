@@ -232,8 +232,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* 采用适度 8px 高斯模糊，保留原背景图的色彩与轮廓 */
-    filter: blur(8px) brightness(var(--ambient-brightness, 0.85));
+    /* 核心：读取动态 --ambient-blur CSS 变量（缺省默认 8px） */
+    filter: blur(var(--ambient-blur, 8px)) brightness(var(--ambient-brightness, 0.85));
     opacity: 0;
     pointer-events: none;
     transition: opacity 260ms ease, filter 260ms ease;

@@ -4,6 +4,7 @@ const STORAGE_KEY_THEME = 'settings_theme';
 const STORAGE_KEY_ICON_STYLE = 'settings_icon_style';
 const STORAGE_KEY_BG_IMAGE = 'settings_bg_image';
 const STORAGE_KEY_BG_BLUR = 'settings_bg_blur';
+const STORAGE_KEY_AMBIENT_BLUR = 'settings_ambient_blur';
 const STORAGE_KEY_CONTAINER_BLUR = 'settings_container_blur';
 const STORAGE_KEY_LAYOUT_MODE = 'settings_layout_mode';
 
@@ -110,6 +111,7 @@ let OPEN_IN_NEW_TAB = true;
 let CURRENT_ICON_STYLE = 'default';
 let CURRENT_BG_IMAGE = null;
 let CURRENT_BG_BLUR = 0;
+let CURRENT_AMBIENT_BLUR = 8;
 let CURRENT_CONTAINER_BLUR = 0;
 let LAYOUT_MODE = 'tree';
 
@@ -663,7 +665,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             Promise.race([
                 getStorage([
             STORAGE_KEY_NEW_TAB, STORAGE_KEY_THEME, STORAGE_KEY_ICON_STYLE,
-            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_CONTAINER_BLUR,
+            STORAGE_KEY_BG_IMAGE, STORAGE_KEY_BG_BLUR, STORAGE_KEY_AMBIENT_BLUR, STORAGE_KEY_CONTAINER_BLUR,
             STORAGE_KEY_LAYOUT_MODE, STORAGE_KEY_HIDDEN_FOLDERS,
             STORAGE_KEY_FLAT_DIR_EXPANDED, STORAGE_KEY_TREE_EXPANDED,
             STORAGE_KEY_AI, STORAGE_KEY_AI_ORDER, STORAGE_KEY_AI_CONFIG,
@@ -687,6 +689,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (settings[STORAGE_KEY_BG_BLUR] !== undefined) {
         const level = parseInt(settings[STORAGE_KEY_BG_BLUR]);
         CURRENT_BG_BLUR = level * 5;
+    }
+
+    if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
+        CURRENT_AMBIENT_BLUR = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
@@ -2194,6 +2200,8 @@ function initSettingsUI(settings) {
     const clearBgBtn = document.getElementById('clear-bg');
     const blurInput = document.getElementById('bg-blur');
     const blurValueDisplay = document.getElementById('bg-blur-value');
+    const ambientBlurInput = document.getElementById('ambient-blur');
+    const ambientBlurValueDisplay = document.getElementById('ambient-blur-value');
     const containerBlurInput = document.getElementById('container-blur');
     const containerBlurValueDisplay = document.getElementById('container-blur-value');
     const blurControls = document.getElementById('blur-controls');
@@ -2263,6 +2271,7 @@ function initSettingsUI(settings) {
     // 更新模糊控制的启用/禁用状态
     function updateBlurControlsState() {
         blurInput.disabled = false;
+        if (ambientBlurInput) ambientBlurInput.disabled = false;
         containerBlurInput.disabled = false;
         blurControls.style.opacity = '1';
     }
@@ -2393,6 +2402,21 @@ function initSettingsUI(settings) {
         saveSetting(STORAGE_KEY_BG_BLUR, level); // 存储档位值
     });
 
+    // 底图模糊滑块
+    if (ambientBlurInput) {
+        ambientBlurInput.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            CURRENT_AMBIENT_BLUR = value;
+            ambientBlurValueDisplay.textContent = `${value}px`;
+            applyBackground();
+        });
+
+        ambientBlurInput.addEventListener('change', (e) => {
+            const value = parseInt(e.target.value);
+            saveSetting(STORAGE_KEY_AMBIENT_BLUR, value);
+        });
+    }
+
     // 主容器透明度滑块
     containerBlurInput.addEventListener('input', (e) => {
         const level = parseInt(e.target.value);
@@ -2412,6 +2436,17 @@ function initSettingsUI(settings) {
         blurInput.value = level;
         CURRENT_BG_BLUR = level * 5;
         blurValueDisplay.textContent = getBlurLabel(level);
+    }
+
+    if (settings[STORAGE_KEY_AMBIENT_BLUR] !== undefined) {
+        const value = parseInt(settings[STORAGE_KEY_AMBIENT_BLUR]);
+        if (ambientBlurInput) ambientBlurInput.value = value;
+        CURRENT_AMBIENT_BLUR = value;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = `${value}px`;
+    } else {
+        if (ambientBlurInput) ambientBlurInput.value = 8;
+        CURRENT_AMBIENT_BLUR = 8;
+        if (ambientBlurValueDisplay) ambientBlurValueDisplay.textContent = '8px';
     }
 
     if (settings[STORAGE_KEY_CONTAINER_BLUR] !== undefined) {
@@ -2895,6 +2930,10 @@ function applyBackground() {
     const bgLayer = document.getElementById('background-layer');
     const ambientLayer = document.getElementById('ambient-layer');
     if (!bgLayer) return;
+
+    if (ambientLayer) {
+        ambientLayer.style.setProperty('--ambient-blur', `${CURRENT_AMBIENT_BLUR}px`);
+    }
 
     if (CURRENT_BG_IMAGE) {
         bgLayer.style.backgroundImage = `url('${CURRENT_BG_IMAGE}')`;

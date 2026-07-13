@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 23:43:00]
+- **Type**: Feature (将底图模糊度转化为可供用户自由调节的设置滑块配置)
+- **Content**: 1) 在 `newtab.html` 的设置面板中，在背景模糊与毛玻璃模糊滑块之间，新增一个“底图模糊程度”滑块，最大调控范围设为 `32px`，默认值为调优的 `8px`；2) 在 `src/01-constants.js` 中声明了 `STORAGE_KEY_AMBIENT_BLUR` 并在配置初始化阶段自动拉取；3) 在 `src/06-settings.js` 和 `script.js` 中捕获新滑块的 `input` 与 `change` 动作完成持久化，并在 `applyBackground` 中动态刷新全局 CSS 变量 `--ambient-blur`；4) 修改 `styles.css` 让氛围层 `#ambient-layer` 从硬编码模糊全面转为动态接收该变量。
+- **Impact**: `newtab.html`, `src/01-constants.js`, `src/06-settings.js`, `script.js`, `styles.css`
+
 ## [2026-07-13 23:31:00]
 - **Type**: Design (调优相框的描边厚度与圆角弧度，打造现代简约艺术画框)
 - **Content**: 在 `styles.css` 中，将 `#background-layer` 物理相框的描边厚度从 `5px` 调细至极具细节张力的 `2px`，同时将相框的 `border-radius` 从 `8px` 大幅放宽至圆润优雅的 `20px`，使其具有更加高级的 macOS 式物理卡片质感，并契合主容器排版弧度。
