@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-13 23:31:00]
+- **Type**: Design (调优相框的描边厚度与圆角弧度，打造现代简约艺术画框)
+- **Content**: 在 `styles.css` 中，将 `#background-layer` 物理相框的描边厚度从 `5px` 调细至极具细节张力的 `2px`，同时将相框的 `border-radius` 从 `8px` 大幅放宽至圆润优雅的 `20px`，使其具有更加高级的 macOS 式物理卡片质感，并契合主容器排版弧度。
+- **Impact**: `styles.css`
+
 ## [2026-07-13 23:24:00]
 - **Type**: Design (实现相框与背景模糊度解耦以保护硬朗黑色相框，并调降底墙模糊半径至 8px)
 - **Content**: 1) 重构 `styles.css`，将 `#background-layer` 的模糊与缩放过渡转移到新增子伪元素 `::before` 上，并增加 `overflow: hidden` 裁剪，解决设置中“调整背景模糊度”会使 5px 物理黑色相框及大外投影一起被模糊虚化的冲突 Bug；2) 修改 `src/06-settings.js` 与 `script.js` 中的 `applyBackground` 函数，将原本对行内样式的覆盖强改，升级为写入 CSS 变量 `--applied-blur` 与 `--applied-scale`，专门向子层透传模糊数据，实现相框和底墙与背景模糊的功能解耦；3) 将氛围底板 `#ambient-layer` 的模糊程度进一步折半降至 `8px`。
