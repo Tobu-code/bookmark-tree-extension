@@ -232,11 +232,14 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* 核心：读取动态 --ambient-blur CSS 变量（缺省默认 8px） */
-    filter: blur(var(--ambient-blur, 8px)) brightness(var(--ambient-brightness, 0.85));
+    /* 核心：读取动态 --ambient-blur CSS 变量，并使用 140% 饱和度强力色彩补偿，消除高斯灰度沉闷感 */
+    filter: blur(var(--ambient-blur, 8px)) saturate(140%) brightness(var(--ambient-brightness, 0.85));
+    /* 启用硬件加速防止锯齿 */
+    transform: scale(1.06) translate3d(0, 0, 0);
+    will-change: filter, transform;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 260ms ease, filter 260ms ease;
+    transition: opacity 320ms cubic-bezier(0.25, 1, 0.5, 1), filter 320ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 body.has-custom-bg #ambient-layer {
@@ -288,15 +291,16 @@ body.has-custom-bg[data-background-tone="light"] {
 #background-layer::before {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -12px; /* 负边距防侧漏，与缩放 scale(1.06) 相互咬合 */
     z-index: -1;
     background-image: inherit; /* 继承父级的 style.backgroundImage */
     background-size: 100% 100%; /* 百分百物理吻合平铺，解决自带框壁纸放大裁剪错位的 Bug */
     background-position: center;
     background-repeat: no-repeat;
     filter: var(--applied-blur, none);
-    transform: var(--applied-scale, scale(1));
-    transition: filter 260ms ease, transform 260ms ease;
+    transform: var(--applied-scale, scale(1)) translate3d(0, 0, 0);
+    will-change: filter, transform;
+    transition: filter 320ms cubic-bezier(0.25, 1, 0.5, 1), transform 320ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 body.has-custom-bg #background-layer {

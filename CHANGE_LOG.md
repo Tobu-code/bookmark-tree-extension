@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 12:33:00]
+- **Type**: Design (引入高阶高斯色彩饱和度补偿算法，全面调优虚化玻璃质感)
+- **Content**: 1) 在 `styles.css` 中重构底图氛围层 `#ambient-layer`，将其滤镜升级为自带 `140%` 色彩饱和度补偿的 `saturate(140%)`，并引入 `scale(1.06)`、`translate3d` 硬件加速及 `will-change` 强制开启 GPU 平滑双线性插值，消除了虚化大色块在视口边缘发淡和生硬过渡的问题；2) 将相框虚化层 `#background-layer::before` 外扩至 `inset: -12px`，并修改 `src/06-settings.js` 与 `script.js`，当模糊激活时施加 `saturate(130%)` 饱和度补偿、`contrast(98%)` 对比度微调及 `scale(1.06)`，彻底消除了高斯虚化引发的画面色彩暗淡与相框边缘侧漏灰影的缺陷。
+- **Impact**: `styles.css`, `src/06-settings.js`, `script.js`
+
 ## [2026-07-14 11:52:00]
 - **Type**: Design (重新校正设置按钮物理圆心对齐相框圆角圆心，消除几何视觉偏差)
 - **Content**: 在 `styles.css` 中将 `#settings-btn` 的 `right` 与 `bottom` 定位参数由 `calc(4.5vw - 26px)`/`calc(4.5vh - 26px)` 重新修正为 `calc(4.5vw - 6px)`/`calc(4.5vh - 6px)`。此举消除了由于相框 `20px` 圆角半径在角落处向左上方收缩弯曲所造成的按钮视觉“偏下偏右”空隙，让按钮物理圆心与相框圆角的几何圆心（各向内缩进 `20px`）重合，按钮边缘正好切入相框起弯点，实现视觉上绝对的最中心咬合；同步在 `LAYOUT_ELEMENTS_GUIDE.md` 中进行更新。

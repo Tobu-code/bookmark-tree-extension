@@ -819,8 +819,8 @@ function applyBackground() {
     }
 
     if (CURRENT_BG_BLUR > 0) {
-        bgLayer.style.setProperty('--applied-blur', `blur(${CURRENT_BG_BLUR}px)`);
-        bgLayer.style.setProperty('--applied-scale', 'scale(1.05)');
+        bgLayer.style.setProperty('--applied-blur', `blur(${CURRENT_BG_BLUR}px) saturate(130%) contrast(98%)`);
+        bgLayer.style.setProperty('--applied-scale', 'scale(1.06)');
     } else {
         bgLayer.style.setProperty('--applied-blur', 'none');
         bgLayer.style.setProperty('--applied-scale', 'scale(1)');
