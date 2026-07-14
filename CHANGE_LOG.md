@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 11:38:00]
+- **Type**: Design (加粗实体画板边框，并实现设置按钮榫卯式重合嵌入相框右下角)
+- **Content**: 1) 在 `styles.css` 中将 `#background-layer` 的实体描边由 `2px` 变更为更显厚重与 3D 质感的 `4px`；2) 新增 `body.has-custom-bg #settings-btn` 规则，利用 `calc` 和 `26px` 半径差将设置齿轮按钮的物理圆心与实体相框的右下角顶点精准重合对齐，呈现几何嵌入的榫卯卡扣艺术感；3) 在 `LAYOUT_ELEMENTS_GUIDE.md` 手册中同步将边框数据修正为 `4px` 并增列按钮的位置描述。
+- **Impact**: `styles.css`, `LAYOUT_ELEMENTS_GUIDE.md`
+
 ## [2026-07-14 11:30:00]
 - **Type**: Docs (在项目根目录下生成排版布局元素定位参考说明文档)
 - **Content**: 新建 `LAYOUT_ELEMENTS_GUIDE.md` 手册，用于阐明新标签页的 3D DOM 图层叠放秩序（z-index 阶梯关系）、各区域核心 CSS 类名选择器及动态 CSS 变量控制关系，极大地方便未来在多 AI 会话协同调试时精确定位代码与修改样式。

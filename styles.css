@@ -276,7 +276,7 @@ body.has-custom-bg[data-background-tone="light"] {
     z-index: 2; /* 正数层级：高于氛围模糊底墙(z-index: 1)，但低于页面内容(z-index: 10) */
     overflow: hidden; /* 核心：裁剪伪元素的高斯模糊外溢，确保硬朗黑色相框不受模糊影响 */
     opacity: 0.72;
-    border: 2px solid #0c111d; /* 精致化调细至 2px */
+    border: 4px solid #0c111d; /* 加粗相框边框线 */
     border-radius: 20px; /* 圆角扩大至 20px，极具柔和现代质感 */
     box-shadow: 
         0 24px 64px rgba(0, 0, 0, 0.48), 
@@ -1836,6 +1836,12 @@ img.bookmark-icon {
 
 #settings-btn {
     bottom: 28px;
+}
+
+/* 艺术画板相框模式下，将设置按钮的圆心精准重合嵌入在相框的右下角顶点上 */
+body.has-custom-bg #settings-btn {
+    right: calc(4.5vw - 26px);
+    bottom: calc(4.5vh - 26px);
 }
 
 #settings-btn:hover {

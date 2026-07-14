@@ -23,7 +23,7 @@ graph TD
 | :--- | :--- | :--- |
 | `body` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L215) | 承载基础环境底色（`--body-bg`）。自定义壁纸判定为亮色时为 `#f4f6fa`，暗色时为 `#090b11` |
 | `#ambient-layer` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L12)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L228) | **自适应模糊霓虹底墙**。同步渲染自定义壁纸，并读取 `--ambient-blur` 和 `--ambient-brightness` 实现环境光晕。 |
-| `#background-layer` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L13)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L242) | **实体悬浮画廊相框**。缩回至居中的 `94vw * 91vh`。带有 `2px` 实体黑色描边（`border`）、大圆角 `20px`（`border-radius`）与 3D 浮空大阴影（`box-shadow`）。 |
+| `#background-layer` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L13)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L242) | **实体悬浮画廊相框**。缩回至居中的 `94vw * 91vh`。带有 `4px` 实体黑色描边（`border`）增强 3D 呈现、大圆角 `20px`（`border-radius`）与 3D 浮空大阴影（`box-shadow`）。 |
 | `#background-layer::before` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L254) | **解耦背景虚化层**。为 `#background-layer` 的子伪元素，单独读取 `--applied-blur` 模糊度和 `--applied-scale` 缩放，避免模糊扩散到 2px 实体黑色相框上。 |
 
 ---
@@ -37,6 +37,7 @@ graph TD
 | `.app-shell` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L552) | **排版主容器外壳**。限制在 `94vw * 91vh`（与相框尺寸完全一致）内，使用 `overflow: hidden` 并设置 `border-radius: 20px` 进行画布内容裁剪。 |
 | `#main-container` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L560) | 主书签面板与古诗词面板。绑定了 `--container-blur` 档位对应的毛玻璃质感（`backdrop-filter: blur(...)`）。 |
 | `.sidebar-wrapper` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L1820) | **AI 侧边栏包装器**。采用 `position: fixed` 固定在右侧，滑出时会给 `.app-shell` 添加偏移，并在 3D 景深下让 `#background-layer` 产生立体推退过渡。 |
+| `#settings-btn` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L1817) | **设置齿轮按钮**。有自定义壁纸时通过 `body.has-custom-bg` 激活，利用 `calc` 精确定位使其圆心重合重叠在相框的右下角顶点上，呈现“榫卯嵌入”卡扣效果。 |
 
 ---
 
