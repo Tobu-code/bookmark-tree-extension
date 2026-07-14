@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 13:46:00]
+- **Type**: Fix (修复首屏白闪根因：bg-ready 信号从 applyBackground 函数体移至 IndexedDB 异步回调末尾)
+- **Content**: 1) 从 `src/06-settings.js` 和 `script.js` 的 `applyBackground()` 函数中移除了 `body.classList.add('bg-ready')`——该函数在初始化时被调用两次，第一次调用时图片尚未从 IndexedDB 取回，导致渐变底板与白色卡片提前曝光；2) 删除了 `script.js` 初始化序列中第一次多余的 `applyBackground()` 调用（原第 740 行），将其合并至 `backgroundLoad.then()` 异步回调内；3) 将 `bg-ready` 信号严格绑定在 IndexedDB 读取完毕（无论成功/失败）之后才触发，确保背景图/渐变底与 UI 组件在同一毫秒内同步淡入，彻底根治白屏闪烁。
+- **Impact**: `script.js`, `src/06-settings.js`
+
 ## [2026-07-14 12:40:00]
 - **Type**: Fix (重构内容外壳与控制按钮首屏可见性，彻底解决半透明卡片在壁纸前先行闪现导致的白色屏闪)
 - **Content**: 在 `styles.css` 中将主排版容器 `.app-shell` 与外部悬浮设置按钮 `#settings-btn` 的初始 `opacity` 统一定制为 `0`（按钮并辅以 `pointer-events: none`），阻断了在图片未载入前半透明白色毛玻璃卡片和乳白色按钮先行在浅色 `body` 底板上曝光而引发的“大白屏闪烁”；直至 JS 判定完毕并在 `body` 挂载 `bg-ready` 标记后，各层组件才与底图背景完美同步地以 `320ms` 硬件加速平滑渐显出来，形成了高度优雅的开屏交融过渡效果。

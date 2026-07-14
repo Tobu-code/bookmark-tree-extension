@@ -826,8 +826,6 @@ function applyBackground() {
         bgLayer.style.setProperty('--applied-scale', 'scale(1)');
     }
 
-    document.body.classList.add('bg-ready');
-
     requestAnimationFrame(() => {
         if (typeof syncSidebarActiveIndicator === 'function') {
             syncSidebarActiveIndicator();
