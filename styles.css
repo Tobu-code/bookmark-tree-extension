@@ -1816,8 +1816,8 @@ img.bookmark-icon {
 
 #settings-btn {
     position: fixed;
-    right: calc(4.5vw - 26px);
-    bottom: calc(4.5vh - 26px);
+    right: calc(4.5vw - 6px);
+    bottom: calc(4.5vh - 6px);
     z-index: 40;
     display: grid;
     place-items: center;

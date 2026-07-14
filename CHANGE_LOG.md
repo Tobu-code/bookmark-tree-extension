@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 11:52:00]
+- **Type**: Design (重新校正设置按钮物理圆心对齐相框圆角圆心，消除几何视觉偏差)
+- **Content**: 在 `styles.css` 中将 `#settings-btn` 的 `right` 与 `bottom` 定位参数由 `calc(4.5vw - 26px)`/`calc(4.5vh - 26px)` 重新修正为 `calc(4.5vw - 6px)`/`calc(4.5vh - 6px)`。此举消除了由于相框 `20px` 圆角半径在角落处向左上方收缩弯曲所造成的按钮视觉“偏下偏右”空隙，让按钮物理圆心与相框圆角的几何圆心（各向内缩进 `20px`）重合，按钮边缘正好切入相框起弯点，实现视觉上绝对的最中心咬合；同步在 `LAYOUT_ELEMENTS_GUIDE.md` 中进行更新。
+- **Impact**: `styles.css`, `LAYOUT_ELEMENTS_GUIDE.md`
+
 ## [2026-07-14 11:47:00]
 - **Type**: Design (重构设置按钮 DOM 层级为 body 直系子代并平铺图片，完美消解相框顶点错位)
 - **Content**: 1) 在 `newtab.html` 中将 `#settings-btn` 移出 `.app-shell` 容器，直接挂载到 `body` 最外层下，消除了由于主卡片容器在侧栏滑出、动画偏移等情况下的 `transform` 导致的 `fixed` 定位失效偏差；2) 在 `styles.css` 中将该按钮的右侧和底部对齐值默认设为相框顶点定位（`calc(4.5vw - 26px)`/`calc(4.5vh - 26px)`），消除清除背景后退回屏幕边缘的严重分离错位；3) 将 `#background-layer::before` 自定义图片填充格式由 `cover` 调整为 `100% 100%`，确保任何自带相框的壁纸在画板内百分百比例平铺、最中心对齐而不被放大裁剪；4) 同步在 `LAYOUT_ELEMENTS_GUIDE.md` 中修正此架构。
