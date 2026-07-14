@@ -604,8 +604,8 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     margin: 4.5vh auto;
     padding: clamp(24px, 4.5vh, 60px) 0 clamp(24px, 6vh, 80px);
     opacity: 0; /* 首屏背景渲染完成前默认隐藏，防止半透明白色卡片先行暴露 */
-    transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1),
-                filter 380ms ease,
+    transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 420ms ease,
                 opacity 380ms ease;
     transform-origin: center left;
 }
@@ -2265,10 +2265,10 @@ input[type="range"] {
         var(--glass-bg);
     box-shadow: -24px 0 72px rgba(0, 0, 0, 0.36), 1px 0 0 rgba(255, 255, 255, 0.12) inset;
     overflow: hidden;
-    transform: translateX(calc(100% + 42px)) scale(0.99);
+    transform: translateX(calc(100% + 42px)) scale(0.97);
     opacity: 0;
-    transition: transform 380ms cubic-bezier(0.25, 1.1, 0.5, 1.02),
-                opacity 380ms cubic-bezier(0.25, 1.1, 0.5, 1.02);
+    transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 320ms ease;
     backdrop-filter: blur(var(--container-blur)) saturate(185%) contrast(104%);
     -webkit-backdrop-filter: blur(var(--container-blur)) saturate(185%) contrast(104%);
 }

@@ -327,11 +327,15 @@ function initAiSidebar() {
     function openSidebar() {
         document.body.classList.add('ai-sidebar-open');
         sidebar.classList.remove('hidden');
+        // 双层 rAF：第一帧让浏览器完成布局重排，注册侧栏的离屏初始位置；
+        // 第二帧再添加 active 触发滑入过渡，确保 CSS transition 完整执行。
         requestAnimationFrame(() => {
-            sidebar.classList.add('active');
-            sidebarOverlay.classList.remove('hidden');
-            sidebarOverlay.classList.add('active');
-            setTimeout(syncAiTabsIndicator, 150);
+            requestAnimationFrame(() => {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.remove('hidden');
+                sidebarOverlay.classList.add('active');
+                setTimeout(syncAiTabsIndicator, 150);
+            });
         });
 
         if (!currentAiId) {
