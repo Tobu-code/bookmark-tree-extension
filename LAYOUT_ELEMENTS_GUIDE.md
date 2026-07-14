@@ -21,7 +21,7 @@ graph TD
 
 | 元素 ID / Class | 对应文件位置 | 作用与样式定位说明 |
 | :--- | :--- | :--- |
-| `body` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L215) | 承载基础环境底色（`--body-bg`）。自定义壁纸判定为亮色时为 `#f4f6fa`，暗色时为 `#090b11` |
+| `body` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L215) | 承载基础环境底色（`--body-bg`）。在 JS 成功提取并渲染背景后会打上 `.bg-ready` 标志，控制背景画布以 `320ms` 硬件平滑淡入呈现，彻底阻断首屏渐变色闪烁。 |
 | `#ambient-layer` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L12)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L228) | **自适应模糊霓虹底墙**。同步渲染自定义壁纸，并读取 `--ambient-blur` 和 `--ambient-brightness` 实现环境光晕。 |
 | `#background-layer` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L13)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L242) | **实体悬浮画廊相框**。缩回至居中的 `94vw * 91vh`。带有 `4px` 实体黑色描边（`border`）增强 3D 呈现、大圆角 `20px`（`border-radius`）与 3D 浮空大阴影（`box-shadow`）。 |
 | `#background-layer::before` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L254) | **解耦背景虚化层**。为 `#background-layer` 的子伪元素，单独读取 `--applied-blur` 模糊度和 `--applied-scale` 缩放，避免模糊扩散到 2px 实体黑色相框上。 |

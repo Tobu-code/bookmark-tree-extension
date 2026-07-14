@@ -278,13 +278,13 @@ body.has-custom-bg[data-background-tone="light"] {
     bottom: 4.5vh;
     z-index: 2; /* 正数层级：高于氛围模糊底墙(z-index: 1)，但低于页面内容(z-index: 10) */
     overflow: hidden; /* 核心：裁剪伪元素的高斯模糊外溢，确保硬朗黑色相框不受模糊影响 */
-    opacity: 0.72;
+    opacity: 0; /* 默认完全透明，防止 JS 异步读取 IndexedDB 时闪烁默认渐变底色 */
     border: 4px solid #0c111d; /* 加粗相框边框线 */
     border-radius: 20px; /* 圆角扩大至 20px，极具柔和现代质感 */
     box-shadow: 
         0 24px 64px rgba(0, 0, 0, 0.48), 
         0 6px 20px rgba(0, 0, 0, 0.3);
-    transition: opacity 260ms ease;
+    transition: opacity 320ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* 解耦的背景图片子图层：仅对其应用模糊与缩放滤镜，物理边框和投影完全不受影响 */
@@ -303,7 +303,11 @@ body.has-custom-bg[data-background-tone="light"] {
     transition: filter 320ms cubic-bezier(0.25, 1, 0.5, 1), transform 320ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-body.has-custom-bg #background-layer {
+body.bg-ready #background-layer {
+    opacity: 0.72;
+}
+
+body.bg-ready.has-custom-bg #background-layer {
     opacity: 1;
     z-index: 2;
 }

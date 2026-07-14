@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 12:35:00]
+- **Type**: Fix (重构首屏背景图加载生命周期，解决异步载入导致的原渐变背景闪烁 Bug)
+- **Content**: 1) 在 `styles.css` 中将 `#background-layer` 的静态初始 `opacity` 归零（`opacity: 0`），隐藏默认渐变，并将其切换为配合 `body.bg-ready` 的状态绑定控制；2) 在 `src/06-settings.js` 与 `script.js` 的 `applyBackground` 函数出口处，新增挂载 `bg-ready` 标志到 `body` 上，使最终背景资源以硬件加速的 `320ms` 平滑淡入（`fade-in`）呈现，彻底阻断了 JS 从 IndexedDB 异步读取图片数据差所产生的首屏闪屏杂音；3) 在 `LAYOUT_ELEMENTS_GUIDE.md` 手册中同步增补本状态说明。
+- **Impact**: `styles.css`, `src/06-settings.js`, `script.js`, `LAYOUT_ELEMENTS_GUIDE.md`
+
 ## [2026-07-14 12:33:00]
 - **Type**: Design (引入高阶高斯色彩饱和度补偿算法，全面调优虚化玻璃质感)
 - **Content**: 1) 在 `styles.css` 中重构底图氛围层 `#ambient-layer`，将其滤镜升级为自带 `140%` 色彩饱和度补偿的 `saturate(140%)`，并引入 `scale(1.06)`、`translate3d` 硬件加速及 `will-change` 强制开启 GPU 平滑双线性插值，消除了虚化大色块在视口边缘发淡和生硬过渡的问题；2) 将相框虚化层 `#background-layer::before` 外扩至 `inset: -12px`，并修改 `src/06-settings.js` 与 `script.js`，当模糊激活时施加 `saturate(130%)` 饱和度补偿、`contrast(98%)` 对比度微调及 `scale(1.06)`，彻底消除了高斯虚化引发的画面色彩暗淡与相框边缘侧漏灰影的缺陷。
