@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 14:13:00]
+- **Type**: Hotfix (彻底解决 AI 侧边栏打开动画失效、页面瞬跳的问题)
+- **Content**: 之前 `document.body.classList.add('ai-sidebar-open')` 位于 `requestAnimationFrame` 外部，导致侧栏移除了 `.hidden` (`display: none`) 之后瞬间被赋予了目标样式 `.ai-sidebar-open .ai-sidebar { transform: translateX(0) }`，从而绕过了 CSS 过渡动画。本次修复通过使用 `void sidebar.offsetWidth` 强制浏览器完成由于移除 `.hidden` 引发的 Reflow 布局重排，以确立初始的 `translateX(100%)` 离屏状态，然后将 `.ai-sidebar-open` 和 `.active` 类名的添加一起放入下一帧中，确保滑入动画完美执行。
+- **Impact**: `src/08-ai-sidebar.js`
+
 ## [2026-07-14 14:00:00]
 - **Type**: Design (统一 AI 侧边栏打开/关闭动画为一致的弹性回弹过渡)
 - **Content**: 1) 在 `src/08-ai-sidebar.js` 中将 `openSidebar()` 的 `active` 类添加改为双层嵌套 `requestAnimationFrame`，强制浏览器在第一帧完成布局重排（注册离屏初始位置），第二帧再触发滑入过渡，解决了 `display: none → visible` 切换时起始帧被跳过导致打开动画瞬跳的问题；2) 在 `styles.css` 中将侧栏 `.ai-sidebar` 和主容器 `.app-shell` 的过渡曲线统一为 `420ms cubic-bezier(0.34, 1.56, 0.64, 1)`（经典弹性回弹曲线），同时将侧栏离屏态的缩放从 `0.99` 增大到 `0.97` 以增强滑入时的展开感。开关两个方向都有一致的微回弹手感。

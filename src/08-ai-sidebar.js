@@ -325,17 +325,18 @@ function initAiSidebar() {
     initAiTabSort();
 
     function openSidebar() {
-        document.body.classList.add('ai-sidebar-open');
         sidebar.classList.remove('hidden');
-        // 双层 rAF：第一帧让浏览器完成布局重排，注册侧栏的离屏初始位置；
-        // 第二帧再添加 active 触发滑入过渡，确保 CSS transition 完整执行。
+        sidebarOverlay.classList.remove('hidden');
+        
+        // 强制触发布局重排 (Reflow)，确保浏览器应用了 initial transform (translateX(100%)) 
+        // 这样后续添加的 .active 才会触发过渡动画
+        void sidebar.offsetWidth;
+
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                sidebar.classList.add('active');
-                sidebarOverlay.classList.remove('hidden');
-                sidebarOverlay.classList.add('active');
-                setTimeout(syncAiTabsIndicator, 150);
-            });
+            document.body.classList.add('ai-sidebar-open');
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            setTimeout(syncAiTabsIndicator, 150);
         });
 
         if (!currentAiId) {

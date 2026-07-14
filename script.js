@@ -3512,11 +3512,16 @@ function initAiSidebar() {
     initAiTabSort();
 
     function openSidebar() {
-        document.body.classList.add('ai-sidebar-open');
         sidebar.classList.remove('hidden');
+        sidebarOverlay.classList.remove('hidden');
+        
+        // 强制触发布局重排 (Reflow)，确保浏览器应用了 initial transform (translateX(100%)) 
+        // 这样后续添加的 .active 才会触发过渡动画
+        void sidebar.offsetWidth;
+
         requestAnimationFrame(() => {
+            document.body.classList.add('ai-sidebar-open');
             sidebar.classList.add('active');
-            sidebarOverlay.classList.remove('hidden');
             sidebarOverlay.classList.add('active');
             setTimeout(syncAiTabsIndicator, 150);
         });
