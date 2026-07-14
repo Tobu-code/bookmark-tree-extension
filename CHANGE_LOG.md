@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 13:52:00]
+- **Type**: Hotfix (将初始化序列修改落实到正确的源模块 src/01-constants.js，修复构建覆写导致的 UI 消失)
+- **Content**: 上一轮修改误编辑了 `script.js`（该文件是由构建脚本从 `src/*.js` 拼接后完全覆写的产物），导致初始化序列变更在 `node build.js` 后被抹除，`bg-ready` 无处可加，所有 UI 层因 `opacity: 0` 永远不可见。本次将完全相同的修改正确应用到 `src/01-constants.js`：删除过早的首次 `applyBackground()` 调用、将 `bg-ready` 信号严格绑定在 `backgroundLoad.then()` 异步回调末尾（含 `.catch()` 兜底）。
+- **Impact**: `src/01-constants.js`
+
 ## [2026-07-14 13:46:00]
 - **Type**: Fix (修复首屏白闪根因：bg-ready 信号从 applyBackground 函数体移至 IndexedDB 异步回调末尾)
 - **Content**: 1) 从 `src/06-settings.js` 和 `script.js` 的 `applyBackground()` 函数中移除了 `body.classList.add('bg-ready')`——该函数在初始化时被调用两次，第一次调用时图片尚未从 IndexedDB 取回，导致渐变底板与白色卡片提前曝光；2) 删除了 `script.js` 初始化序列中第一次多余的 `applyBackground()` 调用（原第 740 行），将其合并至 `backgroundLoad.then()` 异步回调内；3) 将 `bg-ready` 信号严格绑定在 IndexedDB 读取完毕（无论成功/失败）之后才触发，确保背景图/渐变底与 UI 组件在同一毫秒内同步淡入，彻底根治白屏闪烁。

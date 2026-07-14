@@ -736,8 +736,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const theme = settings[STORAGE_KEY_THEME] || 'system';
     applyTheme(theme);
 
-    // 6. Render bookmarks before optional background restoration.
-    applyBackground();
+    // 6. Apply non-background visuals immediately.
     applyContainerOpacity();
 
     // 7. Render Bookmarks
@@ -750,19 +749,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-        // Finish background restoration after the first usable bookmark view.
+        // 9. Finish background restoration after IndexedDB read completes,
+        //    then signal bg-ready to fade in all layers simultaneously.
         void backgroundLoad.then(async (bgFromIdb) => {
             if (!bgFromIdb && settings[STORAGE_KEY_BG_IMAGE]) {
                 bgFromIdb = settings[STORAGE_KEY_BG_IMAGE];
                 void bgIdbSet(bgFromIdb).then(() => chrome.storage.local.remove(STORAGE_KEY_BG_IMAGE));
             }
-            if (!bgFromIdb) return;
-            CURRENT_BG_IMAGE = bgFromIdb;
-            await preloadImage(CURRENT_BG_IMAGE);
+            if (bgFromIdb) {
+                CURRENT_BG_IMAGE = bgFromIdb;
+                await preloadImage(CURRENT_BG_IMAGE);
+                void applyBackgroundContrast(CURRENT_BG_IMAGE);
+            }
             applyBackground();
             applyContainerOpacity();
-            void applyBackgroundContrast(CURRENT_BG_IMAGE);
-        }).catch((error) => console.warn('Failed to restore background image:', error));
+            document.body.classList.add('bg-ready');
+        }).catch((error) => {
+            console.warn('Failed to restore background image:', error);
+            applyBackground();
+            document.body.classList.add('bg-ready');
+        });
     } catch (error) {
         console.error('Failed to initialize bookmark page:', error);
         renderBookmarkState('error', error.message || '读取书签失败，请刷新页面后重试。');
