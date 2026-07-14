@@ -37,7 +37,7 @@ graph TD
 | `.app-shell` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L552) | **排版主容器外壳**。限制在 `94vw * 91vh`（与相框尺寸完全一致）内，使用 `overflow: hidden` 并设置 `border-radius: 20px` 进行画布内容裁剪。 |
 | `#main-container` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L560) | 主书签面板与古诗词面板。绑定了 `--container-blur` 档位对应的毛玻璃质感（`backdrop-filter: blur(...)`）。 |
 | `.sidebar-wrapper` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L1820) | **AI 侧边栏包装器**。采用 `position: fixed` 固定在右侧，滑出时会给 `.app-shell` 添加偏移，并在 3D 景深下让 `#background-layer` 产生立体推退过渡。 |
-| `#settings-btn` | [styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L1817) | **设置齿轮按钮**。有自定义壁纸时通过 `body.has-custom-bg` 激活，利用 `calc` 精确定位使其圆心重合重叠在相框的右下角顶点上，呈现“榫卯嵌入”卡扣效果。 |
+| `#settings-btn` | [newtab.html](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/newtab.html#L15)<br>[styles.css](file:///Users/zanehao/kits/ai-project/bookmark-tree-extension/styles.css#L1817) | **设置齿轮按钮**。作为 `body` 直系子节点以摆脱主容器动画干扰，利用 `calc` 精确将其圆心常态化重合在相框的右下角顶点上，呈现极致的“榫卯嵌入”卡扣美学。 |
 
 ---
 

@@ -291,7 +291,7 @@ body.has-custom-bg[data-background-tone="light"] {
     inset: 0;
     z-index: -1;
     background-image: inherit; /* 继承父级的 style.backgroundImage */
-    background-size: cover;
+    background-size: 100% 100%; /* 百分百物理吻合平铺，解决自带框壁纸放大裁剪错位的 Bug */
     background-position: center;
     background-repeat: no-repeat;
     filter: var(--applied-blur, none);
@@ -1816,7 +1816,8 @@ img.bookmark-icon {
 
 #settings-btn {
     position: fixed;
-    right: clamp(18px, 2vw, 34px);
+    right: calc(4.5vw - 26px);
+    bottom: calc(4.5vh - 26px);
     z-index: 40;
     display: grid;
     place-items: center;
@@ -1832,16 +1833,6 @@ img.bookmark-icon {
     backdrop-filter: blur(22px) saturate(180%);
     -webkit-backdrop-filter: blur(22px) saturate(180%);
     transition: transform var(--liquid-fast) var(--liquid-ease), color var(--liquid-fast) ease, background var(--liquid-fast) ease, border-color var(--liquid-fast) ease, box-shadow var(--liquid-fast) ease;
-}
-
-#settings-btn {
-    bottom: 28px;
-}
-
-/* 艺术画板相框模式下，将设置按钮的圆心精准重合嵌入在相框的右下角顶点上 */
-body.has-custom-bg #settings-btn {
-    right: calc(4.5vw - 26px);
-    bottom: calc(4.5vh - 26px);
 }
 
 #settings-btn:hover {

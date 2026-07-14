@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 11:47:00]
+- **Type**: Design (重构设置按钮 DOM 层级为 body 直系子代并平铺图片，完美消解相框顶点错位)
+- **Content**: 1) 在 `newtab.html` 中将 `#settings-btn` 移出 `.app-shell` 容器，直接挂载到 `body` 最外层下，消除了由于主卡片容器在侧栏滑出、动画偏移等情况下的 `transform` 导致的 `fixed` 定位失效偏差；2) 在 `styles.css` 中将该按钮的右侧和底部对齐值默认设为相框顶点定位（`calc(4.5vw - 26px)`/`calc(4.5vh - 26px)`），消除清除背景后退回屏幕边缘的严重分离错位；3) 将 `#background-layer::before` 自定义图片填充格式由 `cover` 调整为 `100% 100%`，确保任何自带相框的壁纸在画板内百分百比例平铺、最中心对齐而不被放大裁剪；4) 同步在 `LAYOUT_ELEMENTS_GUIDE.md` 中修正此架构。
+- **Impact**: `newtab.html`, `styles.css`, `LAYOUT_ELEMENTS_GUIDE.md`
+
 ## [2026-07-14 11:38:00]
 - **Type**: Design (加粗实体画板边框，并实现设置按钮榫卯式重合嵌入相框右下角)
 - **Content**: 1) 在 `styles.css` 中将 `#background-layer` 的实体描边由 `2px` 变更为更显厚重与 3D 质感的 `4px`；2) 新增 `body.has-custom-bg #settings-btn` 规则，利用 `calc` 和 `26px` 半径差将设置齿轮按钮的物理圆心与实体相框的右下角顶点精准重合对齐，呈现几何嵌入的榫卯卡扣艺术感；3) 在 `LAYOUT_ELEMENTS_GUIDE.md` 手册中同步将边框数据修正为 `4px` 并增列按钮的位置描述。
