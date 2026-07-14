@@ -603,10 +603,19 @@ body.has-custom-bg #bookmarks-tree.layout-flat::after {
     min-height: 0;
     margin: 4.5vh auto;
     padding: clamp(24px, 4.5vh, 60px) 0 clamp(24px, 6vh, 80px);
+    opacity: 0; /* 首屏背景渲染完成前默认隐藏，防止半透明白色卡片先行暴露 */
     transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1),
                 filter 380ms ease,
                 opacity 380ms ease;
     transform-origin: center left;
+}
+
+body.bg-ready .app-shell {
+    opacity: 1;
+}
+
+body.bg-ready.ai-sidebar-open .app-shell {
+    opacity: 0.85;
 }
 
 body.ai-sidebar-open .app-shell {
@@ -1840,7 +1849,14 @@ img.bookmark-icon {
     box-shadow: var(--card-shadow);
     backdrop-filter: blur(22px) saturate(180%);
     -webkit-backdrop-filter: blur(22px) saturate(180%);
-    transition: transform var(--liquid-fast) var(--liquid-ease), color var(--liquid-fast) ease, background var(--liquid-fast) ease, border-color var(--liquid-fast) ease, box-shadow var(--liquid-fast) ease;
+    opacity: 0; /* 默认隐藏，防首屏白色小方块闪烁 */
+    pointer-events: none;
+    transition: transform var(--liquid-fast) var(--liquid-ease), color var(--liquid-fast) ease, background var(--liquid-fast) ease, border-color var(--liquid-fast) ease, box-shadow var(--liquid-fast) ease, opacity 320ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body.bg-ready #settings-btn {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 #settings-btn:hover {

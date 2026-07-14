@@ -1,5 +1,10 @@
 # Change Log
 
+## [2026-07-14 12:40:00]
+- **Type**: Fix (重构内容外壳与控制按钮首屏可见性，彻底解决半透明卡片在壁纸前先行闪现导致的白色屏闪)
+- **Content**: 在 `styles.css` 中将主排版容器 `.app-shell` 与外部悬浮设置按钮 `#settings-btn` 的初始 `opacity` 统一定制为 `0`（按钮并辅以 `pointer-events: none`），阻断了在图片未载入前半透明白色毛玻璃卡片和乳白色按钮先行在浅色 `body` 底板上曝光而引发的“大白屏闪烁”；直至 JS 判定完毕并在 `body` 挂载 `bg-ready` 标记后，各层组件才与底图背景完美同步地以 `320ms` 硬件加速平滑渐显出来，形成了高度优雅的开屏交融过渡效果。
+- **Impact**: `styles.css`
+
 ## [2026-07-14 12:35:00]
 - **Type**: Fix (重构首屏背景图加载生命周期，解决异步载入导致的原渐变背景闪烁 Bug)
 - **Content**: 1) 在 `styles.css` 中将 `#background-layer` 的静态初始 `opacity` 归零（`opacity: 0`），隐藏默认渐变，并将其切换为配合 `body.bg-ready` 的状态绑定控制；2) 在 `src/06-settings.js` 与 `script.js` 的 `applyBackground` 函数出口处，新增挂载 `bg-ready` 标志到 `body` 上，使最终背景资源以硬件加速的 `320ms` 平滑淡入（`fade-in`）呈现，彻底阻断了 JS 从 IndexedDB 异步读取图片数据差所产生的首屏闪屏杂音；3) 在 `LAYOUT_ELEMENTS_GUIDE.md` 手册中同步增补本状态说明。
